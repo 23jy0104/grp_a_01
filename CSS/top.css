@@ -1,10 +1,68 @@
 @charset "UTF-8";
+.nav {
+    background-color: black;
+    padding: 10px 0;
+}
+
+.nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-item {
+    margin: 0 15px;
+    position: relative;
+}
+
+.nav-item:not(:last-child)::after {
+    content: "";
+    display: block;
+    width: 1px;
+    height: 20px;
+    background-color: white;
+    position: absolute;
+    right: -7px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.nav-item:first-child::before {
+    content: "";
+    display: block;
+    width: 1px;
+    height: 20px;
+    background-color: white;
+    position: absolute;
+    left: -7px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.nav-item:last-child::after {
+    display: none;
+}
+
+.nav-item a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.nav-item a:hover {
+    background-color: #444;
+}
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+    background-color: #ffffff;
     margin: 0;
     padding: 20px;
 }
+
 header {
     display: flex;
     align-items: center;
@@ -13,36 +71,29 @@ header {
     border-bottom: 2px solid #ccc;
     position: relative;
 }
-img {
-    height: 50px; /* ロゴのサイズ調整 */
+
+header img {
+    height: 50px;
     margin-right: 10px;
 }
-h1 {
+
+header h1 {
     color: red;
     margin: 0;
 }
-.global-nav {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
-    border: 2px solid white; /* 白い枠線 */
-    border-radius: 5px; /* 角を丸める */
-    background-color: black;
+
+.logout-button {
+    background-color: red; /* ボタンの背景色を赤に */
+    color: white; /* テキストの色を白に */
+    border: none; /* ボーダーをなくす */
+    padding: 10px 15px; /* パディングを調整 */
+    border-radius: 5px; /* 角を丸くする */
+    cursor: pointer; /* カーソルをポインターに */
+    position: absolute; /* 絶対位置にする */
+    right: 20px; /* 右からの距離 */
+    top: 10px; /* 上からの距離 */
 }
-.global-nav button {
-    background-color: black;
-    color: white;
-    border: 2px solid white; /* ボタンの枠線 */
-    padding: 10px;
-    margin: 0;
-    cursor: pointer;
-    border-radius: 5px; /* ボタンの角を丸める */
-    flex: 1; /* ボタンを均等に配置 */
-    transition: background-color 0.3s; /* ホバー時の効果 */
-}
-.global-nav button:hover {
-    background-color: #444; /* ホバー時の色 */
-}
+
 .login-buttons {
     position: absolute;
     right: 10px;
@@ -51,7 +102,7 @@ h1 {
 .login-buttons button {
     margin-left: 5px;
 }
-.login-buttons .login {
+.login-button .login {
     background-color: yellow;
     color: black;
     border: none;
@@ -74,4 +125,14 @@ section {
 ul {
     list-style-type: disc;
     margin-left: 20px;
+}
+.login-buttons .login{
+    background-color: yellow;
+    color: black;
+    border: none;
+    padding: 10px;
+    border-radius: 5px; /* ボタンの角を丸める */
+}
+.nav-item.active a {
+    background-color: #444; /* アクティブなアイテムの背景色 */
 }
