@@ -6,89 +6,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TMC カーシェア</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 20px;
-        }
-        header {
-            display: flex;
-            align-items: center;
-            background-color: #fff;
-            padding: 10px;
-            border-bottom: 2px solid #ccc;
-            position: relative;
-        }
-        img {
-            height: 50px; /* ロゴのサイズ調整 */
-            margin-right: 10px;
-        }
-        h1 {
-            color: red;
-            margin: 0;
-        }
-        .global-nav {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
-            border: 2px solid white; /* 白い枠線 */
-            border-radius: 5px; /* 角を丸める */
-            background-color: black;
-        }
-        .global-nav button {
-            background-color: black;
-            color: white;
-            border: 2px solid white; /* ボタンの枠線 */
-            padding: 10px;
-            margin: 0;
-            cursor: pointer;
-            border-radius: 5px; /* ボタンの角を丸める */
-            flex: 1; /* ボタンを均等に配置 */
-            transition: background-color 0.3s; /* ホバー時の効果 */
-        }
-        .global-nav button:hover {
-            background-color: #444; /* ホバー時の色 */
-        }
-        .login-buttons {
-            position: absolute;
-            right: 10px;
-            top: 10px;
-        }
-        .login-buttons button {
-            margin-left: 5px;
-        }
-        .login-buttons .login {
-            background-color: yellow;
-            color: black;
-            border: none;
-            padding: 10px;
-            border-radius: 5px; /* ボタンの角を丸める */
-        }
-        .login-buttons .member {
-            background-color: red;
-            color: white;
-            border: none;
-            padding: 10px;
-            border-radius: 5px; /* ボタンの角を丸める */
-        }
-        section {
-            background-color: white;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        ul {
-            list-style-type: disc;
-            margin-left: 20px;
-        }
-    </style>
+    <link rel="stylesheet" href="../../CSS/nav.css">
+    <link rel="stylesheet" href="../../CSS/price.css">
 </head>
 <body>
 
 <header>
-    <img src="../img/rog .png" alt="TMCロゴ">
+    <img src="../../img/rog.png" alt="TMCロゴ">
     <h1>TMC カーシェア</h1>
     <div class="login-buttons">
         <button class="member">会員登録申請はこちら</button>
@@ -96,12 +20,14 @@
     </div>
 </header>
 
-<div class="global-nav">
-    <button onclick="location.href='UC02_01_S1_S2.html'">ステーション検索</button>
-    <button onclick="location.href='P40.html'">料金</button>
-    <button onclick="location.href='P43.html'">利用方法</button>
-    <button onclick="location.href='P46.html'">車種</button>
-</div>
+<nav class="nav">
+    <ul>
+        <li class="nav-item gnav02"><a href="/fare/">予約・ステーション検索</a></li>
+        <li class="nav-item gnav03"><a href="/use/">予約確認・変更・取り消し</a></li>
+        <li class="nav-item gnav04"><a href="/car/">ご利用履歴</a></li>
+        <li class="nav-item gnav05"><a href="/about/">ご登録情報の確認</a></li>
+    </ul>
+</nav>
 
 <section>
     <h2>TMCレンタカー、カーシェア事業始めました！</h2>
