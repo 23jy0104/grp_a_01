@@ -1,0 +1,130 @@
+@charset "UTF-8";
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 20px;
+}
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+.logo {
+    display: flex;
+    align-items: center;
+}
+img {
+    max-width: 100px;
+    margin-right: 10px;
+}
+h1 {
+    color: red;
+    margin: 0;
+}
+.form-container {
+    margin-top: 20px;
+    border-radius: 5px;
+}
+.form-group {
+    margin-bottom: 15px;
+    padding: 5px; /* 内側の余白 */
+    border-radius: 3px; /* 角を丸める */
+}
+.form-group label {
+    display: block; /* ラベルをブロック要素に */
+    margin-bottom: 10px;
+    background-color: #87CEFA; /* 薄い青 */
+    padding: 10px; /* 内側の余白 */
+    border-radius: 3px; /* 角を丸める */
+}
+.input-container {
+    display: flex; /* フレックスボックスを使用 */
+    gap: 15px; /* 入力ボックス間のスペース */
+    margin-bottom: 10px;
+}
+.input-container input {
+    width: calc(50% - 7.5px); /* 幅を50%に設定 */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+.btn-container {
+    display: flex;
+    justify-content: flex-end; /* ボタンを右端に配置 */
+    margin-top: 20px;
+}
+.radio-group {
+    margin: 10px 0; /* ラジオボタンのマージン */
+}
+.select-container {
+    display: flex; /* フレックスボックスを使用 */
+    gap: 10px; /* セレクトボックス間のスペース */
+}
+.select-container select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+.box{
+    border: 2px solid black; /* 枠線のスタイル */
+    padding: 10px; /* 内側の余白 */
+    width: 1000px; /* 幅 */  
+}
+.button-container{
+    display:flex;
+    gap: 10px;
+
+}
+input[type="button"] {
+    background-color: orange; /* ボタンの背景色をオレンジに */
+    color: black; /* 文字色を白に */
+    border: none; /* ボタンの枠線をなしに */
+    padding: 10px 20px; /* ボタンの内側の余白 */
+    cursor: pointer; /* カーソルをポインターに */
+    border-radius: 5px; /* ボタンの角を丸くする */
+}
+input[type="button"]:hover {
+    background-color: darkorange; /* ホバー時の色を変更 */
+}
+form[tyoe="text"] {
+    margin: 20px;
+}
+.warning {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #f5c6cb;
+    border-radius: 5px;
+}
+.button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+.button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+.btn-container {
+    display: flex;
+    justify-content: flex-end; /* ボタンを右端に配置 */
+    margin-top: 20px;
+    gap: 10px; /* ボタン間のスペース */
+}
+/* 既存のボタンスタイルを削除または変更 */
+.button, .confirmButton {
+    padding: 10px 20px; /* パディングを統一 */
+    background-color: orange; /* オレンジ色に設定 */
+    color: black; /* 文字色を黒に設定 */
+    border: none; /* 枠線をなしに */
+    border-radius: 5px; /* 角を丸くする */
+    cursor: pointer; /* カーソルをポインターに */
+    font-weight: bold; /* 太字にする */
+    width: 200px; /* 幅を統一 */
+}
