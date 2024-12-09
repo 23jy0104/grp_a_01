@@ -21,15 +21,24 @@ h1 {
     color: red;
     margin: 0;
 }
-.global-nav {
+.nav {
+    background-color: black;
+    padding: 10px 0;
+}
+
+.nav ul {
+    list-style: none;
     display: flex;
     justify-content: center;
-    margin-bottom: 20px;
-    border: 2px solid white; /* 白い枠線 */
-    border-radius: 5px; /* 角を丸める */
-    background-color: black;
+    margin: 0;
+    padding: 0;
 }
-.global-nav button {
+
+.nav-item {
+    margin: 0 15px;
+    position: relative;
+}
+.nav button {
     background-color: black;
     color: white;
     border: 2px solid white; /* ボタンの枠線 */
