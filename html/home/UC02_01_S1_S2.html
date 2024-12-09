@@ -1,0 +1,51 @@
+<!--未ログインも見れるステーション検索-->
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TMC カーシェア</title>
+    <link rel="stylesheet" href="../../CSS/top.css">
+    <link rel="stylesheet" href="../../CSS/not_login.css">
+</head>
+<body>
+
+<header>
+    <img src="../../img/rog .png" alt="TMCロゴ">
+    <h1>TMC カーシェア</h1>
+    <div class="login-buttons">
+        <button class="member" onclick="location.href='P4.html'">会員登録申請はこちら</button>
+        <button class="login" onclick="location.href='UC01.html'">予約・ログイン ▶</button>
+    </div>
+</header>
+
+<nav class="nav">
+    <ul>
+        <li class="nav-item active"><a href="../../html/home/UC02_01_S1_S2.html">ステーション検索</a></li>
+        <li class="nav-item"><a href="../../html/home/P40.html">料金</a></li>
+        <li class="nav-item"><a href="../../html/home/P43.html">利用方法</a></li>
+        <li class="nav-item"><a href="../../html/home/P46.html">車種</a></li>
+    </ul>
+</nav>
+<section>
+    <form>
+        <label>住所/ステーション名から探す</label><br>
+        <div class="radio-group">
+            <label>
+                <input type="radio" name="searchType" value="location" checked> 住所
+            </label>
+            <label>
+                <input type="radio" name="searchType" value="station"> ステーション
+            </label>
+        </div>
+        <input type="text">
+        <button type="submit" class="search-button">検索▶</button>
+    </form>
+    
+    
+    <p>例）新宿、渋谷、池袋</p>
+</section>
+
+</body>
+</html>
