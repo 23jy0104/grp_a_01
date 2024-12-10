@@ -24,7 +24,6 @@
     <main>
         <h2>ステーション情報</h2>
         <button class="back-button" onclick="location.href='P53.html'">検索結果一覧に戻る</button>
-        <br><h3>〇〇〇〇ステーション</h3>
         <table>
             <tr>
                 <th>お知らせ</th>
@@ -36,44 +35,7 @@
                     　大久保駅北口から北西に進んでいただき、大久保通りをまっすぐ進んだ場所にございます。</th>
             </tr>
         </table>
-        
-        <div class="flex-container">
-            <div class="flex-item">
-                <h3>空き情報から探す</h3>
-                <!-- カレンダーの入力ボックス -->
-                <div class="input-container">
-                    <div class="datetime-input">
-                        <label for="datetime1">利用開始日時:</label>
-                        <input type="datetime-local" id="datetime1" name="datetime1">
-                    </div>
-
-                    <div class="datetime-input">
-                        <label for="datetime2">利用終了日時:</label>
-                        <input type="datetime-local" id="datetime2" name="datetime2">
-                    </div>
-
-                    <!-- 検索ボタン -->
-                    <div class="button-container">
-                        <input type="image" src="../../img/kensaku.gif" alt="検索" />
-                    </div>
-                </div>
-            </div>
-
-            <div class="flex-item">
-                <h3 class="sub-title">車種から探す</h3>
-                <!-- 車種の選択リスト -->
-                <select id="carType" name="carType">
-                    <option value="">BNR32型 skyline Nismo</option>
-                    <option value="">NSX NA-1型 type-R</option>
-                    <option value="">GT-R R35 Nismo Special Edition T-spec</option>
-                </select>
-
-                <!-- 車種選択後の検索ボタン -->
-                <div class="button-container">
-                    <input type="image" src="../../img/kensaku.gif" alt="検索" />
-                </div>
-            </div>
-        </div>
+        <button class="login" onclick="location.href='UC01.html'">ログインして予約</button>
     </main>
 </body>
 </html>
