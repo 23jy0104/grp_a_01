@@ -37,7 +37,14 @@ button {
     font-size: 16px;
     cursor: pointer;
     margin: 5px;
+    text-align: center;
 }
 button:hover {
     background-color: #0056b3;
+}
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px; /* ボタンの間隔を調整 */
+    margin-top: 20px; /* 上部の余白を調整 */
 }
