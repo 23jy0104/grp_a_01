@@ -17,7 +17,9 @@ h1 {
     color: red;
     margin: 0;
 }
-
+h4 {
+    text-align: center;
+}
 img {
     width: 100px; /* ロゴのサイズ */
     margin-bottom: 10px; /* ロゴとテキストの間隔 */
@@ -75,4 +77,20 @@ input[type="datetime-local"], select {
 
 nav {
     margin-bottom: 20px; /* navとの間に隙間を追加 */
+}
+.kakutei-button {
+    display: inline-block;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    width: 100px;
+    margin: 20px auto; /* 上下のスペースを追加し、自動で中央揃え */
+    text-align: center; /* 中央揃え */
+}
+
+.kakutei-button:hover {
+    background-color: #0056b3;
 }
