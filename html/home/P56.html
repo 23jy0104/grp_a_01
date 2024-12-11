@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TMC カーシェア</title>
     <link rel="stylesheet" href="../../CSS/nav.css">
-    <link rel="stylesheet" href="../../CSS/P56.css"> <!-- P56.cssを追加 -->
+    <link rel="stylesheet" href="../../CSS/P56.css">
+    <link rel="stylesheet" href="../../CSS/timeTable.css">
 </head>
 <body>
     <header>
@@ -40,7 +41,6 @@
         <div class="flex-container">
             <div class="flex-item">
                 <h3>空き情報から探す</h3>
-                <!-- カレンダーの入力ボックス -->
                 <div class="input-container">
                     <div class="datetime-input">
                         <label for="datetime1">利用開始日時:</label>
@@ -54,14 +54,15 @@
 
                     <!-- 検索ボタン -->
                     <div class="button-container">
-                        <input type="image" src="../../img/kensaku.gif" alt="検索" />
+                        <a href="P57.html">
+                            <input type="image" id="searchButton1" src="../../img/kensaku.gif" alt="検索" />
+                        </a>
                     </div>
                 </div>
             </div>
 
             <div class="flex-item">
                 <h3 class="sub-title">車種から探す</h3>
-                <!-- 車種の選択リスト -->
                 <select id="carType" name="carType">
                     <option value="">BNR32型 skyline Nismo</option>
                     <option value="">NSX NA-1型 type-R</option>
@@ -70,7 +71,9 @@
 
                 <!-- 車種選択後の検索ボタン -->
                 <div class="button-container">
-                    <input type="image" src="../../img/kensaku.gif" alt="検索" />
+                    <a href="P59.html">
+                        <input type="image" id="searchButton2" src="../../img/kensaku.gif" alt="検索" />
+                    </a>
                 </div>
             </div>
         </div>
