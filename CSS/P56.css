@@ -1,0 +1,109 @@
+/* P56.css */
+main {
+    padding: 20px;
+}
+
+h2 {
+    text-decoration: underline;
+    display: inline-block; /* タイトルをインラインブロックに */
+}
+
+.back-button {
+    margin-left: 20px; /* タイトルとのスペース */
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.back-button:hover {
+    background-color: #2980b9;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    border: 1px solid #000;
+    padding: 10px;
+}
+
+th {
+    background-color: #f8f8f8;
+    text-align: left;
+}
+
+th:first-child {
+    background-color: #ffead7;
+    text-align: center;
+}
+
+.input-container {
+    margin-top: 30px; /* 上のマージンを少し大きく */
+    width: 100%; /* 入力コンテナの幅を100%に */
+}
+
+.datetime-input {
+    display: flex; /* フレックスボックスを使用 */
+    flex-direction: column; /* 縦方向に配置 */
+    margin-bottom: 15px; /* 入力ボックスの間隔を広げる */
+}
+
+.datetime-input label {
+    margin-bottom: 5px; /* ラベルと入力ボックスの間隔 */
+}
+
+.datetime-input input {
+    width: 100%; /* 入力ボックスの幅を100%に */
+    padding: 10px; /* パディングを追加 */
+}
+
+h3 {
+    font-size: 1.5em; /* フォントサイズを統一 */
+    margin-top: 0; /* 上のマージンをゼロに */
+    margin-bottom: 20px; /* 下のマージンを設定 */
+    text-decoration: underline; /* 下線を追加 */
+}
+
+.flex-container {
+    display: flex; /* フレックスボックスを使用 */
+    justify-content: center; /* 子要素を中央に配置 */
+    align-items: flex-start; /* 縦方向の配置を上に揃える */
+    margin-top: 30px; /* 上のマージンを設定 */
+    flex-wrap: wrap; /* 要素が折り返すのを許可 */
+    padding: 0px 10px 10px 10px;
+}
+
+.flex-container {
+    display: flex; /* フレックスボックスを使用 */
+    justify-content: center; /* 子要素を中央に配置 */
+    align-items: flex-start; /* 縦方向の配置を上に揃える */
+    margin-top: 30px; /* 上のマージンを設定 */
+    flex-wrap: wrap; /* 要素が折り返すのを許可 */
+    width: 100%; /* 親要素の幅を100%に */
+}
+
+.flex-item {
+    display: flex; /* 子要素をフレックスボックスとして扱う */
+    flex-direction: column; /* 縦方向に配置 */
+    align-items: center; /* 中央寄せ */
+    margin: 0 50px; /* 左右のマージンを50pxに設定 */
+    max-width: 400px; /* 最大幅を設定 */
+    flex: 1; /* 各要素が均等にスペースを取る */
+    box-sizing: border-box; /* 幅計算にパディングを含める */
+    height: 1000px;
+}
+
+
+/* 車種選択リストのスタイル */
+select {
+    width: 80%; /* 幅を広げる */
+    padding: 10px; /* パディングを追加して余白を確保 */
+    margin-bottom: 20px; /* 下のマージンを調整 */
+    margin-top: 59px;
+}
