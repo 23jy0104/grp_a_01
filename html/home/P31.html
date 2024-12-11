@@ -4,18 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="../../css/style.css" rel="stylesheet" type="text/css">
-    <link href="../../css/error.css" rel="stylesheet" type="text/css">
     <title>TMC カーシェア</title>
 </head>
 <body>
 
 <div class="maincontents">
     <img src="../../img/rog .png" alt="TMC Logo"/>
-    <button class="top-right-button">予約・ログイン　▶</button>
+    <button onclick="location.href='P29.html'" class="top-right-button">予約・ログイン　▶</button>
     <h1>TMC カーシェア</h1>
     <h2>パスワード再発行(入力)</h2>
     <div class="login-container">
-    <span class="error-message">※入力情報がお客様の登録情報に設定されている内容と一致していません。</span>
         <form>
             <table>
                 <tr>
@@ -28,7 +26,7 @@
                 <tr>
                     <td><label for="name">お名前【必須】</label></td>
                     <td>
-                        <input type="text" id="name" name="name" required></br>
+                        <input type="text" id="name" name="name" required ></br>
                         <span>例）山田　太郎</span>
                     </td>
                 </tr>
@@ -41,8 +39,8 @@
                 </tr>
             </table>
             <div class="button-container">
-                <button type="submit" onclick="location.href='29.html'" class="btn">ログイン画面に戻る</button>
-                <button type="submit" onclick="location.href='34.html'" class="btn">送信</button>
+                <button type="submit" onclick="location.href='P29.html'" class="btn">ログイン画面に戻る</button>
+                <button type="submit" onclick="location.href='P34.html'" class="btn">送信</button>
             </div>
         </form>
     </div>
