@@ -1,0 +1,10 @@
+@charset "UTF-8";
+
+.login{
+    position: absolute; /* 絶対位置を設定 */
+    top: 50%; /* 垂直方向の中央 */
+    left: 50%; /* 水平方向の中央 */
+    transform: translate(-50%, -50%); /* 自身の中心に移動 */
+    text-align: left;
+    background-color: yellow;
+}
