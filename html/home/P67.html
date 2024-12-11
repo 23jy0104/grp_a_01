@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TMC カーシェア</title>
     <link rel="stylesheet" href="../../CSS/nav.css">
-    <link rel="stylesheet" href="../../CSS/style.css"> <!-- P56.cssを追加 -->
+    <link rel="stylesheet" href="../../CSS/style2.css"> <!-- P56.cssを追加 -->
 </head>
 <body>
     <header>
@@ -21,8 +21,50 @@
             <li class="nav-item gnav05"><a href="P76.html">ご登録情報の確認</a></li>
         </ul>
     </nav>
-    <main>
+<main>
+<h4>※前後5時間以内のみ変更可能です。車種変更または日時変更をする際は取り消してから予約しなおしてください。</h4>
+    <table>
+        <tr>
+            <th colspan="2">現在の予約情報</th>
+        </tr>
+        <tr>
+            <td colspan="2">
+                予約番号：00000000</br>
+                予約開始時間：2024/○○/○○ ○○:○○</br>
+                予約終了時間：2024/○○/○○ ○○:○○</br>
+                車種：BNR32型 skyline Nismo 新宿 わ・・32</br>
+            </td>
+            <tr>
+                <td>駆動</td>
+                <td>4 WD</td>
+            </tr>
+            <tr>
+                <td>駆動</td>
+                <td>4 WD</td>
+            </tr>
+            <tr>
+                <td>安全整備</td>
+                <td>ドライブレコーダー</td>
+            </tr>
+            <tr>
+                <td>備考</td>
+                <td>RB26DETT (1990年式)</td>
+            </tr>
+        </tr>
         
+    </table>
+
+<h2>予約変更入力（入力）</h2>
+<div class="input-section">
+    <label for="start-time">ご利用開始時間</label>
+    <input type="text" id="start-time" placeholder="例: 2024/○○/○○ ○○:○○">
+
+    <label for="end-time">ご利用終了時間</label>
+    <input type="text" id="end-time" placeholder="例: 2024/○○/○○ ○○:○○">
+
+    <button type="button" class="save-button">変更を保存</button>
+</div>
+
     </main>
 </body>
 </html>
