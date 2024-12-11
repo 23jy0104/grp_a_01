@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TMC カーシェア</title>
     <link rel="stylesheet" href="../../CSS/nav.css">
-    <link rel="stylesheet" href="../../CSS/style2.css"> <!-- P56.cssを追加 -->
+    <link rel="stylesheet" href="../../CSS/style2.css">
+    <link href="../../css/error.css" rel="stylesheet" type="text/css">
 </head>
 <body>
     <header>
@@ -56,6 +57,8 @@
 
     <label for="end-time">ご利用終了日時</label>
     <input type="datetime-local" id="end-datetime" name="end-datetime">
+
+    <span class="error-message">※現在予約できない時間が含まれています。</span></br>
 
     <button type="button" onclick="location.href='P70.html'" class="save-button">変更を保存</button>
 </div>

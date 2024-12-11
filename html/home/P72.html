@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TMC カーシェア</title>
     <link rel="stylesheet" href="../../CSS/nav.css">
-    <link rel="stylesheet" href="../../CSS/style2.css"> <!-- P56.cssを追加 -->
+    <link rel="stylesheet" href="../../CSS/style2.css"> 
 </head>
 <body>
     <header>
@@ -25,7 +25,7 @@
     <h4>※前後5時間以内のみ変更可能です。車種変更または日時変更をする際は取り消してから予約しなおしてください。</h4>
     <table>
         <tr>
-            <th colspan="2">変更後の予約情報</th>
+            <th colspan="2">現在の予約情報</th>
         </tr>
         <tr>
             <td colspan="2">
@@ -49,17 +49,9 @@
         </tr>
     </table>
 
-<h2>予約変更入力（入力）</h2>
-<div class="input-section">
-    <label for="start-time">ご利用開始日時</label>
-    <input type="datetime-local" id="start-datetime" name="start-datetime">
-
-    <label for="end-time">ご利用終了日時</label>
-    <input type="datetime-local" id="end-datetime" name="end-datetime">
-
-    <button type="button" onclick="location.href='P70.html'" class="save-button">変更を保存</button>
-</div>
-
-    </main>
+    <div style="text-align: center;">
+        <button type="button" onclick="location.href='P73.html'" class="kakutei-button">取消</button>
+    </div>
+</main>
 </body>
 </html>

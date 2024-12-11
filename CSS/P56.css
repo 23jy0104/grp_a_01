@@ -96,7 +96,7 @@ h3 {
     max-width: 400px; /* 最大幅を設定 */
     flex: 1; /* 各要素が均等にスペースを取る */
     box-sizing: border-box; /* 幅計算にパディングを含める */
-    height: 1000px;
+    height: 250px;
 }
 
 

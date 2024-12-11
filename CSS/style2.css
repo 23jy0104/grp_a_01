@@ -1,0 +1,131 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+}
+
+.login-container {
+    background-color: #ffffff;
+    padding: 40px;
+    text-align: center;
+}
+
+h1 {
+    position: absolute; /* 絶対位置で配置 */
+    top: 20px; /* 上からの距離 */
+    left: 150px; /* 右からの距離 */
+    color: red;
+    margin: 0;
+}
+h4 {
+    text-align: center;
+}
+.maincontents h4 {
+    text-align: center;
+    margin-bottom: 50px;
+}
+img {
+    width: 100px; /* ロゴのサイズ */
+    margin-bottom: 10px; /* ロゴとテキストの間隔 */
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+th, td {
+    border: 1px solid #000;
+    padding: 10px;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+.input-section {
+    background-color: #f9f9f9;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+label {
+    display: block;
+    margin: 10px 0 5px;
+}
+
+input[type="datetime-local"], select {
+    width: 99%;
+    padding: 8px;
+    margin-bottom: 10px;
+}
+
+.save-button {
+    display: inline-block; /* インラインブロックに変更 */
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    width: 100px;
+    margin: 0 auto; /* 中央揃え */
+}
+
+.save-button:hover {
+    background-color: #0056b3;
+}
+.button-container {
+    display: flex;
+    gap: 50px;
+    align-items: center;
+    justify-content: center;
+}
+button {
+    background-color: yellow;
+    border: 2px solid black;
+    padding: 10px 15px;
+    border-radius: 0;
+    cursor: pointer;
+    width: 200px;
+    gap: 50px;
+}
+button:hover {
+    background-color: #e0e0e0;
+}
+nav {
+    margin-bottom: 20px; /* navとの間に隙間を追加 */
+}
+.kakutei-button {
+    display: inline-block;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    width: 100px;
+    margin: 20px auto; /* 上下のスペースを追加し、自動で中央揃え */
+    text-align: center; /* 中央揃え */
+}
+
+.kakutei-button:hover {
+    background-color: #0056b3;
+}
+.maincontents h2 {
+    color: #000000;
+    padding-left: 10px;
+    border-top: 1px solid #000000;
+    border-bottom: 1px solid #000000;
+    border-left: thick solid #000000;
+    border-right: thick solid #000000;
+}
+.maincontents h3 {
+    border: 2px solid #000000; /* 枠の色と太さ */
+    padding: 10px; /* 枠とテキストの間のスペース */
+    display: inline-block; /* 枠をテキストに合わせる */
+    margin: 10px 0; /* 上下のスペース */
+}
