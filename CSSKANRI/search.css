@@ -31,3 +31,8 @@ th, td {
 th {
     background-color: #f2f2f2;
 }
+.logout{
+    align-self: flex-start; /* 左側に配置 */
+    margin: 10px; /* マージンを追加して余白を調整 */
+
+}
