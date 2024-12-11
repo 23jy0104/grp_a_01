@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../../css/style.css" rel="stylesheet" type="text/css">
+    <link href="../../css/error.css" rel="stylesheet" type="text/css">
+    <title>TMC カーシェア</title>
+</head>
+<body>
+
+<div class="maincontents">
+    <img src="../../img/rog.png" alt="TMC Logo"/>
+    <h1>TMC カーシェア</h1>
+    <h2>パスワード再発行(入力)</h2>
+    <div class="login-container">
+        <span class="error-message">※パスワードが一致していません。</span>
+        <form>
+            <table>
+                <tr>
+                    <td><label for="password">新規パスワード入力【必須】</label></td>
+                    <td>
+                        <input type="password" id="password" name="password" required></br>
+                        <span>※半角数字8字～12字まで</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="password">新規パスワード再入力【必須】</label></td>
+                    <td>
+                        <input type="password" id="password" name="password" required></br>
+                        <span>※半角数字8字～12字まで</span>
+                    </td>
+                </tr>
+            </table>
+            <div class="button-container">
+                <button type="submit" onclick="location.href='P38.html'" class="btn">再設定</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>
