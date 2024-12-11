@@ -123,3 +123,9 @@ nav {
     border-left: thick solid #000000;
     border-right: thick solid #000000;
 }
+.maincontents h3 {
+    border: 2px solid #000000; /* 枠の色と太さ */
+    padding: 10px; /* 枠とテキストの間のスペース */
+    display: inline-block; /* 枠をテキストに合わせる */
+    margin: 10px 0; /* 上下のスペース */
+}
