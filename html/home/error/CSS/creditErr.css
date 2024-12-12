@@ -134,7 +134,7 @@ form[tyoe="text"] {
     margin: 20px;
 }
 .warning {
-    background-color: #f8d7da;
+    background-color: rgb(244, 180, 61);
     color: #721c24;
     padding: 10px;
     margin: 10px 0;
@@ -173,4 +173,16 @@ form[tyoe="text"] {
 .confirmButton:disabled {
     background-color: #ccc; /* 無効時の背景色 */
     cursor: not-allowed; /* 無効時のカーソル */
+}
+input[type="text"]{
+    background-color: #ffcccc; /* 薄い赤色 */
+}
+#year{
+    background-color: #ffcccc;
+}
+#month{
+    background-color: #ffcccc;
+}
+h3{
+    color: red;
 }
