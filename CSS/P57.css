@@ -44,7 +44,6 @@
 
 .button-container {
     display: flex; /* フレックスボックスで横並び */
-    justify-content: center; /* 中央寄せ */
     gap: 10px; /* ボタン間のスペース */
     margin-top: 20px; /* 上のマージンを追加 */
 }
