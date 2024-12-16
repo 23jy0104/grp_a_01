@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
 .image-container {
-    text-align: flex; /* 左揃え */
+    text-align: left; /* 左揃え */
     align-items: center;
 }
 
@@ -11,7 +11,7 @@
 }
 
 .image-container img {
-    max-width: 50%; /* 画像の幅を50%に設定 */
+    max-width: 100%; /* 画像の幅を50%に設定 */
     height: auto; /* 高さを自動調整 */
     margin-right: 10px;
 }
@@ -22,9 +22,8 @@
 }
 
 .large-image {
-    width: 40%; /* 画像の幅を50%に設定 */
+    width: 50%; /* 画像の幅を50%に設定 */
     height: auto; /* 高さを自動調整 */
-    max-width: none; /* 最大幅を解除 */
     display: block; /* ブロック要素として表示 */
     margin: 0; /* 中央揃えを解除 */
     float: left;
