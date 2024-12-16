@@ -1,10 +1,12 @@
 @charset "UTF-8";
 
-.login{
-    position: absolute; /* 絶対位置を設定 */
-    top: 50%; /* 垂直方向の中央 */
-    left: 50%; /* 水平方向の中央 */
-    transform: translate(-50%, -50%); /* 自身の中心に移動 */
-    text-align: left;
-    background-color: yellow;
+.login-button {
+    display: block; /* ブロック要素にすることで中央揃えを可能にする */
+    margin: 20px auto; /* 上下のマージンを追加し、左右を自動で設定する */
+    background-color: yellow; /* 背景色を黄色に設定 */
+    color: black; /* 文字色を黒に設定 */
+    padding: 10px 20px; /* ボタンの内側に余白を追加 */
+    border: none; /* ボタンのボーダーを消す */
+    cursor: pointer; /* マウスカーソルをポインタに変更 */
+    font-size: 16px; /* フォントサイズを調整 */
 }

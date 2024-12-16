@@ -92,7 +92,7 @@ h1 {
 }
 .rogin {
     padding: 10px 15px;
-    background-color: yellow; /* ボタンの背景色 */
+    background-color: red; /* ボタンの背景色 */
     color: black; /* ボタンの文字色 */
     text-decoration: none;
     border-radius: 5px;
@@ -185,8 +185,4 @@ input[type="text"]{
 }
 h3{
     color: red;
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> ef796dfb84645599af9def1cdaa369796e443d2e
