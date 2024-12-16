@@ -86,3 +86,23 @@ header h1 {
     right: 20px; /* 右からの距離 */
     top: 10px; /* 上からの距離 */
 }
+
+.user-info {
+    display: flex;
+    align-items: center; /* 垂直方向に中央揃え */
+}
+
+.logout-button {
+    margin-right: 10px; /* ユーザー名との間にスペースを追加 */
+}
+
+#username {
+    margin-right: 10px; /* ボタンとの間にスペースを追加 */
+    position: absolute; /* 絶対位置にする */
+    right: 150px;
+}
+
+.user-info {
+    display: flex;
+    align-items: center; /* 垂直方向に中央揃え */
+}
