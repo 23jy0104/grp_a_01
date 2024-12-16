@@ -2,221 +2,111 @@
 
 <!DOCTYPE html>
 <html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TMC カーシェア</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
-            margin: 0;
-            padding: 20px;
-        }
-        header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
-        .logo {
-            display: flex;
-            align-items: center;
-        }
-        img {
-            max-width: 100px;
-            margin-right: 10px;
-        }
-        .step-container {
-            display: flex;
-            align-items: center;
-            margin: 20px 0;
-        }
-        .step {
-            position: relative;
-            padding: 10px 20px;
-            background-color: white;
-            border: 2px solid #ccc;
-            border-radius: 20px;
-            margin-right: 15px;
-            text-align: center;
-            z-index: 1;
-            width: 120px;
-        }
-        .step.confirmation {
-            background-color: yellow; /* 現在のステップの背景色 */
-            font-weight: bold;
-        }
-        .form-container {
-            margin-top: 20px;
-            border-radius: 5px;
-        }
-        .form-group {
-            margin-bottom: 15px;
-            padding: 5px; /* 内側の余白 */
-            border-radius: 3px; /* 角を丸める */
-        }
-        .form-group label {
-            display: block; /* ラベルをブロック要素に */
-            margin-bottom: 5px;
-            background-color: hsl(35, 78%, 80%); /* 薄い黄色 */
-            padding: 5px; /* 内側の余白 */
-            border-radius: 3px; /* 角を丸める */
-        }
-        .input-container {
-            display: flex; /* フレックスボックスを使用 */
-            gap: 15px; /* 入力ボックス間のスペース */
-        }
-        .input-container input {
-            width: calc(50% - 7.5px); /* 幅を50%に設定 */
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        .btn-container {
-            display: flex;
-            justify-content: flex-end; /* ボタンを右端に配置 */
-            margin-top: 20px;
-        }
-        .btn {
-            padding: 10px 15px;
-            background-color: yellow; /* ボタンの背景色 */
-            color: black; /* ボタンの文字色 */
-            text-decoration: none;
-            border-radius: 5px;
-        }
-        .radio-group {
-            margin: 10px 0; /* ラジオボタンのマージン */
-        }
-        .select-container {
-            display: flex; /* フレックスボックスを使用 */
-            gap: 10px; /* セレクトボックス間のスペース */
-        }
-        .select-container select {
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        .box{
-            border: 2px solid black; /* 枠線のスタイル */
-            padding: 10px; /* 内側の余白 */
-            width: 1000px; /* 幅 */  
-        }
-        .button-container{
-            display:flex;
-            gap: 10px;
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>TMC カーシェア</title>
+        <link rel="stylesheet" href="../../CSS/P20.css"> 
+    </head>
+    <body>
 
-        }
-        input[type="button"] {
-            background-color: orange; /* ボタンの背景色をオレンジに */
-            color: black; /* 文字色を白に */
-            border: none; /* ボタンの枠線をなしに */
-            padding: 10px 20px; /* ボタンの内側の余白 */
-            cursor: pointer; /* カーソルをポインターに */
-            border-radius: 5px; /* ボタンの角を丸くする */
-        }
-        input[type="button"]:hover {
-            background-color: darkorange; /* ホバー時の色を変更 */
-        }
-        .form-licence label {
-            display: block; /* ラベルをブロック要素に */
-            margin-bottom: 5px;
-            background-color: hsl(49, 95%, 85%); /* 薄い黄色 */
-            padding: 5px; /* 内側の余白 */
-            border-radius: 3px; /* 角を丸める */
-        }
-    </style>
-</head>
-<body>
+        <header>
+            <div class="logo">
+                <img src="../../img/rog.png" alt="TMC Logo">
+                <h1>TMC カーシェア</h1>
+            </div>
 
-<header>
-    <div class="logo">
-        <img src="../../img/rog.png" alt="TMC Logo">
-        <h1>TMC カーシェア</h1>
-    </div>
-    <a href="#" class="btn">予約・ログイン ▶</a>
-</header>
+            <a href="P29.html" class="btn">予約・ログイン ▶</a>
 
-<div class="step-container">
-    <div class="step">
-        <div class="step-icon">📝</div>
-        <div class="step-label">詳細・規約のご確認</div>
-    </div>
-    <div class="step current">
-        <div class="step-icon">🖊️</div>
-        <div class="step-label">基本情報のご入力</div> 
-    </div>
-    <div class="step confirmation">
-        <div class="step-icon">🔍</div>
-        <div class="step-label">ご入力基本情報のご確認</div>
-    </div>
-    <div class="step">
-        <div class="step-icon">💳</div>
-        <div class="step-label">クレジットカード情報</div>
-    </div>
-    <div class="step">
-        <div class="step-icon">✅</div>
-        <div class="step-label">申し込み完了</div>
-    </div>
-</div>
+            <a href="#" class="btn">予約・ログイン ▶</a>
+        </header>
 
-<div class="form-container">
-    <div class="form-group">
-        <h1>基本情報の確認</h1>
-        <label for="fullname">
-            氏名
-        </label>
-        <div class="input-container">
-            〇〇　〇〇
+        <div class="step-container">
+            <div class="step">
+                <div class="step-icon">📝</div>
+                <div class="step-label">詳細・規約のご確認</div>
+            </div>
+            <div class="step current">
+                <div class="step-icon">🖊️</div>
+                <div class="step-label">基本情報のご入力</div> 
+            </div>
+            <div class="step confirmation">
+                <div class="step-icon">🔍</div>
+                <div class="step-label">ご入力基本情報のご確認</div>
+            </div>
+            <div class="step">
+                <div class="step-icon">💳</div>
+                <div class="step-label">クレジットカード情報</div>
+            </div>
+            <div class="step">
+                <div class="step-icon">✅</div>
+                <div class="step-label">申し込み完了</div>
+            </div>
         </div>
-        <label for="fullname-kana">
-            氏名(フリガナ)
-        </label>
-        <div class="input-container">
-            〇〇〇〇　〇〇〇〇
-        </div>
-        <label for="address">
-            住所
-        </label>
-        <div class="input-container">
-            東京都〇〇区〇〇〇0-0-0
-        </div>
-        <label for="TEL">
-            携帯電話番号
-        </label>
-        <div class="input-container">
-            〇〇〇-〇〇〇〇-〇〇〇〇
-        </div>
-        <label for="licence">
-            免許証情報
-        </label>        
-</div>
-<div class="form-licence">
-    <div class="form-licence">
-        <label for="type">
-            免許証種別
-        </label>
-        <div class="input-container">
-            〇〇〇〇〇〇免許
-        </div>
-        <label for="deadline">
-            有効期限
-        </label>
-        <div class="input-container">
-           〇〇〇〇(令和〇〇)年〇〇月〇〇日
-        </div>
-        <label for="type">
-            メールアドレス
-        </label>
-        <div class="input-container">
-            〇〇〇〇〇〇＠〇〇〇〇〇〇.ne.jp
-        </div>
-        <div class="button-container">
-            <input type="button"value="入力へ戻る"onclick="location.href='UC03_01.html'">
-            <input type="button"value="クレジット情報のご入力へ" onclick="location.href='UC03_05.html'">
-        </div>
-    </div>
-</div>
 
+        <div class="form-container">
+            <div class="form-group">
+                <h1>基本情報の確認</h1>
+                <label for="fullname">
+                    氏名
+                </label>
+                <div class="input-container">
+                    〇〇　〇〇
+                </div>
+                <label for="fullname-kana">
+                    氏名(フリガナ)
+                </label>
+                <div class="input-container">
+                    〇〇〇〇　〇〇〇〇
+                </div>
+                <label for="address">
+                    住所
+                </label>
+                <div class="input-container">
+                    東京都〇〇区〇〇〇0-0-0
+                </div>
+                <label for="TEL">
+                    携帯電話番号
+                </label>
+                <div class="input-container">
+                    〇〇〇-〇〇〇〇-〇〇〇〇
+                </div>
+                <label for="licence">
+                    免許証情報
+                </label>        
+            </div>
+            <div class="form-licence">
+                <div class="form-licence">
+                    <label for="type">
+                        免許証種別
+                    </label>
+                    <div class="input-container">
+                        〇〇〇〇〇〇免許
+                    </div>
+                    <label for="deadline">
+                        有効期限
+                    </label>
+                    <div class="input-container">
+                    〇〇〇〇(令和〇〇)年〇〇月〇〇日
+                    </div>
+                    <label for="type">
+                        メールアドレス
+                    </label>
+                    <div class="input-container">
+                        〇〇〇〇〇〇＠〇〇〇〇〇〇.ne.jp
+                    </div>
+                    <div class="button-container">
+                        <input type="button"value="入力へ戻る"onclick="location.href='UC03_01.html'">
+                        <input type="button"value="クレジット情報のご入力へ" onclick="location.href='UC03_05.html'">
+                    </div>
+                </div>
 
+            </div>
+        </div>
 
+    </body>
+<<<<<<< HEAD
+</html>
+=======
+</html>
+>>>>>>> ef796dfb84645599af9def1cdaa369796e443d2e

@@ -5,8 +5,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../CSS/error.css">
+    <link rel="stylesheet" href="../../CSS/card.css">
     <title>TMC カーシェア</title>
-    <link rel="stylesheet" href="../../CSS/credit.css">
+    
     <script>
        function toggleButton() {
             const checkbox = document.getElementById('myCheckbox');
@@ -35,32 +37,21 @@
             <img src="../../img/rog.png" alt="TMC Logo">
             <h1>TMC カーシェア</h1>
         </div>
-        <a href="P29.html" class="rogin">予約・ログイン ▶</a>
+        <a href="#" class="rogin">予約・ログイン ▶</a>
     </header>
-
-    <div class="step-container">
-        <div class="step">
-            <div class="step-icon">📝</div>
-            <div class="step-label">詳細・規約のご確認</div>
-        </div>
-        <div class="step current">
-            <div class="step-icon">🖊️</div>
-            <div class="step-label">基本情報のご入力</div> 
-        </div>
-        <div class="step confirmation">
-            <div class="step-icon">🔍</div>
-            <div class="step-label">ご入力基本情報のご確認</div>
-        </div>
-        <div class="step credit">
-            <div class="step-icon">💳</div>
-            <div class="step-label">クレジットカード情報</div>
-        </div>
-        <div class="step">
-            <div class="step-icon">✅</div>
-            <div class="step-label">申し込み完了</div>
-        </div>
-    </div>
     <div class="form-group">
+        <span class="error-message">※正しく入力してください</span>
+        <h2>現在のクレジットカード情報</h2>
+        <table>
+            <tr>
+                <th>クレジットカード番号</th>
+                <td>＊＊＊-〇〇〇〇</td>
+            </tr>
+            <tr>
+                <th>有効期限</th>
+                <td>〇〇月/〇〇年</td>
+            </tr>
+        </table>
         <label for="credit_number">
             <span class="required">必須</span>クレジットカード番号<span class="highlight"> ※半角数字、ハイフンなし</span>
         </label>
