@@ -29,6 +29,12 @@ h1 {
     align-items: center;
     margin: 20px 0;
 }
+.step-container {
+    display: flex;
+    align-items: center;
+    margin: 20px 0;
+}
+
 .step {
     position: relative;
     padding: 10px 20px;
@@ -40,10 +46,23 @@ h1 {
     z-index: 1;
     width: 120px;
 }
+
 .step.credit {
     background-color: yellow; /* 現在のステップの背景色 */
     font-weight: bold;
 }
+
+/* 矢印のスタイル */
+.step:not(:last-child)::after {
+    content: '➔'; /* 矢印を追加 */
+    position: absolute;
+    right: -20px; /* ステップの右側に配置 */
+    top: 50%; /* 縦方向中央揃え */
+    transform: translateY(-50%); /* 矢印を中央に */
+    font-size: 24px; /* 矢印のサイズを調整 */
+    color: #ccc; /* 矢印の色を設定 */
+}
+
 .form-container {
     margin-top: 20px;
     border-radius: 5px;
