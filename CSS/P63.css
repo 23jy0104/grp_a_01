@@ -36,7 +36,7 @@ table {
 }
 td {
     padding: 15px; /* セルのパディングを増やす */
-    border: 2px solid #ddd;
+    border: 1px solid #adadad;
     text-align: center;
 }
 /* テーブルのスタイルを強調 */
@@ -63,4 +63,9 @@ th {
 
 .action-button:hover {
     background-color: #ffc74e; /* ホバー時の色変更 */
+}
+
+.highlight {
+    background-color: #d8d8d8;
+    font-weight: bold;
 }
