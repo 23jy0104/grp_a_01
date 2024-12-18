@@ -4,13 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TMC カーシェア</title>
-    <link rel="stylesheet" href="../../CSS/nav.css">
-    <link rel="stylesheet" href="../../CSS/style2.css">
-    <link href="../../css/error.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="../../../CSS/nav.css">
+    <link rel="stylesheet" href="../../../CSS/style2.css">
+    <link href="../../../css/error.css" rel="stylesheet" type="text/css">
+    <script>
+        function confirmAction() {
+            // 遷移先のURLを指定します
+            window.location.href = 'UC03_08.html';
+        }
+    </script>
 </head>
 <body>
     <header>
-        <img src="../../img/rog.png" alt="TMCロゴ">
+        <img src="../../../img/rog.png" alt="TMCロゴ">
         <h1>TMC カーシェア</h1>
         <h4 id="username">23jy0000様</h4>
         <button class="logout-button" onclick="location.href='P29.html'">ログアウト</button>
@@ -54,14 +60,15 @@
 <h2>予約変更入力（入力）</h2>
 <div class="input-section">
     <label for="start-time">ご利用開始日時</label>
-    <input type="datetime-local" id="start-datetime" name="start-datetime">
+    <input type="datetime-local" id="start-datetime" name="start-datetime" disabled>
 
     <label for="end-time">ご利用終了日時</label>
-    <input type="datetime-local" id="end-datetime" name="end-datetime">
+    <input type="datetime-local" id="end-datetime" name="end-datetime" disabled>
 
     <span class="error-message">※現在予約できない時間が含まれています。</span></br>
-
-    <button type="button" onclick="location.href='#'" class="save-button">変更を保存</button>
+    <div class="btn container">
+        <button id="confirmButton" class="confirmbutton" disabled onclick="confirmAction()">確定</button>
+    </div>
 </div>
 
     </main>
