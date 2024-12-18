@@ -106,5 +106,8 @@ ul {
 .search-button:hover {
     background-color: darkorange; /* ホバー時の色 */
 }
+.err{
+    color:red;
+}
 
 
