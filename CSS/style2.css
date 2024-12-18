@@ -117,3 +117,7 @@ nav {
     display: inline-block; /* 枠をテキストに合わせる */
     margin: 10px 0; /* 上下のスペース */
 }
+.btn{
+    background-color: orange;
+}
+   
