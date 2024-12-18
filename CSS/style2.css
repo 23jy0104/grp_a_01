@@ -84,18 +84,6 @@ input[type="datetime-local"], select {
     align-items: center;
     justify-content: center;
 }
-button {
-    background-color: yellow;
-    border: 2px solid black;
-    padding: 10px 15px;
-    border-radius: 0;
-    cursor: pointer;
-    width: 200px;
-    gap: 50px;
-}
-button:hover {
-    background-color: #e0e0e0;
-}
 nav {
     margin-bottom: 20px; /* navとの間に隙間を追加 */
 }
