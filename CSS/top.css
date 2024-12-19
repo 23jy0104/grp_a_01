@@ -136,3 +136,9 @@ ul {
 .nav-item.active a {
     background-color: #444; /* アクティブなアイテムの背景色 */
 }
+.step {
+    display: none; /* 初めは全て非表示 */
+}
+.active {
+    display: block; /* アクティブなステップのみ表示 */
+}
