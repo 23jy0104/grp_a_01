@@ -142,3 +142,22 @@ ul {
 .active {
     display: block; /* アクティブなステップのみ表示 */
 }
+.stepnav button {
+    background-color: #4CAF50; /* 緑色 */
+    color: white; /* 文字色 */
+    border: none; /* ボーダーなし */
+    padding: 10px 20px; /* パディング */
+    text-align: center; /* 中央揃え */
+    text-decoration: none; /* 下線なし */
+    display: inline-block; /* インラインブロック */
+    font-size: 16px; /* フォントサイズ */
+    margin: 5px 2px; /* マージン */
+    cursor: pointer; /* カーソルをポインターに */
+    border-radius: 5px; /* 角を丸く */
+    transition: background-color 0.3s; /* ホバー時の変化をスムーズに */
+}
+
+.stepnav button:hover {
+    background-color: #45a049; /* ホバー時の色 */
+}
+
