@@ -1,41 +1,65 @@
 <!DOCTYPE html>
 <html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <title>車両管理課</title>
-    <link rel="stylesheet" href="../../CSSKANRI/vehicleCon.css">  
-</head>
-<body>
-    <h1>○○○ステーション車両追加確認画面</h1>
-    <table>
-        <tr>
-            <td>車両メーカー</td>
-            <td>○○○○</td>
-        </tr>
-        <tr>
-            <td>車両モデル</td>
-            <td>○○○○</td>
-        </tr>
-        <tr>
-            <td>年式</td>
-            <td>○○○○年</td>
-        </tr>
-        <tr>
-            <td>ナンバープレート</td>
-            <td>新宿301 わ 1234</td>
-        </tr>
-        <tr>
-            <td>車台番号</td>
-            <td>00000000000000000</td>
-        </tr>
-        <tr>
-            <td>識別番号</td>
-            <td>00000000000000000</td>
-        </tr>
-    </table>
-    <div class="button-container">
-        <button onclick="location.href='P6.html'">入力画面に戻る</button>
-        <button onclick="location.href='P9.html'">追加確定</button>
-    </div>
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>車両管理システム</title>
+        <link rel="stylesheet" href="../../CSSKANRI/vehicleAdd.css">  
+    </head>
+    <body>
+        <h1>〇〇〇〇ステーション</h1>
+        <div class="input-container">
+            <div class="select-container">
+                車両メーカー　　<select id="maker">
+                    <option value="">--選択してください--</option>
+                    <option value="メルセデス・ベンツ">メルセデス・ベンツ</option>
+                    <option value="ポルシェ">ポルシェ</option>
+                    <option value="BME AG">BMW AG</option>
+                    <option value="トヨタ">トヨタ</option>
+                    <option value="ポルシェ AG">ポルシェAG</option>
+                    <option value="ジャガー・ランドローバー">ジャガー・ランドローバー</option>
+                </select>
+                
+                ナンバープレート　　<select id="plate">
+                    <option value="">--選択してください--</option>
+                    <option value="新宿801 わ 1234">新宿801 わ 1234</option>
+                    <option value="新宿802 わ 9876">新宿802 わ 9876</option>
+                    <option value="新宿803 わ 4567">新宿803 わ 4567</option>
+                    <option value="新宿804 わ 8461">新宿804 わ 8461</option>
+                    <option value="新宿805 わ 1634">新宿805 わ 1634</option>
+                    <option value="新宿806 わ 6138">新宿806 わ 6138</option>
+                    <option value="新宿807 わ 9791">新宿807 わ 9791</option>
+                    <option value="新宿808 わ 7316">新宿808 わ 7316</option> 
+                </select>
+            </div>
+            <div class="select-model">
+                車両モデル　　　<select id="maker">
+                    <option value="">--選択してください--</option>
+                    <option value="ベンツ">ベンツ</option>
+                    <option value="カイエン">カイエン</option>
+                    <option value="BMW">BMW</option>
+                    <option value="カローラ">カローラ</option>
+                    <option value="レクサス">レクサス</option>
+                    <option value="アルファード">アルファード</option>
+                    <option value="ポルシェ">ポルシェ</option>
+                    <option value="ジャガーEタイプ">ジャガーEタイプ</option>
+                </select>
+            </div>
+            <div class="year">
+                年式　　　　　　<select id="year">
+                    <option value="">--選択してください--</option>
+                    <option value="2015">2015年</option>
+                    <option value="2016">2016年</option>
+                    <option value="2017">2017年</option>
+                    <option value="2018">2018年</option>
+                    <option value="2019">2019年</option>
+                    <option value="2020">2020年</option>
+                </select>
+            </div>
+        </div>
+        <div class="button-container">
+            <button onclick="location.href='P4.html'">検索画面に戻る</button>
+            <button onclick="location.href='P9.html'">追加確認画面</button>
+        </div>
+    </body>
 </html>
