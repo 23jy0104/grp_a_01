@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="../../../CSS/top.css">
     <link rel="stylesheet" href="../../../CSS/price.css">
     <link rel="stylesheet" href="../../../CSS/not_login.css">
+    <link rel="stylesheet" href="../../../CSS/P53.css">
 </head>
 <body>
 
@@ -29,26 +30,23 @@
         <li class="nav-item"><a href="../../html/home/P46.html">車種</a></li>
     </ul>
 </nav>
-<section>
-    <form action="P52.html">
-        <label>住所/ステーション名から探す</label><br>
-        <div class="radio-group">
-            <label>
-                <input type="radio" name="searchType" value="location"> 住所
-            </label>
-            <label>
-                <input type="radio" name="searchType" value="station"> ステーション
-            </label>
+<div class="column">
+    <h2 class="column_title001">住所/ステーション名から探す</h2>
+    <div>
+        <input type="radio" id="adr" name="localSearchKbn" checked="checked" value="1" />
+        <label for="adr">住所</label>
+        <input type="radio" id="stationNm" name="localSearchKbn" value="2" class="ml20" />
+        <label for="stationNm">ステーション名</label>
+
+        <div class="input-group">
+            <input type="text" id="nameAdr-s" name="nameAdr-s" placeholder="住所やステーション名を入力" style="ime-mode:active;" />
+            <input type="image" id="doNameAdrSearch" name="doNameAdrSearch" src="../../../img/kensaku.gif" onclick="location.href='P51.html'" alt="検索" />
         </div>
-        <input type="text">
-        <button type="submit" class="search-button">検索▶</button>
-    </form>
-    
-    
-    <p>例）新宿、渋谷、池袋</p>
-    <p class="err">※検索に該当するステーションはありません。</p>
-    </p>
-</section>
+        <p class="notes">例）有楽町、新宿、六本木</p>
+        <span style="color: red;">※検索に該当するステーションはありません。
+        </span>
+    </div>
+</div>
 
 </body>
 </html>
