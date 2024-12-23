@@ -1,0 +1,57 @@
+@charset "UTF-8";
+
+body {
+    background-color: #e0f5ff; /* 背景色を明るい青に */ 
+    font-family: Arial, sans-serif;
+    margin: 0; padding: 20px;
+}
+.container{
+    text-align: center;
+}
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+} .logo {
+    width: 50px; /* ロゴのサイズ調整 */
+    margin-right: 10px;
+} .button-container {
+    margin: 20px 0;
+} .yobi-button {
+    background-color: #007bff; /* 青色 */
+    color: black;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    margin: 0 10px;
+    cursor: pointer;
+} .update-button {
+    background-color: #007bff; /* 青色 */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    margin: 20px 0;
+    cursor: pointer;
+} .process-button {
+    background-color: #6c757d; /* グレー */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    margin: 10px 0;
+    cursor: pointer;
+} .return-button {
+    display: block;
+    margin: 20px left; /* 中央に配置 */
+}
+.highlight {
+    background-color: lightyellow; /* 薄い黄色 */
+}
+.red {
+    background-color: red; /* 赤色 */
+}
+.orange {
+    background-color: orange; /* オレンジ色 */
+}
