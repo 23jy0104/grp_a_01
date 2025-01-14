@@ -1,10 +1,13 @@
-@charset "UTF-8";
-
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
     margin: 0;
     padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh; /* ビューポートの高さを100%に */
 }
 h1 {
     text-align: center;
@@ -47,4 +50,22 @@ button:hover {
     justify-content: center;
     gap: 10px; /* ボタンの間隔を調整 */
     margin-top: 20px; /* 上部の余白を調整 */
+}
+#result-container {
+    display: none; /* 初期状態では非表示 */
+    margin-top: 20px;
+    text-align: center; /* 中央寄せ */
+}
+table {
+    border-collapse: collapse;
+    width: 80%; /* テーブルの幅を指定 */
+    margin: auto; /* 中央寄せ */
+    border: 1px solid #ccc; /* テーブルの枠線 */
+    background-color: #fff; /* テーブルの背景色 */
+}
+td {
+    border: 1px solid #ccc; /* セルの枠線 */
+    padding: 10px; /* セルの内側の余白 */
+    text-align: left; /* テキストの位置を左寄せ */
+    white-space: nowrap; /* 折り返しなし */
 }
