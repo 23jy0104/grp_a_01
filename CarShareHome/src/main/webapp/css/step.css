@@ -128,7 +128,7 @@ h1 {
     gap: 10px;
 
 }
-input[type="button"] {
+button[type="button"] {
     background-color: orange; /* ボタンの背景色をオレンジに */
     color: black; /* 文字色を白に */
     border: none; /* ボタンの枠線をなしに */
@@ -136,6 +136,6 @@ input[type="button"] {
     cursor: pointer; /* カーソルをポインターに */
     border-radius: 5px; /* ボタンの角を丸くする */
 }
-input[type="button"]:hover {
+button[type="button"]:hover {
     background-color: darkorange; /* ホバー時の色を変更 */
 }
