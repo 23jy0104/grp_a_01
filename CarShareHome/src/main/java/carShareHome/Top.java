@@ -19,24 +19,26 @@ import model.Customer;
  */
 @WebServlet("/Top")
 public class Top extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-       
+    private static final long serialVersionUID = 1L;
+
     /**
      * @see HttpServlet#HttpServlet()
      */
     public Top() {
         super();
-        // TODO Auto-generated constructor stub
     }
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.setCharacterEncoding("UTF-8");
-		response.setContentType("text/html;charset=UTF-8");
-		CustomerDao ct=new CustomerDao();
-		ArrayList<Customer>clist=ct.addCustomer();
-		HttpSession session =request.getSession();
-		session.setAttribute("customer", ct);
-		RequestDispatcher rd=request.getRequestDispatcher("top.jsp");
-		rd.forward(request, response);
-	}
 
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html;charset=UTF-8");
+
+        CustomerDao customerDao = new CustomerDao();
+        ArrayList<Customer> customerList = customerDao.searchCustomer("", null); // 例: 引数を適切に設定
+
+        HttpSession session = request.getSession();
+        session.setAttribute("customerList", customerList); // 顧客リストをセッションに保存
+
+        RequestDispatcher rd = request.getRequestDispatcher("top.jsp");
+        rd.forward(request, response);
+    }
 }
