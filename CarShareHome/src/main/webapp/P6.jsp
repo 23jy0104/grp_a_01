@@ -10,99 +10,137 @@
     <title>TMC カーシェア</title>
     <link rel="stylesheet" href="css/step.css"> 
     <script>
-    function validateForm(event) {
-        event.preventDefault(); // フォーム送信を防ぐ
-        let errorMessages = [];
-        
-        const fullname = document.getElementById('fullname').value;
-        const fullNamekana = document.getElementById('fullname-kana').value;
-        const gender = document.querySelector('input[name="gender"]:checked');
-        const birthyear=document.getElementById('birthyear').value;
-        const birthmonth =document.getElementById('birthmonth').value;
-        const birthday = document.getElementById('birthday').value;
-        const postcode = document.getElementById('postcode').value;
-        const prefecture=document.getElementById('prefecture').value;
-        const address=document.getElementById('address').value;
-        const phonenumber=document.getElementById('TEL').value;
-        const mailaddress=document.getElementById('e_mail').value;
-        const password=document.getElementById("password").value;
-        const ageinpassword=document.getElementById("agein_password").value;
-        const dateyear=document.getElementById('year').value;
-        const datemonth=document.getElementById("month").value;
-        const dateday=document.getElementById('day').value;
-        const licensenumber=document.getElementById('driver_licence_number').value;
-        const licensetype=document.getElementById('type').value;
-        const licenseyear=document.getElementById('license_year').value;
-        const licensemonth=document.getElementById('license_month').value;
-        const licenseday=document.getElementById('license_day').value;
-        const fileomote=document.getElementById('file_omote').files[0];
-        const fileura=document.getElementById('file_ura').files[0];
-        if (!fullname) {
-            errorMessages.push("※姓名が未入力です。");
-        }
-        if (!fullNamekana) {
-            errorMessages.push("※姓名カナが未入力です。");
-        }
-        if(!gender){
-            errorMessages.push("※性別が選択されていません。")
-        }
-        if(!birthyear||!birthmonth||!birthday){
-            errorMessages.push("※誕生日が未入力です。")
-        }
-        if(!postcode){
-            errorMessages.push('※郵便番号が未入力です。')
-        }
-        if(prefecture==""){
-            errorMessages.push("※都道府県を選択してください。")
-        }
-        if(!address){
-            errorMessages.push("※市区町村が未入力です。")
-       	}
-        if(!phonenumber){
-            errorMessages.push("※携帯電話番号が未入力です。")
-         }
-        if(!mailaddress){
-            errorMessages.push("※メールアドレスが未入力です。")
-        }
-        if(!password){
-            errorMessages.push("※パスワードが未入力です。")
-        }
-        if(!ageinpassword){
-            errorMessages.push("※パスワード確認用が未入力です。")
-        }
-        if (password !== ageinpassword) {
-            errorMessages.push("※パスワードと確認用パスワードが一致しません。");
-        }
-        if(!dateyear==""|| !datemonth|| !dateday){
-            errorMessages.push("※免許証の有効期限が選択されていません。")
-        }
-        if(!licensenumber){
-            errorMessages.push("※免許証番号が未入力です。")
-        }
-        if(licensetype==""){
-            errorMessages.push("※免許証種別が未選択です。")
-        }
-        if(!licenseyear|| !licensemonth|| licenseday){
-            errorMessages.push("※免許証取得日が未選択です。")
-        }
-        if(!fileomote){
-            errorMessages.push("※免許証(表面)写真が選択されていません。")
-        }
-        if(!fileura){
-            errorMessages.push("※免許証(裏面)写真が選択されていません。")
-        }
-        // エラーメッセージを表示
-        const errorContainer = document.getElementById('errorMessages');
-        errorContainer.innerHTML = ''; // 以前のエラーメッセージをクリア
-        if (errorMessages.length > 0) {
-            errorContainer.innerHTML = errorMessages.join('<br>');
-            errorContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        } else {
-            alert("基本情報は正常です。");
-            // フォームを送信する場合は以下の行を有効にします
-            // document.getElementById('infoForm').submit();
-        }
-    }
+	    function validateForm(event) {
+	        event.preventDefault(); // フォーム送信を防ぐ
+	        let errorMessages = [];
+	        
+	        const sei = document.getElementById('sei');
+	        const mei = document.getElementById('mei');
+	        const seikana = document.getElementById('meikana');
+	        const meikana = document.getElementById('seikana');
+	        const gender = document.querySelector('input[name="gender"]:checked');
+	        const birthyear = document.getElementById('birthyear');
+	        const birthmonth = document.getElementById('birthmonth');
+	        const birthday = document.getElementById('birthday');
+	        const postcode = document.getElementById('postcode');
+	        const prefecture = document.getElementById('prefecture');
+	        const address = document.getElementById('address');
+	        const phonenumber = document.getElementById('TEL');
+	        const mailaddress = document.getElementById('e_mail');
+	        const password = document.getElementById("password");
+	        const ageinpassword = document.getElementById("agein_password");
+	        const dateyear = document.getElementById('year');
+	        const datemonth = document.getElementById("month");
+	        const dateday = document.getElementById('day');
+	        const licensenumber = document.getElementById('driver_licence_number');
+	        const licensetype = document.getElementById('type');
+	        const licenseyear = document.getElementById('license_year');
+	        const licensemonth = document.getElementById('license_month');
+	        const licenseday = document.getElementById('license_day');
+	        const fileomote = document.getElementById('file_omote').files[0];
+	        const fileura = document.getElementById('file_ura').files[0];
+	
+	        // 入力フィールドをリセット
+	        const inputs = [sei, mei, seikana, meikana, birthyear, birthmonth, birthday, postcode, prefecture, address, phonenumber, mailaddress, password, ageinpassword, dateyear, datemonth, dateday, licensenumber, licensetype, licenseyear, licensemonth, licenseday];
+	        inputs.forEach(input => {
+	            input.style.backgroundColor = ''; // 背景色をリセット
+	        });
+	        if (!sei.value) {
+	            errorMessages.push("※姓が未入力です。");
+	            sei.style.backgroundColor = '#ffcccc'; // 薄い赤色
+	        }
+	        if (!mei.value) {
+	            errorMessages.push("※名が未入力です。");
+	            mei.style.backgroundColor = '#ffcccc'; // 薄い赤色
+	        }
+	        if(!seikana.value){
+	        	 errorMessages.push("※姓カナが未入力です。");
+		         seikana.style.backgroundColor = '#ffcccc'; // 薄い赤色
+		    }
+		    if(!meikana.value){
+		    	errorMessages.push("※名カナが未入力です。");
+		        seikana.style.backgroundColor = '#ffcccc'; // 薄い赤色
+			}
+	        if (!gender) {
+	            errorMessages.push("※性別が選択されていません。");
+	        }
+	        if (!birthyear.value || !birthmonth.value || !birthday.value) {
+	            errorMessages.push("※誕生日が未入力です。");
+	            birthyear.style.backgroundColor = '#ffcccc'; // 薄い赤色
+	            birthmonth.style.backgroundColor = '#ffcccc'; // 薄い赤色
+	            birthday.style.backgroundColor = '#ffcccc'; // 薄い赤色
+	        }
+	        if (!postcode.value) {
+	            errorMessages.push('※郵便番号が未入力です。');
+	            postcode.style.backgroundColor = '#ffcccc'; // 薄い赤色
+	        }
+	        if (prefecture.value === "") {
+	            errorMessages.push("※都道府県を選択してください。");
+	            prefecture.style.backgroundColor = '#ffcccc'; // 薄い赤色
+	        }
+	        if (!address.value) {
+	            errorMessages.push("※市区町村が未入力です。");
+	            address.style.backgroundColor = '#ffcccc'; // 薄い赤色
+	        }
+	        if (!phonenumber.value) {
+	            errorMessages.push("※携帯電話番号が未入力です。");
+	            phonenumber.style.backgroundColor = '#ffcccc'; // 薄い赤色
+	        }
+	        if (!mailaddress.value) {
+	            errorMessages.push("※メールアドレスが未入力です。");
+	            mailaddress.style.backgroundColor = '#ffcccc'; // 薄い赤色
+	        }
+	        if (!password.value) {
+	            errorMessages.push("※パスワードが未入力です。");
+	            password.style.backgroundColor = '#ffcccc'; // 薄い赤色
+	        }
+	        if (!ageinpassword.value) {
+	            errorMessages.push("※パスワード確認用が未入力です。");
+	            ageinpassword.style.backgroundColor = '#ffcccc'; // 薄い赤色
+	        }
+	        if (password.value !== ageinpassword.value) {
+	            errorMessages.push("※パスワードと確認用パスワードが一致しません。");
+	        }
+	        if (!dateyear.value || !datemonth.value || !dateday.value) {
+	            errorMessages.push("※免許証の有効期限が選択されていません。");
+	            dateyear.style.backgroundColor = '#ffcccc'; // 薄い赤色
+	            datemonth.style.backgroundColor = '#ffcccc'; // 薄い赤色
+	            dateday.style.backgroundColor = '#ffcccc'; // 薄い赤色
+	        }
+	        if (!licensenumber.value) {
+	            errorMessages.push("※免許証番号が未入力です。");
+	            licensenumber.style.backgroundColor = '#ffcccc'; // 薄い赤色
+	        }
+	        if (licensetype.value === "") {
+	            errorMessages.push("※免許証種別が未選択です。");
+	            licensetype.style.backgroundColor = '#ffcccc'; // 薄い赤色
+	        }
+	        if (!licenseyear.value || !licensemonth.value || !licenseday.value) {
+	            errorMessages.push("※免許証取得日が未選択です。");
+	            licenseyear.style.backgroundColor = '#ffcccc'; // 薄い赤色
+	            licensemonth.style.backgroundColor = '#ffcccc'; // 薄い赤色
+	            licenseday.style.backgroundColor = '#ffcccc'; // 薄い赤色
+	        }
+	        if (!fileomote) {
+	            errorMessages.push("※免許証(表面)写真が選択されていません。");
+	        }
+	        if (!fileura) {
+	            errorMessages.push("※免許証(裏面)写真が選択されていません。");
+	        }
+	
+	        // エラーメッセージを表示
+	        const errorContainer = document.getElementById('errorMessages');
+	        errorContainer.innerHTML = ''; // 以前のエラーメッセージをクリア
+	        if (errorMessages.length > 0) {
+	            errorContainer.innerHTML = errorMessages.join('<br>');
+	            errorContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+	        } else {
+	            alert("基本情報は正常です。");
+	            // フォームを送信する場合は以下の行を有効にします
+	            // document.getElementById('infoForm').submit();
+	        }
+	    }
+
     </script>
 </head>
 <body>
@@ -145,8 +183,8 @@
 	            <span class="required">必須</span> 氏名<span class="highlight"> ※全角</span>
 	        </label>
 	        <div class="input-container">
-	            姓<input type="text" id="fullname" placeholder="例：たいむ">
-	            名<input type="text" id="given-name" placeholder="例：太郎">
+	            姓<input type="text" id="sei" placeholder="例：たいむ">
+	            名<input type="text" id="mei" placeholder="例：太郎">
 	        </div>
 	    </div>
 	    <div class="form-group">
@@ -154,8 +192,8 @@
 	            <span class="required">必須</span> 氏名<span class="highlight"> ※全角カナ</span>
 	        </label>
 	        <div class="input-container">
-	            姓<input type="text" id="fullname-kana" placeholder="例：タイム">
-	            名<input type="text" id="given-name-kana" placeholder="例：タロウ">
+	            姓<input type="text" id="seikana" placeholder="例：タイム">
+	            名<input type="text" id="meikana" placeholder="例：タロウ">
 	        </div>
 	    </div>
 	    <div class="form-group">
