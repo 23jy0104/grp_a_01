@@ -4,8 +4,10 @@ import java.util.Date;
 
 public class Customer implements Serializable{
 	private String customerId;
-	private String customerName;
-	private String customerNameKana;
+	private String customerSei;
+	private String customerMei;
+	private String customerSeiKana;
+	private String customerMeiKana;
 	private String customerPassword;
 	private String phoneNumber;
 	private String email;
@@ -21,33 +23,25 @@ public class Customer implements Serializable{
 		super();
 	}
 
-	public Customer(String customerId, String customerName, String customerNameKana,String customerPassword, String phoneNumber, String email,
-			Date birthDate, String licenceNumber, Date licenceDate, String customerAddress, String creditId,
-			String omote, String ura) {
+	public Customer(String customerId, String customerSei, String customerMei, String customerSeiKana,
+			String customerMeiKana, String customerPassword, String phoneNumber, String email, Date birthDate,
+			String licenseNumber, Date licenceDate, String customerAddress, String creditId, String omote, String ura) {
 		super();
 		this.customerId = customerId;
-		this.customerName = customerName;
-		this.customerNameKana=customerNameKana;
+		this.customerSei = customerSei;
+		this.customerMei = customerMei;
+		this.customerSeiKana = customerSeiKana;
+		this.customerMeiKana = customerMeiKana;
 		this.customerPassword = customerPassword;
 		this.phoneNumber = phoneNumber;
 		this.email = email;
 		this.birthDate = birthDate;
-		this.licenseNumber = licenceNumber;
+		this.licenseNumber = licenseNumber;
 		this.licenceDate = licenceDate;
 		this.customerAddress = customerAddress;
 		this.creditId = creditId;
 		this.omote = omote;
 		this.ura = ura;
-	}
-	
-	
-
-	public String getCustomerNameKana() {
-		return customerNameKana;
-	}
-
-	public void setCustomerNameKana(String customerNameKana) {
-		this.customerNameKana = customerNameKana;
 	}
 
 	public String getCustomerId() {
@@ -56,14 +50,6 @@ public class Customer implements Serializable{
 
 	public void setCustomerId(String customerId) {
 		this.customerId = customerId;
-	}
-
-	public String getCustomerName() {
-		return customerName;
-	}
-
-	public void setCustomerName(String customerName) {
-		this.customerName = customerName;
 	}
 
 	public String getCustomerPassword() {
@@ -145,5 +131,59 @@ public class Customer implements Serializable{
 	public void setUra(String ura) {
 		this.ura = ura;
 	}
+
+	public String getCustomerSei() {
+		return customerSei;
+	}
+
+	public void setCustomerSei(String customerSei) {
+		this.customerSei = customerSei;
+	}
+
+	public String getCustomerMei() {
+		return customerMei;
+	}
+
+	public void setCustomerMei(String customerMei) {
+		this.customerMei = customerMei;
+	}
+
+	public String getCustomerSeiKana() {
+		return customerSeiKana;
+	}
+
+	public void setCustomerSeiKana(String customerSeiKana) {
+		this.customerSeiKana = customerSeiKana;
+	}
+
+	public String getCustomerMeiKana() {
+		return customerMeiKana;
+	}
+
+	public void setCustomerMeiKana(String customerMeiKana) {
+		this.customerMeiKana = customerMeiKana;
+	}
+
+	public String getLicenseNumber() {
+		return licenseNumber;
+	}
+
+	public void setLicenseNumber(String licenseNumber) {
+		this.licenseNumber = licenseNumber;
+	}
 	
+	public String getCustomerName() {
+		return customerSei +""+ customerMei;
+	}
+	public String getCustomerNameKana() {
+		return customerSeiKana +""+customerMeiKana;
+	}
+	public void setCustomerName(String customerSei, String customerMei) {
+        this.customerSei = customerSei;
+        this.customerMei = customerMei;
+    }
+	public void setCustomerNameKana(String customerSeiKana,String customerMeiKana) {
+		this.customerSeiKana = customerSeiKana;
+        this.customerMeiKana = customerMeiKana;
+	}
 }

@@ -135,9 +135,7 @@
 	            errorContainer.innerHTML = errorMessages.join('<br>');
 	            errorContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
 	        } else {
-	            alert("基本情報は正常です。");
-	            // フォームを送信する場合は以下の行を有効にします
-	            // document.getElementById('infoForm').submit();
+	        	window.location.href = "P20.jsp";
 	        }
 	    }
 
@@ -359,13 +357,13 @@
 	        <label for="password">
 	            <span class="required">必須</span>パスワード<span class="highlight"> ※半角英数字8字以上20字以内</span>
 	        </label>
-	        <input type="text"id="password"placeholder="例:mypassword1234"required>
+	        <input type="password"id="password"placeholder="例:mypassword1234"required>
 	    </div>
 	    <div class="form-group">
 	        <label for="agein_password">
 	            <span class="required">必須</span>パスワード確認用
 	        </label>
-	        <input type="text"id="agein_password"placeholder="例:mypassword1234"required>
+	        <input type="password"id="agein_password"placeholder="例:mypassword1234"required>
 	    </div>
 	    <div class="form-group">
 	        <label for="information">
