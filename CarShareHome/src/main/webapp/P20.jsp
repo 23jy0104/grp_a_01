@@ -83,7 +83,7 @@
                 }
             %>
             <div class="button-container">
-                <input type="button" value="入力へ戻る" onclick="location.href='UC03_01.html'">
+                <input type="button" value="入力へ戻る" onclick="location.href='P6.html'">
                 <input type="button" value="クレジット情報のご入力へ" onclick="location.href='UC03_05.html'">
             </div>
         </div>
