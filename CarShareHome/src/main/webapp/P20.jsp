@@ -59,7 +59,7 @@
                     <div class="input-container">${customer.customerAddress }</div>
                     
                     <label for="TEL">携帯電話番号</label>
-                    <div class="input-container">${customer.phoneNumber }</div>
+                    <div class="input-container">${customer.tellNumber }</div>
                     
                     <label for="licence">免許証情報</label>
                     <div class="form-licence">
