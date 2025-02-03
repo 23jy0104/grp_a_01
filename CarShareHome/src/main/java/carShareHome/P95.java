@@ -24,19 +24,31 @@ public class P95 extends HttpServlet {
         String currentPassword = request.getParameter("currentPassword");
         String newPassword = request.getParameter("newPassword");
         String confirmNewPassword = request.getParameter("confirmNewPassword");
+        String errorMessage = null;
 
-        Customer customer = userDao.getUserByUsername(customerName); // 小文字に修正
+        Customer customer = userDao.getUserByUsername(customerName); // ユーザー情報を取得
 
-        if (customer != null && customer.getCustomerPassword().equals(currentPassword)) {
-            if (newPassword.equals(confirmNewPassword)) {
-                customer.setCustomerPassword(newPassword);
-                userDao.updateUser(customer);
-                response.sendRedirect("P99.jsp");
-            } else {
-                response.sendRedirect("changePassword.jsp?error=新しいパスワードが一致しません。");
-            }
-        } else {
-            response.sendRedirect("changePassword.jsp?error=現在のパスワードが正しくありません。");
+        // パスワードの形式を検証
+        if (!isValidPassword(currentPassword) || !isValidPassword(newPassword) || !isValidPassword(confirmNewPassword)) {
+            errorMessage = "パスワードは半角数字8字～12字までである必要があります。";
+        } else if (!newPassword.equals(confirmNewPassword)) {
+            errorMessage = "新規パスワードと確認用パスワードが一致しません。";
         }
+
+        if (errorMessage != null) {
+            response.sendRedirect("P95.jsp?error=" + errorMessage); // エラーメッセージをリダイレクト
+        } else {
+            if (customer != null && customer.getCustomerPassword().equals(currentPassword)) {
+                customer.setCustomerPassword(newPassword);
+                userDao.updateUser(customer); // パスワードを更新
+                response.sendRedirect("P99.jsp"); // 成功ページへリダイレクト
+            } else {
+                response.sendRedirect("P95.jsp?error=現在のパスワードが正しくありません。");
+            }
+        }
+    }
+
+    private boolean isValidPassword(String password) {
+        return password != null && password.matches("^[0-9]{8,12}$");
     }
 }
