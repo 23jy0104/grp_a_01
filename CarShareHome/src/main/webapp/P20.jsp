@@ -1,11 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import="model.Customer"%>
-<%@ page import="java.util.ArrayList"%>
 <!--基本情報の確認ページ-->
-<% 
-    ArrayList<Customer> clist = (ArrayList<Customer>) session.getAttribute("clist");
-%>
 <!DOCTYPE html>
 <html lang="ja">
 <head>

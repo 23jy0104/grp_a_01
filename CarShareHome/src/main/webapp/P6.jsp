@@ -571,7 +571,6 @@
 	    <button type="button" onclick="validateForm(event)" class="btn">基本情報のご確認</button>
     </div>
 	</form>
-	<div id="errorMessages" style="color: red;"></div>
 </div>
 </body>
 </html>
