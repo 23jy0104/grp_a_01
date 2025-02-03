@@ -58,7 +58,9 @@ public class CarShareNew extends HttpServlet {
         Customer customer = new Customer();
         customer.setBirthDate(birthDate);
         
-        
+        if (year < 1900 || year > Calendar.getInstance().get(Calendar.YEAR)) {
+            System.out.checkError();
+        }
         try {
             licenseDate = dateFormat.parse(licenseDateString);
         } catch (Exception e) {
