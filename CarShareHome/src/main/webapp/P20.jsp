@@ -51,32 +51,30 @@
     <div class="form-wrapper">
         <div class="form-group">
             <h1>基本情報の確認</h1>
-            <%
-                for (Customer c : clist) {
-            %>
+           
                 <div class="form-section">
                     <label for="fullname">氏名</label>
-                    <div class="input-container"><%= c.getCustomerName() %></div>
+                    <div class="input-container">${customer.customerName }</div>
                     
                     <label for="fullname-kana">氏名(フリガナ)</label>
-                    <div class="input-container"><%= c.getCustomerNameKana() %></div>
+                    <div class="input-container">${customer.customerNameKana }</div>
                     
                     <label for="address">住所</label>
-                    <div class="input-container"><%= c.getCustomerAddress() %></div>
+                    <div class="input-container">${customer.customerAddress }</div>
                     
                     <label for="TEL">携帯電話番号</label>
-                    <div class="input-container"><%= c.getPhoneNumber() %></div>
+                    <div class="input-container">${customer.phoneNumber }</div>
                     
                     <label for="licence">免許証情報</label>
                     <div class="form-licence">
                         <label for="type">免許証番号</label>
-                        <div class="input-container"><%= c.getLicenceNumber() %></div>
+                        <div class="input-container">${customer.licenseNumber }</div>
                         
                         <label for="deadline">有効期限</label>
-                        <div class="input-container"><%= c.getLicenceDate() %></div>
+                        <div class="input-container">${customer.licenseDate }</div>
                         
                         <label for="email">メールアドレス</label>
-                        <div class="input-container"><%= c.getEmail() %></div>
+                        <div class="input-container">${customer.eMail }</div>
                     </div>
                 </div>
             <%
@@ -84,7 +82,7 @@
             %>
             <div class="button-container">
                 <input type="button" value="入力へ戻る" onclick="location.href='P6.html'">
-                <input type="button" value="クレジット情報のご入力へ" onclick="location.href='UC03_05.html'">
+                <input type="button" value="クレジット情報のご入力へ" onclick="location.href='P22.html'">
             </div>
         </div>
     </div>
