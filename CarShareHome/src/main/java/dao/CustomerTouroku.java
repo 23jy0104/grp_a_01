@@ -10,7 +10,7 @@ import java.util.Date;
 
 import model.Customer;
 
-public class CustomerTouroku {
+public class CustomerTouroku implements UserDao {
     private Connection con = null;
 
     public CustomerTouroku() {
