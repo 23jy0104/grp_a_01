@@ -83,4 +83,45 @@ public class CustomerTouroku {
         }
         return cs;
     }
+    public Customer getUserByUsername(String customerName) {
+		Customer customer = null;
+        try{
+            String sql = "SELECT * FROM Customer WHERE customer_Name = ?";
+            PreparedStatement sa=con.prepareStatement(sql);
+            sa.setString(1, customerName);
+            ResultSet rs = sa.executeQuery();
+            if (rs.next()) {
+            	customer = new Customer(
+                        String.valueOf(rs.getInt("customer_Id")), // int型をString型に変換
+                        rs.getString("customer_Name"),
+                        rs.getString("customer_Password"),
+                        rs.getString("tell_number"),
+                        rs.getString("e_mail"),
+                        sql, sql, sql, rs.getDate("birth_date"),
+                        rs.getString("license_number"),
+                        rs.getDate("license_date"),
+                        rs.getString("customer_address"),
+                        rs.getString("credit_id"),
+                        rs.getString("omote_jpg"),
+                        rs.getString("ura_jpg")
+                    );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return customer;
+    }
+
+
+    public void updateUser(Customer customerId) {
+        try{
+        	String sql = "UPDATE Customer SET customer_password = ? WHERE customer_Name = ?";
+        	PreparedStatement sa=con.prepareStatement(sql);
+            sa.setString(1, customerId.getCustomerPassword());
+            sa.setString(2, customerId.getCustomerName());
+            sa.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
