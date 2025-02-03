@@ -9,7 +9,7 @@ public class Customer implements Serializable{
 	private String customerSeiKana;
 	private String customerMeiKana;
 	private String customerPassword;
-	private String phoneNumber;
+	private String tellNumber;
 	private String email;
 	private Date birthDate;
 	private String licenseNumber;
@@ -24,7 +24,7 @@ public class Customer implements Serializable{
 	}
 
 	public Customer(String customerId, String customerSei, String customerMei, String customerSeiKana,
-			String customerMeiKana, String customerPassword, String phoneNumber, String email, Date birthDate,
+			String customerMeiKana, String customerPassword, String tellNumber, String email, Date birthDate,
 			String licenseNumber, Date licenceDate, String customerAddress, String creditId, String omote, String ura) {
 		super();
 		this.customerId = customerId;
@@ -33,7 +33,7 @@ public class Customer implements Serializable{
 		this.customerSeiKana = customerSeiKana;
 		this.customerMeiKana = customerMeiKana;
 		this.customerPassword = customerPassword;
-		this.phoneNumber = phoneNumber;
+		this.tellNumber = tellNumber;
 		this.email = email;
 		this.birthDate = birthDate;
 		this.licenseNumber = licenseNumber;
@@ -60,12 +60,12 @@ public class Customer implements Serializable{
 		this.customerPassword = customerPassword;
 	}
 
-	public String getPhoneNumber() {
-		return phoneNumber;
+	public String gettellNumber() {
+		return tellNumber;
 	}
 
-	public void setPhoneNumber(String phoneNumber) {
-		this.phoneNumber = phoneNumber;
+	public void setPhoneNumber(String tellNumber) {
+		this.tellNumber = tellNumber;
 	}
 
 	public String getEmail() {

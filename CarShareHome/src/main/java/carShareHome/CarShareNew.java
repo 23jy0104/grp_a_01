@@ -92,7 +92,7 @@ public class CarShareNew extends HttpServlet {
             preparedStatement.setString(1, customer.getCustomerName());
             preparedStatement.setString(2, customer.getCustomerNameKana());
             preparedStatement.setString(3, customer.getCustomerPassword());
-            preparedStatement.setString(4, customer.getPhoneNumber());
+            preparedStatement.setString(4, customer.gettellNumber());
             preparedStatement.setString(5, customer.getEmail());
             preparedStatement.setDate(6, new java.sql.Date(customer.getBirthDate().getTime()));
             preparedStatement.setString(7, customer.getLicenseNumber());

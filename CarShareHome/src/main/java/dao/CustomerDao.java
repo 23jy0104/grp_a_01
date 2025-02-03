@@ -44,7 +44,7 @@ public class CustomerDao {
         try (PreparedStatement pstmt = con.prepareStatement(sql)) {
             pstmt.setString(1, customer.getCustomerName());
             pstmt.setString(2, customer.getCustomerPassword());
-            pstmt.setString(3, customer.getPhoneNumber());
+            pstmt.setString(3, customer.gettellNumber());
             pstmt.setString(4, customer.getEmail());
             pstmt.setDate(5, new java.sql.Date(customer.getBirthDate().getTime()));
             pstmt.setString(6, customer.getLicenceNumber());
