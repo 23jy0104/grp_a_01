@@ -10,7 +10,7 @@
     <title>TMC カーシェア</title>
     <link rel="stylesheet" href="css/top.css">
     <link rel="stylesheet" href="css/price.css">
-    <link rel="stylesheet" href="css/useprice.css">
+    <link rel="stylesheet" href="css/comprice.css">
 </head>
 <body>
 
@@ -25,7 +25,7 @@
 
 <nav class="nav">
     <ul>
-        <li class="nav-item"><a href="../../html/home/UC02_01_S1_S2.html">ステーション検索</a></li>
+        <li class="nav-item"><a href="P49.jsp">ステーション検索</a></li>
         <li class="nav-item"><a href="P40.jsp">料金</a></li>
         <li class="nav-item active"><a href="P43.jsp">利用方法</a></li>
         <li class="nav-item"><a href="P46.jsp">車種</a></li>
@@ -42,41 +42,32 @@
                 <td><a href="P40.jsp" class="link">利用料金</a></td>
             </tr>
             <tr>
-                <td><a href="P41.jsp" class="link active">補償制度</a></td>
+                <td><a href="P41.jsp" class="link ">補償制度</a></td>
             </tr>
             <tr>
-                <td><a href="P42.jsp" class="link">延長、超過料金について</a></td>
+                <td><a href="P42.jsp" class="link active">延長、超過料金について</a></td>
             </tr>
         </table>
     </div>
     <div class="comprice">
         <table>
             <tr>
-                <th class="price" colspan="2">補償制度</th>
-            </tr>
-            <tr>
-                <td>安心補償サービス加入料金</td>
-                <td>550円/利用</td>
+                <th class="price" colspan="2">延長について</th>
             </tr>
         </table>
-        <p>事故時のNOC、タイヤの実費に加え、バッテリー上がり、キーのインロック、ガス欠、それに関わる搬送（レッカー等）の費用が免除となります。
-        <br>なお、この制度は必須で料金に含まれています。</p>
-        <table class="img">
-            <tr>
-                <h1>これらが免除！</h1>
-            </tr>
-            <tr>
-                <td><img src="img/jioko.png"></td>
-                <td><img src="img/gas.png"></td>
-            </tr>
-            <tr>
-                <td><img src="img/keyrock.png"></td>
-                <td><img src="img/battery.png"></td>
-                <td><img src="img/pank.png"></td>
-            </tr>
-        </table>
+        <p>ご利用を延長される場合は、返却予定時刻までに延長手続きをおこなってください。
+            <table>
+                <tr>
+                    <th class="price" colspan="2">超過料金について</th>
+                </tr>
+            </table>
+            <p>あらかじめ設定した返却予定日時までに手続きをおこなわず、返却が遅れた場合、返却完了までの超過料金は通常料金の2倍です。</p>
+            <table>
+                <tr>
+                    <td>880円/15分</td>
+                </tr>
+            </table>
+        </div>
     </div>
-</div>
-
 </body>
 </html>
