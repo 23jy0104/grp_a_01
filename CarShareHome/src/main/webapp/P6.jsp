@@ -135,7 +135,7 @@
 	            errorContainer.innerHTML = errorMessages.join('<br>');
 	            errorContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
 	        } else {
-	        	window.location.href = "P20.jsp";
+	        	window.location.href = "CarShareNew";
 	        }
 	    }
 
@@ -174,7 +174,7 @@
     </div>
 </div>
 <div id="errorMessages" class="error-message" style="color: red; margin: 10px 0;"></div>
-<form id="infoForm" action="" method="post" onsubmit="validateForm(event);">
+<form id="infoForm" action="CarShareNew" method="post" onsubmit="validateForm(event);">
 	<div class="form-container">
 	    <div class="form-group">
 	        <label for="fullname">
