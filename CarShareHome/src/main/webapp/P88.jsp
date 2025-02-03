@@ -12,6 +12,42 @@
     <link rel="stylesheet" href="css/credit.css">
     <link rel="stylesheet" href="css/P88.css">
     <script>
+	    function validateForm(event) {
+	        const passwordField = document.getElementById('password');
+	        const yearField = document.getElementById('year');
+	        const codeField = document.getElementById('code');
+	        const errorDisplay = document.getElementById('error-message');
+	        errorDisplay.innerHTML = ''; // 前のエラーメッセージをクリア
+
+	        // フィールドの初期化
+	        passwordField.style.backgroundColor = '';
+	        yearField.style.backgroundColor = '';
+	        codeField.style.backgroundColor = '';
+
+	        let hasError = false;
+
+	        if (!passwordField.value) {
+	            errorDisplay.innerHTML += '※パスワード入力は必須です。<br>';
+	            passwordField.style.backgroundColor = '#ffcccc'; // 薄い赤色
+	            hasError = true;
+	        }
+
+	        if (!yearField.value) {
+	            errorDisplay.innerHTML += '※新規パスワード入力は必須です。<br>';
+	            yearField.style.backgroundColor = '#ffcccc'; // 薄い赤色
+	            hasError = true;
+	        }
+
+	        if (!codeField.value) {
+	            errorDisplay.innerHTML += '※新規パスワード再入力は必須です。<br>';
+	            codeField.style.backgroundColor = '#ffcccc'; // 薄い赤色
+	            hasError = true;
+	        }
+
+	        if (hasError) {
+	            event.preventDefault(); // フォームの送信を中止
+	        }
+	    }
        function toggleButton() {
             const checkbox = document.getElementById('myCheckbox');
             const button = document.getElementById('confirmButton');
@@ -44,9 +80,9 @@
     <nav class="nav">
         <ul>
             <li class="nav-item gnav02"><a href="P53.jsp">予約・ステーション検索</a></li>
-            <li class="nav-item gnav03"><a href="P65.html">予約確認・変更・取り消し</a></li>
-            <li class="nav-item gnav04"><a href="P74.html">ご利用履歴</a></li>
-            <li class="nav-item gnav05"><a href="P76.html">ご登録情報の確認</a></li>
+            <li class="nav-item gnav03"><a href="P65.jsp">予約確認・変更・取り消し</a></li>
+            <li class="nav-item gnav04"><a href="P74.jsp">ご利用履歴</a></li>
+            <li class="nav-item gnav05"><a href="P76.jsp">ご登録情報の確認</a></li>
         </ul>
     </nav>
     <table class="present">
@@ -68,14 +104,14 @@
         <label for="credit_number">
             <span class="required">必須</span>クレジットカード番号<span class="highlight"> ※半角数字、ハイフンなし</span>
         </label>
-        <input type="text"id="password"placeholder="例:mypassword1234"required><br><br>
+        <input type="text"id="password"　name = "password" placeholder="例:mypassword1234"required><br><br>
         <span class="highlight2"> 注意:ご登録は、お申込ご本人名義のクレジットカードに限ります。</span><br>
         VISA・JCB・AMEX・MASTER・DINERS・EPOSの6ブランドがご利用いただけます。
         <label for="credit_date">
             <span class="required">必須</span>有効期限
         </label>
         <div class="select-container">
-            <select id="year" required>
+            <select id="year" name= "year" required>
                 <option value="">年</option>
                 <option value="2025">2025年</option>
                 <option value="2026">2026年</option>
@@ -103,9 +139,9 @@
         </div>
         <br>
         <label for="security">
-            <span class="required">必須</span>クレジットカード番号<span class="highlight"> ※半角数字</span>
+            <span class="required">必須</span>セキュリティコード<span class="highlight"> ※半角数字</span>
         </label>
-        <input type="text"id="password"placeholder="例:012"required>
+        <input type="text"id="code" name = "code" placeholder="例:012"required>
         <div class="warning">
             <input type="checkbox" id="myCheckbox" onclick="toggleButton()">入力内容をご確認いただき、誤りがない場合はチェックをつけてください。<br>
             ※チェックが入っていない場合、変更を確定できません。
