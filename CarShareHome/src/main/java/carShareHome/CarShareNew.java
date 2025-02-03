@@ -26,10 +26,8 @@ public class CarShareNew extends HttpServlet {
         response.setContentType("text/html; charset=UTF-8");
         String customerSei = request.getParameter("customerSei");
         String customerMei = request.getParameter("customerMei");
-        String customerName = customerSei + " " + customerMei; // 姓と名の間にスペース
         String customerSeiKana = request.getParameter("customerSeiKana");
         String customerMeiKana = request.getParameter("customerMeiKana");
-        String customerNameKana = customerSeiKana + " " + customerMeiKana; // スペースを追加
         String customerPassword = request.getParameter("customer_Password");
         String tellNumber = request.getParameter("tell_Number");
         String eMail = request.getParameter("e_Mail");
