@@ -8,13 +8,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TMC カーシェア</title>
-    <link rel="stylesheet" href="../../CSS/P20.css"> 
+    <link rel="stylesheet" href="css/P20.css"> 
 </head>
 <body>
 
 <header>
     <div class="logo">
-        <img src="../../img/rog.png" alt="TMC Logo">
+        <img src="img/rog.png" alt="TMC Logo">
         <h1>TMC カーシェア</h1>
     </div>
     <a href="P29.html" class="btn">予約・ログイン ▶</a>
@@ -73,11 +73,8 @@
                         <div class="input-container">${customer.eMail }</div>
                     </div>
                 </div>
-            <%
-                }
-            %>
             <div class="button-container">
-                <input type="button" value="入力へ戻る" onclick="location.href='P6.html'">
+                <input type="button" value="入力へ戻る" onclick="location.href='P6.jsp'">
                 <input type="button" value="クレジット情報のご入力へ" onclick="location.href='P22.html'">
             </div>
         </div>
