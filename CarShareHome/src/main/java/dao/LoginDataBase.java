@@ -35,9 +35,9 @@ public class LoginDataBase extends HttpServlet {
 
         boolean isValidUser = false;
 
-        try (Connection conn = DataBaseUtil.getConnection()) {
+        try (Connection con = DataBaseUtil.getConnection()) {
             String sql = "SELECT * FROM users WHERE email = ? AND password = ?";
-            PreparedStatement stmt = conn.prepareStatement(sql);
+            PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setString(1, email);
             stmt.setString(2, password);
             ResultSet rs = stmt.executeQuery();
