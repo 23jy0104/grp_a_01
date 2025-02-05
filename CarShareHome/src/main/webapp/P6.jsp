@@ -181,8 +181,8 @@
 	            <span class="required">必須</span> 氏名<span class="highlight"> ※全角</span>
 	        </label>
 	        <div class="input-container">
-	            姓<input type="text" id="sei" placeholder="例：たいむ">
-	            名<input type="text" id="mei" placeholder="例：太郎">
+	            姓<input type="text" id="sei" name="customerSei" placeholder="例：たいむ">
+	            名<input type="text" id="mei" name="customerMei" placeholder="例：太郎">
 	        </div>
 	    </div>
 	    <div class="form-group">
@@ -190,8 +190,8 @@
 	            <span class="required">必須</span> 氏名<span class="highlight"> ※全角カナ</span>
 	        </label>
 	        <div class="input-container">
-	            姓<input type="text" id="seikana" placeholder="例：タイム">
-	            名<input type="text" id="meikana" placeholder="例：タロウ">
+	            姓<input type="text" id="seikana" name="customerSeiKana" placeholder="例：タイム">
+	            名<input type="text" id="meikana" name="customerMeiKana" placeholder="例：タロウ">
 	        </div>
 	    </div>
 	    <div class="form-group">

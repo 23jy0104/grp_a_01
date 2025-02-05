@@ -44,7 +44,7 @@ public class CustomerTouroku implements UserDao {
             pstmt.setString(1, customer.getCustomerName());
             pstmt.setString(2, customer.getCustomerNameKana());
             pstmt.setString(3, customer.getCustomerPassword());
-            pstmt.setString(4, customer.getPhoneNumber());
+            pstmt.setString(4, customer.gettellNumber());
             pstmt.setString(5, customer.getEmail());
             pstmt.setDate(6, new java.sql.Date(customer.getBirthDate().getTime()));
             pstmt.setString(7, customer.getLicenceNumber());
