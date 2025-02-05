@@ -6,6 +6,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.servlet.RequestDispatcher;
@@ -26,20 +27,41 @@ public class CarShareNew extends HttpServlet {
         response.setContentType("text/html; charset=UTF-8");
         String customerSei = request.getParameter("customerSei");
         String customerMei = request.getParameter("customerMei");
+        
         String customerSeiKana = request.getParameter("customerSeiKana");
         String customerMeiKana = request.getParameter("customerMeiKana");
+        
         String customerPassword = request.getParameter("customer_Password");
+        
         String tellNumber = request.getParameter("tell_Number");
+        
         String eMail = request.getParameter("e_Mail");
-        String birthDateString = request.getParameter("birth_Date");
-        Date birthDate = null;
+        
+        String yearString = request.getParameter("birthyear");
+        String monthString = request.getParameter("birthmonth");
+        String dayString = request.getParameter("birthday");
+        
         String licenseNumber = request.getParameter("license_Number");
         String licenseDateString = request.getParameter("license_Date");
+        
         Date licenseDate = null;
+        Date birthDate=null;
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
+        
+        int year = Integer.parseInt(yearString);
+        int month = Integer.parseInt(monthString);
+        int day = Integer.parseInt(dayString);
+        
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month - 1, day);
+        birthDate = calendar.getTime();
+        Customer customer = new Customer();
+        customer.setBirthDate(birthDate);
+        
+        if (year < 1900 || year > Calendar.getInstance().get(Calendar.YEAR)) {
+            System.out.checkError();
+        }
         try {
-            birthDate = dateFormat.parse(birthDateString);
             licenseDate = dateFormat.parse(licenseDateString);
         } catch (Exception e) {
             e.printStackTrace(); // 例外処理
@@ -52,7 +74,6 @@ public class CarShareNew extends HttpServlet {
             rd.forward(request, response);
         } else {
             // Customerオブジェクトを作成
-            Customer customer = new Customer();
             customer.setCustomerName(customerMei,customerSei);
             customer.setCustomerNameKana(customerSeiKana,customerMeiKana);
             customer.setCustomerPassword(customerPassword);
