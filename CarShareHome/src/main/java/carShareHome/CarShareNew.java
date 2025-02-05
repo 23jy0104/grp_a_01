@@ -77,7 +77,7 @@ public class CarShareNew extends HttpServlet {
             customer.setCustomerName(customerMei,customerSei);
             customer.setCustomerNameKana(customerSeiKana,customerMeiKana);
             customer.setCustomerPassword(customerPassword);
-            customer.setPhoneNumber(tellNumber);
+            customer.settellNumber(tellNumber);
             customer.setEmail(eMail);
             customer.setBirthDate(birthDate);
             customer.setLicenseNumber(licenseNumber);

@@ -1,6 +1,8 @@
 package model;
 
-public class LoginCustomer {
+import java.io.Serializable;
+
+public class LoginCustomer implements Serializable{
  private String email;
  private String password;
  private boolean login_flag;
