@@ -45,16 +45,14 @@ public class Login extends HttpServlet {
 			final String user ="23jya01";
 			final String pass ="23jya01";
 			
-			String sql ="select e_mail,customer_password From Customer where e_mail = ? and customer_password =?";
+			String sql ="select customer_name, e_mail,customer_password From Customer where e_mail = ? and customer_password =?";
 			try(Connection con =DriverManager.getConnection(url,user,pass);
 					PreparedStatement pstmt =con.prepareStatement(sql)) {
 				pstmt.setString(1, email);
 				pstmt.setString(2, hashedPassword);
-				System.out.println("ここ来てるよ！");
 				ResultSet rs =pstmt.executeQuery();
 				if(rs.next()) {
-					System.out.println("ちゃんと入ったよ！");
-					request.setAttribute("customerId", rs.getString("cutomerId"));
+					request.setAttribute("customerName", rs.getString("customer_name"));
 					path ="P53.jsp";
 				}else {
 					request.setAttribute("loginfalse", "メールアドレスまたはパスワードが違います。");
@@ -81,7 +79,6 @@ public class Login extends HttpServlet {
                 String hex = Integer.toHexString(0xff & b);
                 if (hex.length() == 1) hexString.append('0');
                 hexString.append(hex);
-                System.out.println("ハッシュ後の値も取れてるよ！");
             }
             return hexString.toString();
         } catch (NoSuchAlgorithmException | IOException e) {
