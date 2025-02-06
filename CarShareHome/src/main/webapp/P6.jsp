@@ -210,7 +210,7 @@
 	        <div class="input-container">
 	            <input type="number" id="birthyear" placeholder="年" min="1920" max="2100" required>
 	            <div class="select-container">
-	                <select id="birthmonth" required>
+	                <select id="birthmonth" name="birthmonth" required>
 	                    <option value="">月</option>
 	                    <option value="1">1</option>
 	                    <option value="2">2</option>
@@ -225,7 +225,7 @@
 	                    <option value="11">11</option>
 	                    <option value="12">12</option>
 	                </select>
-	                <select id="birthday" required>
+	                <select id="birthday" name="birthday" required>
 	                    <option value="">日</option>
 	                    <option value="1">1</option>
 	                    <option value="2">2</option>
@@ -266,7 +266,7 @@
 	        <label for="postcode">
 	            <span class="required">必須</span> 郵便番号
 	        </label>
-	        〒<input type="text" id="postcode" placeholder="例：169-0073" required>
+	        〒<input type="text" id="postcode" name="postcode" placeholder="例：169-0073" required>
 	    </div>
 	    <div class="form-group">
 	        <label for="prefecture">
@@ -327,43 +327,43 @@
 	        <label for="address">
 	            <span class="required">必須</span> 市区町村/町名/番地
 	        </label>
-	        <input type="text" id="address" placeholder="例：中央区銀座1-2-3" required>
+	        <input type="text" id="address" name="address" placeholder="例：中央区銀座1-2-3" required>
 	    </div>
 	    <div class="form-group">
 	        <label for="building">
 	            <span class="required">必須</span> マンション名・ビル名など
 	        </label>
-	        <input type="text" id="building" placeholder="例：銀座マンション101号室" required>
+	        <input type="text" id="building" name="buiding"  placeholder="例：銀座マンション101号室" required>
 	    </div>
 	    <div class="form-group">
 	        <label for="TEL">
 	            <span class="required">必須</span>携帯電話番号
 	        </label>
-	        <input type="text" id="TEL" placeholder="例:09012345678" required>
+	        <input type="text" id="TEL" name="TEL" placeholder="例:09012345678" required>
 	    </div>
 	    <div class="form-group">
 	        <label for="koteiTEL">
 	            自宅電話番号
 	        </label>
-	        <input type="text"id="koteiTEL"placeholder="例:0312345678">
+	        <input type="text"id="koteiTEL" name="koteiTEL" placeholder="例:0312345678">
 	    </div>
 	    <div class="form-group">
 	        <label for="e_mail">
 	            <span class="required">必須</span>メールアドレス<span class="highlight"> ※半角英数字</span>
 	        </label>
-	        <input type="text"id="e_mail"placeholder="tmccarchare@share.ne.jp"required>
+	        <input type="text"id="e_mail" name="email" placeholder="tmccarchare@share.ne.jp"required>
 	    </div>
 	    <div class="form-group">
 	        <label for="password">
 	            <span class="required">必須</span>パスワード<span class="highlight"> ※半角英数字8字以上20字以内</span>
 	        </label>
-	        <input type="password"id="password"placeholder="例:mypassword1234"required>
+	        <input type="password"id="password" name="password" placeholder="例:mypassword1234"required>
 	    </div>
 	    <div class="form-group">
 	        <label for="agein_password">
 	            <span class="required">必須</span>パスワード確認用
 	        </label>
-	        <input type="password"id="agein_password"placeholder="例:mypassword1234"required>
+	        <input type="password"id="agein_password" name="agein_password" placeholder="例:mypassword1234"required>
 	    </div>
 	    <div class="form-group">
 	        <label for="information">
@@ -376,7 +376,7 @@
 	        </label>
 	
 	        <div class="select-container">
-	            <select id="year" required>
+	            <select id="year" name="year" required>
 	                <option value="">年</option>
 	                <option value="2025">2025年</option>
 	                <option value="2026">2026年</option>
@@ -386,7 +386,7 @@
 	                <option value="2030">2030年</option>
 	                <option value="2031">2031年</option>
 	            </select>
-	            <select id="month" required>
+	            <select id="month" name="month" required>
 	                <option value="">月</option>
 	                <option value="1">1月</option>
 	                <option value="2">2月</option>
@@ -401,7 +401,7 @@
 	                <option value="11">11月</option>
 	                <option value="12">12月</option>
 	            </select>
-	            <select id="day" required>
+	            <select id="day" name="day" required>
 	                <option value="">日</option>
 	                <option value="1">1</option>
 	                <option value="2">2</option>
@@ -443,14 +443,14 @@
 	        <label for="driver_licence_number">
 	            <span class="required">必須</span>免許証番号<span class="highlight"> ※半角数字</span>
 	        </label>
-	        <input type="text"id="driver_licence_number"placeholder="例:001234567890"required>
+	        <input type="text"id="driver_licence_number" name="licenseNumber" placeholder="例:001234567890"required>
 	    </div>
 	    <div class="form-group">
 	        <label for="licence_type">
 	            <span class="required">必須</span>免許証種別<span class="highlight"> ※半角数字</span>
 	        </label>
 	        <div class="select-container">
-	            <select id="type" required>
+	            <select id="type" name="type" required>
 	                <option value="">--選択--</option>
 	                <option value="普通自動車免許">普通自動車免許</option>
 	                <option value="普通自動車免許(AT限定)">普通自動車免許(AT限定)</option>
@@ -471,14 +471,14 @@
 	            <span class="required">必須</span>免許取得年月日<span class="highlight"> ※半角数字</span>
 	        </lavel>
 	        <div class="select-container">
-	            <select id="license_year" required>
+	            <select id="license_year" name="licenseyear" required>
 	                <option value="">--選択--</option>
 	                <option value="昭和">昭和</option>
 	                <option value="平成">平成</option>
 	                <option value="令和">令和</option>
 	            </select>
 	            <input type="text" id="acquisition" placeholder="例:27" required>
-	            <select id="license_month" required>
+	            <select id="license_month" name="license_month" required>
 	                <option value="">月</option>
 	                <option value="1">1月</option>
 	                <option value="2">2月</option>
@@ -493,7 +493,7 @@
 	                <option value="11">11月</option>
 	                <option value="12">12月</option>
 	            </select>
-	            <select id="license_day" required>
+	            <select id="license_day" name="licenseday" required>
 	                <option value="">日</option>
 	                <option value="1">1</option>
 	                <option value="2">2</option>
