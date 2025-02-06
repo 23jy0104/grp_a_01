@@ -1,5 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import ="model.Customer" %>
+<% 
+    String customerName = (String) request.getAttribute("customerName"); 
+%>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -13,7 +17,7 @@
     <header>
         <img src="img/rog.png" href="home.html" alt="TMCロゴ">
         <h1>TMC カーシェア</h1>
-        <h4 id="username"><%=customer.getcustomerName() %></h4>
+        <h4 id="username"><%=customerName%>さん</h4>
         <button class="logout-button" onclick="location.href='P29.jsp'">ログアウト</button>
     </header>
     <nav class="nav">
