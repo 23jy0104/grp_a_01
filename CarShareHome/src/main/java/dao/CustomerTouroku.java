@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -73,7 +74,11 @@ public class CustomerTouroku implements UserDao {
                 Customer cus = new Customer();
                 cus.setCustomerName(rs.getString("customerSei"),rs.getNString("customerMei"));
                 cus.setCustomerId(rs.getString("customerId"));
+<<<<<<< HEAD
                 cus.settellNumber(rs.getString("tellNumber"));
+=======
+                cus.settellNumber(rs.getString("phoneNumber"));
+>>>>>>> branch 'main' of https://github.com/23jy0104/grp_a_01.git
                 cus.setEmail(rs.getString("email"));
                 cus.setBirthDate(rs.getDate("birthDate"));
                 cs.add(cus);
@@ -124,4 +129,32 @@ public class CustomerTouroku implements UserDao {
             e.printStackTrace();
         }
     }
+    public  ArrayList<Customer>findAll(){
+    	String sql ="select customerSei,customerMei,CustomerSeiKana,CustomerMeiKana,customerPassword,tellNumber,emai,birthDate,licenseNumber,licenseDate,customerAddress from Customer";
+    	ArrayList<Customer>ary =null;
+    	
+    	try {
+			Statement state =con.createStatement();
+			ResultSet rs= state.executeQuery(sql);
+			ary= new ArrayList<Customer>();
+			while(rs.next()) {
+				Customer one=new Customer();
+				one.setCustomerName(rs.getString("customerSei"), rs.getString("customerMei"));
+				one.setCustomerNameKana(rs.getString("stomerSeiKana"), rs.getString("customerMeiKana"));
+				one.setCustomerPassword(rs.getString("customerPassword"));
+				one.settellNumber(rs.getString("tellNumner"));
+				one.setEmail(rs.getString("email"));
+				one.setBirthDate(rs.getDate("birthDate"));
+				one.setLicenceNumber(rs.getString("licenseNumber"));
+				one.setLicenceDate(rs.getDate("locenseDate"));
+				one.setCustomerAddress("customerAddress");
+			}
+		} catch (SQLException e) {
+			// TODO 自動生成された catch ブロック
+			e.printStackTrace();
+		}
+    	return ary;
+    	
+    }
+
 }
