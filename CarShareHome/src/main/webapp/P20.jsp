@@ -50,27 +50,27 @@
            
                 <div class="form-section">
                     <label for="fullname">氏名</label>
-                    <div class="input-container">${customer.customerName }</div>
+                    <div class="input-container"><%=customer.getCustomerName() %></div>
                     
                     <label for="fullname-kana">氏名(フリガナ)</label>
-                    <div class="input-container">${customer.customerNameKana }</div>
+                    <div class="input-container"><%=customer.getCustomerNameKana() %></div>
                     
                     <label for="address">住所</label>
-                    <div class="input-container">${customer.customerAddress }</div>
+                    <div class="input-container"><%=customer.getCustomerAdderss() %></div>
                     
                     <label for="TEL">携帯電話番号</label>
-                    <div class="input-container">${customer.tellNumber }</div>
+                    <div class="input-container"><%=customer.gettellNumber() %></div>
                     
                     <label for="licence">免許証情報</label>
                     <div class="form-licence">
                         <label for="type">免許証番号</label>
-                        <div class="input-container">${customer.licenseNumber }</div>
+                        <div class="input-container"><%= customer.getLicenseNumber()%></div>
                         
                         <label for="deadline">有効期限</label>
-                        <div class="input-container">${customer.licenseDate }</div>
+                        <div class="input-container"><%=customer.getLicenseDate() %></div>
                         
                         <label for="email">メールアドレス</label>
-                        <div class="input-container">${customer.eMail }</div>
+                        <div class="input-container"><%=customer.getEmail() %></div>
                     </div>
                 </div>
             <div class="button-container">

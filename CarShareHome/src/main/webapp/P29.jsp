@@ -23,7 +23,6 @@
 	            <label for="password">パスワード</label>
 	            <input type="password" id="password" placeholder="Placeholder">
 	        </div>
-<<<<<<< HEAD
 	        <button type="submit" class="btn">ログイン</button>
 	    </form>
 	    <div class="links">
@@ -32,16 +31,6 @@
 	        <a href="top.jsp">ホームページへ</a>
 	    </div>
 	 </div>
-=======
-	        <button type="button" onclick="LoginOK" class="btn">ログイン</button>
-	        <div class="links">
-	            <a href="P31.jsp">パスワードをお忘れの方</a>
-	            <a href="P4.jsp">新規会員の方はこちら</a>
-	            <a href="top.jsp">ホームページへ</a>
-	        </div>
-	     </form>
-	  </div>
 	    
->>>>>>> branch 'main' of https://github.com/23jy0104/grp_a_01.git
 </body>
 </html>

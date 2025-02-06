@@ -73,7 +73,7 @@ public class CustomerTouroku implements UserDao {
                 Customer cus = new Customer();
                 cus.setCustomerName(rs.getString("customerSei"),rs.getNString("customerMei"));
                 cus.setCustomerId(rs.getString("customerId"));
-                cus.setPhoneNumber(rs.getString("phoneNumber"));
+                cus.settellNumber(rs.getString("tellNumber"));
                 cus.setEmail(rs.getString("email"));
                 cus.setBirthDate(rs.getDate("birthDate"));
                 cs.add(cus);

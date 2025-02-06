@@ -69,7 +69,7 @@ public class Customer implements Serializable{
 		return tellNumber;
 	}
 
-	public void setPhoneNumber(String tellNumber) {
+	public void settellNumber(String tellNumber) {
 		this.tellNumber = tellNumber;
 	}
 

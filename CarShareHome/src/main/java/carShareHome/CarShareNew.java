@@ -47,6 +47,9 @@ public class CarShareNew extends HttpServlet {
         Date licenseDate = null;
         Date birthDate=null;
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Customer customer = new Customer();
+        customer.setBirthDate(birthDate);
+        
         
         int year = Integer.parseInt(yearString);
         int month = Integer.parseInt(monthString);
@@ -55,9 +58,6 @@ public class CarShareNew extends HttpServlet {
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, month - 1, day);
         birthDate = calendar.getTime();
-        Customer customer = new Customer();
-        customer.setBirthDate(birthDate);
-        
         if (year < 1900 || year > Calendar.getInstance().get(Calendar.YEAR)) {
             System.out.checkError();
         }
@@ -77,7 +77,7 @@ public class CarShareNew extends HttpServlet {
             customer.setCustomerName(customerMei,customerSei);
             customer.setCustomerNameKana(customerSeiKana,customerMeiKana);
             customer.setCustomerPassword(customerPassword);
-            customer.setPhoneNumber(tellNumber);
+            customer.settellNumber(tellNumber);
             customer.setEmail(eMail);
             customer.setBirthDate(birthDate);
             customer.setLicenseNumber(licenseNumber);
