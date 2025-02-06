@@ -29,16 +29,16 @@
     <div class="login-container">
         <h2>マイページログイン</h2>
         <div id="error-message" style="color: red;"></div> 
-        <form action="Login" method="post"onsubmit="return validateForm();">
+        <form action="Login" method="post">
 	        <div class="o">
 	            <label for="email">メールアドレス</label>
-	            <input type="email" id="email" placeholder="Placeholder">
+	            <input type="email" id="email" name="email" placeholder="Placeholder">
 	        </div>
 	        <div class="o">
 	            <label for="password">パスワード</label>
-	            <input type="password" id="password" placeholder="Placeholder">
+	            <input type="password" id="customerpassword"name="customerpassword" placeholder="Placeholder">
 	        </div>
-	        <button type="submit" class="btn">ログイン</button>
+	        <input type="submit" value="ログイン">
 	    </form>
 	    <div class="links">
 	        <a href="P31.jsp">パスワードをお忘れの方</a>

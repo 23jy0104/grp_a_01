@@ -35,8 +35,8 @@ public class Login extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
 		Customer customer = new Customer();
-		String email =request.getParameter("e_mail");
-		String password =request.getParameter("customer_password");
+		String email =request.getParameter("email");
+		String password =request.getParameter("customerpassword");
 		String hashedPassword =hashPassword(password);
 		String path ="";
 		try {
@@ -50,8 +50,10 @@ public class Login extends HttpServlet {
 					PreparedStatement pstmt =con.prepareStatement(sql)) {
 				pstmt.setString(1, email);
 				pstmt.setString(2, hashedPassword);
+				System.out.println("ここ来てるよ！");
 				ResultSet rs =pstmt.executeQuery();
 				if(rs.next()) {
+					System.out.println("ちゃんと入ったよ！");
 					request.setAttribute("customerId", rs.getString("cutomerId"));
 					path ="P53.jsp";
 				}else {
@@ -73,11 +75,13 @@ public class Login extends HttpServlet {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
             byte[] hash = digest.digest(password.getBytes("UTF-8"));
+            System.out.println("ハッシュもできてるよ！");
             StringBuilder hexString = new StringBuilder();
             for (byte b : hash) {
                 String hex = Integer.toHexString(0xff & b);
                 if (hex.length() == 1) hexString.append('0');
                 hexString.append(hex);
+                System.out.println("ハッシュ後の値も取れてるよ！");
             }
             return hexString.toString();
         } catch (NoSuchAlgorithmException | IOException e) {
