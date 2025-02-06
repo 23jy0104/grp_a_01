@@ -77,11 +77,10 @@ public class CustomerDao {
                 Customer cus = new Customer();
                 cus.setCustomerName(rs.getString("customerSei"), rs.getString("customerMei")); // 姓と名を設定
                 cus.setCustomerId(rs.getString("customerId"));
-<<<<<<< HEAD
+
                 cus.settellNumber(rs.getString("tellNumber"));
-=======
+
                 cus.settellNumber(rs.getString("phoneNumber"));
->>>>>>> branch 'main' of https://github.com/23jy0104/grp_a_01.git
                 cus.setEmail(rs.getString("email"));
                 cus.setBirthDate(rs.getDate("birthDate"));
                 cs.add(cus);
