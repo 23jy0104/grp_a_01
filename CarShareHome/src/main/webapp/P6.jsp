@@ -272,7 +272,7 @@
 	        <label for="prefecture">
 	            <span class="required">必須</span> 都道府県
 	        </label>
-	        <select id="prefecture" required>
+	        <select id="prefecture" name="city" required>
 	            <option value="">選択してください</option>
 	            <option value="hokkaido">北海道</option>
 	            <option value="aomori">青森県</option>

@@ -51,10 +51,10 @@
            
                 <div class="form-section">
                     <label for="fullname">氏名</label>
-                    <div class="input-container"><%=customer.getCustomerName() %></div>
+                    <div class="input-container"><%=Name %></div>
                     
                     <label for="fullname-kana">氏名(フリガナ)</label>
-                    <div class="input-container"><%=customer.getCustomerNameKana() %></div>
+                    <div class="input-container"><%=NameKana %></div>
                     
                     <label for="address">住所</label>
                     <div class="input-container"><%=customer.getCustomerAdderss() %></div>

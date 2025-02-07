@@ -27,6 +27,7 @@ public class CarShareNew extends HttpServlet {
         response.setContentType("text/html; charset=UTF-8");
         String customerSei = request.getParameter("customerSei");
         String customerMei = request.getParameter("customerMei");
+        String customerName =customerSei +""+customerMei;
         
         String customerSeiKana = request.getParameter("customerSeiKana");
         String customerMeiKana = request.getParameter("customerMeiKana");
@@ -106,7 +107,7 @@ public class CarShareNew extends HttpServlet {
             connection = DriverManager.getConnection(jdbcUrl, dbUser, dbPassword);
 
             // SQL文を準備
-            String sql = "INSERT INTO customers (name, name_kana, password, tell_number, email, birth_date, license_number, license_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO customers (customer_name, password, tell_number, email, birth_date, license_number, license_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             preparedStatement = connection.prepareStatement(sql);
 
             // パラメータを設定
