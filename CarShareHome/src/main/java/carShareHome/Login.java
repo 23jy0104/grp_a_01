@@ -49,7 +49,7 @@ public class Login extends HttpServlet {
 				pstmt.setString(2, hashedPassword);
 				ResultSet rs =pstmt.executeQuery();
 				if(rs.next()) {
-					request.setAttribute("customerName", rs.getString("customer_name"));
+					request.getSession().setAttribute("customerName", rs.getString("customer_name"));
 					path ="P53.jsp";
 				}else {
 					request.setAttribute("loginfalse", "メールアドレスまたはパスワードが違います。");

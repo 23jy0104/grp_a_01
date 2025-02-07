@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ page import ="model.Customer" %>
 <%
-    String customerName = (String) request.getAttribute("customerName");
+    String customerName = (String) session.getAttribute("customerName");
 %>
 <!DOCTYPE html>
 <html lang="ja">
