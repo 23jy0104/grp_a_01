@@ -4,25 +4,13 @@
 <%@ page import ="model.Customer" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
+<%@ page import="model.Station" %>
 
 <%	
 	String customerName = (String) session.getAttribute("customerName");
 	List<String[]> stations = (List<String[]>) session.getAttribute("stations"); // ステーション情報を取得
-	String stationId = request.getParameter("stationId");
-	
-	String stationDataValue = ""; // ステーションデータの初期化
-	String stationNameValue = ""; // ステーション名の初期化
-	
-	// ステーション情報の取得
-	if (stations != null && !stations.isEmpty()) {
-	    for (String[] station : stations) {
-	        if (station.length > 3 && station[3].equals(stationId)) {
-	            stationDataValue = station[3]; // ステーションID
-	            stationNameValue = station[1]; // ステーション名
-	            break; // 一致するステーションが見つかったらループを抜ける
-	        }
-	    }
-	}
+	String stationNameValue = request.getParameter("stationname"); // URLからステーション名を取得
+	String stationDataValue = request.getParameter("stationdata"); // URLからステーションデータを取得
 	
 	// セッションに値を設定
 	session.setAttribute("stationdata", stationDataValue);
@@ -56,7 +44,7 @@
     <main>
         <h2>ステーション情報</h2>
         <button class="back-button" onclick="location.href='P55.jsp'">検索結果一覧に戻る</button>
-        <br><h3><%=stationName %></h3>
+        <br><h3><%=stationNameValue %></h3>
         <table>
             <tr>
                 <th>お知らせ</th>
@@ -66,7 +54,7 @@
                     　・車内で出た飲み物,食べ物などのゴミは、必ず各自でお持ち帰りください。<br><br>
                 </th>
                 <th>ステーション情報</th>
-                <th><%=stationdata %></th>
+                <th><%=stationDataValue %></th>
             </tr>
         </table>
         

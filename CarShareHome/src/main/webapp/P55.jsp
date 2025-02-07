@@ -57,7 +57,7 @@
             for (String[] station : stations) {
             	String stationName = station[1];
                 String stationdata = station[3];
-                String detailUrl = "P56.jsp?stationdata=" + stationName + stationdata; 
+                String detailUrl = "P56.jsp?stationname=" + stationName +"&stationdata="+ stationdata; 
         %>
             <tr>
                 <td><%= station[1] %></td>
