@@ -6,8 +6,9 @@
 
 <% 
 	String customerName = (String) session.getAttribute("customerName");
-    List<String[]> stations = (List<String[]>) request.getAttribute("stations"); // ステーション情報を取得
+    List<String[]> stations = (List<String[]>) session.getAttribute("stations"); // ステーション情報を取得
 %>
+
 
 <!DOCTYPE html>
 <html lang="ja">
@@ -44,33 +45,39 @@
         </table>
 
         <table border="1" style="width: 100%; border-collapse: collapse; margin-top: 10px;">
-            <thead>
-                <tr>
-                    <th>ステーション名</th>
-                    <th>住所</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <% if (stations != null && !stations.isEmpty()) {
-                    for (String[] station : stations) { %>
-                        <tr>
-                            <td><%= station[0] %></td> <!-- ステーション名 -->
-                            <td><%= station[1] %></td> <!-- ステーション住所 -->
-                            <td>
-                                <a href="./P56.html">
-                                    <input type="image" id="select_station" name="select" src="img/syousai.gif" alt="詳細" />
-                                </a>
-                            </td>
-                        </tr>
-                    <% } 
-                } else { %>
-                    <tr>
-                        <td colspan="3">該当するステーションが見つかりませんでした。</td>
-                    </tr>
-                <% } %>
-            </tbody>
-        </table>
+    <thead>
+        <tr>
+            <th>ステーション名</th>
+            <th>住所</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <% if (stations != null && !stations.isEmpty()) {
+            for (String[] station : stations) {
+            	String stationName = station[1];
+                String stationdata = station[3];
+                String detailUrl = "P56.jsp?stationdata=" + stationName + stationdata; 
+        %>
+            <tr>
+                <td><%= station[1] %></td>
+                <td><%= station[2] %></td>
+                <td>
+                    <a href="<%= detailUrl %>">
+                        <input type="image" id="select_station" name="select" src="img/syousai.gif" alt="詳細" />
+                    </a>
+                </td>
+            </tr>
+        <% 
+            } 
+        } else { %>
+            <tr>
+                <td colspan="3">該当するステーションが見つかりませんでした。</td>
+            </tr>
+        <% } %>
+    </tbody>
+</table>
+
     </main>
 </body>
 </html>

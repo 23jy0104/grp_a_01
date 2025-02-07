@@ -45,7 +45,7 @@ public class StationSearch extends HttpServlet {
             final String user = "23jya01";
             final String pass = "23jya01";
             
-            String sql = "select station_name, station_address From Station where station_Name LIKE ?";
+            String sql = "select * From Station where station_Name LIKE ?";
             List<String[]> stations = new ArrayList<>(); // ステーション情報を格納するリスト
             
             try (Connection con = DriverManager.getConnection(url, user, pass);
@@ -55,14 +55,16 @@ public class StationSearch extends HttpServlet {
                 ResultSet rs = pstmt.executeQuery();
                 
                 while (rs.next()) {
-                    String[] station = new String[2];
-                    station[0] = rs.getString("station_name");
-                    station[1] = rs.getString("station_address");
+                    String[] station = new String[4];
+                    station[0] =rs.getString("station_id");
+                    station[1] = rs.getString("station_name");
+                    station[2] = rs.getString("station_address");
+                    station[3] =rs.getString("station_data");
                     stations.add(station); // ステーション情報をリストに追加
                 }
                 
                 if (!stations.isEmpty()) {
-                    request.setAttribute("stations", stations); // リストをリクエスト属性に設定
+                    request.getSession().setAttribute("stations", stations); // リストをリクエスト属性に設定
                     path = "P55.jsp"; // ステーション情報を表示するJSP
                 } else {
                     path = "P53.jsp"; // データが見つからない場合の遷移
