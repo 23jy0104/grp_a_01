@@ -16,8 +16,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import model.Customer;
-
 /**
  * Servlet implementation class Login
  */
@@ -34,7 +32,6 @@ public class Login extends HttpServlet {
     }
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
-		Customer customer = new Customer();
 		String email =request.getParameter("email");
 		String password =request.getParameter("customerpassword");
 		String hashedPassword =hashPassword(password);
@@ -73,7 +70,6 @@ public class Login extends HttpServlet {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
             byte[] hash = digest.digest(password.getBytes("UTF-8"));
-            System.out.println("ハッシュもできてるよ！");
             StringBuilder hexString = new StringBuilder();
             for (byte b : hash) {
                 String hex = Integer.toHexString(0xff & b);
