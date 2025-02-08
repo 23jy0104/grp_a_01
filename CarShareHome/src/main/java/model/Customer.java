@@ -1,23 +1,25 @@
 package model;
 import java.io.Serializable;
+import java.sql.Blob;
 import java.util.Date;
 
 public class Customer implements Serializable{
 	private String customerId;
-	private String customerSei;
-	private String customerMei;
-	private String customerSeiKana;
-	private String customerMeiKana;
+	private String customerName;
+	private String customerKana;
+	private String gender;
 	private String customerPassword;
 	private String tellNumber;
+	private String fixedCall;
 	private String email;
 	private Date birthDate;
 	private String licenseNumber;
 	private Date licenceDate;
+	private String postCode;
 	private String customerAddress;
 	private String creditId;
-	private String omote;
-	private String ura;
+	private Blob omote;
+	private Blob ura;
 	
 	public Customer() {
 		super();
@@ -28,21 +30,20 @@ public class Customer implements Serializable{
 		this.email = email;
 	}
 
-	public Customer(String customerId, String customerSei, String customerMei, String customerSeiKana,
-			String customerMeiKana, String customerPassword, String tellNumber, String email, Date birthDate,
-			String licenseNumber, Date licenceDate, String customerAddress, String creditId, String omote, String ura) {
+	public Customer(String customerId, String customerName, String customerKana, String gender, String customerPassword, String tellNumber, String fixedCall,String email, Date birthDate,
+			String licenseNumber, Date licenceDate,String postCode, String customerAddress, String creditId, Blob omote, Blob ura) {
 		super();
 		this.customerId = customerId;
-		this.customerSei = customerSei;
-		this.customerMei = customerMei;
-		this.customerSeiKana = customerSeiKana;
-		this.customerMeiKana = customerMeiKana;
+		this.customerName = customerName;
+		this.customerKana = customerKana;
+		this.gender =gender;
 		this.customerPassword = customerPassword;
 		this.tellNumber = tellNumber;
 		this.email = email;
 		this.birthDate = birthDate;
 		this.licenseNumber = licenseNumber;
 		this.licenceDate = licenceDate;
+		this.postCode =postCode;
 		this.customerAddress = customerAddress;
 		this.creditId = creditId;
 		this.omote = omote;
@@ -121,52 +122,20 @@ public class Customer implements Serializable{
 		this.creditId = creditId;
 	}
 
-	public String getOmote() {
+	public Blob getOmote() {
 		return omote;
 	}
 
-	public void setOmote(String omote) {
+	public void setOmote(Blob omote) {
 		this.omote = omote;
 	}
 
-	public String getUra() {
+	public Blob getUra() {
 		return ura;
 	}
 
-	public void setUra(String ura) {
+	public void setUra(Blob ura) {
 		this.ura = ura;
-	}
-
-	public String getCustomerSei() {
-		return customerSei;
-	}
-
-	public void setCustomerSei(String customerSei) {
-		this.customerSei = customerSei;
-	}
-
-	public String getCustomerMei() {
-		return customerMei;
-	}
-
-	public void setCustomerMei(String customerMei) {
-		this.customerMei = customerMei;
-	}
-
-	public String getCustomerSeiKana() {
-		return customerSeiKana;
-	}
-
-	public void setCustomerSeiKana(String customerSeiKana) {
-		this.customerSeiKana = customerSeiKana;
-	}
-
-	public String getCustomerMeiKana() {
-		return customerMeiKana;
-	}
-
-	public void setCustomerMeiKana(String customerMeiKana) {
-		this.customerMeiKana = customerMeiKana;
 	}
 
 	public String getLicenseNumber() {
@@ -177,18 +146,42 @@ public class Customer implements Serializable{
 		this.licenseNumber = licenseNumber;
 	}
 	
+	public String getGender() {
+		return gender;
+	}
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+	public String getTellNumber() {
+		return tellNumber;
+	}
+	public void setTellNumber(String tellNumber) {
+		this.tellNumber = tellNumber;
+	}
+	public String getFixedCall() {
+		return fixedCall;
+	}
+	public void setFixedCall(String fixedCall) {
+		this.fixedCall = fixedCall;
+	}
 	public String getCustomerName() {
-		return customerSei +""+ customerMei;
+		return customerName;
 	}
-	public String getCustomerNameKana() {
-		return customerSeiKana +""+customerMeiKana;
+	public void setCustomerName(String customerName) {
+		this.customerName = customerName;
 	}
-	public void setCustomerName(String customerSei, String customerMei) {
-        this.customerSei = customerSei;
-        this.customerMei = customerMei;
-    }
-	public void setCustomerNameKana(String customerSeiKana,String customerMeiKana) {
-		this.customerSeiKana = customerSeiKana;
-        this.customerMeiKana = customerMeiKana;
+	public String getCustomerKana() {
+		return customerKana;
 	}
+	public void setCustomerKana(String customerKana) {
+		this.customerKana = customerKana;
+	}
+	public String getPostCode() {
+		return postCode;
+	}
+	public void setPostCode(String postCode) {
+		this.postCode = postCode;
+	}
+	
+	
 }

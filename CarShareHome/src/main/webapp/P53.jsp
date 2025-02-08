@@ -39,7 +39,7 @@
 			<form action="StationSearch"method="post">
 	            <div class="input-group">
 	                <input type="text" id="nameAdr-s" name="stationAddress" placeholder="住所やステーション名を入力" style="ime-mode:active;" />
-	                <input type="image" id="doNameAdrSearch" src="img/kensaku.gif" onclick="location.href='P55.html'" alt="検索" />
+	                <input type="image" id="doNameAdrSearch" src="img/kensaku.gif" onclick="location.href='P55.jsp'" alt="検索" />
 	            </div>
 	            <p class="notes">例）有楽町、新宿、六本木</p>
 	        </form>
