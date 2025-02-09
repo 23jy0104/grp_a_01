@@ -91,7 +91,7 @@
 
                 <!-- 車種選択後の検索ボタン -->
                 <div class="button-container">
-                    <a href="P59.html">
+                    <a href="P59.jsp">
                         <input type="image" id="searchButton2" src="img/kensaku.gif" alt="検索" />
                     </a>
                 </div>
