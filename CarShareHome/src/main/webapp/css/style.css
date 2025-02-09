@@ -43,7 +43,7 @@ input[type="date"] {
     align-items: center;
     justify-content: center;
 }
-button {
+input[type="submit"] {
     background-color: yellow;
     border: 2px solid black;
     padding: 10px 15px;
@@ -52,7 +52,7 @@ button {
     width: 200px;
     gap: 50px;
 }
-button:hover {
+input[type="submit"]:hover {
     background-color: #e0e0e0;
 }
 .links {
@@ -99,4 +99,8 @@ th, td {
 }
 .top-right-button:hover {
     background-color: #e0e0e0;
+}
+ .error {
+    color: red; /* 赤字に設定 */
+    font-weight: bold; /* 太字に設定 */
 }
