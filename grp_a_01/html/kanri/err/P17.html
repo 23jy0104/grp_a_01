@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>システム管理課</title>
+    <link rel="stylesheet" href="../../../CSSKANRI/vehicleCon.css">  
+    <script>
+        function showModal() {
+            document.getElementById("myModal").style.display = "block";
+        }
+
+        function closeModal() {
+            document.getElementById("myModal").style.display = "none";
+        }
+
+        function register() {
+            location.href = 'P13.html'; // 遷移するページのURLを指定
+        }
+    </script>
+</head>
+<body>
+    <h1>顧客情報登録画面</h1>
+    <table>
+        <tr>
+            <th>顧客申請者名</th>
+            <td>〇〇〇〇</td>
+        </tr>
+        <tr>
+            <th>電話番号</th>
+            <td>09000000000</td>
+        </tr>
+        <tr>
+            <th>メールアドレス</th>
+            <td>23jy0000@jec.ac.jp</td>
+        </tr>
+        <tr>
+            <th>運転免許証番号</th>
+            <td>0000000000000</td>
+        </tr>
+        <tr>
+            <th>有効期限</th>
+            <td>〇〇年〇〇月〇〇日</td>
+        </tr>
+        <tr>
+            <th>運転免許証画像(表)</th>
+            <td>〇〇〇〇.jpg</td>
+        </tr>
+        <tr>
+            <th>運転免許証画像(裏)</th>
+            <td>〇〇〇〇.jpg</td>
+        </tr>
+    </table>
+    <div class="button-container">
+        <button class="send" onclick="showModal()">免許証情報を送る</button>
+    </div>
+
+    <!-- モーダル -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <p>判定NGです。</p>
+            <button onclick="register()">審査落ち</button>
+        </div>
+    </div>
+</body>
+</html>

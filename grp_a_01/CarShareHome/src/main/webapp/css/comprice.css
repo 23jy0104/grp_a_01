@@ -1,0 +1,59 @@
+@charset "UTF-8";
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+header {
+    text-align: center;
+    padding: 20px;
+}
+h1 {
+    margin: 0;
+}
+h2 {
+    background-color: rgb(58, 58, 232);
+    color: white;
+    width: 100%;
+    margin: 0;
+    padding: 2px 0;
+}
+.login-buttons {
+    margin-top: 10px;
+}
+.container {
+    display: flex;
+    margin: 20px;
+}
+.link {
+    color: black;
+    text-decoration: none;
+}
+.link:hover {
+    color: red;
+}
+.active {
+    color: red; /* 自動的に赤くする */
+}
+
+/* 利用料金テーブルのスタイル */
+.comprice {
+    flex: 1;
+}
+.comprice table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 2px solid #333; /* テーブル全体を囲む */
+    margin-top: 20px;
+}
+.comprice th, .comprice td {
+    border: 1px solid #ccc;
+    padding: 10px; /* パディングを調整 */
+    text-align: left;
+    font-size: 1.2em; /* フォントサイズを大きく */
+}
+.price {
+    background-color: rgb(58, 58, 232);
+    color: white;
+    font-size: 1.5em; /* タイトルのフォントサイズを大きく */
+}

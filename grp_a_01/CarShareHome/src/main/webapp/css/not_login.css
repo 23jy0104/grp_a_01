@@ -1,0 +1,113 @@
+@charset "UTF-8";
+
+/* 全体のスタイル */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f7f7f7; /* 背景色を薄いグレーに */
+}
+
+/* ヘッダーのスタイル */
+header {
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    padding: 10px 20px;
+    border-bottom: 2px solid #ccc;
+}
+
+/* ナビゲーションのスタイル */
+.nav {
+    background-color: black;
+    padding: 10px 0;
+}
+
+.nav-item {
+    margin: 0 15px;
+}
+
+/* セクションのスタイル */
+section {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-top: 20px; /* セクションの上にマージンを追加 */
+}
+
+/* フォームのスタイル */
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+/* ラジオボタンのスタイル */
+form input[type="radio"] {
+    margin: 10px 0;
+}
+
+/* テキスト入力のスタイル */
+form input[type="text"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100%; /* 幅を100%にする */
+}
+
+/* ボタンのスタイル */
+form button {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: red; /* ボタンの背景色を赤に */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s; /* ホバー時の背景色変更 */
+}
+
+form button:hover {
+    background-color: darkred; /* ホバー時の色 */
+}
+
+/* リストのスタイル */
+ul {
+    list-style-type: disc;
+    margin-left: 20px;
+}
+
+/* アクティブなナビゲーションアイテムのスタイル */
+.nav-item.active a {
+    background-color: #444; /* アクティブなアイテムの背景色 */
+}
+.radio-group {
+    display: flex;
+    align-items: center;
+    margin: 10px 0; /* 上下のマージンを追加 */
+}
+
+.radio-group label {
+    margin-right: 20px; /* ラジオボタン間のスペース */
+}
+
+.radio-group input[type="radio"] {
+    margin-right: 5px; /* ラジオボタンとラベルの間のスペース */
+}
+.search-button {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: orange; /* 背景色をオレンジに */
+    color: black; /* 文字色を黒に */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.search-button:hover {
+    background-color: darkorange; /* ホバー時の色 */
+}
+.err{
+    color:red;
+}
+
+
