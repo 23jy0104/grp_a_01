@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../CSSKANRI/keybox.css"> 
+    <title>オペレーター</title>
+    <style>
+        .highlight {
+            background-color: lightyellow; /* 薄い黄色 */
+        }
+        .red {
+            background-color: red; /* 赤色 */
+        }
+        .orange {
+            background-color: orange; /* オレンジ色 */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="../../img/rog.png" alt="TMC" class="logo">
+            <h1>オペレーター</h1>
+        </div>
+        <div class="button-container">
+            <button class="yobi-button" id="yobiBOX1">yobiBOX1</button>
+            <button class="yobi-button" id="yobiBOX2">yobiBOX2</button>
+            <button class="yobi-button" id="yobiBOX3">yobiBOX3</button>
+        </div>
+        <div class="button-container">
+            <button class="update-button" id="updateButton">更新</button>
+            <button class="process-button" id="processButton" disabled onclick="location.href='P32.html'">返却処理</button>
+        </div>
+        <button class="return-button" onclick="location.href='P25.html'">顧客情報確認画面に戻る</button>
+    </div>
+
+    <script>
+        let selectedYobiBox = null; // 選択されたyobiBOXを管理
+
+        // yobiBOXボタンのクリックイベントを追加
+        document.querySelectorAll('.yobi-button').forEach(button => {
+            button.addEventListener('click', function() {
+                if (selectedYobiBox) {
+                    selectedYobiBox.classList.remove('highlight'); // 前の選択を解除
+                }
+                selectedYobiBox = this; // 現在のボタンを選択
+                selectedYobiBox.classList.add('highlight'); // 薄い黄色に変更
+            });
+        });
+
+        document.getElementById('updateButton').addEventListener('click', function() {
+            if (selectedYobiBox) {
+                selectedYobiBox.classList.remove('highlight'); // 薄い黄色を削除
+                selectedYobiBox.classList.add('red'); // 赤色に変更
+                document.getElementById('processButton').disabled = false; // 返却処理ボタンを押せるようにする
+                document.getElementById('processButton').classList.add('orange'); // オレンジ色に変更
+                selectedYobiBox = null; // 選択を解除
+            }
+        });
+    </script>
+</body>
+</html>

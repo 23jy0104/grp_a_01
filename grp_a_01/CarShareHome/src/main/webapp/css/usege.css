@@ -1,0 +1,39 @@
+@charset "UTF-8";
+.usage {
+    flex: 1;
+}
+.usage table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 2px solid #333; /* テーブル全体を囲む */
+    margin-top: 20px;
+}
+.usage th, .usage td {
+    border: 1px solid #ccc;
+    padding: 10px; /* パディングを調整 */
+    text-align: left;
+    font-size: 1.2em; /* フォントサイズを大きく */
+}
+.howtouse {
+    background-color: rgb(23, 140, 213);
+    color: white;
+    font-size: 1.5em; /* タイトルのフォントサイズを大きく */
+}
+h2{
+    color: blue;
+}
+.button-container {
+    display: flex;
+    justify-content: space-between; /* 左右に配置 */
+    align-items: center; /* 垂直方向に中央揃え */
+}
+.button-container button {
+    margin-left: auto; /* ボタンを右端に配置 */
+}
+button{
+    background-color: yellow;
+}
+h3 {
+    font-weight: bold; /* 太字にする */
+    text-align: center; /* 中央揃えにする */
+}

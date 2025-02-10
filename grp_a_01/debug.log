@@ -1,0 +1,2 @@
+[1209/134235.638:ERROR:registration_protocol_win.cc(107)] CreateFile: 指定されたファイルが見つかりません。 (0x2)
+[1209/134236.074:ERROR:registration_protocol_win.cc(107)] CreateFile: 指定されたファイルが見つかりません。 (0x2)
