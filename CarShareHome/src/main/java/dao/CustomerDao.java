@@ -38,33 +38,6 @@ public class CustomerDao {
         }
     }
 
-    // 顧客を追加するメソッド
-    public void addCustomer(Customer customer) {
-        String sql = "INSERT INTO customer (customer_Name, customer_Password, tell_Number, e_Mail, birth_Date, license_Number, license_Date, customer_Address, omote_Jpg, ura_Jpg) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        try (PreparedStatement pstmt = con.prepareStatement(sql)) {
-            pstmt.setString(1, customer.getCustomerName());
-            pstmt.setString(2, customer.getCustomerPassword());
-            pstmt.setString(3, customer.gettellNumber());
-            pstmt.setString(4, customer.getEmail());
-            pstmt.setDate(5, new java.sql.Date(customer.getBirthDate().getTime()));
-            pstmt.setString(6, customer.getLicenceNumber());
-            pstmt.setDate(7, new java.sql.Date(customer.getLicenceDate().getTime()));
-            pstmt.setString(8, customer.getCustomerAddress());
-            // omote_Jpgとura_Jpgの値を設定（必要に応じて）
-            pstmt.setString(9, null); // 例: 画像のパスを設定
-            pstmt.setString(10, null); // 例: 画像のパスを設定
-
-            int affected = pstmt.executeUpdate();
-            if (affected > 0) {
-                System.out.println("顧客が正常に追加されました。");
-            } else {
-                System.out.println("顧客の追加に失敗しました。");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
     // 顧客を検索するメソッド
     public ArrayList<Customer> searchCustomer(String name, Date birthDate) {
         ArrayList<Customer> cs = new ArrayList<>();
@@ -75,9 +48,12 @@ public class CustomerDao {
             ResultSet rs = state.executeQuery();
             while (rs.next()) {
                 Customer cus = new Customer();
-                cus.setCustomerName(rs.getString("customerSei"), rs.getString("customerMei")); // 姓と名を設定
+                cus.setCustomerName(rs.getString("customerName")); // 姓と名を設定
                 cus.setCustomerId(rs.getString("customerId"));
-                cus.setPhoneNumber(rs.getString("phoneNumber"));
+
+                cus.settellNumber(rs.getString("tellNumber"));
+
+                cus.settellNumber(rs.getString("phoneNumber"));
                 cus.setEmail(rs.getString("email"));
                 cus.setBirthDate(rs.getDate("birthDate"));
                 cs.add(cus);

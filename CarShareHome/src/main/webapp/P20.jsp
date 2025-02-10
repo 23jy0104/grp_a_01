@@ -1,6 +1,26 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import="model.Customer"%>
+<%@ page import="java.util.Date" %>
+<%@ page import="java.text.SimpleDateFormat" %>
+<%
+    Customer customer = (Customer) session.getAttribute("customer");
+    if (customer == null) {
+        // エラーハンドリング: 顧客がセッションに存在しない場合
+        response.sendRedirect("error.jsp");
+        return;
+    }
+
+    String customerName = customer.getCustomerName();
+    String customerKana = customer.getCustomerKana();
+    String email = customer.getEmail();
+    String tellNumber = customer.gettellNumber();
+    String customerAddress = customer.getCustomerAddress(); // 住所を取得するメソッド名に注意
+    Date licenseDate = customer.getLicenceDate();
+    String licenseNumber = customer.getLicenseNumber(); // 免許証番号を取得
+
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy年MM月dd日"); // 日付フォーマット
+%>
 <!--基本情報の確認ページ-->
 <!DOCTYPE html>
 <html lang="ja">
@@ -50,27 +70,27 @@
            
                 <div class="form-section">
                     <label for="fullname">氏名</label>
-                    <div class="input-container">${customer.customerName }</div>
+                    <div class="input-container"><%=customerName %></div>
                     
                     <label for="fullname-kana">氏名(フリガナ)</label>
-                    <div class="input-container">${customer.customerNameKana }</div>
+                    <div class="input-container"><%=customerKana %></div>
                     
                     <label for="address">住所</label>
-                    <div class="input-container">${customer.customerAddress }</div>
+                    <div class="input-container"><%=customerAddress %></div>
                     
                     <label for="TEL">携帯電話番号</label>
-                    <div class="input-container">${customer.tellNumber }</div>
+                    <div class="input-container"><%=tellNumber %></div>
                     
                     <label for="licence">免許証情報</label>
                     <div class="form-licence">
                         <label for="type">免許証番号</label>
-                        <div class="input-container">${customer.licenseNumber }</div>
+                        <div class="input-container"><%=licenseNumber %></div>
                         
                         <label for="deadline">有効期限</label>
-                        <div class="input-container">${customer.licenseDate }</div>
+                        <div class="input-container"><%= (licenseDate != null) ? dateFormat.format(licenseDate) : "未設定" %></div>
                         
                         <label for="email">メールアドレス</label>
-                        <div class="input-container">${customer.eMail }</div>
+                        <div class="input-container"><%=email %></div>
                     </div>
                 </div>
             <div class="button-container">
