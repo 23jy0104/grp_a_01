@@ -95,7 +95,7 @@
             <button class="informationchange" onclick="location.href='UC07_01.html'">会員情報の変更</button>    
     </div>
     <h3>各種手続き</h3>
-    <a href="P95.html">パスワード変更</a><br>
-    <a href="top.html">ログアウト</a>
+    <a href="P95.jsp">パスワード変更</a><br>
+    <a href="top.jsp">ログアウト</a>
 </body>
 </html>
