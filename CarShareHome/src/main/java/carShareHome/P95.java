@@ -12,7 +12,7 @@ import dao.CustomerTouroku; // インポート
 import dao.UserDao; // インポート
 import model.Customer;
 
-@WebServlet("/p95")
+@WebServlet("/P95")
 public class P95 extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private UserDao userDao = new CustomerTouroku(); // UserDaoインターフェースを実装
@@ -21,12 +21,12 @@ public class P95 extends HttpServlet {
         HttpSession session = request.getSession();
         String customerName = (String) session.getAttribute("customerName");
 
-        String currentPassword = request.getParameter("currentPassword");
-        String newPassword = request.getParameter("newPassword");
-        String confirmNewPassword = request.getParameter("confirmNewPassword");
+        String currentPassword = request.getParameter("password"); // 修正
+        String newPassword = request.getParameter("new-password"); // 修正
+        String confirmNewPassword = request.getParameter("confirm-password"); // 修正
         String errorMessage = null;
 
-        Customer customer = userDao.getUserByUsername(customerName); // ユーザー情報を取得
+        Customer customer = userDao.getUserByUsername(customerName);
 
         // パスワードの形式を検証
         if (!isValidPassword(currentPassword) || !isValidPassword(newPassword) || !isValidPassword(confirmNewPassword)) {

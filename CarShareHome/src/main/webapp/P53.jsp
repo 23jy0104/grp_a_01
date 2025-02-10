@@ -1,8 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import ="model.Customer" %>
-<% 
-    String customerName = (String) request.getAttribute("customerName"); 
+<%
+    String customerName = (String) session.getAttribute("customerName");
 %>
 <!DOCTYPE html>
 <html lang="ja">
@@ -36,12 +36,13 @@
             <label for="adr">住所</label>
             <input type="radio" id="stationNm" name="localSearchKbn" value="2" class="ml20" />
             <label for="stationNm">ステーション名</label>
-
-            <div class="input-group">
-                <input type="text" id="nameAdr-s" name="nameAdr-s" placeholder="住所やステーション名を入力" style="ime-mode:active;" />
-                <input type="image" id="doNameAdrSearch" name="doNameAdrSearch" src="../../img/kensaku.gif" onclick="location.href='P55.html'" alt="検索" />
-            </div>
-            <p class="notes">例）有楽町、新宿、六本木</p>
+			<form action="StationSearch"method="post">
+	            <div class="input-group">
+	                <input type="text" id="nameAdr-s" name="stationAddress" placeholder="住所やステーション名を入力" style="ime-mode:active;" />
+	                <input type="image" id="doNameAdrSearch" src="img/kensaku.gif" onclick="location.href='P55.jsp'" alt="検索" />
+	            </div>
+	            <p class="notes">例）有楽町、新宿、六本木</p>
+	        </form>
         </div>
     </div>
 </body>

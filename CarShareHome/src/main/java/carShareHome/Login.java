@@ -16,8 +16,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import model.Customer;
-
 /**
  * Servlet implementation class Login
  */
@@ -34,7 +32,6 @@ public class Login extends HttpServlet {
     }
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
-		Customer customer = new Customer();
 		String email =request.getParameter("email");
 		String password =request.getParameter("customerpassword");
 		String hashedPassword =hashPassword(password);
@@ -45,14 +42,21 @@ public class Login extends HttpServlet {
 			final String user ="23jya01";
 			final String pass ="23jya01";
 			
-			String sql ="select customer_name, e_mail,customer_password From Customer where e_mail = ? and customer_password =?";
+			String sql = "SELECT customer_name, customer_kana, e_mail, customer_password, post_code, customer_address, license_date, tell_number FROM Customer WHERE e_mail = ? AND customer_password = ?";
+
 			try(Connection con =DriverManager.getConnection(url,user,pass);
 					PreparedStatement pstmt =con.prepareStatement(sql)) {
 				pstmt.setString(1, email);
 				pstmt.setString(2, hashedPassword);
 				ResultSet rs =pstmt.executeQuery();
 				if(rs.next()) {
-					request.setAttribute("customerName", rs.getString("customer_name"));
+					request.getSession().setAttribute("customerName", rs.getString("customer_name"));
+					request.getSession().setAttribute("customerKana", rs.getString("customer_kana"));
+					request.getSession().setAttribute("email", rs.getString("e_mail"));
+					request.getSession().setAttribute("postCode", rs.getString("post_code"));
+					request.getSession().setAttribute("customerAddress", rs.getString("customer_address"));
+					request.getSession().setAttribute("licenseDate", rs.getDate("license_date"));
+					request.getSession().setAttribute("tellNumber", rs.getString("tell_number"));
 					path ="P53.jsp";
 				}else {
 					request.setAttribute("loginfalse", "メールアドレスまたはパスワードが違います。");
@@ -73,7 +77,6 @@ public class Login extends HttpServlet {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
             byte[] hash = digest.digest(password.getBytes("UTF-8"));
-            System.out.println("ハッシュもできてるよ！");
             StringBuilder hexString = new StringBuilder();
             for (byte b : hash) {
                 String hex = Integer.toHexString(0xff & b);
