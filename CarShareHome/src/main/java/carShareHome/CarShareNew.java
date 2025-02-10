@@ -134,6 +134,7 @@ public class CarShareNew extends HttpServlet {
             }
             HttpSession session = request.getSession();
             session.setAttribute("customer", customer);
+            
             // データベースに挿入
             insertCustomerData(customer);
             RequestDispatcher rd = request.getRequestDispatcher("P20.jsp");
