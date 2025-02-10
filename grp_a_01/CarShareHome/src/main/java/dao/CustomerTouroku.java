@@ -1,3 +1,4 @@
+
 package dao;
 
 import java.sql.Connection;
@@ -7,7 +8,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Date;
 
 import model.Customer;
 
@@ -40,17 +40,24 @@ public class CustomerTouroku implements UserDao {
     }
 
     public void addCustomer(Customer customer) {
-        String sql = "INSERT INTO customers (customerName, customerNameKana, customerPassword, phoneNumber, email, birthDate, licenseNumber, licenseDate, customerAddress) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO customers (customer_name,gender, customer_password, tell_number,fixed_call, e_mail, birth_date, license_number, license_date,license_date,post_code,customer_address,omote_jpg,ura_jpg) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?,?,?)";
         try (PreparedStatement pstmt = con.prepareStatement(sql)) {
-            pstmt.setString(1, customer.getCustomerName());
-            pstmt.setString(2, customer.getCustomerNameKana());
-            pstmt.setString(3, customer.getCustomerPassword());
-            pstmt.setString(4, customer.gettellNumber());
-            pstmt.setString(5, customer.getEmail());
-            pstmt.setDate(6, new java.sql.Date(customer.getBirthDate().getTime()));
-            pstmt.setString(7, customer.getLicenceNumber());
-            pstmt.setDate(8, new java.sql.Date(customer.getLicenceDate().getTime()));
-            pstmt.setString(9, customer.getCustomerAddress());
+        	pstmt.setString(1, customer.getCustomerName());
+            pstmt.setString(2, customer.getCustomerKana());
+            pstmt.setString(3, customer.getGender());
+            pstmt.setString(4, customer.getCustomerPassword());
+            pstmt.setString(5, customer.gettellNumber());
+            //if(fiexed !=null){
+            pstmt.setString(6,customer.getFixedCall());//}閉じる
+            pstmt.setString(7, customer.getEmail());
+            pstmt.setDate(8, new java.sql.Date(customer.getBirthDate().getTime()));
+            pstmt.setString(9, customer.getLicenceNumber());
+            pstmt.setDate(10, new java.sql.Date(customer.getLicenceDate().getTime()));
+            pstmt.setString(11, customer.getPostCode());
+            pstmt.setString(12, customer.getPostCode());
+            pstmt.setString(13, customer.getCustomerAddress());
+            pstmt.setBlob(14, customer.getOmote());
+            pstmt.setBlob(15, customer.getUra());
 
             int affected = pstmt.executeUpdate();
             if (affected > 0) {
@@ -63,51 +70,31 @@ public class CustomerTouroku implements UserDao {
         }
     }
 
-    public ArrayList<Customer> searchCustomer(String name, Date birthDate) {
-        ArrayList<Customer> cs = new ArrayList<>();
-        String sql = "SELECT customerName, customerId, phoneNumber, email, birthDate FROM customers WHERE customerName LIKE ? AND birthDate = ?";
-        try (PreparedStatement state = con.prepareStatement(sql)) {
-            state.setString(1, "%" + name + "%");
-            state.setDate(2, new java.sql.Date(birthDate.getTime()));
-            ResultSet rs = state.executeQuery();
-            while (rs.next()) {
-                Customer cus = new Customer();
-                cus.setCustomerName(rs.getString("customerSei"),rs.getNString("customerMei"));
-                cus.setCustomerId(rs.getString("customerId"));
-
-                cus.settellNumber(rs.getString("tellNumber"));
-
-                cus.settellNumber(rs.getString("phoneNumber"));
-                cus.setEmail(rs.getString("email"));
-                cus.setBirthDate(rs.getDate("birthDate"));
-                cs.add(cus);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return cs;
-    }
     public Customer getUserByUsername(String customerName) {
 		Customer customer = null;
         try{
-            String sql = "SELECT * FROM Customer WHERE customer_Name = ?";
+            String sql = "SELECT * FROM Customer WHERE customer_name = ?";
             PreparedStatement sa=con.prepareStatement(sql);
-            sa.setString(1, customerName);
+            sa.setString(2, customerName);
             ResultSet rs = sa.executeQuery();
             if (rs.next()) {
             	customer = new Customer(
                         String.valueOf(rs.getInt("customer_Id")), // int型をString型に変換
                         rs.getString("customer_Name"),
+                        rs.getString("customer_kana"),
+                        rs.getString("gender"),
                         rs.getString("customer_Password"),
                         rs.getString("tell_number"),
+                        rs.getString("fixed_call"),
                         rs.getString("e_mail"),
-                        sql, sql, sql, rs.getDate("birth_date"),
+                        rs.getDate("birth_date"),
                         rs.getString("license_number"),
                         rs.getDate("license_date"),
+                        rs.getString("post_code"),
                         rs.getString("customer_address"),
                         rs.getString("credit_id"),
-                        rs.getString("omote_jpg"),
-                        rs.getString("ura_jpg")
+                        rs.getBlob("omote_jpg"),
+                        rs.getBlob("ura_jpg")
                     );
             }
         } catch (SQLException e) {
@@ -129,7 +116,7 @@ public class CustomerTouroku implements UserDao {
         }
     }
     public  ArrayList<Customer>findAll(){
-    	String sql ="select customerSei,customerMei,CustomerSeiKana,CustomerMeiKana,customerPassword,tellNumber,emai,birthDate,licenseNumber,licenseDate,customerAddress from Customer";
+    	String sql ="select customer_name,customer_kana,customerPassword,tellNumber,emai,birthDate,licenseNumber,licenseDate,customerAddress,omote_jpg,ura_jpg from Customer";
     	ArrayList<Customer>ary =null;
     	
     	try {
@@ -138,8 +125,8 @@ public class CustomerTouroku implements UserDao {
 			ary= new ArrayList<Customer>();
 			while(rs.next()) {
 				Customer one=new Customer();
-				one.setCustomerName(rs.getString("customerSei"), rs.getString("customerMei"));
-				one.setCustomerNameKana(rs.getString("stomerSeiKana"), rs.getString("customerMeiKana"));
+				one.setCustomerName(rs.getString("customerName"));
+				one.setCustomerKana(rs.getString("customerKana"));
 				one.setCustomerPassword(rs.getString("customerPassword"));
 				one.settellNumber(rs.getString("tellNumner"));
 				one.setEmail(rs.getString("email"));
