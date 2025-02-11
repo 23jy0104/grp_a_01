@@ -1,6 +1,7 @@
 package carShareHome;
 
 import java.io.IOException;
+import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -12,21 +13,15 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  * Servlet implementation class CreditNew
  */
 @WebServlet("/CreditNew")
 public class CreditNew extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public CreditNew() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
+    private static final long serialVersionUID = 1L;
+
     static {
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -35,21 +30,29 @@ public class CreditNew extends HttpServlet {
         }
     }
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// 顧客データを取得
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // 顧客データを取得
         String customerName = (String) request.getAttribute("customerName");
         String customerKana = (String) request.getAttribute("customerKana");
+        String gender = (String) request.getAttribute("gender");
+        String password = (String) request.getAttribute("customerPassword");
+        java.util.Date birthDate = (java.util.Date) request.getAttribute("birthDate");
         String email = (String) request.getAttribute("email");
         String tellNumber = (String) request.getAttribute("tellNumber");
         String postCode = (String) request.getAttribute("postCode");
         String customerAddress = (String) request.getAttribute("customerAddress");
         String licenseNumber = (String) request.getAttribute("licenseNumber");
-        String licenseDate = (String) request.getAttribute("licenseDate");
+        java.util.Date licenseDate = (java.util.Date) request.getAttribute("licenseDate");
 
         // クレジットカード情報を取得
         String creditNumber = request.getParameter("credit_number");
         String creditDate = request.getParameter("credittime");
         String securityCode = request.getParameter("security");
+
+        // セッションから画像データを取得
+        HttpSession session = request.getSession();
+        byte[] omoteBytes = (byte[]) session.getAttribute("omoteImage");
+        byte[] uraBytes = (byte[]) session.getAttribute("uraImage");
 
         // データベースに登録する処理
         try {
@@ -60,19 +63,34 @@ public class CreditNew extends HttpServlet {
 
             // データベース接続
             Connection connection = DriverManager.getConnection(jdbcUrl, dbUser, dbPassword);
-            String sql = "INSERT INTO customer (customer_name, customer_kana, email, tell_number, post_code, customer_address, license_number, license_date, credit_number, credit_date, security_code) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO customer (customer_name, customer_kana, gender, customer_password, tell_number, e_mail, birth_date, license_number, license_date, post_code, customer_address, omote_jpg, ura_jpg) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, customerName);
             preparedStatement.setString(2, customerKana);
-            preparedStatement.setString(3, email);
-            preparedStatement.setString(4, tellNumber);
-            preparedStatement.setString(5, postCode);
-            preparedStatement.setString(6, customerAddress);
-            preparedStatement.setString(7, licenseNumber);
-            preparedStatement.setString(8, licenseDate);
-            preparedStatement.setString(9, creditNumber);
-            preparedStatement.setString(10, creditDate);
-            preparedStatement.setString(11, securityCode);
+            preparedStatement.setString(3, gender);
+            preparedStatement.setString(4, password);
+            preparedStatement.setString(5, tellNumber);
+            preparedStatement.setString(6, email);
+            preparedStatement.setDate(7, new java.sql.Date(birthDate.getTime()));
+            preparedStatement.setString(8, licenseNumber);
+            preparedStatement.setDate(9, new java.sql.Date(licenseDate.getTime()));
+            preparedStatement.setString(10, postCode);
+            preparedStatement.setString(11, customerAddress);
+            
+            // 画像データをBlobとして設定
+            if (omoteBytes != null) {
+                Blob omoteBlob = new javax.sql.rowset.serial.SerialBlob(omoteBytes);
+                preparedStatement.setBlob(12, omoteBlob);
+            } else {
+                preparedStatement.setNull(12, java.sql.Types.BLOB);
+            }
+
+            if (uraBytes != null) {
+                Blob uraBlob = new javax.sql.rowset.serial.SerialBlob(uraBytes);
+                preparedStatement.setBlob(13, uraBlob);
+            } else {
+                preparedStatement.setNull(13, java.sql.Types.BLOB);
+            }
 
             // SQLを実行
             preparedStatement.executeUpdate();
@@ -86,6 +104,5 @@ public class CreditNew extends HttpServlet {
             RequestDispatcher rd = request.getRequestDispatcher("error.jsp");
             rd.forward(request, response);
         }
-	}
-
+    }
 }

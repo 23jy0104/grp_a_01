@@ -25,7 +25,7 @@ import model.Customer;
 @MultipartConfig
 public class CarShareNew extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    
+
     static {
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -33,6 +33,7 @@ public class CarShareNew extends HttpServlet {
             e.printStackTrace();
         }
     }
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html; charset=UTF-8");
@@ -57,34 +58,13 @@ public class CarShareNew extends HttpServlet {
         String postCode = request.getParameter("postcode");
 
         // 生年月日の取得と変換
-        String birthDateString = request.getParameter("birthday");
-        Date birthDate = null;
-        if (birthDateString != null && !birthDateString.isEmpty()) {
-            try {
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                birthDate = dateFormat.parse(birthDateString);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        }
-
-        // 免許証の取得と変換
-        String licenseDateString = request.getParameter("licenseDate");
-        Date licenseDate = null;
-        if (licenseDateString != null && !licenseDateString.isEmpty()) {
-            try {
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                licenseDate = dateFormat.parse(licenseDateString);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        }
+        Date birthDate = parseDate(request.getParameter("birthday"));
+        Date licenseDate = parseDate(request.getParameter("licenseDate"));
 
         Customer customer = new Customer();
         String licenseNumber = request.getParameter("licenseNumber");
 
         if (islicenseNumberExists(licenseNumber)) {
-            System.out.println("このライセンス番号は既に登録されています。");
             request.setAttribute("errorMessage", "このライセンス番号は既に登録されています。");
             RequestDispatcher rd = request.getRequestDispatcher("error.jsp");
             rd.forward(request, response);
@@ -104,10 +84,13 @@ public class CarShareNew extends HttpServlet {
 
             // 画像ファイルの処理
             try {
-                Blob omoteBlob = createBlobFromPart(omoteJpg);
-                customer.setOmote(omoteBlob);
-                Blob uraBlob = createBlobFromPart(uraJpg);
-                customer.setUra(uraBlob);
+                byte[] omoteBytes = convertBlobToBytes(createBlobFromPart(omoteJpg));
+                byte[] uraBytes = convertBlobToBytes(createBlobFromPart(uraJpg));
+                
+                // セッションにbyte[]をセット
+                HttpSession session = request.getSession();
+                session.setAttribute("omoteImage", omoteBytes);
+                session.setAttribute("uraImage", uraBytes);
             } catch (SQLException | IOException e) {
                 e.printStackTrace();
             }
@@ -117,64 +100,35 @@ public class CarShareNew extends HttpServlet {
             session.setAttribute("customer", customer);
 
             // CreditNewサーブレットにフォワードし、データを渡す
-            request.setAttribute("customerName", customerName);
-            request.setAttribute("customerKana", customerNameKana);
-            request.setAttribute("gender", gender);
-            request.setAttribute("customerPassword", hashedPassword);
-            request.setAttribute("email", eMail);
-            request.setAttribute("tellNumber", tellNumber);
-            request.setAttribute("postCode", postCode);
-            request.setAttribute("birthDate", birthDate);
-            request.setAttribute("customerAddress", customerAddress);
-            request.setAttribute("licenseNumber", licenseNumber);
-            request.setAttribute("licenseDate", licenseDateString); // 生年月日を文字列で渡す
-
             RequestDispatcher rd = request.getRequestDispatcher("P20.jsp");
             rd.forward(request, response);
         }
     }
 
+    private Date parseDate(String dateString) {
+        if (dateString != null && !dateString.isEmpty()) {
+            try {
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                return dateFormat.parse(dateString);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
     private Blob createBlobFromPart(Part part) throws SQLException, IOException {
-        // PartからBlobを生成
         byte[] blobData = part.getInputStream().readAllBytes();
         return new javax.sql.rowset.serial.SerialBlob(blobData);
     }
 
+    private byte[] convertBlobToBytes(Blob blob) throws SQLException {
+        return blob.getBytes(1, (int) blob.length());
+    }
+
     private boolean islicenseNumberExists(String licenseNumber) {
-        // 本来のデータベース接続はコメントアウト
-        /*
-        String jdbcUrl = "jdbc:mysql://10.64.144.5:3306/23jya01";
-        String dbUser = "23jya01";
-        String dbPassword = "23jya01";
-
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-
-        try {
-            connection = DriverManager.getConnection(jdbcUrl, dbUser, dbPassword);
-            String sql = "SELECT COUNT(*) FROM customer WHERE license_number = ?";
-            preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, licenseNumber);
-            resultSet = preparedStatement.executeQuery();
-
-            if (resultSet.next()) {
-                int count = resultSet.getInt(1);
-                return count > 0; // 1以上であれば重複
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (resultSet != null) resultSet.close();
-                if (preparedStatement != null) preparedStatement.close();
-                if (connection != null) connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        */
-        return false; // データベース接続を行わないため、常にfalseを返す
+        // データベース接続のコードはコメントアウト
+        return false; // 常にfalseを返す
     }
 
     public String hashPassword(String password) {
@@ -193,5 +147,4 @@ public class CarShareNew extends HttpServlet {
             throw new RuntimeException(e);
         }
     }
-
 }
