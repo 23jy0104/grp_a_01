@@ -1,5 +1,25 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import="model.Customer"%>
+<%@ page import="java.util.Date" %>
+<%@ page import="java.text.SimpleDateFormat" %>
+<%@page import="java.sql.Blob"%>
+<%
+    Customer customer = (Customer) session.getAttribute("customer");
+
+    String customerName = customer.getCustomerName();
+    String customerKana = customer.getCustomerKana();
+    String gender =customer.getGender();
+    String password =customer.getCustomerPassword();
+    String email = customer.getEmail();
+    String tellNumber = customer.gettellNumber();
+    String customerAddress = customer.getCustomerAddress(); // 住所を取得するメソッド名に注意
+    Date licenseDate = customer.getLicenceDate();
+    String licenseNumber = customer.getLicenseNumber(); // 免許証番号を取得
+	Blob omote =customer.getOmote();
+    Blob ura =customer.getUra();
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy年MM月dd日"); // 日付フォーマット
+%>
 <!--基本情報の入力-->
 
 <!DOCTYPE html>
@@ -59,7 +79,7 @@
                 errorContainer.style.display = 'block'; // 表示する
             } else {
                 // エラーがなければ遷移先のURLを指定
-                window.location.href = 'creditNew';
+                window.location.href = 'CreditNew';
             }
         }
     </script>
@@ -99,37 +119,47 @@
     <div id="errorContainer" class="error-message"></div> <!-- エラーメッセージ表示用 -->
     
     <div class="form-group">
-        <form action="creditNew" method="post" onsubmit="confirmAction(event)">
-            <div class="form-group">
-                <label for="credit_number">
-                    <span class="required">必須</span>クレジットカード番号<span class="highlight"> ※半角数字、ハイフンなし</span>
-                </label>
-                <input type="text" id="credit_number" placeholder="例:1234567891234567"><br><br>
-                <span class="highlight2"> 注意:ご登録は、お申込ご本人名義のクレジットカードに限ります。</span><br>
-                VISA・JCB・AMEX・MASTER・DINERS・EPOSの6ブランドがご利用いただけます。
+    <form action="CreditNew" method="post" onsubmit="confirmAction(event)">
+    <input type="hidden" name="customerName" value="<%= customerName %>">
+	<input type="hidden" name="customerKana" value="<%= customerKana %>">
+	<input type="hidden" name="gender" value="<%= gender %>"> <!-- 性別の追加 -->
+	<input type="hidden" name="email" value="<%= email %>">
+	<input type="hidden" name="tellNumber" value="<%= tellNumber %>">
+	<input type="hidden" name="postCode" value="<%= postCode %>"> <!-- 郵便番号の追加 -->
+	<input type="hidden" name="customerAddress" value="<%= customerAddress %>">
+	<input type="hidden" name="licenseNumber" value="<%= licenseNumber %>">
+	<input type="hidden" name="licenseDate" value="<%= dateFormat.format(licenseDate) %>">
 
-                <label for="credit_date">
-                    <span class="required">必須</span>有効期限
-                </label>
-                <input type="month" name="credittime">
-                <br>
+	    <div class="form-group">
+            <label for="credit_number">
+                <span class="required">必須</span>クレジットカード番号<span class="highlight"> ※半角数字、ハイフンなし</span>
+            </label>
+            <input type="text" id="credit_number" placeholder="例:1234567891234567"><br><br>
+            <span class="highlight2"> 注意:ご登録は、お申込ご本人名義のクレジットカードに限ります。</span><br>
+            VISA・JCB・AMEX・MASTER・DINERS・EPOSの6ブランドがご利用いただけます。
 
-                <label for="security">
-                    <span class="required">必須</span>セキュリティコード<span class="highlight"> ※半角数字</span>
-                </label>
-                <input type="number" id="security" placeholder="例:012">
+            <label for="credit_date">
+                <span class="required">必須</span>有効期限
+            </label>
+            <input type="month" name="credittime">
+            <br>
 
-                <div class="warning">
-                    <input type="checkbox" id="myCheckbox" onclick="toggleButton()">入力内容をご確認いただき、誤りがない場合はチェックをつけてください。<br>
-                    ※チェックが入っていない場合、変更を確定できません。
-                </div>
+            <label for="security">
+                <span class="required">必須</span>セキュリティコード<span class="highlight"> ※半角数字</span>
+            </label>
+            <input type="number" id="security" placeholder="例:012">
 
-                <div class="btn container">
-                    <input type="button" id="modoru" value="ご登録情報の確認に戻る" onclick="location.href='P20.jsp'">
-                    <button id="confirmButton" class="confirmbutton" disabled type="submit">確定</button>
-                </div>
+            <div class="warning">
+                <input type="checkbox" id="myCheckbox" onclick="toggleButton()">入力内容をご確認いただき、誤りがない場合はチェックをつけてください。<br>
+                ※チェックが入っていない場合、変更を確定できません。
             </div>
-        </form>
-    </div>
+
+            <div class="btn container">
+                <input type="button" id="modoru" value="ご登録情報の確認に戻る" onclick="location.href='P20.jsp'">
+                <button id="confirmButton" class="confirmbutton" disabled type="submit">確定</button>
+            </div>
+        </div>
+    </form>
+</div>
 </body>
 </html>

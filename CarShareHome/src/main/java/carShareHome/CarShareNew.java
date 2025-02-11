@@ -1,15 +1,9 @@
 package carShareHome;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Blob;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -39,7 +33,6 @@ public class CarShareNew extends HttpServlet {
             e.printStackTrace();
         }
     }
-
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html; charset=UTF-8");
@@ -50,16 +43,18 @@ public class CarShareNew extends HttpServlet {
         String customerSeiKana = request.getParameter("customerSeiKana");
         String customerMeiKana = request.getParameter("customerMeiKana");
         String customerNameKana = customerSeiKana + customerMeiKana;
+        String gender = request.getParameter("gender");
         String customerPassword = request.getParameter("password");
         String hashedPassword = hashPassword(customerPassword);
-        String city =request.getParameter("city");
-        String address =request.getParameter("address");
-        String building =request.getParameter("building");
-        String customerAddress =city+address+building;
+        String city = request.getParameter("city");
+        String address = request.getParameter("address");
+        String building = request.getParameter("building");
+        String customerAddress = city + address + building;
         String tellNumber = request.getParameter("TEL");
         String eMail = request.getParameter("email");
         Part omoteJpg = request.getPart("file_omote");
         Part uraJpg = request.getPart("file_ura");
+        String postCode = request.getParameter("postcode");
 
         // 生年月日の取得と変換
         String birthDateString = request.getParameter("birthday");
@@ -97,99 +92,57 @@ public class CarShareNew extends HttpServlet {
             // Customerオブジェクトを作成
             customer.setCustomerName(customerName);
             customer.setCustomerKana(customerNameKana);
+            customer.setGender(gender);
             customer.setCustomerPassword(hashedPassword);
-            customer.settellNumber(tellNumber);
+            customer.setTellNumber(tellNumber);
             customer.setEmail(eMail);
             customer.setBirthDate(birthDate);
             customer.setLicenseNumber(licenseNumber);
             customer.setLicenceDate(licenseDate);
             customer.setCustomerAddress(customerAddress);
+            customer.setPostCode(postCode);
 
-            // InputStream から Blob を作成し、Customerオブジェクトにセット
-            try (Connection connection = DriverManager.getConnection("jdbc:mysql://10.64.144.5:3306/23jya01", "23jya01", "23jya01")) {
-                Blob omoteBlob = connection.createBlob();
-                try (InputStream omoteInputStream = omoteJpg.getInputStream();
-                     OutputStream omoteOutputStream = omoteBlob.setBinaryStream(1)) {
-                    byte[] buffer = new byte[1024];
-                    int bytesRead;
-                    while ((bytesRead = omoteInputStream.read(buffer)) != -1) {
-                        omoteOutputStream.write(buffer, 0, bytesRead);
-                    }
-                }
-                customer.setOmote(omoteBlob); // Blobをセット
-
-                Blob uraBlob = connection.createBlob();
-                try (InputStream uraInputStream = uraJpg.getInputStream();
-                     OutputStream uraOutputStream = uraBlob.setBinaryStream(1)) {
-                    byte[] buffer = new byte[1024];
-                    int bytesRead;
-                    while ((bytesRead = uraInputStream.read(buffer)) != -1) {
-                        uraOutputStream.write(buffer, 0, bytesRead);
-                    }
-                }
-                customer.setUra(uraBlob); // Blobをセット
-            } catch (SQLException e) {
+            // 画像ファイルの処理
+            try {
+                Blob omoteBlob = createBlobFromPart(omoteJpg);
+                customer.setOmote(omoteBlob);
+                Blob uraBlob = createBlobFromPart(uraJpg);
+                customer.setUra(uraBlob);
+            } catch (SQLException | IOException e) {
                 e.printStackTrace();
-                // エラーハンドリング
             }
+
+            // セッションにcustomerオブジェクトをセット
             HttpSession session = request.getSession();
             session.setAttribute("customer", customer);
-            
-            // データベースに挿入
-            insertCustomerData(customer);
+
+            // CreditNewサーブレットにフォワードし、データを渡す
+            request.setAttribute("customerName", customerName);
+            request.setAttribute("customerKana", customerNameKana);
+            request.setAttribute("gender", gender);
+            request.setAttribute("customerPassword", hashedPassword);
+            request.setAttribute("email", eMail);
+            request.setAttribute("tellNumber", tellNumber);
+            request.setAttribute("postCode", postCode);
+            request.setAttribute("birthDate", birthDate);
+            request.setAttribute("customerAddress", customerAddress);
+            request.setAttribute("licenseNumber", licenseNumber);
+            request.setAttribute("licenseDate", licenseDateString); // 生年月日を文字列で渡す
+
             RequestDispatcher rd = request.getRequestDispatcher("P20.jsp");
             rd.forward(request, response);
         }
     }
 
-    private void insertCustomerData(Customer customer) {
-        // データベース接続の情報を設定
-        String jdbcUrl = "jdbc:mysql://10.64.144.5:3306/23jya01";
-        String dbUser = "23jya01";
-        String dbPassword = "23jya01";
-
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
-
-        try {
-            // データベースに接続
-            connection = DriverManager.getConnection(jdbcUrl, dbUser, dbPassword);
-
-            // SQL文を準備
-            String sql = "INSERT INTO customer (customer_name, customer_kana, customer_password, tell_number, e_mail, birth_date, license_number, license_date, omote_jpg, ura_jpg) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-            preparedStatement = connection.prepareStatement(sql);
-
-            // パラメータを設定
-            preparedStatement.setString(1, customer.getCustomerName());
-            preparedStatement.setString(2, customer.getCustomerKana());
-            preparedStatement.setString(3, customer.getCustomerPassword());
-            preparedStatement.setString(4, customer.gettellNumber());
-            preparedStatement.setString(5, customer.getEmail());
-            preparedStatement.setDate(6, new java.sql.Date(customer.getBirthDate().getTime()));
-            preparedStatement.setString(7, customer.getLicenseNumber());
-            preparedStatement.setDate(8, new java.sql.Date(customer.getLicenceDate().getTime()));
-            preparedStatement.setBlob(9, customer.getOmote());
-            preparedStatement.setBlob(10, customer.getUra());
-
-            // SQL文を実行
-            preparedStatement.executeUpdate();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            // リソースを解放
-            try {
-                if (preparedStatement != null) preparedStatement.close();
-                if (connection != null) connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
+    private Blob createBlobFromPart(Part part) throws SQLException, IOException {
+        // PartからBlobを生成
+        byte[] blobData = part.getInputStream().readAllBytes();
+        return new javax.sql.rowset.serial.SerialBlob(blobData);
     }
 
     private boolean islicenseNumberExists(String licenseNumber) {
-        // データベース接続の情報を設定
+        // 本来のデータベース接続はコメントアウト
+        /*
         String jdbcUrl = "jdbc:mysql://10.64.144.5:3306/23jya01";
         String dbUser = "23jya01";
         String dbPassword = "23jya01";
@@ -199,20 +152,12 @@ public class CarShareNew extends HttpServlet {
         ResultSet resultSet = null;
 
         try {
-            // データベースに接続
             connection = DriverManager.getConnection(jdbcUrl, dbUser, dbPassword);
-
-            // SQL文を準備
-            String sql = "SELECT COUNT(*) FROM customers WHERE license_number = ?";
+            String sql = "SELECT COUNT(*) FROM customer WHERE license_number = ?";
             preparedStatement = connection.prepareStatement(sql);
-            
-            // パラメータを設定
             preparedStatement.setString(1, licenseNumber);
-
-            // クエリを実行
             resultSet = preparedStatement.executeQuery();
 
-            // 結果を確認
             if (resultSet.next()) {
                 int count = resultSet.getInt(1);
                 return count > 0; // 1以上であれば重複
@@ -220,7 +165,6 @@ public class CarShareNew extends HttpServlet {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            // リソースを解放
             try {
                 if (resultSet != null) resultSet.close();
                 if (preparedStatement != null) preparedStatement.close();
@@ -229,8 +173,8 @@ public class CarShareNew extends HttpServlet {
                 e.printStackTrace();
             }
         }
-        
-        return false; // 何らかのエラーが
+        */
+        return false; // データベース接続を行わないため、常にfalseを返す
     }
 
     public String hashPassword(String password) {
@@ -246,7 +190,8 @@ public class CarShareNew extends HttpServlet {
             }
             return hexString.toString();
         } catch (NoSuchAlgorithmException | java.io.UnsupportedEncodingException e) {
-        	throw new RuntimeException(e);
+            throw new RuntimeException(e);
         }
     }
+
 }

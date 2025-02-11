@@ -1,3 +1,4 @@
+<%@page import="java.sql.Blob"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import="model.Customer"%>
@@ -5,20 +6,18 @@
 <%@ page import="java.text.SimpleDateFormat" %>
 <%
     Customer customer = (Customer) session.getAttribute("customer");
-    if (customer == null) {
-        // エラーハンドリング: 顧客がセッションに存在しない場合
-        response.sendRedirect("error.jsp");
-        return;
-    }
 
     String customerName = customer.getCustomerName();
     String customerKana = customer.getCustomerKana();
+    String gender =customer.getGender();
+    String password =customer.getCustomerPassword();
     String email = customer.getEmail();
     String tellNumber = customer.gettellNumber();
     String customerAddress = customer.getCustomerAddress(); // 住所を取得するメソッド名に注意
     Date licenseDate = customer.getLicenceDate();
     String licenseNumber = customer.getLicenseNumber(); // 免許証番号を取得
-
+	Blob omote =customer.getOmote();
+    Blob ura =customer.getUra();
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy年MM月dd日"); // 日付フォーマット
 %>
 <!--基本情報の確認ページ-->
@@ -95,7 +94,7 @@
                 </div>
             <div class="button-container">
                 <input type="button" value="入力へ戻る" onclick="location.href='P6.jsp'">
-                <input type="button" value="クレジット情報のご入力へ" onclick="location.href='P22.html'">
+                <input type="button" value="クレジット情報のご入力へ" onclick="location.href='P22.jsp'">
             </div>
         </div>
     </div>
