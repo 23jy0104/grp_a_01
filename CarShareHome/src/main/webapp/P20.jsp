@@ -37,7 +37,7 @@
         e.printStackTrace();
     }
 %>
-<!--基本情報の確認ページ-->
+<!--基本情報の確認ページ xxxx-->
 <!DOCTYPE html>
 <html lang="ja">
 <head>
