@@ -12,9 +12,9 @@ public class Customer implements Serializable{
 	private String tellNumber;
 	private String fixedCall;
 	private String email;
-	private Date birthDate;
+	private java.sql.Date birthDate;
 	private String licenseNumber;
-	private Date licenceDate;
+	private java.sql.Date licenceDate;
 	private String postCode;
 	private String customerAddress;
 	private String creditId;
@@ -30,8 +30,8 @@ public class Customer implements Serializable{
 		this.email = email;
 	}
 
-	public Customer(String customerId, String customerName, String customerKana, String gender, String customerPassword, String tellNumber, String fixedCall,String email, Date birthDate,
-			String licenseNumber, Date licenceDate,String postCode, String customerAddress, String creditId, Blob omote, Blob ura) {
+	public Customer(String customerId, String customerName, String customerKana, String gender, String customerPassword, String tellNumber, String fixedCall,String email, java.sql.Date birthDate,
+			String licenseNumber, java.sql.Date licenceDate,String postCode, String customerAddress, String creditId, Blob omote, Blob ura) {
 		super();
 		this.customerId = customerId;
 		this.customerName = customerName;
@@ -86,7 +86,7 @@ public class Customer implements Serializable{
 		return birthDate;
 	}
 
-	public void setBirthDate(Date birthDate) {
+	public void setBirthDate(java.sql.Date birthDate) {
 		this.birthDate = birthDate;
 	}
 
@@ -102,7 +102,7 @@ public class Customer implements Serializable{
 		return licenceDate;
 	}
 
-	public void setLicenceDate(Date licenceDate) {
+	public void setLicenceDate(java.sql.Date licenceDate) {
 		this.licenceDate = licenceDate;
 	}
 

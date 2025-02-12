@@ -4,10 +4,10 @@ import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Blob;
+import java.sql.Date; // 追加
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -63,8 +63,8 @@ public class CarShareNew extends HttpServlet {
 
         Customer customer = new Customer();
         String licenseNumber = request.getParameter("licenseNumber");
-        System.out.println("CustomerbirthDate:"+birthDate);
-        System.out.println("licenseDate:"+licenseDate);
+        System.out.println("CustomerbirthDate:" + birthDate);
+        System.out.println("licenseDate:" + licenseDate);
         if (islicenseNumberExists(licenseNumber)) {
             request.setAttribute("errorMessage", "このライセンス番号は既に登録されています。");
             RequestDispatcher rd = request.getRequestDispatcher("error.jsp");
@@ -77,9 +77,9 @@ public class CarShareNew extends HttpServlet {
             customer.setCustomerPassword(hashedPassword);
             customer.setTellNumber(tellNumber);
             customer.setEmail(eMail);
-            customer.setBirthDate(birthDate);
+            customer.setBirthDate(new Date(birthDate.getTime())); // java.sql.Dateに変換
             customer.setLicenseNumber(licenseNumber);
-            customer.setLicenceDate(licenseDate);
+            customer.setLicenceDate(new Date(licenseDate.getTime())); // java.sql.Dateに変換
             customer.setCustomerAddress(customerAddress);
             customer.setPostCode(postCode);
 
@@ -87,7 +87,7 @@ public class CarShareNew extends HttpServlet {
             try {
                 byte[] omoteBytes = convertBlobToBytes(createBlobFromPart(omoteJpg));
                 byte[] uraBytes = convertBlobToBytes(createBlobFromPart(uraJpg));
-                
+
                 // セッションにbyte[]をセット
                 HttpSession session = request.getSession();
                 session.setAttribute("omoteImage", omoteBytes);
@@ -110,7 +110,7 @@ public class CarShareNew extends HttpServlet {
         if (dateString != null && !dateString.isEmpty()) {
             try {
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                return dateFormat.parse(dateString);
+                return (java.sql.Date) dateFormat.parse(dateString);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -136,7 +136,7 @@ public class CarShareNew extends HttpServlet {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
             byte[] hashedBytes = digest.digest(password.getBytes("UTF-8"));
-            
+
             StringBuilder hexString = new StringBuilder();
             for (byte b : hashedBytes) {
                 String hex = Integer.toHexString(0xff & b);
