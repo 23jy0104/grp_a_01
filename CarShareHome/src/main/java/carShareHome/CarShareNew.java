@@ -63,7 +63,8 @@ public class CarShareNew extends HttpServlet {
 
         Customer customer = new Customer();
         String licenseNumber = request.getParameter("licenseNumber");
-
+        System.out.println("CustomerbirthDate:"+birthDate);
+        System.out.println("licenseDate:"+licenseDate);
         if (islicenseNumberExists(licenseNumber)) {
             request.setAttribute("errorMessage", "このライセンス番号は既に登録されています。");
             RequestDispatcher rd = request.getRequestDispatcher("error.jsp");

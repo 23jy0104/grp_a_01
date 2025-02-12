@@ -1,23 +1,24 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import="model.Customer"%>
 <%@ page import="java.util.Date" %>
 <%@ page import="java.text.SimpleDateFormat" %>
-<%@ page import="java.util.Base64"%>
+<%@ page import="javax.servlet.http.HttpSession" %>
 <%
-    String customerName = request.getParameter("customerName");
-    String customerKana = request.getParameter("customerKana");
-    String gender = request.getParameter("gender");
-    String email = request.getParameter("email");
-    String tellNumber = request.getParameter("tellNumber");
-    String customerAddress = request.getParameter("customerAddress");
-    String licenseNumber = request.getParameter("licenseNumber");
-    String licenseDateStr = request.getParameter("licenseDate");
-    String omoteImageBase64 = request.getParameter("omoteImage");
-    String uraImageBase64 = request.getParameter("uraImage");
-
-    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy年MM月dd日");
-    Date licenseDate = dateFormat.parse(licenseDateStr);
+    // セッションからデータを取得
+    String customerName = (String) session.getAttribute("customerName");
+    String customerKana = (String) session.getAttribute("customerNameKana");
+    String gender = (String) session.getAttribute("gender");
+    String email = (String) session.getAttribute("email");
+    String tellNumber = (String) session.getAttribute("tellNumber");
+    String customerAddress = (String) session.getAttribute("customerAddress");
+    String licenseNumber = (String) session.getAttribute("licenseNumber");
+    Date licenseDate = (Date) session.getAttribute("licenseDate");
+    Date birthDate = (Date) session.getAttribute("birthDate"); // 生年月日も取得
+    String hashedPassword = (String) session.getAttribute("hashedPassword");
+    // 日付のフォーマット設定
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    String licenseDateStr = (licenseDate != null) ? dateFormat.format(licenseDate) : "";
+    String birthDateStr = (birthDate != null) ? dateFormat.format(birthDate) : ""; // 生年月日をフォーマット
 %>
 <!-- クレジットカード情報入力ページ -->
 <!DOCTYPE html>
@@ -46,10 +47,8 @@
         <input type="hidden" name="customerAddress" value="<%= customerAddress %>">
         <input type="hidden" name="licenseNumber" value="<%= licenseNumber %>">
         <input type="hidden" name="licenseDate" value="<%= licenseDateStr %>">
-        
-        <!-- 画像データの隠しフィールド -->
-        <input type="hidden" name="omoteImage" value="<%= omoteImageBase64 %>">
-        <input type="hidden" name="uraImage" value="<%= uraImageBase64 %>">
+        <input type="hidden" name="birthDate" value="<%= birthDateStr %>"> <!-- 生年月日を隠しフィールドとして追加 -->
+        <input type="hidden" name="hashedPassword" value="<%= hashedPassword %>"> <!-- ハッシュ化されたパスワードを保持 -->
 
         <div class="form-group">
             <label for="credit_number">
