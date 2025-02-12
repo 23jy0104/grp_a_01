@@ -62,7 +62,7 @@
             <td><%= reservation.getCustomer().getCustomerName() %></td>
             <td><%= reservation.getStartDate() %></td>
             <td><%= reservation.getFinishDate() %></td>
-            <td><%= "ステーション名" %></td> <!-- ステーション名を適宜設定 -->
+            <td><%= "ステーション名" %></td> <!-- ステーション名を適宜設定  -->
             <td><%= reservation.getPrice() %> 円</td>
         </tr>
     <%
