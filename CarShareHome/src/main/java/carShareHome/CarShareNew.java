@@ -7,7 +7,9 @@ import java.sql.Blob;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -43,7 +45,7 @@ public class CarShareNew extends HttpServlet {
         String customerName = customerSei + customerMei;
         String customerSeiKana = request.getParameter("customerSeiKana");
         String customerMeiKana = request.getParameter("customerMeiKana");
-        String customerNameKana = customerSeiKana + customerMeiKana;
+        String customerKana =customerMeiKana+customerSeiKana;
         String gender = request.getParameter("gender");
         String customerPassword = request.getParameter("password");
         String hashedPassword = hashPassword(customerPassword);
@@ -61,43 +63,43 @@ public class CarShareNew extends HttpServlet {
         Date birthDate = parseDate(request.getParameter("birthday"));
         Date licenseDate = parseDate(request.getParameter("licenseDate"));
 
+        // 日本時間に変換
+        birthDate = convertToJapanTime(birthDate);
+        licenseDate = convertToJapanTime(licenseDate);
+        
         Customer customer = new Customer();
         String licenseNumber = request.getParameter("licenseNumber");
 
+        // セッションにデータを保存
+        HttpSession session = request.getSession();
+        session.setAttribute("customerName", customerName);
+        session.setAttribute("customerKana", customerKana);
+        session.setAttribute("gender", gender);
+        session.setAttribute("hashedPassword", hashedPassword);
+        session.setAttribute("tellNumber", tellNumber);
+        session.setAttribute("email", eMail);
+        session.setAttribute("birthDate", birthDate);
+        session.setAttribute("licenseDate", licenseDate);
+        session.setAttribute("customerAddress", customerAddress);
+        session.setAttribute("postCode", postCode);
+        session.setAttribute("licenseNumber", licenseNumber);
+        session.setAttribute("hashedPassword", hashedPassword);
         if (islicenseNumberExists(licenseNumber)) {
             request.setAttribute("errorMessage", "このライセンス番号は既に登録されています。");
             RequestDispatcher rd = request.getRequestDispatcher("error.jsp");
             rd.forward(request, response);
         } else {
-            // Customerオブジェクトを作成
-            customer.setCustomerName(customerName);
-            customer.setCustomerKana(customerNameKana);
-            customer.setGender(gender);
-            customer.setCustomerPassword(hashedPassword);
-            customer.setTellNumber(tellNumber);
-            customer.setEmail(eMail);
-            customer.setBirthDate(birthDate);
-            customer.setLicenseNumber(licenseNumber);
-            customer.setLicenceDate(licenseDate);
-            customer.setCustomerAddress(customerAddress);
-            customer.setPostCode(postCode);
-
             // 画像ファイルの処理
             try {
                 byte[] omoteBytes = convertBlobToBytes(createBlobFromPart(omoteJpg));
                 byte[] uraBytes = convertBlobToBytes(createBlobFromPart(uraJpg));
                 
                 // セッションにbyte[]をセット
-                HttpSession session = request.getSession();
                 session.setAttribute("omoteImage", omoteBytes);
                 session.setAttribute("uraImage", uraBytes);
             } catch (SQLException | IOException e) {
                 e.printStackTrace();
             }
-
-            // セッションにcustomerオブジェクトをセット
-            HttpSession session = request.getSession();
-            session.setAttribute("customer", customer);
 
             // CreditNewサーブレットにフォワードし、データを渡す
             RequestDispatcher rd = request.getRequestDispatcher("P20.jsp");
@@ -115,6 +117,15 @@ public class CarShareNew extends HttpServlet {
             }
         }
         return null;
+    }
+
+    private Date convertToJapanTime(Date date) {
+        if (date == null) {
+            return null;
+        }
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("Asia/Tokyo"));
+        calendar.setTime(date);
+        return calendar.getTime();
     }
 
     private Blob createBlobFromPart(Part part) throws SQLException, IOException {
