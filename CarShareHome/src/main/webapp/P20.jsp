@@ -1,8 +1,8 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%@page import="java.sql.Blob"%>
 <%@page import="java.sql.SQLException"%>
-<%@page import="java.sql.Date" %>
 <%@page import="model.Customer"%>
-<%@page import="java.text.SimpleDateFormat" %>
 <%@page import="java.util.Base64"%>
 <%
     Customer customer = (Customer) session.getAttribute("customer");
@@ -16,7 +16,6 @@
     String birthDate = customer.getBirthDate();
     String licenseNumber = customer.getLicenseNumber();
     String licenseDate = customer.getLicenceDate();
-    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy年MM月dd日");
 
     // Blobをbyte[]に変換してBase64エンコード
     String omoteBase64 = null;
@@ -100,13 +99,7 @@
                     <label for="type">免許証番号</label>
                     <div class="input-container"><%= licenseNumber %></div>
                     <label for="deadline">有効期限</label>
-                    <div class="input-container">
-                        <%
-                            String formattedLicenseDate = (licenseDate != null) 
-                                ? dateFormat.format(new java.util.Date(licenseDate.getTime())) 
-                                : "未設定";
-                        %>
-                        <%= formattedLicenseDate %>
+                    <div class="input-container"><%=licenseDate %>
                     </div>
                     <label for="email">メールアドレス</label>
                     <div class="input-container"><%= email %></div>
@@ -121,9 +114,9 @@
                     <input type="hidden" name="email" value="<%= email %>">
                     <input type="hidden" name="tellNumber" value="<%= tellNumber %>">
                     <input type="hidden" name="customerAddress" value="<%= customerAddress %>">
-                    <input type="hidden" name="birthDate" value ="<%= dateFormat.format(new java.util.Date(birthDate.getTime())) %>">
+                    <input type="hidden" name="birthDate" value ="<%= birthDate %>">
                     <input type="hidden" name="licenseNumber" value="<%= licenseNumber %>">
-                    <input type="hidden" name="licenseDate" value="<%= dateFormat.format(new java.util.Date(licenseDate.getTime())) %>">
+                    <input type="hidden" name="licenseDate" value="<%= licenseDate %>">
                     <input type="hidden" name="omoteImage" value="<%= omoteBase64 %>">
                     <input type="hidden" name="uraImage" value="<%= uraBase64 %>">
                     <input type="submit" value="クレジット情報のご入力へ">

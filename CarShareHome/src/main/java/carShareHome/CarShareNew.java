@@ -4,16 +4,7 @@ import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Blob;
-import java.sql.Date;
 import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-<<<<<<< HEAD
-import java.util.Calendar;
-import java.util.Date;
-import java.util.TimeZone;
-=======
->>>>>>> branch 'main' of https://github.com/23jy0104/grp_a_01.git
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -46,14 +37,10 @@ public class CarShareNew extends HttpServlet {
 
         String customerSei = request.getParameter("customerSei");
         String customerMei = request.getParameter("customerMei");
-        String customerName = customerSei + " " + customerMei; // スペースを追加
+        String customerName = customerSei + " " + customerMei;
         String customerSeiKana = request.getParameter("customerSeiKana");
         String customerMeiKana = request.getParameter("customerMeiKana");
-<<<<<<< HEAD
-        String customerKana =customerMeiKana+customerSeiKana;
-=======
-        String customerNameKana = customerSeiKana + " " + customerMeiKana; // スペースを追加
->>>>>>> branch 'main' of https://github.com/23jy0104/grp_a_01.git
+        String customerKana = customerMeiKana + customerSeiKana;
         String gender = request.getParameter("gender");
         String customerPassword = request.getParameter("password");
         String hashedPassword = hashPassword(customerPassword);
@@ -69,80 +56,36 @@ public class CarShareNew extends HttpServlet {
         String birthDate = request.getParameter("birthday");
         String licenseDate = request.getParameter("licenseDate");
 
-        // 入力データの検証
         if (validateInputs(customerSei, customerMei, customerSeiKana, customerMeiKana, gender, birthDate, licenseDate, tellNumber, eMail)) {
             Customer customer = new Customer();
             String licenseNumber = request.getParameter("licenseNumber");
 
-<<<<<<< HEAD
-        // 日本時間に変換
-        birthDate = convertToJapanTime(birthDate);
-        licenseDate = convertToJapanTime(licenseDate);
-        
-        Customer customer = new Customer();
-        String licenseNumber = request.getParameter("licenseNumber");
-=======
             if (isLicenseNumberExists(licenseNumber)) {
                 request.setAttribute("errorMessage", "このライセンス番号は既に登録されています。");
                 forwardToErrorPage(request, response);
             } else {
-                // Customerオブジェクトを作成
                 customer.setCustomerName(customerName);
-                customer.setCustomerKana(customerNameKana);
+                customer.setCustomerKana(customerKana);
                 customer.setGender(gender);
                 customer.setCustomerPassword(hashedPassword);
                 customer.setTellNumber(tellNumber);
                 customer.setEmail(eMail);
-                customer.setBirthDate(parseDate(birthDate));
+                customer.setBirthDate(birthDate);
                 customer.setLicenseNumber(licenseNumber);
-                customer.setLicenceDate(parseDate(licenseDate));
+                customer.setLicenceDate(licenseDate);
                 customer.setCustomerAddress(customerAddress);
                 customer.setPostCode(postCode);
->>>>>>> branch 'main' of https://github.com/23jy0104/grp_a_01.git
 
-<<<<<<< HEAD
-        // セッションにデータを保存
-        HttpSession session = request.getSession();
-        session.setAttribute("customerName", customerName);
-        session.setAttribute("customerKana", customerKana);
-        session.setAttribute("gender", gender);
-        session.setAttribute("hashedPassword", hashedPassword);
-        session.setAttribute("tellNumber", tellNumber);
-        session.setAttribute("email", eMail);
-        session.setAttribute("birthDate", birthDate);
-        session.setAttribute("licenseDate", licenseDate);
-        session.setAttribute("customerAddress", customerAddress);
-        session.setAttribute("postCode", postCode);
-        session.setAttribute("licenseNumber", licenseNumber);
-        session.setAttribute("hashedPassword", hashedPassword);
-        if (islicenseNumberExists(licenseNumber)) {
-            request.setAttribute("errorMessage", "このライセンス番号は既に登録されています。");
-            RequestDispatcher rd = request.getRequestDispatcher("error.jsp");
-            rd.forward(request, response);
-        } else {
-            // 画像ファイルの処理
-            try {
-                byte[] omoteBytes = convertBlobToBytes(createBlobFromPart(omoteJpg));
-                byte[] uraBytes = convertBlobToBytes(createBlobFromPart(uraJpg));
-                
-                // セッションにbyte[]をセット
-                session.setAttribute("omoteImage", omoteBytes);
-                session.setAttribute("uraImage", uraBytes);
-            } catch (SQLException | IOException e) {
-                e.printStackTrace();
-=======
-                // 画像ファイルの処理
+                HttpSession session = request.getSession();
+                session.setAttribute("customer", customer);
+
                 try {
                     byte[] omoteBytes = convertBlobToBytes(createBlobFromPart(omoteJpg));
                     byte[] uraBytes = convertBlobToBytes(createBlobFromPart(uraJpg));
-
-                    // セッションにbyte[]をセット
-                    HttpSession session = request.getSession();
+                    
                     session.setAttribute("omoteImage", omoteBytes);
                     session.setAttribute("uraImage", uraBytes);
-                    session.setAttribute("customer", customer);
 
-                    // CreditNewサーブレットにフォワードし、データを渡す
                     RequestDispatcher rd = request.getRequestDispatcher("P20.jsp");
                     rd.forward(request, response);
                 } catch (SQLException | IOException e) {
@@ -150,46 +93,15 @@ public class CarShareNew extends HttpServlet {
                     request.setAttribute("errorMessage", "画像処理中にエラーが発生しました。");
                     forwardToErrorPage(request, response);
                 }
->>>>>>> branch 'main' of https://github.com/23jy0104/grp_a_01.git
             }
-<<<<<<< HEAD
-
-            // CreditNewサーブレットにフォワードし、データを渡す
-            RequestDispatcher rd = request.getRequestDispatcher("P20.jsp");
-            rd.forward(request, response);
-=======
         } else {
             request.setAttribute("errorMessage", "入力データにエラーがあります。");
             forwardToErrorPage(request, response);
->>>>>>> branch 'main' of https://github.com/23jy0104/grp_a_01.git
         }
     }
 
     private boolean validateInputs(String sei, String mei, String seiKana, String meiKana, String gender, String birthDate, String licenseDate, String tellNumber, String email) {
-        // 簡単な検証ルールを追加
         return sei != null && mei != null && seiKana != null && meiKana != null && gender != null && birthDate != null && licenseDate != null && tellNumber != null && email != null;
-    }
-
-    private String parseDate(String dateString) {
-        if (dateString != null && !dateString.isEmpty()) {
-            try {
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                Date date = new Date(dateFormat.parse(dateString).getTime());
-                return date.toString(); // Dateオブジェクトの文字列表現を返す
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        }
-        return null;
-    }
-
-    private Date convertToJapanTime(Date date) {
-        if (date == null) {
-            return null;
-        }
-        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("Asia/Tokyo"));
-        calendar.setTime(date);
-        return calendar.getTime();
     }
 
     private Blob createBlobFromPart(Part part) throws SQLException, IOException {
@@ -204,8 +116,7 @@ public class CarShareNew extends HttpServlet {
     }
 
     private boolean isLicenseNumberExists(String licenseNumber) {
-        // データベース接続のコードはコメントアウト
-        return false; // 常にfalseを返す
+        return false;
     }
 
     private void forwardToErrorPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
