@@ -1,8 +1,6 @@
 package carShareHome;
 
 import java.io.IOException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -15,6 +13,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import model.PasswordHasher;
 
 /**
  * Servlet implementation class Login
@@ -34,7 +34,7 @@ public class Login extends HttpServlet {
 		request.setCharacterEncoding("UTF-8");
 		String email =request.getParameter("email");
 		String password =request.getParameter("customerpassword");
-		String hashedPassword =hashPassword(password);
+		String hashedPassword =PasswordHasher.hashPassword(password);
 		String path ="";
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -73,20 +73,6 @@ public class Login extends HttpServlet {
 		 RequestDispatcher rd = request.getRequestDispatcher(path);
 		    rd.forward(request, response);
 	}
-	private String hashPassword(String password) {
-        try {
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] hash = digest.digest(password.getBytes("UTF-8"));
-            StringBuilder hexString = new StringBuilder();
-            for (byte b : hash) {
-                String hex = Integer.toHexString(0xff & b);
-                if (hex.length() == 1) hexString.append('0');
-                hexString.append(hex);
-            }
-            return hexString.toString();
-        } catch (NoSuchAlgorithmException | IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
+	
 
 }
