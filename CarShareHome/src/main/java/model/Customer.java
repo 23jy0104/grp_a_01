@@ -1,7 +1,6 @@
 package model;
 import java.io.Serializable;
 import java.sql.Blob;
-import java.util.Date;
 
 public class Customer implements Serializable{
 	private String customerId;
@@ -12,9 +11,9 @@ public class Customer implements Serializable{
 	private String tellNumber;
 	private String fixedCall;
 	private String email;
-	private java.sql.Date birthDate;
+	private String birthDate;
 	private String licenseNumber;
-	private java.sql.Date licenceDate;
+	private String licenceDate;
 	private String postCode;
 	private String customerAddress;
 	private String creditId;
@@ -30,8 +29,8 @@ public class Customer implements Serializable{
 		this.email = email;
 	}
 
-	public Customer(String customerId, String customerName, String customerKana, String gender, String customerPassword, String tellNumber, String fixedCall,String email, java.sql.Date birthDate,
-			String licenseNumber, java.sql.Date licenceDate,String postCode, String customerAddress, String creditId, Blob omote, Blob ura) {
+	public Customer(String customerId, String customerName, String customerKana, String gender, String customerPassword, String tellNumber, String fixedCall,String email, String birthDate,
+			String licenseNumber, String licenceDate,String postCode, String customerAddress, String creditId, Blob omote, Blob ura) {
 		super();
 		this.customerId = customerId;
 		this.customerName = customerName;
@@ -82,11 +81,11 @@ public class Customer implements Serializable{
 		this.email = email;
 	}
 
-	public Date getBirthDate() {
+	public String getBirthDate() {
 		return birthDate;
 	}
 
-	public void setBirthDate(java.sql.Date birthDate) {
+	public void setBirthDate(String birthDate) {
 		this.birthDate = birthDate;
 	}
 
@@ -98,11 +97,11 @@ public class Customer implements Serializable{
 		this.licenseNumber = licenceNumber;
 	}
 
-	public Date getLicenceDate() {
+	public String getLicenceDate() {
 		return licenceDate;
 	}
 
-	public void setLicenceDate(java.sql.Date licenceDate) {
+	public void setLicenceDate(String licenceDate) {
 		this.licenceDate = licenceDate;
 	}
 
