@@ -8,6 +8,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import model.CarData;
+import model.Customer;
 import model.Reservation;
 
 public class ReservationDAO {
@@ -40,15 +42,15 @@ public class ReservationDAO {
 
     // 予約の作成
     public boolean createReservation(Reservation reservation) {
-        String sql = "INSERT INTO reservation (reservation_id, start_date, stop_date, customer_id, price, car_code, finish_date) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO reservation (reservation_id, start_date, stop_date, customer_id, finish_date, price, car_code) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement pstmt = con.prepareStatement(sql)) {
             pstmt.setString(1, reservation.getReservationId());
             pstmt.setTimestamp(2, reservation.getStartDate());
             pstmt.setTimestamp(3, reservation.getStopDate());
-            pstmt.setString(4, reservation.getCustomerId());
-            pstmt.setInt(5, reservation.getPrice());
-            pstmt.setString(6, reservation.getCarCode());
-            pstmt.setTimestamp(7, reservation.getFinishDate());
+            pstmt.setString(4, reservation.getCustomerID().getCustomerId()); // CustomerオブジェクトからIDを取得
+            pstmt.setTimestamp(5, reservation.getFinishId());
+            pstmt.setInt(6, reservation.getPrice());
+            pstmt.setString(7, reservation.getCarCode().getCarCode()); // CarDataオブジェクトから車コードを取得
             return pstmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -67,10 +69,10 @@ public class ReservationDAO {
                     rs.getString("reservation_id"),
                     rs.getTimestamp("start_date"),
                     rs.getTimestamp("stop_date"),
-                    rs.getString("customer_id"),
+                    new Customer(rs.getString("customer_id")), // Customerオブジェクトを作成
+                    rs.getTimestamp("finish_date"),
                     rs.getInt("price"),
-                    rs.getString("car_code"),
-                    rs.getTimestamp("finish_date")
+                    new CarData(rs.getString("car_code")) // CarDataオブジェクトを作成
                 );
             }
         } catch (SQLException e) {
@@ -81,14 +83,14 @@ public class ReservationDAO {
 
     // 予約の更新
     public boolean updateReservation(Reservation reservation) {
-        String sql = "UPDATE reservation SET start_date = ?, stop_date = ?, customer_id = ?, price = ?, car_code = ?, finish_date = ? WHERE reservation_id = ?";
+        String sql = "UPDATE reservation SET start_date = ?, stop_date = ?, customer_id = ?, finish_date = ?, price = ?, car_code = ? WHERE reservation_id = ?";
         try (PreparedStatement pstmt = con.prepareStatement(sql)) {
             pstmt.setTimestamp(1, reservation.getStartDate());
             pstmt.setTimestamp(2, reservation.getStopDate());
-            pstmt.setString(3, reservation.getCustomerId());
-            pstmt.setInt(4, reservation.getPrice());
-            pstmt.setString(5, reservation.getCarCode());
-            pstmt.setTimestamp(6, reservation.getFinishDate());
+            pstmt.setString(3, reservation.getCustomerID().getCustomerId()); // CustomerオブジェクトからIDを取得
+            pstmt.setTimestamp(4, reservation.getFinishId());
+            pstmt.setInt(5, reservation.getPrice());
+            pstmt.setString(6, reservation.getCarCode().getCarCode()); // CarDataオブジェクトから車コードを取得
             pstmt.setString(7, reservation.getReservationId());
             return pstmt.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -109,29 +111,7 @@ public class ReservationDAO {
         return false;
     }
 
-    // すべての予約を取得
-    public List<Reservation> getAllReservations() {
-        List<Reservation> reservations = new ArrayList<>();
-        String sql = "SELECT * FROM reservation";
-        try (PreparedStatement pstmt = con.prepareStatement(sql); ResultSet rs = pstmt.executeQuery()) {
-            while (rs.next()) {
-                reservations.add(new Reservation(
-                    rs.getString("reservation_id"),
-                    rs.getTimestamp("start_date"),
-                    rs.getTimestamp("stop_date"),
-                    rs.getString("customer_id"),
-                    rs.getInt("price"),
-                    rs.getString("car_code"),
-                    rs.getTimestamp("finish_date")
-                ));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return reservations;
-    }
-
-    // 過去の予約を取得（利用履歴）
+    // 顧客の過去の予約を取得
     public List<Reservation> getPastReservations(String customerId) {
         List<Reservation> pastReservations = new ArrayList<>();
         String sql = "SELECT * FROM reservation WHERE customer_id = ? AND finish_date IS NOT NULL";
@@ -143,10 +123,10 @@ public class ReservationDAO {
                     rs.getString("reservation_id"),
                     rs.getTimestamp("start_date"),
                     rs.getTimestamp("stop_date"),
-                    rs.getString("customer_id"),
+                    new Customer(rs.getString("customer_id")), // Customerオブジェクトを作成
+                    rs.getTimestamp("finish_date"),
                     rs.getInt("price"),
-                    rs.getString("car_code"),
-                    rs.getTimestamp("finish_date")
+                    new CarData(rs.getString("car_code")) // CarDataオブジェクトを作成
                 ));
             }
         } catch (SQLException e) {

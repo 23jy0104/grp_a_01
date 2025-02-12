@@ -84,25 +84,18 @@
 	        if (!password.value) {
 	            errorMessages.push("※パスワードが未入力です。");
 	            password.style.backgroundColor = '#ffcccc'; // 薄い赤色
-	        } else if (password.value.length < 8 || password.value.length > 20) {
-	            errorMessages.push("※パスワードは8字以上20字以内で入力してください。");
 	        }
-
 	        if (!ageinpassword.value) {
 	            errorMessages.push("※パスワード確認用が未入力です。");
 	            ageinpassword.style.backgroundColor = '#ffcccc'; // 薄い赤色
-	        } else if (password.value !== ageinpassword.value) {
+	        }
+	        if (password.value !== ageinpassword.value) {
 	            errorMessages.push("※パスワードと確認用パスワードが一致しません。");
 	        }
-
 	        if (!licensenumber.value) {
 	            errorMessages.push("※免許証番号が未入力です。");
 	            licensenumber.style.backgroundColor = '#ffcccc'; // 薄い赤色
-	        } else if (!/^\d{12}$/.test(licensenumber.value)) {
-	            errorMessages.push("※免許証番号は12桁の数字で入力してください。");
-	            licensenumber.style.backgroundColor = '#ffcccc'; // 薄い赤色
 	        }
-
 	        if (licensetype.value === "") {
 	            errorMessages.push("※免許証種別が未選択です。");
 	            licensetype.style.backgroundColor = '#ffcccc'; // 薄い赤色
@@ -183,9 +176,9 @@
 	        <label for="gender">
 	        	        <span class="required">必須</span>性別<span class="highlight"> ※必須</span></label>
 	        <div class="radio-group">
-	            <input type="radio" name="gender" value="男" required> 男性
-	            <input type="radio" name="gender" value="女"> 女性
-	            <input type="radio" name="gender" value="拒"> 回答しない
+	            <input type="radio" name="gender" value="male" required> 男性
+	            <input type="radio" name="gender" value="female"> 女性
+	            <input type="radio" name="gender" value="nomal"> 回答しない
 	        </div>
 	    </div>
 	    <div class="form-group">
@@ -351,7 +344,7 @@
 	    </div>
 	</div>
 	<div class="button-container">
-	    <button type="button" onclick="location.href='P4.jsp'" class="btn">詳細・規約のご確認に戻る</button>
+	    	    <button type="button" onclick="location.href='P4.jsp'" class="btn">詳細・規約のご確認に戻る</button>
 	    <button type="button" onclick="validateForm(event)" class="btn">基本情報のご確認</button>
 	</div>
 </form>

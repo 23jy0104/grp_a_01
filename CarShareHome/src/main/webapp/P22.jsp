@@ -15,7 +15,10 @@
     Date licenseDate = (Date) session.getAttribute("licenseDate");
     Date birthDate = (Date) session.getAttribute("birthDate"); // 生年月日も取得
     String hashedPassword = (String) session.getAttribute("hashedPassword");
+<<<<<<< HEAD
 
+=======
+>>>>>>> branch 'main' of https://github.com/23jy0104/grp_a_01.git
     // 日付のフォーマット設定
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     String licenseDateStr = (licenseDate != null) ? dateFormat.format(licenseDate) : "";

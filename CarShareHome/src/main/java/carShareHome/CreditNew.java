@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Date;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -36,18 +37,13 @@ public class CreditNew extends HttpServlet {
         String customerKana = (String) request.getAttribute("customerKana");
         String gender = (String) request.getAttribute("gender");
         String password = (String) request.getAttribute("customerPassword");
-        java.util.Date birthDate = (java.util.Date) request.getAttribute("birthDate");
+        Date birthDate = (Date) request.getAttribute("birthDate");
         String email = (String) request.getAttribute("email");
         String tellNumber = (String) request.getAttribute("tellNumber");
         String postCode = (String) request.getAttribute("postCode");
         String customerAddress = (String) request.getAttribute("customerAddress");
         String licenseNumber = (String) request.getAttribute("licenseNumber");
-        java.util.Date licenseDate = (java.util.Date) request.getAttribute("licenseDate");
-
-        // クレジットカード情報を取得
-        String creditNumber = request.getParameter("credit_number");
-        String creditDate = request.getParameter("credittime");
-        String securityCode = request.getParameter("security");
+        Date licenseDate = (Date) request.getAttribute("licenseDate");
 
         // セッションから画像データを取得
         HttpSession session = request.getSession();
@@ -71,9 +67,9 @@ public class CreditNew extends HttpServlet {
             preparedStatement.setString(4, password);
             preparedStatement.setString(5, tellNumber);
             preparedStatement.setString(6, email);
-            preparedStatement.setDate(7, new java.sql.Date(birthDate.getTime()));
+            preparedStatement.setDate(7, (java.sql.Date) new Date(birthDate.getTime()));
             preparedStatement.setString(8, licenseNumber);
-            preparedStatement.setDate(9, new java.sql.Date(licenseDate.getTime()));
+            preparedStatement.setDate(9, (java.sql.Date) new Date(licenseDate.getTime()));
             preparedStatement.setString(10, postCode);
             preparedStatement.setString(11, customerAddress);
             

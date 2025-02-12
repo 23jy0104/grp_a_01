@@ -1,81 +1,89 @@
 package model;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
-public class Reservation {
-    private String reservationId;  // 予約ID
-    private Timestamp startDate;    // 開始日時
-    private Timestamp stopDate;     // 終了日時
-    private String customerId;       // 顧客ID
-    private int price;               // 価格
-    private String carCode;          // 車コード
-    private Timestamp finishDate;    // 完了日時（過去の履歴用）
+public class Reservation implements Serializable {
+	private String reservationId;
+	private Timestamp startDate;
+	private Timestamp stopDate;
+	private Customer customerID;
+	private Timestamp finishId;
+	private int price;
+	private CarData carCode;
+	
+	public Reservation() {
+		super();
+	}
 
-    // コンストラクタ
-    public Reservation(String reservationId, Timestamp startDate, Timestamp stopDate, String customerId, int price, String carCode, Timestamp finishDate) {
-        this.reservationId = reservationId;
-        this.startDate = startDate;
-        this.stopDate = stopDate;
-        this.customerId = customerId;
-        this.price = price;
-        this.carCode = carCode;
-        this.finishDate = finishDate;
-    }
+	public Reservation(String reservationId, Timestamp startDate, Timestamp stopDate, Customer customerID,
+			Timestamp finishId, int price, CarData carCode) {
+		super();
+		this.reservationId = reservationId;
+		this.startDate = startDate;
+		this.stopDate = stopDate;
+		this.customerID = customerID;
+		this.finishId = finishId;
+		this.price = price;
+		this.carCode = carCode;
+	}
 
-    // ゲッターとセッター
-    public String getReservationId() {
-        return reservationId;
-    }
+	public String getReservationId() {
+		return reservationId;
+	}
 
-    public void setReservationId(String reservationId) {
-        this.reservationId = reservationId;
-    }
+	public void setReservationId(String reservationId) {
+		this.reservationId = reservationId;
+	}
 
-    public Timestamp getStartDate() {
-        return startDate;
-    }
+	public Timestamp getStartDate() {
+		return startDate;
+	}
 
-    public void setStartDate(Timestamp startDate) {
-        this.startDate = startDate;
-    }
+	public void setStartDate(Timestamp startDate) {
+		this.startDate = startDate;
+	}
 
-    public Timestamp getStopDate() {
-        return stopDate;
-    }
+	public Timestamp getStopDate() {
+		return stopDate;
+	}
 
-    public void setStopDate(Timestamp stopDate) {
-        this.stopDate = stopDate;
-    }
+	public void setStopDate(Timestamp stopDate) {
+		this.stopDate = stopDate;
+	}
 
-    public String getCustomerId() {
-        return customerId;
-    }
+	public Customer getCustomerID() {
+		return customerID;
+	}
 
-    public void setCustomerId(String customerId) {
-        this.customerId = customerId;
-    }
+	public void setCustomerID(Customer customerID) {
+		this.customerID = customerID;
+	}
 
-    public int getPrice() {
-        return price;
-    }
+	public Timestamp getFinishId() {
+		return finishId;
+	}
 
-    public void setPrice(int price) {
-        this.price = price;
-    }
+	public void setFinishId(Timestamp finishId) {
+		this.finishId = finishId;
+	}
 
-    public String getCarCode() {
-        return carCode;
-    }
+	public int getPrice() {
+		return price;
+	}
 
-    public void setCarCode(String carCode) {
-        this.carCode = carCode;
-    }
+	public void setPrice(int price) {
+		this.price = price;
+	}
 
-    public Timestamp getFinishDate() {
-        return finishDate;
-    }
+	public CarData getCarCode() {
+		return carCode;
+	}
 
-    public void setFinishDate(Timestamp finishDate) {
-        this.finishDate = finishDate;
-    }
+	public void setCarCode(CarData carCode) {
+		this.carCode = carCode;
+	}
+	
+	
+
 }

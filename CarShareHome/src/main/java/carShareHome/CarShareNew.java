@@ -4,12 +4,16 @@ import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Blob;
+import java.sql.Date;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+<<<<<<< HEAD
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
+=======
+>>>>>>> branch 'main' of https://github.com/23jy0104/grp_a_01.git
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -42,10 +46,14 @@ public class CarShareNew extends HttpServlet {
 
         String customerSei = request.getParameter("customerSei");
         String customerMei = request.getParameter("customerMei");
-        String customerName = customerSei + customerMei;
+        String customerName = customerSei + " " + customerMei; // スペースを追加
         String customerSeiKana = request.getParameter("customerSeiKana");
         String customerMeiKana = request.getParameter("customerMeiKana");
+<<<<<<< HEAD
         String customerKana =customerMeiKana+customerSeiKana;
+=======
+        String customerNameKana = customerSeiKana + " " + customerMeiKana; // スペースを追加
+>>>>>>> branch 'main' of https://github.com/23jy0104/grp_a_01.git
         String gender = request.getParameter("gender");
         String customerPassword = request.getParameter("password");
         String hashedPassword = hashPassword(customerPassword);
@@ -58,18 +66,41 @@ public class CarShareNew extends HttpServlet {
         Part omoteJpg = request.getPart("file_omote");
         Part uraJpg = request.getPart("file_ura");
         String postCode = request.getParameter("postcode");
+        String birthDate = request.getParameter("birthday");
+        String licenseDate = request.getParameter("licenseDate");
 
-        // 生年月日の取得と変換
-        Date birthDate = parseDate(request.getParameter("birthday"));
-        Date licenseDate = parseDate(request.getParameter("licenseDate"));
+        // 入力データの検証
+        if (validateInputs(customerSei, customerMei, customerSeiKana, customerMeiKana, gender, birthDate, licenseDate, tellNumber, eMail)) {
+            Customer customer = new Customer();
+            String licenseNumber = request.getParameter("licenseNumber");
 
+<<<<<<< HEAD
         // 日本時間に変換
         birthDate = convertToJapanTime(birthDate);
         licenseDate = convertToJapanTime(licenseDate);
         
         Customer customer = new Customer();
         String licenseNumber = request.getParameter("licenseNumber");
+=======
+            if (isLicenseNumberExists(licenseNumber)) {
+                request.setAttribute("errorMessage", "このライセンス番号は既に登録されています。");
+                forwardToErrorPage(request, response);
+            } else {
+                // Customerオブジェクトを作成
+                customer.setCustomerName(customerName);
+                customer.setCustomerKana(customerNameKana);
+                customer.setGender(gender);
+                customer.setCustomerPassword(hashedPassword);
+                customer.setTellNumber(tellNumber);
+                customer.setEmail(eMail);
+                customer.setBirthDate(parseDate(birthDate));
+                customer.setLicenseNumber(licenseNumber);
+                customer.setLicenceDate(parseDate(licenseDate));
+                customer.setCustomerAddress(customerAddress);
+                customer.setPostCode(postCode);
+>>>>>>> branch 'main' of https://github.com/23jy0104/grp_a_01.git
 
+<<<<<<< HEAD
         // セッションにデータを保存
         HttpSession session = request.getSession();
         session.setAttribute("customerName", customerName);
@@ -99,19 +130,52 @@ public class CarShareNew extends HttpServlet {
                 session.setAttribute("uraImage", uraBytes);
             } catch (SQLException | IOException e) {
                 e.printStackTrace();
+=======
+                // 画像ファイルの処理
+                try {
+                    byte[] omoteBytes = convertBlobToBytes(createBlobFromPart(omoteJpg));
+                    byte[] uraBytes = convertBlobToBytes(createBlobFromPart(uraJpg));
+
+                    // セッションにbyte[]をセット
+                    HttpSession session = request.getSession();
+                    session.setAttribute("omoteImage", omoteBytes);
+                    session.setAttribute("uraImage", uraBytes);
+                    session.setAttribute("customer", customer);
+
+                    // CreditNewサーブレットにフォワードし、データを渡す
+                    RequestDispatcher rd = request.getRequestDispatcher("P20.jsp");
+                    rd.forward(request, response);
+                } catch (SQLException | IOException e) {
+                    e.printStackTrace();
+                    request.setAttribute("errorMessage", "画像処理中にエラーが発生しました。");
+                    forwardToErrorPage(request, response);
+                }
+>>>>>>> branch 'main' of https://github.com/23jy0104/grp_a_01.git
             }
+<<<<<<< HEAD
 
             // CreditNewサーブレットにフォワードし、データを渡す
             RequestDispatcher rd = request.getRequestDispatcher("P20.jsp");
             rd.forward(request, response);
+=======
+        } else {
+            request.setAttribute("errorMessage", "入力データにエラーがあります。");
+            forwardToErrorPage(request, response);
+>>>>>>> branch 'main' of https://github.com/23jy0104/grp_a_01.git
         }
     }
 
-    private Date parseDate(String dateString) {
+    private boolean validateInputs(String sei, String mei, String seiKana, String meiKana, String gender, String birthDate, String licenseDate, String tellNumber, String email) {
+        // 簡単な検証ルールを追加
+        return sei != null && mei != null && seiKana != null && meiKana != null && gender != null && birthDate != null && licenseDate != null && tellNumber != null && email != null;
+    }
+
+    private String parseDate(String dateString) {
         if (dateString != null && !dateString.isEmpty()) {
             try {
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                return dateFormat.parse(dateString);
+                Date date = new Date(dateFormat.parse(dateString).getTime());
+                return date.toString(); // Dateオブジェクトの文字列表現を返す
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -129,24 +193,31 @@ public class CarShareNew extends HttpServlet {
     }
 
     private Blob createBlobFromPart(Part part) throws SQLException, IOException {
-        byte[] blobData = part.getInputStream().readAllBytes();
-        return new javax.sql.rowset.serial.SerialBlob(blobData);
+        try (var inputStream = part.getInputStream()) {
+            byte[] blobData = inputStream.readAllBytes();
+            return new javax.sql.rowset.serial.SerialBlob(blobData);
+        }
     }
 
     private byte[] convertBlobToBytes(Blob blob) throws SQLException {
         return blob.getBytes(1, (int) blob.length());
     }
 
-    private boolean islicenseNumberExists(String licenseNumber) {
+    private boolean isLicenseNumberExists(String licenseNumber) {
         // データベース接続のコードはコメントアウト
         return false; // 常にfalseを返す
+    }
+
+    private void forwardToErrorPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        RequestDispatcher rd = request.getRequestDispatcher("error.jsp");
+        rd.forward(request, response);
     }
 
     public String hashPassword(String password) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
             byte[] hashedBytes = digest.digest(password.getBytes("UTF-8"));
-            
+
             StringBuilder hexString = new StringBuilder();
             for (byte b : hashedBytes) {
                 String hex = Integer.toHexString(0xff & b);
