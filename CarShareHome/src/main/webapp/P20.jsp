@@ -21,7 +21,7 @@
 
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy年MM月dd日"); // 日付フォーマット
 %>
-<!--基本情報の確認ページ-->
+<!--基本情報の確認ページ xxxx-->
 <!DOCTYPE html>
 <html lang="ja">
 <head>
