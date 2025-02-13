@@ -49,15 +49,7 @@ public class CreditNew extends HttpServlet {
         String customerAddress = request.getParameter("customerAddress");
         String licenseNumber = request.getParameter("licenseNumber");
         String licenseDateStr = request.getParameter("licenseDate");
-        System.out.println(customerName);
-        System.out.println(customerKana);
-        System.out.println(gender);
-        System.out.println(password);
-        System.out.println(email);
-        System.out.println(postCode);
-        System.out.println(customerAddress);
         String hashedPassword = PasswordHasher.hashPassword(password);
-        System.out.println(licenseNumber);
         // セッションから画像データを取得
         HttpSession session = request.getSession();
         byte[] omoteBytes = (byte[]) session.getAttribute("omoteImage");
