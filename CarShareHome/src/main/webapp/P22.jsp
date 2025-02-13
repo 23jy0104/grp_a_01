@@ -1,7 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import="java.util.Date" %>
-<%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="javax.servlet.http.HttpSession" %>
 <%
     // セッションからデータを取得
@@ -12,13 +10,10 @@
     String tellNumber = (String) session.getAttribute("tellNumber");
     String customerAddress = (String) session.getAttribute("customerAddress");
     String licenseNumber = (String) session.getAttribute("licenseNumber");
-    Date licenseDate = (Date) session.getAttribute("licenseDate");
-    Date birthDate = (Date) session.getAttribute("birthDate"); // 生年月日も取得
+   	String licenseDate = (String) session.getAttribute("licenseDate");
+    String birthDate = (String) session.getAttribute("birthDate"); // 生年月日も取得
     String hashedPassword = (String) session.getAttribute("hashedPassword");
-    // 日付のフォーマット設定
-    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-    String licenseDateStr = (licenseDate != null) ? dateFormat.format(licenseDate) : "";
-    String birthDateStr = (birthDate != null) ? dateFormat.format(birthDate) : ""; // 生年月日をフォーマット
+
 %>
 <!-- クレジットカード情報入力ページ -->
 <!DOCTYPE html>
@@ -46,8 +41,8 @@
         <input type="hidden" name="tellNumber" value="<%= tellNumber %>">
         <input type="hidden" name="customerAddress" value="<%= customerAddress %>">
         <input type="hidden" name="licenseNumber" value="<%= licenseNumber %>">
-        <input type="hidden" name="licenseDate" value="<%= licenseDateStr %>">
-        <input type="hidden" name="birthDate" value="<%= birthDateStr %>"> <!-- 生年月日を隠しフィールドとして追加 -->
+        <input type="hidden" name="licenseDate" value="<%= licenseDate %>">
+        <input type="hidden" name="birthDate" value="<%= birthDate %>"> <!-- 生年月日を隠しフィールドとして追加 -->
         <input type="hidden" name="hashedPassword" value="<%= hashedPassword %>"> <!-- ハッシュ化されたパスワードを保持 -->
 
         <div class="form-group">

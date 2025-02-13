@@ -1,11 +1,12 @@
 package carShareHome;
-
 import java.io.IOException;
 import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.servlet.RequestDispatcher;
@@ -37,18 +38,22 @@ public class CreditNew extends HttpServlet {
         String customerKana = (String) request.getAttribute("customerKana");
         String gender = (String) request.getAttribute("gender");
         String password = (String) request.getAttribute("customerPassword");
-        Date birthDate = (Date) request.getAttribute("birthDate");
+        String birthDateStr = (String) request.getAttribute("birthDate");
         String email = (String) request.getAttribute("email");
         String tellNumber = (String) request.getAttribute("tellNumber");
         String postCode = (String) request.getAttribute("postCode");
         String customerAddress = (String) request.getAttribute("customerAddress");
         String licenseNumber = (String) request.getAttribute("licenseNumber");
-        Date licenseDate = (Date) request.getAttribute("licenseDate");
+        String licenseDateStr = (String) request.getAttribute("licenseDate");
 
         // セッションから画像データを取得
         HttpSession session = request.getSession();
         byte[] omoteBytes = (byte[]) session.getAttribute("omoteImage");
         byte[] uraBytes = (byte[]) session.getAttribute("uraImage");
+
+        // 日付の変換
+        java.sql.Date birthDate = convertStringToSqlDate(birthDateStr);
+        java.sql.Date licenseDate = convertStringToSqlDate(licenseDateStr);
 
         // データベースに登録する処理
         try {
@@ -67,9 +72,9 @@ public class CreditNew extends HttpServlet {
             preparedStatement.setString(4, password);
             preparedStatement.setString(5, tellNumber);
             preparedStatement.setString(6, email);
-            preparedStatement.setDate(7, (java.sql.Date) new Date(birthDate.getTime()));
+            preparedStatement.setDate(7, birthDate);
             preparedStatement.setString(8, licenseNumber);
-            preparedStatement.setDate(9, (java.sql.Date) new Date(licenseDate.getTime()));
+            preparedStatement.setDate(9, licenseDate);
             preparedStatement.setString(10, postCode);
             preparedStatement.setString(11, customerAddress);
             
@@ -100,5 +105,18 @@ public class CreditNew extends HttpServlet {
             RequestDispatcher rd = request.getRequestDispatcher("P22.jsp");
             rd.forward(request, response);
         }
+    }
+
+    private java.sql.Date convertStringToSqlDate(String dateStr) {
+        if (dateStr != null && !dateStr.isEmpty()) {
+            try {
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                Date date = dateFormat.parse(dateStr);
+                return new java.sql.Date(date.getTime());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
     }
 }
