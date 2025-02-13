@@ -16,6 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import model.PasswordHasher;
 
+
+
 /**
  * Servlet implementation class Login
  */
@@ -73,6 +75,5 @@ public class Login extends HttpServlet {
 		 RequestDispatcher rd = request.getRequestDispatcher(path);
 		    rd.forward(request, response);
 	}
-	
 
 }
