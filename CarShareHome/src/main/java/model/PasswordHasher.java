@@ -3,6 +3,10 @@ import java.security.MessageDigest;
 
 public class PasswordHasher {
     public static String hashPassword(String password) {
+        if (password == null) {
+            throw new IllegalArgumentException("パスワードはnullであってはいけません");
+        }
+
         try {
             // SHA-256アルゴリズムを使用してパスワードをハッシュ化
             MessageDigest md = MessageDigest.getInstance("SHA-256");
