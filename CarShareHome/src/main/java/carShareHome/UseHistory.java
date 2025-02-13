@@ -23,8 +23,6 @@ public class UseHistory extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String customerName = request.getParameter("customerName");
 
-        System.out.println("customerName: " + customerName);
-
         // customerIdをデータベースから取得
         String customerId = getCustomerIdByName(customerName);
 
@@ -45,9 +43,6 @@ public class UseHistory extends HttpServlet {
         request.setAttribute("customerId", customerId);
         request.setAttribute("customerName", customerName);
         request.setAttribute("usedReservations", usedReservations);
-
-        // デバッグ用のログ
-        System.out.println("取得した予約数: " + (usedReservations != null ? usedReservations.size() : 0));
 
         // JSPにフォワード
         request.getRequestDispatcher("P74.jsp").forward(request, response);

@@ -6,18 +6,6 @@
     String customerId = (String) request.getAttribute("customerId");
     String customerName = (String) request.getAttribute("customerName");
     List<Reservation> usedReservations = (List<Reservation>) request.getAttribute("usedReservations");
-
-    // デバッグログ
-    System.out.println("customerId: " + customerId);
-    System.out.println("customerName: " + customerName);
-    if (usedReservations != null) {
-        System.out.println("取得した予約数: " + usedReservations.size());
-        for (Reservation reservation : usedReservations) {
-            System.out.println("予約ID: " + reservation.getReservationId() + ", 顧客名: " + reservation.getCustomer().getCustomerName());
-        }
-    } else {
-        System.out.println("予約情報は取得できませんでした。");
-    }
 %>
 
 <!DOCTYPE html>

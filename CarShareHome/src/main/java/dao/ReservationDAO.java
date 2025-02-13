@@ -19,14 +19,12 @@ public class ReservationDAO {
     public ReservationDAO() {
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            System.out.println("JDBC Driver loaded."); // ドライバ読み込みログ
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
             System.exit(1);
         }
         try {
             con = DriverManager.getConnection("jdbc:mysql://10.64.144.5:3306/23jya01?characterEncoding=UTF-8", "23jya01", "23jya01");
-            System.out.println("Database connection established."); // データベース接続成功ログ
         } catch (SQLException e) {
             e.printStackTrace();
             System.exit(1);
@@ -37,7 +35,6 @@ public class ReservationDAO {
         try {
             if (con != null) {
                 con.close();
-                System.out.println("Database connection closed."); // 接続終了ログ
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -77,14 +74,12 @@ public class ReservationDAO {
                     );
 
                     reservations.add(reservation);
-                    System.out.println("予約ID: " + reservation.getReservationId() + ", 顧客名: " + customer.getCustomerName());
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         
-        System.out.println("取得した予約数: " + reservations.size());
         return reservations;
     }
 
