@@ -11,6 +11,7 @@ import java.util.List;
 import model.CarData;
 import model.Customer;
 import model.Reservation;
+import model.Station;
 
 public class ReservationDAO {
     private Connection con = null;
@@ -18,12 +19,14 @@ public class ReservationDAO {
     public ReservationDAO() {
         try {
             Class.forName("com.mysql.jdbc.Driver");
+            System.out.println("JDBC Driver loaded."); // ドライバ読み込みログ
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
             System.exit(1);
         }
         try {
             con = DriverManager.getConnection("jdbc:mysql://10.64.144.5:3306/23jya01?characterEncoding=UTF-8", "23jya01", "23jya01");
+            System.out.println("Database connection established."); // データベース接続成功ログ
         } catch (SQLException e) {
             e.printStackTrace();
             System.exit(1);
@@ -34,106 +37,56 @@ public class ReservationDAO {
         try {
             if (con != null) {
                 con.close();
+                System.out.println("Database connection closed."); // 接続終了ログ
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    // 予約の作成
-    public boolean createReservation(Reservation reservation) {
-        String sql = "INSERT INTO reservation (reservation_id, start_date, stop_date, customer_id, finish_date, price, car_code) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        try (PreparedStatement pstmt = con.prepareStatement(sql)) {
-            pstmt.setString(1, reservation.getReservationId());
-            pstmt.setTimestamp(2, reservation.getStartDate());
-            pstmt.setTimestamp(3, reservation.getStopDate());
-            pstmt.setString(4, reservation.getCustomerID().getCustomerId());
-            pstmt.setTimestamp(5, reservation.getFinishDate()); // 修正
-            pstmt.setInt(6, reservation.getPrice());
-            pstmt.setString(7, reservation.getCarCode().getCarCode());
-            return pstmt.executeUpdate() > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
+    public List<Reservation> getAllReservations(String customerId) {
+        List<Reservation> reservations = new ArrayList<>();
+        String sql = "SELECT r.*, c.customer_id, c.customer_name, s.station_name, s.station_id " +
+                     "FROM reservation r " +
+                     "JOIN customer c ON r.customer_id = c.customer_id " +
+                     "JOIN keybox kb ON r.car_code = kb.car_code " +
+                     "JOIN station s ON kb.station_id = s.station_id " +
+                     "WHERE r.customer_id = ?";
 
-    public Reservation getReservation(String reservationId) {
-        String sql = "SELECT * FROM reservation WHERE reservation_id = ?";
         try (PreparedStatement pstmt = con.prepareStatement(sql)) {
-            pstmt.setString(1, reservationId);
-            try (ResultSet rs = pstmt.executeQuery()) { // ResultSetのクリーンアップ
-                if (rs.next()) {
-                    return new Reservation(
+            pstmt.setString(1, customerId); // customerIdを設定
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    String customerIdFromDb = rs.getString("customer_id");
+                    String customerName = rs.getString("customer_name");
+
+                    // Customerオブジェクトを作成
+                    Customer customer = new Customer(customerIdFromDb);
+                    customer.setCustomerName(customerName); // customerNameを後から設定
+
+                    // Reservationオブジェクトを作成
+                    Reservation reservation = new Reservation(
                         rs.getString("reservation_id"),
                         rs.getTimestamp("start_date"),
                         rs.getTimestamp("stop_date"),
-                        new Customer(rs.getString("customer_id")),
+                        new Station(rs.getString("station_id"), rs.getString("station_name")),
+                        customer,
                         rs.getTimestamp("finish_date"),
                         rs.getInt("price"),
-                        new CarData(rs.getString("car_code"));
+                        new CarData(rs.getString("car_code"))
                     );
+
+                    reservations.add(reservation);
+                    System.out.println("予約ID: " + reservation.getReservationId() + ", 顧客名: " + customer.getCustomerName());
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
+        
+        System.out.println("取得した予約数: " + reservations.size());
+        return reservations;
     }
 
-    // 他のメソッドも同様に修正
 
-    // 予約の更新
-    public boolean updateReservation(Reservation reservation) {
-        String sql = "UPDATE reservation SET start_date = ?, stop_date = ?, customer_id = ?, finish_date = ?, price = ?, car_code = ? WHERE reservation_id = ?";
-        try (PreparedStatement pstmt = con.prepareStatement(sql)) {
-            pstmt.setTimestamp(1, reservation.getStartDate());
-            pstmt.setTimestamp(2, reservation.getStopDate());
-            pstmt.setString(3, reservation.getCustomerID().getCustomerId()); // CustomerオブジェクトからIDを取得
-            pstmt.setTimestamp(4, reservation.getFinishId());
-            pstmt.setInt(5, reservation.getPrice());
-            pstmt.setString(6, reservation.getCarCode().getCarCode()); // CarDataオブジェクトから車コードを取得
-            pstmt.setString(7, reservation.getReservationId());
-            return pstmt.executeUpdate() > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    // 予約の削除
-    public boolean deleteReservation(String reservationId) {
-        String sql = "DELETE FROM reservation WHERE reservation_id = ?";
-        try (PreparedStatement pstmt = con.prepareStatement(sql)) {
-            pstmt.setString(1, reservationId);
-            return pstmt.executeUpdate() > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    // 顧客の過去の予約を取得
-    public List<Reservation> getPastReservations(String customerId) {
-        List<Reservation> pastReservations = new ArrayList<>();
-        String sql = "SELECT * FROM reservation WHERE customer_id = ? AND finish_date IS NOT NULL";
-        try (PreparedStatement pstmt = con.prepareStatement(sql)) {
-            pstmt.setString(1, customerId);
-            ResultSet rs = pstmt.executeQuery();
-            while (rs.next()) {
-                pastReservations.add(new Reservation(
-                    rs.getString("reservation_id"),
-                    rs.getTimestamp("start_date"),
-                    rs.getTimestamp("stop_date"),
-                    new Customer(rs.getString("customer_id")), // Customerオブジェクトを作成
-                    rs.getTimestamp("finish_date"),
-                    rs.getInt("price"),
-                    new CarData(rs.getString("car_code")) // CarDataオブジェクトを作成
-                ));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return pastReservations;
-    }
 }
