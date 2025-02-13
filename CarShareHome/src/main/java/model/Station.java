@@ -18,6 +18,10 @@ public class Station implements Serializable{
 	public Station() {
 		super();
 	}
+	public Station(String stationId, String stationName) {
+        this.stationId = stationId;
+        this.stationName = stationName;
+    }
 	public Station(String stationId,String stationName, String stationAddress,String stationData) {
 		super();
 		this.stationId=stationId;
