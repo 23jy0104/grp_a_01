@@ -1,8 +1,6 @@
 package carShareHome;
 
 import java.io.IOException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.sql.Blob;
 import java.sql.SQLException;
 
@@ -42,8 +40,7 @@ public class CarShareNew extends HttpServlet {
         String customerMeiKana = request.getParameter("customerMeiKana");
         String customerKana = customerMeiKana + customerSeiKana;
         String gender = request.getParameter("gender");
-        String customerPassword = request.getParameter("password");
-        String hashedPassword = hashPassword(customerPassword);
+        String Password = request.getParameter("password");
         String city = request.getParameter("city");
         String address = request.getParameter("address");
         String building = request.getParameter("building");
@@ -56,7 +53,7 @@ public class CarShareNew extends HttpServlet {
         String birthDate = request.getParameter("birthday");
         String licenseDate = request.getParameter("licenseDate");
 
-        if (validateInputs(customerSei, customerMei, customerSeiKana, customerMeiKana, gender, birthDate, licenseDate, tellNumber, eMail)) {
+        if (validateInputs(customerSei, customerMei, customerSeiKana, customerMeiKana, gender, birthDate, licenseDate, tellNumber, eMail,city,address,building,Password)) {
             Customer customer = new Customer();
             String licenseNumber = request.getParameter("licenseNumber");
 
@@ -67,7 +64,7 @@ public class CarShareNew extends HttpServlet {
                 customer.setCustomerName(customerName);
                 customer.setCustomerKana(customerKana);
                 customer.setGender(gender);
-                customer.setCustomerPassword(hashedPassword);
+                customer.setCustomerPassword(Password);
                 customer.setTellNumber(tellNumber);
                 customer.setEmail(eMail);
                 customer.setBirthDate(birthDate);
@@ -76,15 +73,15 @@ public class CarShareNew extends HttpServlet {
                 customer.setCustomerAddress(customerAddress);
                 customer.setPostCode(postCode);
 
-                HttpSession session = request.getSession();
-                session.setAttribute("customer", customer);
+                HttpSession hs = request.getSession();
+                hs.setAttribute("customer", customer);
 
                 try {
                     byte[] omoteBytes = convertBlobToBytes(createBlobFromPart(omoteJpg));
                     byte[] uraBytes = convertBlobToBytes(createBlobFromPart(uraJpg));
                     
-                    session.setAttribute("omoteImage", omoteBytes);
-                    session.setAttribute("uraImage", uraBytes);
+                    hs.setAttribute("omoteImage", omoteBytes);
+                    hs.setAttribute("uraImage", uraBytes);
 
                     RequestDispatcher rd = request.getRequestDispatcher("P20.jsp");
                     rd.forward(request, response);
@@ -100,8 +97,8 @@ public class CarShareNew extends HttpServlet {
         }
     }
 
-    private boolean validateInputs(String sei, String mei, String seiKana, String meiKana, String gender, String birthDate, String licenseDate, String tellNumber, String email) {
-        return sei != null && mei != null && seiKana != null && meiKana != null && gender != null && birthDate != null && licenseDate != null && tellNumber != null && email != null;
+    private boolean validateInputs(String sei, String mei, String seiKana, String meiKana, String gender, String birthDate, String licenseDate, String tellNumber, String email,String city,String address,String building, String Password) {
+        return sei != null && mei != null && seiKana != null && meiKana != null && gender != null && birthDate != null && licenseDate != null && tellNumber != null && email != null &&city!=null &&address !=null &&building!=null && Password !=null;
     }
 
     private Blob createBlobFromPart(Part part) throws SQLException, IOException {
@@ -124,20 +121,5 @@ public class CarShareNew extends HttpServlet {
         rd.forward(request, response);
     }
 
-    public String hashPassword(String password) {
-        try {
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] hashedBytes = digest.digest(password.getBytes("UTF-8"));
-
-            StringBuilder hexString = new StringBuilder();
-            for (byte b : hashedBytes) {
-                String hex = Integer.toHexString(0xff & b);
-                if (hex.length() == 1) hexString.append('0');
-                hexString.append(hex);
-            }
-            return hexString.toString();
-        } catch (NoSuchAlgorithmException | java.io.UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
-        }
-    }
+   
 }

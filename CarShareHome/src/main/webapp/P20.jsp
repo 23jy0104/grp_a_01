@@ -6,7 +6,7 @@
 <%@page import="java.util.Base64"%>
 <%
     Customer customer = (Customer) session.getAttribute("customer");
-
+	String postCode =customer.getPostCode();
     String customerName = customer.getCustomerName();
     String customerKana = customer.getCustomerKana();
     String gender = customer.getGender();
@@ -16,7 +16,7 @@
     String birthDate = customer.getBirthDate();
     String licenseNumber = customer.getLicenseNumber();
     String licenseDate = customer.getLicenceDate();
-
+	String password =customer.getCustomerPassword();
     // Blobをbyte[]に変換してBase64エンコード
     String omoteBase64 = null;
     String uraBase64 = null;
@@ -113,6 +113,9 @@
                     <input type="hidden" name="gender" value="<%= gender %>">
                     <input type="hidden" name="email" value="<%= email %>">
                     <input type="hidden" name="tellNumber" value="<%= tellNumber %>">
+                    <input type="hidden" name ="postCode" value="<%=postCode %>">
+                    <input type="hidden" name="password1" value="<%= password %>">
+                                 
                     <input type="hidden" name="customerAddress" value="<%= customerAddress %>">
                     <input type="hidden" name="birthDate" value ="<%= birthDate %>">
                     <input type="hidden" name="licenseNumber" value="<%= licenseNumber %>">

@@ -176,9 +176,9 @@
 	        <label for="gender">
 	        	        <span class="required">必須</span>性別<span class="highlight"> ※必須</span></label>
 	        <div class="radio-group">
-	            <input type="radio" name="gender" value="male" required> 男性
-	            <input type="radio" name="gender" value="female"> 女性
-	            <input type="radio" name="gender" value="nomal"> 回答しない
+	            <input type="radio" name="gender" value="男" required> 男性
+	            <input type="radio" name="gender" value="女"> 女性
+	            <input type="radio" name="gender" value="×"> 回答しない
 	        </div>
 	    </div>
 	    <div class="form-group">
