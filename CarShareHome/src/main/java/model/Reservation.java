@@ -4,26 +4,25 @@ import java.io.Serializable;
 import java.security.Timestamp;
 
 public class Reservation implements Serializable {
-	private String reservationId;
-	private Timestamp startDate;
-	private Timestamp stopDate;
-	private Customer customerID;
-	private Timestamp finishId;
-	private int price;
-	private CarData carCode;
 	
-	public Reservation() {
-		super();
-	}
+    private String reservationId;
+    private Timestamp startDate;
+    private Timestamp stopDate;
+    private String customerId;
+    private Timestamp finishDate;
+    private int price;
+    private CarData carCode;
+    private Customer customer;
+    private Station station;
 
-	public Reservation(String reservationId, Timestamp startDate, Timestamp stopDate, Customer customerID,
+	public Reservation(String reservationId, Timestamp startDate, Timestamp stopDate, String customerId,
 			Timestamp finishId, int price, CarData carCode) {
 		super();
 		this.reservationId = reservationId;
 		this.startDate = startDate;
 		this.stopDate = stopDate;
-		this.customerID = customerID;
-		this.finishId = finishId;
+		this.customerId = customerId;
+		this.finishDate = finishId;
 		this.price = price;
 		this.carCode = carCode;
 	}
@@ -52,20 +51,20 @@ public class Reservation implements Serializable {
 		this.stopDate = stopDate;
 	}
 
-	public Customer getCustomerID() {
-		return customerID;
+	public String getCustomerId() {
+		return customerId;
 	}
 
-	public void setCustomerID(Customer customerID) {
-		this.customerID = customerID;
+	public void setCustomerId(String customerId) {
+		this.customerId = customerId;
 	}
 
-	public Timestamp getFinishId() {
-		return finishId;
+	public Timestamp getFinishDate() {
+		return finishDate;
 	}
 
-	public void setFinishId(Timestamp finishId) {
-		this.finishId = finishId;
+	public void setFinishId(Timestamp finishDate) {
+		this.finishDate = finishDate;
 	}
 
 	public int getPrice() {
@@ -82,6 +81,22 @@ public class Reservation implements Serializable {
 
 	public void setCarCode(CarData carCode) {
 		this.carCode = carCode;
+	}
+
+	public Customer getCustomer() {
+		return customer;
+	}
+
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
+	}
+
+	public Station getStation() {
+		return station;
+	}
+
+	public void setStation(Station station) {
+		this.station = station;
 	}
 	
 	

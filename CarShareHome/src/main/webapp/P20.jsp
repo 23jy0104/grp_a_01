@@ -16,7 +16,7 @@
     String email = customer.getEmail();
     String tellNumber = customer.gettellNumber();
     String customerAddress = customer.getCustomerAddress(); // 住所を取得するメソッド名に注意
-    Date licenseDate = customer.getLicenceDate();
+    String licenseDate = customer.getLicenceDate();
     String licenseNumber = customer.getLicenseNumber(); // 免許証番号を取得
 
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy年MM月dd日"); // 日付フォーマット

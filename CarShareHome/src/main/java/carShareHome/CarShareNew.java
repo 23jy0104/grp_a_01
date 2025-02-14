@@ -11,9 +11,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -62,28 +59,10 @@ public class CarShareNew extends HttpServlet {
         Part uraJpg = request.getPart("file_ura");
 
         // 生年月日の取得と変換
-        String birthDateString = request.getParameter("birthday");
-        Date birthDate = null;
-        if (birthDateString != null && !birthDateString.isEmpty()) {
-            try {
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                birthDate = dateFormat.parse(birthDateString);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        }
+        String birthDate = request.getParameter("birthday");
 
         // 免許証の取得と変換
-        String licenseDateString = request.getParameter("licenseDate");
-        Date licenseDate = null;
-        if (licenseDateString != null && !licenseDateString.isEmpty()) {
-            try {
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                licenseDate = dateFormat.parse(licenseDateString);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        }
+        String licenseDate = request.getParameter("licenseDate");
 
         Customer customer = new Customer();
         String licenseNumber = request.getParameter("licenseNumber");
@@ -165,9 +144,9 @@ public class CarShareNew extends HttpServlet {
             preparedStatement.setString(3, customer.getCustomerPassword());
             preparedStatement.setString(4, customer.gettellNumber());
             preparedStatement.setString(5, customer.getEmail());
-            preparedStatement.setDate(6, new java.sql.Date(customer.getBirthDate().getTime()));
+            preparedStatement.setString(6,customer.getBirthDate());
             preparedStatement.setString(7, customer.getLicenseNumber());
-            preparedStatement.setDate(8, new java.sql.Date(customer.getLicenceDate().getTime()));
+            preparedStatement.setString(8, customer.getLicenceDate());
             preparedStatement.setBlob(9, customer.getOmote());
             preparedStatement.setBlob(10, customer.getUra());
 
