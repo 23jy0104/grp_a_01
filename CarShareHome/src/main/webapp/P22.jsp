@@ -9,12 +9,13 @@
     String customerKana = request.getParameter("customerNameKana");
     String gender =request.getParameter("gender");
     String email = request.getParameter("email");
+    String postcode =request.getParameter("postcode");
     String tellNumber =request.getParameter("tellNumber");
     String customerAddress = request.getParameter("customerAddress");
     String licenseNumber =request.getParameter("licenseNumber");
    	String licenseDate = request.getParameter("licenseDate");
     String birthDate = request.getParameter("birthDate"); // 生年月日も取得
-    String hashedPassword = request.getParameter("hashedPassword");
+    String password = request.getParameter("password");
 
 %>
 <!-- クレジットカード情報入力ページ -->
@@ -40,12 +41,14 @@
         <input type="hidden" name="customerKana" value="<%= customerKana %>">
         <input type="hidden" name="gender" value="<%= gender %>">
         <input type="hidden" name="email" value="<%= email %>">
+        <input type="hidden" name ="postcode" value ="<%=postcode %>">
+        <input type ="hidden" name="password" value ="<%=password %>">
         <input type="hidden" name="tellNumber" value="<%= tellNumber %>">
         <input type="hidden" name="customerAddress" value="<%= customerAddress %>">
         <input type="hidden" name="licenseNumber" value="<%= licenseNumber %>">
         <input type="hidden" name="licenseDate" value="<%= licenseDate %>">
         <input type="hidden" name="birthDate" value="<%= birthDate %>"> <!-- 生年月日を隠しフィールドとして追加 -->
-        <input type="hidden" name="hashedPassword" value="<%= hashedPassword %>"> <!-- ハッシュ化されたパスワードを保持 -->
+        <input type="hidden" name="hashedPassword" value="<%= password %>"> <!-- ハッシュ化されたパスワードを保持 -->
 
         <div class="form-group">
             <label for="credit_number">

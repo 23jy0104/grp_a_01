@@ -17,6 +17,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import model.PasswordHasher;
+
 /**
  * Servlet implementation class CreditNew
  */
@@ -38,17 +40,18 @@ public class CreditNew extends HttpServlet {
     	
     	// 顧客データを取得
         String customerName = request.getParameter("customerName");
-        String customerKana = (String) request.getAttribute("customerKana");
-        String gender = (String) request.getAttribute("gender");
-        String password = (String) request.getAttribute("customerPassword");
-        String birthDateStr = (String) request.getAttribute("birthDate");
-        String email = (String) request.getAttribute("email");
-        String tellNumber = (String) request.getAttribute("tellNumber");
-        String postCode = (String) request.getAttribute("postCode");
-        String customerAddress = (String) request.getAttribute("customerAddress");
-        String licenseNumber = (String) request.getAttribute("licenseNumber");
-        String licenseDateStr = (String) request.getAttribute("licenseDate");
-
+        String customerKana = request.getParameter("customerKana");
+        String gender = request.getParameter("gender");
+        String password = request.getParameter("password");
+        String birthDateStr =request.getParameter("birthDate");
+        String email = request.getParameter("email");
+        String tellNumber =request.getParameter("tellNumber");
+        String postCode = request.getParameter("postcode");
+        String customerAddress =request.getParameter("customerAddress");
+        String licenseNumber = request.getParameter("licenseNumber");
+        String licenseDateStr = request.getParameter("licenseDate");
+        System.out.println(password);
+        String hashedPassword =PasswordHasher.hashPassword(password);
         // セッションから画像データを取得
         HttpSession session = request.getSession();
         byte[] omoteBytes = (byte[]) session.getAttribute("omoteImage");
@@ -72,7 +75,7 @@ public class CreditNew extends HttpServlet {
             preparedStatement.setString(1, customerName);
             preparedStatement.setString(2, customerKana);
             preparedStatement.setString(3, gender);
-            preparedStatement.setString(4, password);
+            preparedStatement.setString(4, hashedPassword);
             preparedStatement.setString(5, tellNumber);
             preparedStatement.setString(6, email);
             preparedStatement.setDate(7, birthDate);
@@ -105,7 +108,7 @@ public class CreditNew extends HttpServlet {
             e.printStackTrace();
             // エラーハンドリングの処理
             request.setAttribute("errorMessage", "データベースへの登録に失敗しました。");
-            RequestDispatcher rd = request.getRequestDispatcher("P22.jsp");
+            RequestDispatcher rd = request.getRequestDispatcher("P6.jsp");
             rd.forward(request, response);
         }
     }

@@ -15,7 +15,6 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
 import model.Customer;
-import model.PasswordHasher;
 
 @WebServlet("/CarShareNew")
 @MultipartConfig
@@ -41,8 +40,7 @@ public class CarShareNew extends HttpServlet {
         String customerMeiKana = request.getParameter("customerMeiKana");
         String customerKana = customerMeiKana + customerSeiKana;
         String gender = request.getParameter("gender");
-        String customerPassword = request.getParameter("password");
-        String hashedPassword =PasswordHasher.hashPassword(customerPassword);
+        String password = request.getParameter("password");
         String city = request.getParameter("city");
         String address = request.getParameter("address");
         String building = request.getParameter("building");
@@ -66,7 +64,7 @@ public class CarShareNew extends HttpServlet {
                 customer.setCustomerName(customerName);
                 customer.setCustomerKana(customerKana);
                 customer.setGender(gender);
-                customer.setCustomerPassword(hashedPassword);
+                customer.setCustomerPassword(password);
                 customer.setTellNumber(tellNumber);
                 customer.setEmail(eMail);
                 customer.setBirthDate(birthDate);

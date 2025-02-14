@@ -176,9 +176,9 @@
 	        <label for="gender">
 	        	        <span class="required">必須</span>性別<span class="highlight"> ※必須</span></label>
 	        <div class="radio-group">
-	            <input type="radio" name="gender" value="male" required> 男性
-	            <input type="radio" name="gender" value="female"> 女性
-	            <input type="radio" name="gender" value="nomal"> 回答しない
+	            <input type="radio" name="gender" value="男" required> 男性
+	            <input type="radio" name="gender" value="女"> 女性
+	            <input type="radio" name="gender" value="無"> 回答しない
 	        </div>
 	    </div>
 	    <div class="form-group">
@@ -191,9 +191,9 @@
 	    </div>
 	    <div class="form-group">
 	        <label for="postcode">
-	            <span class="required">必須</span> 郵便番号
+	            <span class="required">必須</span> 郵便番号　ハイフンなし半角数字で入力してください。
 	        </label>
-	        〒<input type="text" id="postcode" name="postcode" placeholder="例：169-0073" required>
+	        〒<input type="text" id="postcode" name="postcode" placeholder="例：1690073" required>
 	    </div>
 	    <div class="form-group">
 	        <label for="prefecture">
