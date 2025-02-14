@@ -42,7 +42,7 @@ public class Login extends HttpServlet {
 			final String user ="23jya01";
 			final String pass ="23jya01";
 			
-			String sql = "SELECT customer_name, customer_kana, e_mail, customer_password, post_code, customer_address, license_date, tell_number FROM Customer WHERE e_mail = ? AND customer_password = ?";
+			String sql = "SELECT customer_name, customer_kana, e_mail, customer_password, post_code, customer_address, license_date, tell_number, manager_check FROM Customer WHERE e_mail = ? AND customer_password = ? AND manager_check IS NOT NULL";
 
 			try(Connection con =DriverManager.getConnection(url,user,pass);
 					PreparedStatement pstmt =con.prepareStatement(sql)) {
