@@ -1,18 +1,20 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import="javax.servlet.http.HttpSession" %>
+	<%@ page import="javax.servlet.http.HttpSession" %>
 <%
+	request.setCharacterEncoding("UTF-8");
+	response.setContentType("text/html; charset=UTF-8");
     // セッションからデータを取得
-    String customerName = (String) session.getAttribute("customerName");
-    String customerKana = (String) session.getAttribute("customerNameKana");
-    String gender = (String) session.getAttribute("gender");
-    String email = (String) session.getAttribute("email");
-    String tellNumber = (String) session.getAttribute("tellNumber");
-    String customerAddress = (String) session.getAttribute("customerAddress");
-    String licenseNumber = (String) session.getAttribute("licenseNumber");
-   	String licenseDate = (String) session.getAttribute("licenseDate");
-    String birthDate = (String) session.getAttribute("birthDate"); // 生年月日も取得
-    String hashedPassword = (String) session.getAttribute("hashedPassword");
+    String customerName = request.getParameter("customerName");
+    String customerKana = request.getParameter("customerNameKana");
+    String gender =request.getParameter("gender");
+    String email = request.getParameter("email");
+    String tellNumber =request.getParameter("tellNumber");
+    String customerAddress = request.getParameter("customerAddress");
+    String licenseNumber =request.getParameter("licenseNumber");
+   	String licenseDate = request.getParameter("licenseDate");
+    String birthDate = request.getParameter("birthDate"); // 生年月日も取得
+    String hashedPassword = request.getParameter("hashedPassword");
 
 %>
 <!-- クレジットカード情報入力ページ -->

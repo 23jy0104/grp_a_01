@@ -1,8 +1,6 @@
 package carShareHome;
 
 import java.io.IOException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.sql.Blob;
 import java.sql.SQLException;
 
@@ -17,6 +15,7 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
 import model.Customer;
+import model.PasswordHasher;
 
 @WebServlet("/CarShareNew")
 @MultipartConfig
@@ -43,7 +42,7 @@ public class CarShareNew extends HttpServlet {
         String customerKana = customerMeiKana + customerSeiKana;
         String gender = request.getParameter("gender");
         String customerPassword = request.getParameter("password");
-        String hashedPassword = hashPassword(customerPassword);
+        String hashedPassword =PasswordHasher.hashPassword(customerPassword);
         String city = request.getParameter("city");
         String address = request.getParameter("address");
         String building = request.getParameter("building");
@@ -124,20 +123,5 @@ public class CarShareNew extends HttpServlet {
         rd.forward(request, response);
     }
 
-    public String hashPassword(String password) {
-        try {
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] hashedBytes = digest.digest(password.getBytes("UTF-8"));
-
-            StringBuilder hexString = new StringBuilder();
-            for (byte b : hashedBytes) {
-                String hex = Integer.toHexString(0xff & b);
-                if (hex.length() == 1) hexString.append('0');
-                hexString.append(hex);
-            }
-            return hexString.toString();
-        } catch (NoSuchAlgorithmException | java.io.UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
-        }
-    }
+   
 }

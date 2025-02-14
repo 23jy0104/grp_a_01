@@ -33,8 +33,11 @@ public class CreditNew extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // 顧客データを取得
-        String customerName = (String) request.getAttribute("customerName");
+    	 request.setCharacterEncoding("UTF-8");
+         response.setContentType("text/html; charset=UTF-8");
+    	
+    	// 顧客データを取得
+        String customerName = request.getParameter("customerName");
         String customerKana = (String) request.getAttribute("customerKana");
         String gender = (String) request.getAttribute("gender");
         String password = (String) request.getAttribute("customerPassword");
