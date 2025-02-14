@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>車両管理システム</title>
+    <link rel="stylesheet" href="../../CSSKANRI/vehicleAdd.css">  
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 80%; /* テーブルの幅を指定 */
+            margin: 20px auto; /* 中央寄せ */
+            border: 1px solid #ccc; /* テーブルの枠線 */
+            background-color: #fff; /* テーブルの背景色 */
+        }
+        td {
+            border: 1px solid #ccc; /* セルの枠線 */
+            padding: 10px; /* セルの内側の余白 */
+            text-align: left; /* テキストの位置を左寄せ */
+            white-space: nowrap; /* 折り返しなし */
+        }
+    </style>
+</head>
+<body>
+    <h1>〇〇〇〇ステーション</h1>
+    <div class="input-container">
+        <div class="select-container">
+            ナンバープレート　　<select id="plate">
+                <option value="">--選択してください--</option>
+                <option value="新宿801 わ 1234">新宿801 わ 1234</option>
+                <option value="新宿802 わ 9876">新宿802 わ 9876</option>
+                <option value="新宿803 わ 4567">新宿803 わ 4567</option>
+                <option value="新宿804 わ 8461">新宿804 わ 8461</option>
+                <option value="新宿805 わ 1634">新宿805 わ 1634</option>
+                <option value="新宿806 わ 6138">新宿806 わ 6138</option>
+                <option value="新宿807 わ 9791">新宿807 わ 9791</option>
+                <option value="新宿808 わ 7316">新宿808 わ 7316</option> 
+            </select>
+        </div>
+        <div class="button-container">
+            <button onclick="displayResult()">検索</button>
+        </div>
+    </div>
+    <div id="result-container" style="display: none;">
+        <div id="result-table-container"></div>
+        <div class="button-container">
+            <button onclick="register()">登録する</button>
+        </div>
+    </div>
+
+    <script>
+        function displayResult() {
+            const plate = document.getElementById('plate').value;
+            const resultContainer = document.getElementById('result-container');
+            const resultTableContainer = document.getElementById('result-table-container');
+
+            // 車両情報のデータ（例）
+            const vehicleData = {
+                "新宿801 わ 1234": {
+                    manufacturer: "トヨタ",
+                    model: "プリウス",
+                    year: "2020年",
+                    plate: "新宿801 わ 1234",
+                    chassisNumber: "12345678901234567",
+                    identificationNumber: "98765432109876543"
+                },
+                "新宿802 わ 9876": {
+                    manufacturer: "ホンダ",
+                    model: "フィット",
+                    year: "2019年",
+                    plate: "新宿802 わ 9876",
+                    chassisNumber: "23456789012345678",
+                    identificationNumber: "87654321098765432"
+                }
+                // 他のナンバープレートのデータも追加可能
+            };
+
+            if (plate && vehicleData[plate]) {
+                const vehicle = vehicleData[plate];
+                resultTableContainer.innerHTML = `
+                    <table>
+                        <tr>
+                            <td>車両メーカー</td>
+                            <td>${vehicle.manufacturer}</td>
+                        </tr>
+                        <tr>
+                            <td>車両モデル</td>
+                            <td>${vehicle.model}</td>
+                        </tr>
+                        <tr>
+                            <td>年式</td>
+                            <td>${vehicle.year}</td>
+                        </tr>
+                        <tr>
+                            <td>ナンバープレート</td>
+                            <td>${vehicle.plate}</td>
+                        </tr>
+                        <tr>
+                            <td>車台番号</td>
+                            <td>${vehicle.chassisNumber}</td>
+                        </tr>
+                        <tr>
+                            <td>識別番号</td>
+                            <td>${vehicle.identificationNumber}</td>
+                        </tr>
+                    </table>
+                `;
+                resultContainer.style.display = 'block'; // 結果を表示
+            } else {
+                alert('ナンバープレートを選択してください。');
+                resultContainer.style.display = 'none'; // 結果を非表示
+            }
+        }
+
+        function register() {
+            window.location.href = "P10.html"; // 登録処理（ページ遷移）
+        }
+    </script>
+</body>
+</html>

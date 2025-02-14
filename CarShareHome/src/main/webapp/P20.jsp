@@ -1,44 +1,26 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@page import="java.sql.Blob"%>
-<%@page import="java.sql.SQLException"%>
-<%@page import="model.Customer"%>
-<%@page import="java.util.Base64"%>
+<%@ page import="model.Customer"%>
+<%@ page import="java.util.Date" %>
+<%@ page import="java.text.SimpleDateFormat" %>
 <%
     Customer customer = (Customer) session.getAttribute("customer");
+    if (customer == null) {
+        // エラーハンドリング: 顧客がセッションに存在しない場合
+        response.sendRedirect("error.jsp");
+        return;
+    }
 
     String customerName = customer.getCustomerName();
     String customerKana = customer.getCustomerKana();
-    String gender = customer.getGender();
     String email = customer.getEmail();
-    String tellNumber = customer.getTellNumber();
-    String customerAddress = customer.getCustomerAddress();
-    String birthDate = customer.getBirthDate();
-    String licenseNumber = customer.getLicenseNumber();
-    String licenseDate = customer.getLicenceDate();
+    String tellNumber = customer.gettellNumber();
+    String customerAddress = customer.getCustomerAddress(); // 住所を取得するメソッド名に注意
+    Date licenseDate = customer.getLicenceDate();
+    String licenseNumber = customer.getLicenseNumber(); // 免許証番号を取得
 
-    // Blobをbyte[]に変換してBase64エンコード
-    String omoteBase64 = null;
-    String uraBase64 = null;
-    Blob omote = customer.getOmote();
-    Blob ura = customer.getUra();
-    try {
-        if (omote != null) {
-            byte[] omoteBytes = omote.getBytes(1, (int) omote.length());
-            omoteBase64 = Base64.getEncoder().encodeToString(omoteBytes);
-        }
-        if (ura != null) {
-            byte[] uraBytes = ura.getBytes(1, (int) ura.length());
-            uraBase64 = Base64.getEncoder().encodeToString(uraBytes);
-        }
-    } catch (SQLException e) {
-        e.printStackTrace();
-        // エラーメッセージを表示する場合
-        omoteBase64 = "画像の取得に失敗しました";
-        uraBase64 = "画像の取得に失敗しました";
-    }
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy年MM月dd日"); // 日付フォーマット
 %>
-
 <!--基本情報の確認ページ-->
 <!DOCTYPE html>
 <html lang="ja">
@@ -71,7 +53,7 @@
         <div class="step-icon">🔍</div>
         <div class="step-label">ご入力基本情報のご確認</div>
     </div>
-    <div class="step credit">
+    <div class="step">
         <div class="step-icon">💳</div>
         <div class="step-label">クレジットカード情報</div>
     </div>
@@ -85,42 +67,35 @@
     <div class="form-wrapper">
         <div class="form-group">
             <h1>基本情報の確認</h1>
-            <div class="form-section">
-                <label for="fullname">氏名</label>
-                <div class="input-container"><%= customerName %></div>
-                <label for="fullname-kana">氏名(フリガナ)</label>
-                <div class="input-container"><%= customerKana %></div>
-                <label for="address">住所</label>
-                <div class="input-container"><%= customerAddress %></div>
-                <label for="TEL">携帯電話番号</label>
-                <div class="input-container"><%= tellNumber %></div>
-                <label for="licence">免許証情報</label>
-                <div class="form-licence">
-                    <label for="type">免許証番号</label>
-                    <div class="input-container"><%= licenseNumber %></div>
-                    <label for="deadline">有効期限</label>
-                    <div class="input-container"><%=licenseDate %>
+           
+                <div class="form-section">
+                    <label for="fullname">氏名</label>
+                    <div class="input-container"><%=customerName %></div>
+                    
+                    <label for="fullname-kana">氏名(フリガナ)</label>
+                    <div class="input-container"><%=customerKana %></div>
+                    
+                    <label for="address">住所</label>
+                    <div class="input-container"><%=customerAddress %></div>
+                    
+                    <label for="TEL">携帯電話番号</label>
+                    <div class="input-container"><%=tellNumber %></div>
+                    
+                    <label for="licence">免許証情報</label>
+                    <div class="form-licence">
+                        <label for="type">免許証番号</label>
+                        <div class="input-container"><%=licenseNumber %></div>
+                        
+                        <label for="deadline">有効期限</label>
+                        <div class="input-container"><%= (licenseDate != null) ? dateFormat.format(licenseDate) : "未設定" %></div>
+                        
+                        <label for="email">メールアドレス</label>
+                        <div class="input-container"><%=email %></div>
                     </div>
-                    <label for="email">メールアドレス</label>
-                    <div class="input-container"><%= email %></div>
                 </div>
-            </div>
             <div class="button-container">
                 <input type="button" value="入力へ戻る" onclick="location.href='P6.jsp'">
-                <form action="P22.jsp" method="post">
-                    <input type="hidden" name="customerName" value="<%= customerName %>">
-                    <input type="hidden" name="customerKana" value="<%= customerKana %>">
-                    <input type="hidden" name="gender" value="<%= gender %>">
-                    <input type="hidden" name="email" value="<%= email %>">
-                    <input type="hidden" name="tellNumber" value="<%= tellNumber %>">
-                    <input type="hidden" name="customerAddress" value="<%= customerAddress %>">
-                    <input type="hidden" name="birthDate" value ="<%= birthDate %>">
-                    <input type="hidden" name="licenseNumber" value="<%= licenseNumber %>">
-                    <input type="hidden" name="licenseDate" value="<%= licenseDate %>">
-                    <input type="hidden" name="omoteImage" value="<%= omoteBase64 %>">
-                    <input type="hidden" name="uraImage" value="<%= uraBase64 %>">
-                    <input type="submit" value="クレジット情報のご入力へ">
-                </form>
+                <input type="button" value="クレジット情報のご入力へ" onclick="location.href='P22.html'">
             </div>
         </div>
     </div>

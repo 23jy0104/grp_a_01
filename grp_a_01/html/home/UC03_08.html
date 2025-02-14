@@ -1,0 +1,69 @@
+<!--申請完了-->
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TMC カーシェア</title>
+    <style>
+         body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 20px;
+            text-align: center; /* テキストを中央揃え */
+        }
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        img {
+            max-width: 100px;
+            margin-right: 10px;
+        }
+        h1 {
+            color: red;
+            margin: 0;
+        }
+        .btn {
+        margin-top: 20px; /* ボタンの上にマージンを追加 */
+        }
+        .btn-container {
+        display: flex; /* Flexboxを使用 */
+        justify-content: center; /* 水平方向に中央揃え */
+        align-items: center; /* 垂直方向に中央揃え */
+        height: calc(100vh - 200px); /* 高さを調整（必要に応じて調整） */
+        }
+        input[type="button"] {
+            background-color: orange; /* ボタンの色をオレンジに */
+            border: none; /* ボーダーを削除 */
+            color: white; /* 文字色を白に */
+            padding: 10px 20px; /* 内側のパディング */
+            font-size: 16px; /* フォントサイズ */
+            cursor: pointer; /* カーソルをポインターに */
+        }
+        input[type="button"]:hover {
+            background-color: darkorange; /* ホバー時の色 */
+        }
+    </style>
+</head>
+<header>
+    <div class="logo">
+        <img src="../../img/rog.png" alt="TMC Logo">
+        <h1>TMC カーシェア</h1>
+    </div>
+</header>
+<body>
+    <h2>申請完了</h2>
+    <p>申請が完了しました。最短で１５分で申請が完了致します。<br>入会が完了致しましたら、入会完了のメールをお送り致しますので、入会完了までしばらくお待ちください。</p>
+    <div class="btn container">
+        <input type="button" id="modoru" value="ホーム画面へ" onclick="location.href='top.html'">
+    </div>
+</body>

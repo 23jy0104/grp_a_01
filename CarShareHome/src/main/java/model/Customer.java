@@ -1,6 +1,7 @@
 package model;
 import java.io.Serializable;
 import java.sql.Blob;
+import java.util.Date;
 
 public class Customer implements Serializable{
 	private String customerId;
@@ -11,9 +12,9 @@ public class Customer implements Serializable{
 	private String tellNumber;
 	private String fixedCall;
 	private String email;
-	private String birthDate;
+	private Date birthDate;
 	private String licenseNumber;
-	private String licenceDate;
+	private Date licenceDate;
 	private String postCode;
 	private String customerAddress;
 	private String creditId;
@@ -29,8 +30,8 @@ public class Customer implements Serializable{
 		this.email = email;
 	}
 
-	public Customer(String customerId, String customerName, String customerKana, String gender, String customerPassword, String tellNumber, String fixedCall,String email, String birthDate,
-			String licenseNumber, String licenceDate,String postCode, String customerAddress, String creditId, Blob omote, Blob ura) {
+	public Customer(String customerId, String customerName, String customerKana, String gender, String customerPassword, String tellNumber, String fixedCall,String email, Date birthDate,
+			String licenseNumber, Date licenceDate,String postCode, String customerAddress, String creditId, Blob omote, Blob ura) {
 		super();
 		this.customerId = customerId;
 		this.customerName = customerName;
@@ -81,11 +82,11 @@ public class Customer implements Serializable{
 		this.email = email;
 	}
 
-	public String getBirthDate() {
+	public Date getBirthDate() {
 		return birthDate;
 	}
 
-	public void setBirthDate(String birthDate) {
+	public void setBirthDate(Date birthDate) {
 		this.birthDate = birthDate;
 	}
 
@@ -97,11 +98,11 @@ public class Customer implements Serializable{
 		this.licenseNumber = licenceNumber;
 	}
 
-	public String getLicenceDate() {
+	public Date getLicenceDate() {
 		return licenceDate;
 	}
 
-	public void setLicenceDate(String licenceDate) {
+	public void setLicenceDate(Date licenceDate) {
 		this.licenceDate = licenceDate;
 	}
 

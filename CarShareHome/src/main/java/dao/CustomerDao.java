@@ -55,7 +55,7 @@ public class CustomerDao {
 
                 cus.settellNumber(rs.getString("phoneNumber"));
                 cus.setEmail(rs.getString("email"));
-                cus.setBirthDate(rs.getString("birthDate"));
+                cus.setBirthDate(rs.getDate("birthDate"));
                 cs.add(cus);
             }
         } catch (SQLException e) {
