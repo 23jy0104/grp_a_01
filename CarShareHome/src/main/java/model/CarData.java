@@ -13,6 +13,10 @@ public class CarData implements Serializable{
 	public CarData() {
 		super();
 	}
+	
+	public CarData(String carCode) {
+        this.carCode = carCode;
+    }
 
 	public CarData(String carCode, String modelYear, String carNumber, Maker makerId, Model modelId,
 			Station stationId) {
