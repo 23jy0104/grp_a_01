@@ -20,13 +20,13 @@ import javax.servlet.http.HttpServletResponse;
  * Servlet implementation class Station
  */
 @WebServlet("/StationSearch")
-public class StationSearch extends HttpServlet {
+public class LoginOKStationSearch extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public StationSearch() {
+    public LoginOKStationSearch() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -80,4 +80,3 @@ public class StationSearch extends HttpServlet {
         rd.forward(request, response);
     }
 }
-

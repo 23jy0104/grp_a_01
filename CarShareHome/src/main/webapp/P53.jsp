@@ -36,7 +36,7 @@
             <label for="adr">住所</label>
             <input type="radio" id="stationNm" name="localSearchKbn" value="2" class="ml20" />
             <label for="stationNm">ステーション名</label>
-			<form action="StationSearch"method="post">
+			<form action="LoginOKStationSearch"method="post">
 	            <div class="input-group">
 	                <input type="text" id="nameAdr-s" name="stationAddress" placeholder="住所やステーション名を入力" style="ime-mode:active;" />
 	                <input type="image" id="doNameAdrSearch" src="img/kensaku.gif" onclick="location.href='P55.jsp'" alt="検索" />
