@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 
 public class Reservation implements Serializable {
+	
     private String reservationId;
     private Timestamp startDate;
     private Timestamp stopDate;

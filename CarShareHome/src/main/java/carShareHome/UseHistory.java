@@ -17,6 +17,7 @@ import dao.ReservationDAO;
 import model.Reservation;
 
 @WebServlet("/UseHistory")
+
 public class UseHistory extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
