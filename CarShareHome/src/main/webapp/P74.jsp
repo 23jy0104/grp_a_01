@@ -6,6 +6,7 @@
     String customerId = (String) request.getAttribute("customerId");
     String customerName = (String) request.getAttribute("customerName");
     List<Reservation> usedReservations = (List<Reservation>) request.getAttribute("usedReservations");
+    
 %>
 
 <!DOCTYPE html>
