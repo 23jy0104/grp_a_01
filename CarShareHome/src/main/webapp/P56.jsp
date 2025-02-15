@@ -84,9 +84,9 @@
             <div class="flex-item">
                 <h3 class="sub-title">車種から探す</h3>
                 <select id="carType" name="carType">
-                    <option value="">BNR32型 skyline Nismo</option>
-                    <option value="">NSX NA-1型 type-R</option>
-                    <option value="">GT-R R35 Nismo Special Edition T-spec</option>
+                    <option value="BNR32型 skyline Nismo">BNR32型 skyline Nismo</option>
+                    <option value="NSX NA-1型 type-R">NSX NA-1型 type-R</option>
+                    <option value="GT-R R35 Nismo Special Edition T-spec">GT-R R35 Nismo Special Edition T-spec</option>
                 </select>
 
                 <!-- 車種選択後の検索ボタン -->
