@@ -9,10 +9,12 @@
 <%	
 	String customerName = (String) session.getAttribute("customerName");
 	List<String[]> stations = (List<String[]>) session.getAttribute("stations"); // ステーション情報を取得
+	String stationIdvalue   =request.getParameter("stationid");
 	String stationNameValue = request.getParameter("stationname"); // URLからステーション名を取得
 	String stationDataValue = request.getParameter("stationdata"); // URLからステーションデータを取得
 	
 	// セッションに値を設定
+	session.setAttribute("stationId",stationIdValue);
 	session.setAttribute("stationdata", stationDataValue);
 	session.setAttribute("stationName", stationNameValue);
 %>
@@ -61,41 +63,33 @@
         <div class="flex-container">
             <div class="flex-item">
                 <h3>空き情報から探す</h3>
-                <div class="input-container">
-                    <div class="datetime-input">
-                        <label for="datetime1">利用開始日時:</label>
-                        <input type="datetime-local" id="datetime1" name="datetime1">
-                    </div>
-
-                    <div class="datetime-input">
-                        <label for="datetime2">利用終了日時:</label>
-                        <input type="datetime-local" id="datetime2" name="datetime2">
-                    </div>
-
-                    <!-- 検索ボタン -->
-                    <div class="button-container">
-                        <a href="P57.html">
-                            <input type="image" id="searchButton1" src="img/kensaku.gif" alt="検索" />
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="flex-item">
-                <h3 class="sub-title">車種から探す</h3>
-                <select id="carType" name="carType">
-                    <option value="BNR32型 skyline Nismo">BNR32型 skyline Nismo</option>
-                    <option value="NSX NA-1型 type-R">NSX NA-1型 type-R</option>
-                    <option value="GT-R R35 Nismo Special Edition T-spec">GT-R R35 Nismo Special Edition T-spec</option>
-                </select>
-
-                <!-- 車種選択後の検索ボタン -->
                 <div class="button-container">
-                    <a href="P59.jsp">
-                        <input type="image" id="searchButton2" src="img/kensaku.gif" alt="検索" />
-                    </a>
-                </div>
+				    <form action="ReservationTime" method="get">
+				    	<input type="hidden" name="stationid" value ="<%=stationIdValue %>">
+				        <input type="hidden" name="stationname" value="<%= stationNameValue %>">
+				        <input type="hidden" name="stationdata" value="<%= stationDataValue %>">
+				        <input type="datetime-local" id="startdate" name="startdate" required>
+				        <input type="datetime-local" id="stopdate" name="stopdate" required>
+				        <input type="submit" value="検索">
+				    </form>
+				</div>
+
             </div>
+
+            <div class="button-container">
+			    <form action="ReservationCar" method="get">
+			    	<input type="hidden" name="stationid" value ="<%=stationIdValue %>"
+			        <input type="hidden" name="stationname" value="<%= stationNameValue %>">
+			        <input type="hidden" name="stationdata" value="<%= stationDataValue %>">
+			        <select id="carType" name="carType">
+			            <option value="BNR32型 skyline Nismo">BNR32型 skyline Nismo</option>
+			            <option value="NSX NA-1型 type-R">NSX NA-1型 type-R</option>
+			            <option value="GT-R R35 Nismo Special Edition T-spec">GT-R R35 Nismo Special Edition T-spec</option>
+			        </select>
+			        <input type="submit" value="検索">
+			    </form>
+			</div>
+
         </div>
     </main>
 </body>
