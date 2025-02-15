@@ -67,7 +67,6 @@
 				    <form action="ReservationTime" method="get">
 				    	<input type="hidden" name="stationid" value ="<%=stationIdValue %>">
 				        <input type="hidden" name="stationname" value="<%= stationNameValue %>">
-				        <input type="hidden" name="stationdata" value="<%= stationDataValue %>">
 				        <input type="datetime-local" id="startdate" name="startdate" required>
 				        <input type="datetime-local" id="stopdate" name="stopdate" required>
 				        <input type="submit" value="検索">
@@ -80,7 +79,6 @@
 			    <form action="ReservationCar" method="get">
 			    	<input type="hidden" name="stationid" value ="<%=stationIdValue %>"
 			        <input type="hidden" name="stationname" value="<%= stationNameValue %>">
-			        <input type="hidden" name="stationdata" value="<%= stationDataValue %>">
 			        <select id="carType" name="carType">
 			            <option value="BNR32型 skyline Nismo">BNR32型 skyline Nismo</option>
 			            <option value="NSX NA-1型 type-R">NSX NA-1型 type-R</option>

@@ -30,20 +30,22 @@ public class ReservationTime extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html; charset=UTF-8");
+        String stationId= request.getParameter("stationid");
         String stationName=request.getParameter("stationname");
-        String stationData=request.getParameter("stationdata");
         String startDate =request.getParameter("startdate");
         String stopDate =request.getParameter("stopdate");
+        String sql = "SELECT keybox_id,station_id,car_code From keybox inner join station on station.station_id =keybox.station_id inner join cardb on cardb.car_code =keybox.car_code WHERE station.station_id = ? ";
         try {
-			Class.forName("com.mysql.Driver");
+			Class.forName("com.mysql.jdbc.Driver");
 			final String url ="jdbc:mysql://10.64.144.5:3306/23jya01";
-			final String user="23jya01";
+			final String user ="23jya01";
 			final String pass ="23jya01";
-			Connection connection = DriverManager.getConnection(url, user, pass);
-			String sql ="INSERT INTO reservation(start_date,stop_date) VALUES(?,?)";
-			PreparedStatement ps =connection.prepareStatement(sql);
-			ps.setString(1, startDate);
-			ps.setString(2, stopDate);
+			Connection con =DriverManager.getConnection(url, user, pass);
+			Class.forName("com.mysql.jdbc.Driver");
+			PreparedStatement pstmt =con.prepareStatement(sql);
+			pstmt.setString(1, stationId);
+			pstmt.setString(2, startDate);
+			pstmt.setString(3, stopDate);
 		} catch (ClassNotFoundException e) {
 			// TODO 自動生成された catch ブロック
 			e.printStackTrace();
