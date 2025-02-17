@@ -3,7 +3,7 @@
 <%@ page import="javax.servlet.http.HttpSession" %>
 <%
     // セッションからデータを取得
-    String customerName = (String) session.getAttribute("customerName");
+    String customerName = request.getParameter("customerName");
     String customerKana = (String) session.getAttribute("customerNameKana");
     String gender = (String) session.getAttribute("gender");
     String email = (String) session.getAttribute("email");
@@ -13,7 +13,7 @@
    	String licenseDate = (String) session.getAttribute("licenseDate");
     String birthDate = (String) session.getAttribute("birthDate"); // 生年月日も取得
     String hashedPassword = (String) session.getAttribute("hashedPassword");
-
+	System.out.println(customerName);
 %>
 <!-- クレジットカード情報入力ページ -->
 <!DOCTYPE html>

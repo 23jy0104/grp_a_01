@@ -8,7 +8,6 @@ import java.sql.SQLException;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -19,7 +18,6 @@ import javax.servlet.http.Part;
 import model.Customer;
 
 @WebServlet("/CarShareNew")
-@MultipartConfig
 public class CarShareNew extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
@@ -50,8 +48,8 @@ public class CarShareNew extends HttpServlet {
         String customerAddress = city + address + building;
         String tellNumber = request.getParameter("TEL");
         String eMail = request.getParameter("email");
-        Part omoteJpg = request.getPart("file_omote");
-        Part uraJpg = request.getPart("file_ura");
+        String omoteJpg = request.getPart("file_omote");
+        String uraJpg = request.getPart("file_ura");
         String postCode = request.getParameter("postcode");
         String birthDate = request.getParameter("birthday");
         String licenseDate = request.getParameter("licenseDate");

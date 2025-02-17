@@ -108,17 +108,17 @@
             <div class="button-container">
                 <input type="button" value="入力へ戻る" onclick="location.href='P6.jsp'">
                 <form action="P22.jsp" method="post">
-                    <input type="hidden" name="customerName" value="<%= customerName %>">
-                    <input type="hidden" name="customerKana" value="<%= customerKana %>">
-                    <input type="hidden" name="gender" value="<%= gender %>">
-                    <input type="hidden" name="email" value="<%= email %>">
-                    <input type="hidden" name="tellNumber" value="<%= tellNumber %>">
+                    <input type="hidden" name="customerName"    value="<%= customerName %>">
+                    <input type="hidden" name="customerKana"    value="<%= customerKana %>">
+                    <input type="hidden" name="gender"          value="<%= gender %>">
+                    <input type="hidden" name="email"           value="<%= email %>">
+                    <input type="hidden" name="tellNumber"      value="<%= tellNumber %>">
                     <input type="hidden" name="customerAddress" value="<%= customerAddress %>">
-                    <input type="hidden" name="birthDate" value ="<%= birthDate %>">
-                    <input type="hidden" name="licenseNumber" value="<%= licenseNumber %>">
-                    <input type="hidden" name="licenseDate" value="<%= licenseDate %>">
-                    <input type="hidden" name="omoteImage" value="<%= omoteBase64 %>">
-                    <input type="hidden" name="uraImage" value="<%= uraBase64 %>">
+                    <input type="hidden" name="birthDate"       value ="<%= birthDate %>">
+                    <input type="hidden" name="licenseNumber"   value="<%= licenseNumber %>">
+                    <input type="hidden" name="licenseDate"     value="<%= licenseDate %>">
+                    <input type="hidden" name="omoteImage"      value="<%= omoteBase64 %>">
+                    <input type="hidden" name="uraImage"        value="<%= uraBase64 %>">
                     <input type="submit" value="クレジット情報のご入力へ">
                 </form>
             </div>
