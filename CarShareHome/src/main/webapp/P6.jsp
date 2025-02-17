@@ -331,6 +331,23 @@
             
 	    </div>
 	    <div class="form-group">
+        <label for="license_img">
+            <span class="required">必須</span>免許画像アップロード
+        </label>
+    </div>
+    <div class="box">
+        運転免許証画像は表面と裏面の両方をご登録ください。<br>裏面に何も記載がない場合でもご登録をお願いいたします。
+        <br><br>☆注意事項<br>
+        <li><span class="highlight">記載事項を読み取ることができない場合、免許情報を確認することができません。送信前に記載事項が鮮明に写っているかご確認お願いいたします。</span></li>
+        ↓以下の場合は確認できません。
+        <li>光が反射して文字が読み取れない。</li>
+        <li>余白が多いため画像が小さくて読み取れない。</li>
+        <li>画像がぼやけていたり、荒いため文字が読み取れない。</li>
+        <li>氏名、生年月日部分が切れていて見えない。</li>
+        <li>スクリーンショットをアップロードしている。</li>
+        <li>画像が正しい方向に向いていない。</li>
+    </div>
+	    <div class="form-group">
 	        <label for="licence_img_omote">
 	            <span class="required">必須</span>免許証(表面)
 	        </label>
