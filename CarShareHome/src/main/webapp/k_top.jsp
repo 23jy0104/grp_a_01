@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="css/k_top.css">
     <script>
         function openVehicleManagement() {
-            window.location.href = "k_P2.jsp"; 
+            window.location.href = "k_P2.jsp";
         }
 
         function openReservationManagement() {

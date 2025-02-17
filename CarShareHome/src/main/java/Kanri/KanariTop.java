@@ -1,4 +1,4 @@
-package Kanari;
+package Kanri;
 
 import java.io.IOException;
 
