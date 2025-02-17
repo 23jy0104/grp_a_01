@@ -3,6 +3,7 @@
 <%@ page import ="model.Customer" %>
 <%
     String customerName = (String) session.getAttribute("customerName");
+	String customerId =(String)session.getAttribute("customerId");
 %>
 <!DOCTYPE html>
 <html lang="ja">

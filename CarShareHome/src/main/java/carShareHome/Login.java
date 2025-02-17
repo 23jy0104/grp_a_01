@@ -43,7 +43,7 @@ public class Login extends HttpServlet {
 			final String user ="23jya01";
 			final String pass ="23jya01";
 			
-			String sql = "SELECT customer_name, customer_kana, e_mail, customer_password, post_code, customer_address, license_date, tell_number, manager_check FROM Customer WHERE e_mail = ? AND customer_password = ? AND manager_check IS NOT NULL";
+			String sql = "SELECT customer_id, customer_name, customer_kana, e_mail, customer_password, post_code, customer_address, license_date, tell_number, manager_check FROM Customer WHERE e_mail = ? AND customer_password = ? AND manager_check IS NOT NULL";
 
 			try(Connection con =DriverManager.getConnection(url,user,pass);
 					PreparedStatement pstmt =con.prepareStatement(sql)) {
@@ -51,6 +51,7 @@ public class Login extends HttpServlet {
 				pstmt.setString(2, hashedPassword);
 				ResultSet rs =pstmt.executeQuery();
 				if(rs.next()) {
+					request.getSession().setAttribute("customerId", rs.getString("customer_id"));
 					request.getSession().setAttribute("customerName", rs.getString("customer_name"));
 					request.getSession().setAttribute("customerKana", rs.getString("customer_kana"));
 					request.getSession().setAttribute("email", rs.getString("e_mail"));

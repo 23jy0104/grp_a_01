@@ -36,7 +36,7 @@ public class CarShareNew extends HttpServlet {
         String customerName = customerSei + " " + customerMei;
         String customerSeiKana = request.getParameter("customerSeiKana");
         String customerMeiKana = request.getParameter("customerMeiKana");
-        String customerKana = customerMeiKana + customerSeiKana;
+        String customerKana = customerMeiKana +" "+ customerSeiKana;
         String gender = request.getParameter("gender");
         String password = request.getParameter("password");
         String city = request.getParameter("city");

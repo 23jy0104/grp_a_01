@@ -9,12 +9,12 @@
 <%	
 	String customerName = (String) session.getAttribute("customerName");
 	List<String[]> stations = (List<String[]>) session.getAttribute("stations"); // ステーション情報を取得
-	String stationIdvalue   =request.getParameter("stationid");
+	String stationIdValue   =request.getParameter("stationid");
 	String stationNameValue = request.getParameter("stationname"); // URLからステーション名を取得
 	String stationDataValue = request.getParameter("stationdata"); // URLからステーションデータを取得
 	
 	// セッションに値を設定
-	session.setAttribute("stationId",stationIdValue);
+	session.setAttribute("stationId",   stationIdValue);
 	session.setAttribute("stationdata", stationDataValue);
 	session.setAttribute("stationName", stationNameValue);
 %>
@@ -64,12 +64,15 @@
             <div class="flex-item">
                 <h3>空き情報から探す</h3>
                 <div class="button-container">
-				    <form action="ReservationTime" method="get">
+				    <form action="ReservationTime" method="post">
 				    	<input type="hidden" name="stationid" value ="<%=stationIdValue %>">
 				        <input type="hidden" name="stationname" value="<%= stationNameValue %>">
-				        <input type="datetime-local" id="startdate" name="startdate" required>
+				        利用開始日時:<br>
+				        <input type="datetime-local" id="startdate" name="startdate" required><br>
+				        利用終了日時:<br>
 				        <input type="datetime-local" id="stopdate" name="stopdate" required>
-				        <input type="submit" value="検索">
+				        
+				        <br><input type="image" id="searchButton1" src="img/kensaku.gif" alt="検索" />
 				    </form>
 				</div>
 
@@ -84,7 +87,7 @@
 			            <option value="NSX NA-1型 type-R">NSX NA-1型 type-R</option>
 			            <option value="GT-R R35 Nismo Special Edition T-spec">GT-R R35 Nismo Special Edition T-spec</option>
 			        </select>
-			        <input type="submit" value="検索">
+			        <br><input type="image" id="searchButton2" src="img/kensaku.gif" alt="検索" />
 			    </form>
 			</div>
 

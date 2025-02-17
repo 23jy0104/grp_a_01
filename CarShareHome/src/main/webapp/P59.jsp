@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+<%@ page import ="model.Customer" %>
 <!DOCTYPE html>
 <html>
 <!DOCTYPE html>
@@ -8,11 +9,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TMC カーシェア</title>
-    <link rel="stylesheet" href="../../CSS/nav.css">
-    <link rel="stylesheet" href="../../CSS/P56.css">
-    <link rel="stylesheet" href="../../CSS/P57.css">
-    <link rel="stylesheet" href="../../CSS/P59.css">
-    <link rel="stylesheet" href="../../CSS/timeTable.css">
+    <link rel="stylesheet" href="css/nav.css">
+    <link rel="stylesheet" href="css/P56.css">
+    <link rel="stylesheet" href="css/P57.css">
+    <link rel="stylesheet" href="css/P59.css">
+    <link rel="stylesheet" href="css/timeTable.css">
 </head>
 <body>
     <header>
