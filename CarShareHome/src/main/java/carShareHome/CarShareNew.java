@@ -45,8 +45,8 @@ public class CarShareNew extends HttpServlet {
         String customerAddress = city + address + building;
         String tellNumber = request.getParameter("TEL");
         String eMail = request.getParameter("email");
-        String omoteJpg = request.getPart("file_omote");
-        String uraJpg = request.getPart("file_ura");
+        Part omoteJpg = request.getPart("file_omote");
+        Part uraJpg = request.getPart("file_ura");
         String postCode = request.getParameter("postcode");
         String birthDate = request.getParameter("birthday");
         String licenseDate = request.getParameter("licenseDate");
