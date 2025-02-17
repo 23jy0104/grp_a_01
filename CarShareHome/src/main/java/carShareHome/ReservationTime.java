@@ -42,7 +42,6 @@ public class ReservationTime extends HttpServlet {
 			final String user ="23jya01";
 			final String pass ="23jya01";
 			Connection con =DriverManager.getConnection(url, user, pass);
-			Class.forName("com.mysql.jdbc.Driver");
 			 String sql = "SELECT r.start_date,r.stop_dater,r.customer_id,c.car_code,s.station_id,station_name,car_img,customer_name"
 		        		+ "FROM reservation r"
 		        		+ "JOIN cardb c ON c.car_code = r.car_code"
