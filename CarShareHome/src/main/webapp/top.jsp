@@ -23,7 +23,7 @@
 
 <nav class="nav">
     <ul>
-        <li class="nav-item gnav02"><a href="UC02_01_S1_S2.jsp">予約・ステーション検索</a></li>
+        <li class="nav-item gnav02"><a href="P49.jsp">予約・ステーション検索</a></li>
         <li class="nav-item gnav03"><a href="P39.jsp">料金</a></li>
         <li class="nav-item gnav04"><a href="P43.">利用方法</a></li>
         <li class="nav-item gnav05"><a href="P46.jsp">車種</a></li>

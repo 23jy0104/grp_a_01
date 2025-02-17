@@ -1,9 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import="javax.servlet.http.HttpSession" %>
+	<%@ page import="javax.servlet.http.HttpSession" %>
 <%
+	request.setCharacterEncoding("UTF-8");
+	response.setContentType("text/html; charset=UTF-8");
     // セッションからデータを取得
     String customerName = request.getParameter("customerName");
+<<<<<<< HEAD
     String customerKana = (String) session.getAttribute("customerNameKana");
     String gender = (String) session.getAttribute("gender");
     String email = (String) session.getAttribute("email");
@@ -14,6 +17,19 @@
     String birthDate = (String) session.getAttribute("birthDate"); // 生年月日も取得
     String hashedPassword = (String) session.getAttribute("hashedPassword");
 	System.out.println(customerName);
+=======
+    String customerKana = request.getParameter("customerNameKana");
+    String gender =request.getParameter("gender");
+    String email = request.getParameter("email");
+    String postcode =request.getParameter("postcode");
+    String tellNumber =request.getParameter("tellNumber");
+    String customerAddress = request.getParameter("customerAddress");
+    String licenseNumber =request.getParameter("licenseNumber");
+   	String licenseDate = request.getParameter("licenseDate");
+    String birthDate = request.getParameter("birthDate"); // 生年月日も取得
+    String password = request.getParameter("password");
+
+>>>>>>> branch 'main' of https://github.com/23jy0104/grp_a_01.git
 %>
 <!-- クレジットカード情報入力ページ -->
 <!DOCTYPE html>
@@ -38,12 +54,14 @@
         <input type="hidden" name="customerKana" value="<%= customerKana %>">
         <input type="hidden" name="gender" value="<%= gender %>">
         <input type="hidden" name="email" value="<%= email %>">
+        <input type="hidden" name ="postcode" value ="<%=postcode %>">
+        <input type ="hidden" name="password" value ="<%=password %>">
         <input type="hidden" name="tellNumber" value="<%= tellNumber %>">
         <input type="hidden" name="customerAddress" value="<%= customerAddress %>">
         <input type="hidden" name="licenseNumber" value="<%= licenseNumber %>">
         <input type="hidden" name="licenseDate" value="<%= licenseDate %>">
         <input type="hidden" name="birthDate" value="<%= birthDate %>"> <!-- 生年月日を隠しフィールドとして追加 -->
-        <input type="hidden" name="hashedPassword" value="<%= hashedPassword %>"> <!-- ハッシュ化されたパスワードを保持 -->
+        <input type="hidden" name="hashedPassword" value="<%= password %>"> <!-- ハッシュ化されたパスワードを保持 -->
 
         <div class="form-group">
             <label for="credit_number">

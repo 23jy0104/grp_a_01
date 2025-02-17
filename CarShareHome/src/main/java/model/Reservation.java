@@ -7,14 +7,14 @@ public class Reservation implements Serializable {
     private String reservationId;
     private String startDate;
     private String stopDate;
-    private String customerId;
+    private Customer customerId;
     private String finishDate;
     private int price;
     private CarData carCode;
     private Customer customer;
     private Station station;
 
-	public Reservation(String reservationId, String startDate, String stopDate, String customerId,
+	public Reservation(String reservationId, String startDate, String stopDate, Customer customerId,
 			String finishId, int price, CarData carCode) {
 		super();
 		this.reservationId = reservationId;
@@ -61,11 +61,11 @@ public class Reservation implements Serializable {
 		this.stopDate = stopDate;
 	}
 
-	public String getCustomerId() {
+	public Customer getCustomerId() {
 		return customerId;
 	}
 
-	public void setCustomerId(String customerId) {
+	public void setCustomerId(Customer customerId) {
 		this.customerId = customerId;
 	}
 

@@ -11,12 +11,13 @@
     String customerKana = customer.getCustomerKana();
     String gender = customer.getGender();
     String email = customer.getEmail();
+    String password =customer.getCustomerPassword();
     String tellNumber = customer.getTellNumber();
     String customerAddress = customer.getCustomerAddress();
     String birthDate = customer.getBirthDate();
     String licenseNumber = customer.getLicenseNumber();
     String licenseDate = customer.getLicenceDate();
-
+	String postcode =customer.getPostCode();
     // Blobをbyte[]に変換してBase64エンコード
     String omoteBase64 = null;
     String uraBase64 = null;
@@ -112,7 +113,13 @@
                     <input type="hidden" name="customerKana"    value="<%= customerKana %>">
                     <input type="hidden" name="gender"          value="<%= gender %>">
                     <input type="hidden" name="email"           value="<%= email %>">
+<<<<<<< HEAD
                     <input type="hidden" name="tellNumber"      value="<%= tellNumber %>">
+=======
+                    <input type="hidden" name="password"        value="<%=password %>">
+                    <input type="hidden" name="tellNumber"      value="<%= tellNumber %>">
+                    <input type="hidden" name="postcode"        value ="<%=postcode %>">
+>>>>>>> branch 'main' of https://github.com/23jy0104/grp_a_01.git
                     <input type="hidden" name="customerAddress" value="<%= customerAddress %>">
                     <input type="hidden" name="birthDate"       value ="<%= birthDate %>">
                     <input type="hidden" name="licenseNumber"   value="<%= licenseNumber %>">
