@@ -3,6 +3,9 @@ package carShareHome;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import javax.servlet.annotation.WebServlet;
+
+@WebServlet("/PasswordUtil")
 public class PasswordUtil {
     
     public static String hashPassword(String password) {
