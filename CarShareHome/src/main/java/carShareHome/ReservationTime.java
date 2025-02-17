@@ -34,11 +34,11 @@ public class ReservationTime extends HttpServlet {
         String stationName=request.getParameter("stationname");
         String startDate =request.getParameter("startdate");
         String stopDate =request.getParameter("stopdate");
-        String sql = "SELECT c.car_code, c.model_year, c.number, m.maker_name, mo.model_name\r\n"
-        		+ "FROM car_db c\r\n"
-        		+ "JOIN maker m ON c.maker_id = m.maker_id\r\n"
-        		+ "JOIN model mo ON c.model_id = mo.model_id\r\n"
-        		+ "JOIN keybox k ON c.car_code = k.car_code\r\n"
+        String sql = "SELECT c.car_code, c.model_year, c.number, m.maker_name, mo.model_name"
+        		+ "FROM car_db"
+        		+ "JOIN maker m ON c.maker_id = m.maker_id"
+        		+ "JOIN model mo ON c.model_id = mo.model_id"
+        		+ "JOIN keybox k ON c.car_code = k.car_code"
         		+ "WHERE k.station_id = ?"
         		+ "	c.car_code NOT IN"
         		+ "    SELECT car_code"
