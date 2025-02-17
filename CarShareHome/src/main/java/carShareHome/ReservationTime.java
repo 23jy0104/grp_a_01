@@ -34,7 +34,16 @@ public class ReservationTime extends HttpServlet {
         String stationName=request.getParameter("stationname");
         String startDate =request.getParameter("startdate");
         String stopDate =request.getParameter("stopdate");
-        String sql = "SELECT keybox_id,station_id,car_code From keybox inner join station on station.station_id =keybox.station_id inner join cardb on cardb.car_code =keybox.car_code WHERE station.station_id = ? ";
+        String sql = "SELECT c.car_code, c.model_year, c.number, m.maker_name, mo.model_name\r\n"
+        		+ "FROM car_db c\r\n"
+        		+ "JOIN maker m ON c.maker_id = m.maker_id\r\n"
+        		+ "JOIN model mo ON c.model_id = mo.model_id\r\n"
+        		+ "JOIN keybox k ON c.car_code = k.car_code\r\n"
+        		+ "WHERE k.station_id = ?"
+        		+ "	c.car_code NOT IN"
+        		+ "    SELECT car_code"
+        		+ "    FROM reservation"
+        		+ "    WHERE (start_date < ? AND stop_date > ? AND );";
         try {
 			Class.forName("com.mysql.jdbc.Driver");
 			final String url ="jdbc:mysql://10.64.144.5:3306/23jya01";
