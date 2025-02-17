@@ -1,6 +1,22 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ page import ="model.Customer" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="model.Station" %>
+
+<%	
+	String customerName = (String) session.getAttribute("customerName");
+	List<String[]> stations = (List<String[]>) session.getAttribute("stations"); // ステーション情報を取得
+	String stationIdValue   =request.getParameter("stationid");
+	String stationNameValue = request.getParameter("stationname"); // URLからステーション名を取得
+	String stationDataValue = request.getParameter("stationdata"); // URLからステーションデータを取得
+	
+	// セッションに値を設定
+	session.setAttribute("stationId",   stationIdValue);
+	session.setAttribute("stationdata", stationDataValue);
+	session.setAttribute("stationName", stationNameValue);
+%>
 <!DOCTYPE html>
 <html>
 <!DOCTYPE html>
@@ -17,10 +33,10 @@
 </head>
 <body>
     <header>
-        <img src="../../img/rog.png" alt="TMCロゴ">
+        <img src="img/rog.png" alt="TMCロゴ">
         <h1>TMC カーシェア</h1>
-        <h4 id="username">23jy0000様</h4>
-        <button class="logout-button" onclick="location.href='P29.html'">ログアウト</button>
+        <h4 id="username"><%=customerName %></h4>
+        <button class="logout-button" onclick="location.href='P29.jsp'">ログアウト</button>
     </header>
     <nav class="nav">
         <ul>
@@ -69,7 +85,7 @@
             </div>
         </div> 
         <div class="button-container" id="actionButtons" style="margin-top: 20px;">
-            <button class="back-button" onclick="location.href='P56.html'">戻る</button>
+            <button class="back-button" onclick="location.href='P56.jsp'">戻る</button>
             <button class="confirm-button" onclick="checkAvailability()">空き状況確認</button>
         </div>
         
