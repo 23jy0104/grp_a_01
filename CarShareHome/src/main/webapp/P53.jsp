@@ -16,7 +16,7 @@
 </head>
 <body>
     <header>
-        <img src="img/rog.png" href="home.html" alt="TMCロゴ">
+        <img src="img/rog.png" href="P53.jsp" alt="TMCロゴ">
         <h1>TMC カーシェア</h1>
         <h4 id="username"><%=customerName%>さん</h4>
         <button class="logout-button" onclick="location.href='P29.jsp'">ログアウト</button>

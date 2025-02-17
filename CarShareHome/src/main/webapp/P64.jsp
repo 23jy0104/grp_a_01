@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <!DOCTYPE html>
@@ -8,8 +8,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TMC カーシェア</title>
-    <link rel="stylesheet" href="../../CSS/nav.css">
-    <link rel="stylesheet" href="../../CSS/P63.css">
+    <link rel="stylesheet" href="css/nav.css">
+    <link rel="stylesheet" href="css/P63.css">
 </head>
 <body>
     <header>
@@ -34,7 +34,7 @@
         <div class="content">
             <div class="flex-container">
                 <div class="image-section"></div>
-                    <img src="../../img/NISSAN.jpg" alt="サンプル画像" style="width: 400px; height: auto; margin-top: 10px;">
+                    <img src="img/NISSAN.jpg" alt="サンプル画像" style="width: 400px; height: auto; margin-top: 10px;">
                     <p>BNR32型 skyline Nismo<br>新宿 わ ‥32<br>（ダークシルバー）</p>
                 </div>
                 <div class="table-section">

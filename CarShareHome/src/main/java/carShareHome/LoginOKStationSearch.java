@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class Station
  */
-@WebServlet("/LoginOKStationSearch.java")
+@WebServlet("/LoginOKStationSearch")
 public class LoginOKStationSearch extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
