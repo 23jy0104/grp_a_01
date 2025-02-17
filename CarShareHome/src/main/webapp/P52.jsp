@@ -41,7 +41,7 @@
     </ul>
 </nav>
     <main>
-        <h2><%=stationName %></h2>
+        <h2><%=stationNameValue %></h2>
         <button class="back-button" onclick="location.href='P49.jsp'">検索結果一覧に戻る</button>
         <table>
             <tr>

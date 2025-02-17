@@ -55,14 +55,14 @@
     <tbody>
         <% if (stations != null && !stations.isEmpty()) {
             for (String[] station : stations) {
-            	String stationId   =station[0]
+            	String stationId   =station[0];
             	String stationName = station[1];
                 String stationdata = station[3];
                 String detailUrl = "P56.jsp?stationid"+stationId+"&stationname=" + stationName +"&stationdata="+ stationdata; 
         %>
             <tr>
                 <td><%= station[1] %></td>
-                <td><%= station[3] %></td>
+                <td><%= station[2] %></td>
                 <td>
                     <a href="<%= detailUrl %>">
                         <input type="image" id="select_station" name="select" src="img/syousai.gif" alt="詳細" />
