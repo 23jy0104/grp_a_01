@@ -4,18 +4,19 @@
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="model.Station" %>
+<%@ page import ="model.carData" %>
+<%@ page import ="model.KeyBox" %>
+<%@ page import ="model.Model" %>
+<%@ page import="model.Reservation" %>
 
 <%	
 	String customerName = (String) session.getAttribute("customerName");
-	List<String[]> stations = (List<String[]>) session.getAttribute("stations"); // ステーション情報を取得
-	String stationIdValue   =request.getParameter("stationid");
-	String stationNameValue = request.getParameter("stationname"); // URLからステーション名を取得
-	String stationDataValue = request.getParameter("stationdata"); // URLからステーションデータを取得
-	
-	// セッションに値を設定
-	session.setAttribute("stationId",   stationIdValue);
-	session.setAttribute("stationdata", stationDataValue);
-	session.setAttribute("stationName", stationNameValue);
+	String stationName =(String)session.getAttribute("stationName");
+	String stationId =(String)session.getAttribute("stationId");
+	String startDate =(String)session.getAttribute("startDate");
+	String stopDate =(String)session.getAttribute("stopDate");
+	String img =(String)session.getAttribute("img");
+	String carCode =(String)session.getAttribute("code");
 %>
 <!DOCTYPE html>
 <html>

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.servlet.ServletException;
@@ -34,16 +35,7 @@ public class ReservationTime extends HttpServlet {
         String stationName=request.getParameter("stationname");
         String startDate =request.getParameter("startdate");
         String stopDate =request.getParameter("stopdate");
-        String sql = "SELECT c.car_code, c.model_year, c.number, m.maker_name, mo.model_name"
-        		+ "FROM car_db"
-        		+ "JOIN maker m ON c.maker_id = m.maker_id"
-        		+ "JOIN model mo ON c.model_id = mo.model_id"
-        		+ "JOIN keybox k ON c.car_code = k.car_code"
-        		+ "WHERE k.station_id = ?"
-        		+ "	c.car_code NOT IN"
-        		+ "    SELECT car_code"
-        		+ "    FROM reservation"
-        		+ "    WHERE (start_date < ? AND stop_date > ? AND );";
+        String path ="";
         try {
 			Class.forName("com.mysql.jdbc.Driver");
 			final String url ="jdbc:mysql://10.64.144.5:3306/23jya01";
@@ -51,10 +43,37 @@ public class ReservationTime extends HttpServlet {
 			final String pass ="23jya01";
 			Connection con =DriverManager.getConnection(url, user, pass);
 			Class.forName("com.mysql.jdbc.Driver");
+			 String sql = "SELECT r.start_date,r.stop_dater,r.customer_id,c.car_code,s.station_id,station_name,car_img,customer_name"
+		        		+ "FROM reservation r"
+		        		+ "JOIN cardb c ON c.car_code = r.car_code"
+		        		+ "JOIN model m ON c.model_id = m.model_id"
+		        		+ "JOIN keybox k ON c.car_code = k.car_code"
+		        		+"JOIN Station s on s.station_id =k.station_id"
+		        		+ "WHERE k.station_id = ?"
+		        		+ "	c.car_code NOT IN("
+		        		+ "    SELECT car_code"
+		        		+ "    FROM reservation"
+		        		+ "    WHERE (start_date < ? AND stop_date > ? AND ));";
 			PreparedStatement pstmt =con.prepareStatement(sql);
 			pstmt.setString(1, stationId);
-			pstmt.setString(2, startDate);
-			pstmt.setString(3, stopDate);
+			pstmt.setString(2, stationName);
+			pstmt.setString(3, startDate);
+			pstmt.setString(4, stopDate);
+			ResultSet rs =pstmt.executeQuery();
+			if(rs.next()) {
+				request.getSession().setAttribute("customerName", rs.getString("customer_name"));
+				request.getSession().setAttribute("stationId", rs.getString("station_id"));
+				request.getSession().setAttribute("stationName", rs.getString("station_name"));
+				request.getSession().setAttribute("startDate", rs.getString("start_date"));
+				request.getSession().setAttribute("stopDate", rs.getString("stop_date"));
+				request.getSession().setAttribute("img", rs.getString("car_img"));
+				request.getSession().setAttribute("code", rs.getString("car_code"));
+				path ="P59.jsp";
+			}else {
+				path ="P56.jsp";
+			}
+			
+			
 		} catch (ClassNotFoundException e) {
 			// TODO 自動生成された catch ブロック
 			e.printStackTrace();
