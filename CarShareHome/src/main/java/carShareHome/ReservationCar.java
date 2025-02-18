@@ -28,7 +28,11 @@ public class ReservationCar extends HttpServlet {
         String stationId =request.getParameter("stationid");
         String stationName=request.getParameter("stationname");
         String carType =request.getParameter("carType");
-        
+        Class.forName("com.mysql.jdbc.Driver");
+		final String url ="jdbc:mysql://10.64.144.5:3306/23jya01";
+		final String user ="23jya01";
+		final String pass ="23jya01";
+		Connection con =DriverManager.getConnection(url, user, pass);
 	}
 
 }
