@@ -4,16 +4,16 @@ import java.io.Serializable;
 
 public class Maker implements Serializable{
 	private String makerId;
-	private  String mekerName;
+	private  String makerName;
 	
 	public Maker() {
 		super();
 	}
 	
-	public Maker(String makerID, String mekerName) {
+	public Maker(String makerID, String makerName) {
 		super();
 		this.makerId = makerID;
-		this.mekerName = mekerName;
+		this.makerName = makerName;
 	}
 
 	public String getMakerID() {
@@ -23,10 +23,10 @@ public class Maker implements Serializable{
 		this.makerId = makerID;
 	}
 	public String getMekerName() {
-		return mekerName;
+		return makerName;
 	}
-	public void setMekerName(String mekerName) {
-		this.mekerName = mekerName;
+	public void setMekerName(String makerName) {
+		this.makerName = makerName;
 	}
 	
 }

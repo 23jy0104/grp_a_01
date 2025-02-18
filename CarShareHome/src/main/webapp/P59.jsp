@@ -64,7 +64,7 @@
         <h2>該当車種</h2>
         <div class="additional-info-container" id="additionalInfo">
             <div>
-                <label><%= modelName %></label>
+                <label><%= modelName %>さん</label>
                 <img src="img/<%= img %>" alt="車" />
             </div>
             <table class="info-table">
@@ -107,6 +107,7 @@
             <button class="back-button" onclick="location.href='P56.jsp'">戻る</button>
             <form action="ReservationCarTime" method="post" style="display:inline;">
                 <input type="hidden" name="stationId" value="<%= stationId %>">
+    			<input type="hidden" name="modelName" value="<%= modelName %>"> <!-- ここを追加 -->
                 <input type="hidden" name="startCalendar" id="startCalendarInput" value="">
                 <input type="hidden" name="startTime" id="startTimeInput" value="">
                 <input type="hidden" name="endCalendar" id="endCalendarInput" value="">
