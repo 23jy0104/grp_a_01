@@ -87,29 +87,4 @@ public class ReservationDAO {
         System.out.println("取得した予約数: " + reservations.size());
         return reservations;
     }
-    
-    public List<Station> getStationsWithLessThanThreeCars() {
-        List<Station> stations = new ArrayList<>();
-        String sql = "SELECT s.station_id, s.station_name, s.station_address " +
-                     "FROM station s " +
-                     "LEFT JOIN keybox kb ON s.station_id = kb.station_id " +
-                     "GROUP BY s.station_id, s.station_name, s.station_address " +
-                     "HAVING COUNT(kb.car_code) < 3";
-
-        try (PreparedStatement pstmt = con.prepareStatement(sql);
-             ResultSet rs = pstmt.executeQuery()) {
-            while (rs.next()) {
-                Station station = new Station(rs.getString("station_id"), 
-                                               rs.getString("station_name"), 
-                                               rs.getString("station_address"));
-                stations.add(station);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return stations;
-    }
-
-
 }
