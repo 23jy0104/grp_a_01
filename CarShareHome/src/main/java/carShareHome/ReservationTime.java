@@ -61,6 +61,7 @@ public class ReservationTime extends HttpServlet {
 			final String user ="23jya01";
 			final String pass ="23jya01";
 			Connection con =DriverManager.getConnection(url, user, pass);
+<<<<<<< HEAD
 			Class.forName("com.mysql.jdbc.Driver");
 			String sql = "SELECT start_date, stop_date, cu.customer_id, ca.car_code, s.station_id, s.station_name, ca.car_img, cu.customer_name, station_data "
 			           + " FROM reservation r "
@@ -78,6 +79,19 @@ public class ReservationTime extends HttpServlet {
 
 
 
+=======
+			 String sql = "SELECT r.start_date,r.stop_dater,r.customer_id,c.car_code,s.station_id,station_name,car_img,customer_name"
+		        		+ "FROM reservation r"
+		        		+ "JOIN cardb c ON c.car_code = r.car_code"
+		        		+ "JOIN model m ON c.model_id = m.model_id"
+		        		+ "JOIN keybox k ON c.car_code = k.car_code"
+		        		+"JOIN Station s on s.station_id =k.station_id"
+		        		+ "WHERE k.station_id = ?"
+		        		+ "	c.car_code NOT IN("
+		        		+ "    SELECT car_code"
+		        		+ "    FROM reservation"
+		        		+ "    WHERE (start_date < ? AND stop_date > ? AND ));";
+>>>>>>> branch 'main' of https://github.com/23jy0104/grp_a_01.git
 			PreparedStatement pstmt =con.prepareStatement(sql);
 			pstmt.setString(1, stationId);
 			pstmt.setTimestamp(2, startDate);
@@ -106,6 +120,7 @@ public class ReservationTime extends HttpServlet {
 			// TODO 自動生成された catch ブロック
 			e.printStackTrace();
 		}
+        
 	}
 
 }
