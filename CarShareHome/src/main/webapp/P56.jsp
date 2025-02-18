@@ -79,7 +79,7 @@
             </div>
 
             <div class="button-container">
-			    <form action="ReservationCar" method="get">
+			    <form action="ReservationCar" method="post">
 			    	<input type="hidden" name="stationid" value ="<%=stationIdValue %>"
 			        <input type="hidden" name="stationname" value="<%= stationNameValue %>">
 			        <select id="carType" name="carType">
