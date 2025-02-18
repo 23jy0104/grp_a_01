@@ -1,8 +1,6 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ page import="dao.ReservationDAO" %>
-<%@ page import="model.Station" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.util.List" %>
+<%@ page import="model.Station" %>
 
 <!DOCTYPE html>
 <html lang="ja">
@@ -28,18 +26,30 @@
             </tr>
         </thead>
         <tbody id="resultsBody">
-            <%
-                // 初期データをリクエストから取得
+            <% 
+                // リクエスト属性からステーションリストを取得
                 List<Station> stations = (List<Station>) request.getAttribute("stations");
-                if (stations != null) {
+                String address = request.getParameter("address"); 
+
+                if (stations != null && !stations.isEmpty()) {
                     for (Station station : stations) {
             %>
-                        <tr>
-                            <td><%= station.getStationName() %></td>
-                            <td><%= station.getStationAddress() %></td>
-                        </tr>
+            <tr>
+                <td>
+                    <a href="k_P7.jsp?stationName=<%= station.getStationName() %>&stationAddress=<%= station.getStationAddress() %>">
+                        <%= station.getStationName() %>
+                    </a>
+                </td>
+                <td><%= station.getStationAddress() %></td>
+            </tr>
             <%
                     }
+                } else {
+            %>
+            <tr>
+                <td colspan="2">ステーションが見つかりませんでした。</td>
+            </tr>
+            <%
                 }
             %>
         </tbody>
@@ -47,55 +57,45 @@
 
     <script>
         document.getElementById('searchBtn').addEventListener('click', function() {
-            const address = document.getElementById('address').value.trim(); // 空白を削除
-            const resultsBody = document.getElementById('resultsBody');
-            resultsBody.innerHTML = ''; // 既存の結果をクリア
+            const address = document.getElementById('address').value; 
 
-            console.log("検索する住所:", address); // デバッグ出力
+            if (!address) {
+                return;
+            }
 
-            // AJAXリクエストを送信
-            fetch('getStations') // サーブレットのURL
+            fetch('getStations?address=' + encodeURIComponent(address))
                 .then(response => {
                     if (!response.ok) {
-                        throw new Error('ネットワークエラー: ' + response.status);
+                        throw new Error('HTTPエラー: ' + response.status);
                     }
                     return response.json();
                 })
                 .then(data => {
-                    console.log("取得したステーション:", data); // 取得したデータを確認
+                    const resultsBody = document.getElementById('resultsBody');
+                    resultsBody.innerHTML = '';
 
-                    // 部分検索に対応
-                    const filteredStations = data.filter(station => 
-                        station.station_address && station.station_address.includes(address)
-                    );
-
-                    console.log("フィルタリングされたステーション:", filteredStations); // フィルタリング後のデータを確認
-
-                    // 結果をテーブルに追加
-                    if (filteredStations.length === 0) {
-                        console.log("フィルタリング結果が空です。"); // フィルタリング結果が空の場合のデバッグ出力
-                    }
-
-                    filteredStations.forEach(station => {
-                        const row = document.createElement('tr');
-                        row.innerHTML = `<td>${station.station_name}</td><td>${station.station_address}</td>`;
-                        resultsBody.appendChild(row);
-                    });
-
-                    // 結果があればテーブルを表示
-                    if (filteredStations.length > 0) {
+                    if (Array.isArray(data) && data.length > 0) {
+                        data.forEach(station => {
+                            const row = document.createElement('tr');
+                            row.innerHTML = '<td>' +
+                                '<a href="k_P7.jsp?stationName=' + encodeURIComponent(station.station_name) + 
+                                '&stationAddress=' + encodeURIComponent(station.station_address) + '">' + 
+                                station.station_name + 
+                                '</a>' +
+                                '</td>' +
+                                '<td>' + station.station_address + '</td>';
+                            resultsBody.appendChild(row);
+                        });
                         document.getElementById('resultsTable').style.display = 'table';
                     } else {
                         document.getElementById('resultsTable').style.display = 'none';
                     }
                 })
                 .catch(error => {
-                    console.error('Error:', error);
-                    alert('エラーが発生しました: ' + error.message); // アラートでエラーメッセージを表示
                 });
         });
     </script>
-    
+
     <button class="logout" onclick="location.href='k_top.jsp'">サインアウト</button>
 
 </body>
