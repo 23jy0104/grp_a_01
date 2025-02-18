@@ -51,77 +51,57 @@
     <main>
         <h2>ステーション情報</h2>
         <button class="back-button" onclick="location.href='P55.jsp'">検索結果一覧に戻る</button>
-        <h3><%= stationNameValue %></h3>
-        
+        <br><h3><%=stationNameValue %></h3>
         <table>
             <tr>
                 <th>お知らせ</th>
-                <th>注意点</th>
-                <th>ステーション情報</th>
-                <th><%= stationDataValue %></th>
-            </tr>
-            <tr>
-                <td>ご乗車の際は、必ずご自身で安全点検をしてください。</td>
-                <td>
-                    ・全車禁煙です。喫煙される場合は、クルマをとめ、喫煙設備のある場所でお願いします。<br>
-                    ・車内で出た飲み物,食べ物などのゴミは、必ず各自でお持ち帰りください。
-                </td>
-                <td>ステーションの詳細情報がここに入ります。</td>
+                <th>注意点:<br>
+                    　・ご乗車の際は、必ずご自身で安全点検をしてください。<br>
+                    　・全車禁煙です。喫煙される場合は、クルマをとめ、喫煙設備のある場所でお願いします。<br>
+                    　・車内で出た飲み物,食べ物などのゴミは、必ず各自でお持ち帰りください。<br><br>
+                    アクセス:<br>
+                    　大久保駅北口から北西に進んでいただき、大久保通りをまっすぐ進んだ場所にございます。</th>
             </tr>
         </table>
-
+        
         <div class="flex-container">
             <div class="flex-item">
                 <h3>空き情報から探す</h3>
                 <div class="input-container">
-                    <form action="CarAvailabilityServlet" method="post">
-                        <div class="datetime-input">
-                            <label for="datetime1">利用開始日時:</label>
-                            <input type="datetime-local" id="datetime1" name="datetime1" min="<%= minStartDateTime %>" required>
-                        </div>
-                        <div class="datetime-input">
-                            <label for="datetime2">利用終了日時:</label>
-                            <input type="datetime-local" id="datetime2" name="datetime2" min="<%= minStartDateTime %>" required>
-                        </div>
-                        <input type="hidden" name="stationName" value="<%= stationNameValue %>">
-                        <div class="button-container">
-                            <button type="submit" id="searchButton1">
-                                <img src="img/kensaku.gif" alt="検索" />
-                            </button>
-                        </div>
-                    </form>
+                    <div class="datetime-input">
+                        <label for="datetime1">利用開始日時:</label>
+                        <input type="datetime-local" id="datetime1" name="datetime1">
+                    </div>
+
+                    <div class="datetime-input">
+                        <label for="datetime2">利用終了日時:</label>
+                        <input type="datetime-local" id="datetime2" name="datetime2">
+                    </div>
+
+                    <!-- 検索ボタン -->
+                    <div class="button-container">
+                        <a href="P57.html">
+                            <input type="image" id="searchButton1" src="img/kensaku.gif" alt="検索" />
+                        </a>
+                    </div>
                 </div>
             </div>
 
-<<<<<<< HEAD
-            <div class="button-container">
-			    <form action="ReservationCar" method="post">
-			    	<input type="hidden" name="stationid" value ="<%=stationIdValue %>"
-			        <input type="hidden" name="stationname" value="<%= stationNameValue %>">
+            <div class="flex-item">
+			    <h3 class="sub-title">車種から探す</h3>
+			    <form action="ReservationCar" method="POST">
 			        <select id="carType" name="carType">
-			            <option value="BNR32型 skyline Nismo">BNR32型 skyline Nismo</option>
-			            <option value="NSX NA-1型 type-R">NSX NA-1型 type-R</option>
-			            <option value="GT-R R35 Nismo Special Edition T-spec">GT-R R35 Nismo Special Edition T-spec</option>
+			            <option value="">BNR32型 skyline Nismo</option>
+			            <option value="">NSX NA-1型 type-R</option>
+			            <option value="">GT-R R35 Nismo Special Edition T-spec</option>
 			        </select>
-			        <br><input type="image" id="searchButton2" src="img/kensaku.gif" alt="検索" />
+			
+			        <!-- 車種選択後の検索ボタン -->
+			        <div class="button-container">
+			            <input type="image" id="searchButton2" src="img/kensaku.gif" alt="検索" />
+			        </div>
 			    </form>
 			</div>
-=======
-            <div class="flex-item">
-                <h3>車種から探す</h3>
-                <select id="carType" name="carType">
-                    <option value="BNR32型 skyline Nismo">BNR32型 skyline Nismo</option>
-                    <option value="NSX NA-1型 type-R">NSX NA-1型 type-R</option>
-                    <option value="GT-R R35 Nismo Special Edition T-spec">GT-R R35 Nismo Special Edition T-spec</option>
-                </select>
->>>>>>> branch 'newmain' of https://github.com/23jy0104/grp_a_01.git
-
-                <div class="button-container">
-                    <a href="P59.jsp">
-                        <input type="image" id="searchButton2" src="img/kensaku.gif" alt="検索" />
-                    </a>
-                </div>
-            </div>
         </div>
     </main>
 </body>
