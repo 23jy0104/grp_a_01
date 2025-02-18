@@ -1,0 +1,46 @@
+@charset "UTF-8";
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 20px;
+    text-align: center; /* テキストを中央揃え */
+}
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+.logo {
+    display: flex;
+    align-items: center;
+}
+img {
+    max-width: 100px;
+    margin-right: 10px;
+}
+h1 {
+    color: red;
+    margin: 0;
+}
+.btn {
+margin-top: 20px; /* ボタンの上にマージンを追加 */
+}
+.btn-container {
+display: flex; /* Flexboxを使用 */
+justify-content: center; /* 水平方向に中央揃え */
+align-items: center; /* 垂直方向に中央揃え */
+height: calc(100vh - 200px); /* 高さを調整（必要に応じて調整） */
+}
+input[type="button"] {
+    background-color: orange; /* ボタンの色をオレンジに */
+    border: none; /* ボーダーを削除 */
+    color: white; /* 文字色を白に */
+    padding: 10px 20px; /* 内側のパディング */
+    font-size: 16px; /* フォントサイズ */
+    cursor: pointer; /* カーソルをポインターに */
+}
+input[type="button"]:hover {
+    background-color: darkorange; /* ホバー時の色 */
+}
