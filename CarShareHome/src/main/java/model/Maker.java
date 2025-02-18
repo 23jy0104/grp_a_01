@@ -22,10 +22,10 @@ public class Maker implements Serializable{
 	public void setMakerID(String makerID) {
 		this.makerId = makerID;
 	}
-	public String getMekerName() {
+	public String getMakerName() {
 		return makerName;
 	}
-	public void setMekerName(String makerName) {
+	public void setMakerName(String makerName) {
 		this.makerName = makerName;
 	}
 	

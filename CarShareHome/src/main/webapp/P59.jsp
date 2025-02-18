@@ -107,7 +107,7 @@
             <button class="back-button" onclick="location.href='P56.jsp'">戻る</button>
             <form action="ReservationCarTime" method="post" style="display:inline;">
                 <input type="hidden" name="stationId" value="<%= stationId %>">
-    			<input type="hidden" name="modelName" value="<%= modelName %>"> <!-- ここを追加 -->
+                <input type="hidden" name="modelName" value="<%= modelName %>">
                 <input type="hidden" name="startCalendar" id="startCalendarInput" value="">
                 <input type="hidden" name="startTime" id="startTimeInput" value="">
                 <input type="hidden" name="endCalendar" id="endCalendarInput" value="">
@@ -115,6 +115,36 @@
                 <button type="submit" class="confirm-button" onclick="setAvailabilityInputs()">空き状況確認</button>
             </form>
         </div>
+
+        <%-- 空き状況を表示するためのコードを追加 --%>
+        <% List<CarData> availableCars = (List<CarData>) request.getAttribute("availableCars"); %>
+        <% if (availableCars != null && !availableCars.isEmpty()) { %>
+            <h3>空き状況</h3>
+            <table class="availability-table">
+                <thead>
+                    <tr>
+                        <th>車両コード</th>
+                        <th>モデル年</th>
+                        <th>ナンバー</th>
+                        <th>メーカー名</th>
+                        <th>モデル名</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for (CarData car : availableCars) { %>
+                        <tr>
+                            <td><%= car.getCarCode() %></td>
+                            <td><%= car.getModelYear() %></td>
+                            <td><%= car.getCarNumber() %></td>
+                            <td><%= car.getMaker().getMakerName() %></td>
+                                                       <td><%= car.getModel().getModelName() %></td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        <% } else { %>
+            <p>空きがありません。</p>
+        <% } %>
     </main>
 
     <script>
@@ -176,3 +206,4 @@
     </script>
 </body>
 </html>
+

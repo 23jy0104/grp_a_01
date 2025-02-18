@@ -38,7 +38,6 @@ public class ReservationCarTime extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	    request.setCharacterEncoding("UTF-8");
     	    response.setContentType("text/html; charset=UTF-8"); 
 
@@ -97,7 +96,7 @@ public class ReservationCarTime extends HttpServlet {
     	            Maker maker = new Maker();
     	            maker.setMakerID(rs.getString("maker_id"));
     	            maker.setMakerName(rs.getString("maker_name"));
-    	            car.setMker(maker);
+    	            car.setMaker(maker);
 
     	            // Modelオブジェクトの作成
     	            Model model = new Model();
