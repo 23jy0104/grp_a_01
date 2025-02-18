@@ -1,0 +1,61 @@
+@charset "UTF-8";
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background-color: #f9f9f9;
+}
+h1 {
+    color: red;
+}
+h2 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+th, td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: left;
+}
+th {
+    background-color: #007bff;
+    color: white;
+}
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.logo {
+    width: 100px;
+}
+.button {
+    background-color: yellow;
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+}
+.confirm-button {
+    background-color: orange;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+}
+.btn-container {
+    display: flex;
+    justify-content: flex-end; /* ボタンを右端に配置 */
+    margin-top: 20px;
+}
+.btn {
+    padding: 10px 15px;
+    background-color: #ff9800;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+}

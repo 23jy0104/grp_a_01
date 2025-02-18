@@ -1,0 +1,54 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0; /* 背景色 */
+    margin: 0;
+    padding: 0;
+}
+.container {
+    background-color: #ffffff; /* コンテナの背景色 */
+    width: 300px; /* 幅 */
+    margin: 100px auto; /* 中央寄せ */
+    padding: 20px; /* 内側の余白 */
+    border-radius: 10px; /* 角の丸み */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* 影 */
+}
+h1 {
+    text-align: center; /* 中央寄せ */
+    font-size: 20px; /* フォントサイズ */
+    margin-bottom: 20px; /* 下の余白 */
+}
+input {
+    width: 100%; /* 幅を100% */
+    padding: 10px; /* 内側の余白 */
+    margin: 10px 0; /* 上下の余白 */
+    border: 1px solid #ccc; /* 枠線 */
+    border-radius: 5px; /* 角の丸み */
+    box-sizing: border-box; /* パディングとボーダーを含める */
+}
+.button-container {
+    text-align: center; /* 中央寄せ */
+}
+button {
+    background-color: #007bff; /* ボタンの背景色 */
+    color: white; /* テキストの色 */
+    border: none; /* 枠線なし */
+    border-radius: 5px; /* 角の丸み */
+    padding: 10px 15px; /* 内側の余白 */
+    cursor: pointer; /* カーソルをポインターに */
+    margin: 5px; /* ボタンの余白 */
+}
+button:hover {
+    background-color: #0056b3; /* ホバー時の色 */
+}
+.go-back {
+    background-color: #28a745; /* 検索ボタンの色 */
+}
+.go-back:hover {
+    background-color: #218838; /* ホバー時の色 */
+}
+.signout {
+    display: block; /* ブロック要素として表示 */
+    margin: 20px 0; /* 上下の余白 */
+    text-align: left; /* 左寄せ */
+    padding-left: 20px; /* 左の内側の余白 */
+}
