@@ -36,7 +36,7 @@
             %>
             <tr>
                 <td>
-                    <a href="k_P7.jsp?stationName=<%= station.getStationName() %>&stationAddress=<%= station.getStationAddress() %>">
+                    <a href="k_P7Servlet?stationName=<%= station.getStationName() %>&stationAddress=<%= station.getStationAddress() %>">
                         <%= station.getStationName() %>
                     </a>
                 </td>
