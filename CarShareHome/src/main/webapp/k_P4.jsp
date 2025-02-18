@@ -1,5 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import="dao.ReservationDAO" %>
+<%@ page import="model.Station" %>
+<%@ page import="java.util.List" %>
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -23,38 +27,72 @@
                 <th>住所</th>
             </tr>
         </thead>
-        <tbody id="resultsBody"></tbody>
+        <tbody id="resultsBody">
+            <%
+                // 初期データをリクエストから取得
+                List<Station> stations = (List<Station>) request.getAttribute("stations");
+                if (stations != null) {
+                    for (Station station : stations) {
+            %>
+                        <tr>
+                            <td><%= station.getStationName() %></td>
+                            <td><%= station.getStationAddress() %></td>
+                        </tr>
+            <%
+                    }
+                }
+            %>
+        </tbody>
     </table>
 
     <script>
         document.getElementById('searchBtn').addEventListener('click', function() {
-            const address = document.getElementById('address').value;
+            const address = document.getElementById('address').value.trim(); // 空白を削除
             const resultsBody = document.getElementById('resultsBody');
             resultsBody.innerHTML = ''; // 既存の結果をクリア
 
-            // サンプルデータ（実際にはAPIから取得することを想定）
-            const stations = [
-                { name: 'ステーションA', address: '東京都千代田区1-1', link: 'P7.html' },
-                { name: 'ステーションB', address: '東京都新宿区2-2', link: 'P7.html' },
-                { name: 'ステーションC', address: '東京都渋谷区3-3', link: 'P7.html' }
-            ];
+            console.log("検索する住所:", address); // デバッグ出力
 
-            // 住所に基づいてフィルタリング
-            const filteredStations = stations.filter(station => station.address.includes(address));
+            // AJAXリクエストを送信
+            fetch('getStations') // サーブレットのURL
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('ネットワークエラー: ' + response.status);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log("取得したステーション:", data); // 取得したデータを確認
 
-            // 結果をテーブルに追加
-            filteredStations.forEach(station => {
-                const row = document.createElement('tr');
-                row.innerHTML = `<td><a href="${station.link}">${station.name}</a></td><td>${station.address}</td>`;
-                resultsBody.appendChild(row);
-            });
+                    // 部分検索に対応
+                    const filteredStations = data.filter(station => 
+                        station.station_address && station.station_address.includes(address)
+                    );
 
-            // 結果があればテーブルを表示
-            if (filteredStations.length > 0) {
-                document.getElementById('resultsTable').style.display = 'table';
-            } else {
-                document.getElementById('resultsTable').style.display = 'none';
-            }
+                    console.log("フィルタリングされたステーション:", filteredStations); // フィルタリング後のデータを確認
+
+                    // 結果をテーブルに追加
+                    if (filteredStations.length === 0) {
+                        console.log("フィルタリング結果が空です。"); // フィルタリング結果が空の場合のデバッグ出力
+                    }
+
+                    filteredStations.forEach(station => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `<td>${station.station_name}</td><td>${station.station_address}</td>`;
+                        resultsBody.appendChild(row);
+                    });
+
+                    // 結果があればテーブルを表示
+                    if (filteredStations.length > 0) {
+                        document.getElementById('resultsTable').style.display = 'table';
+                    } else {
+                        document.getElementById('resultsTable').style.display = 'none';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('エラーが発生しました: ' + error.message); // アラートでエラーメッセージを表示
+                });
         });
     </script>
     
