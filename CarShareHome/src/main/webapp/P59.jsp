@@ -51,7 +51,7 @@
         <h2>該当車種</h2>
         <div class="additional-info-container" id="additionalInfo">
             <div>
-                <label><%= modelName %></label>
+                <label><%= modelName %>さん</label>
                 <img src="img/<%= img %>" alt="車" />
             </div>
             <table class="info-table">
@@ -103,6 +103,7 @@
             </form>
         </div>
 
+<<<<<<< HEAD
         <!-- 空き状況表示エリア -->
         <div id="availabilityResults" style="margin-top: 20px;">
             <h2>空いている時間帯</h2>
@@ -131,6 +132,37 @@
                 %>
             </table>
         </div>
+=======
+        <%-- 空き状況を表示するためのコードを追加 --%>
+        <% List<CarData> availableCars = (List<CarData>) request.getAttribute("availableCars"); %>
+        <% if (availableCars != null && !availableCars.isEmpty()) { %>
+            <h3>空き状況</h3>
+            <table class="availability-table">
+                <thead>
+                    <tr>
+                        <th>車両コード</th>
+                        <th>モデル年</th>
+                        <th>ナンバー</th>
+                        <th>メーカー名</th>
+                        <th>モデル名</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for (CarData car : availableCars) { %>
+                        <tr>
+                            <td><%= car.getCarCode() %></td>
+                            <td><%= car.getModelYear() %></td>
+                            <td><%= car.getCarNumber() %></td>
+                            <td><%= car.getMaker().getMakerName() %></td>
+                                                       <td><%= car.getModel().getModelName() %></td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        <% } else { %>
+            <p>空きがありません。</p>
+        <% } %>
+>>>>>>> branch 'newmain' of https://github.com/23jy0104/grp_a_01.git
     </main>
 
     <script>
@@ -191,5 +223,8 @@
     </script>
 </body>
 </html>
+<<<<<<< HEAD
         
+=======
+>>>>>>> branch 'newmain' of https://github.com/23jy0104/grp_a_01.git
 
