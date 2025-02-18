@@ -1,115 +1,100 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
-<!DOCTYPE html>
-<html>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.util.List" %>
+
+<%
+    List<Car> availableCars = (List<Car>) request.getAttribute("availableCars");
+    String stationName = (String) request.getAttribute("stationName");
+%>
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TMC カーシェア</title>
-    <link rel="stylesheet" href="../../CSS/nav.css">
-    <link rel="stylesheet" href="../../CSS/P56.css">
-    <link rel="stylesheet" href="../../CSS/P57.css">
-    <link rel="stylesheet" href="../../CSS/timeTable.css">
+    <title>TMC カーシェア - 空車情報</title>
+    <link rel="stylesheet" href="css/nav.css">
+    <link rel="stylesheet" href="css/P57.css">
 </head>
 <body>
     <header>
-        <img src="../../img/rog.png" alt="TMCロゴ">
+        <img src="img/rog.png" alt="TMCロゴ">
         <h1>TMC カーシェア</h1>
-        <h4 id="username">23jy0000様</h4>
-        <button class="logout-button" onclick="location.href='P29.html'">ログアウト</button>
+        <button class="logout-button" onclick="location.href='P29.jsp'">ログアウト</button>
     </header>
+
     <nav class="nav">
         <ul>
-            <li class="nav-item gnav02"><a href="P53.html">予約・ステーション検索</a></li>
-            <li class="nav-item gnav03"><a href="P65.html">予約確認・変更・取り消し</a></li>
-            <li class="nav-item gnav04"><a href="P74.html">ご利用履歴</a></li>
-            <li class="nav-item gnav05"><a href="P76.html">ご登録情報の確認</a></li>
+            <li class="nav-item gnav02"><a href="P53.jsp">予約・ステーション検索</a></li>
+            <li class="nav-item gnav03"><a href="P65.jsp">予約確認・変更・取り消し</a></li>
+            <li class="nav-item gnav04"><a href="P74.jsp">ご利用履歴</a></li>
+            <li class="nav-item gnav05"><a href="P76.jsp">ご登録情報の確認</a></li>
         </ul>
     </nav>
+
     <main>
-        <h2>空車情報</h2>
-        <div class="additional-info-container" id="additionalInfo">
-            <div>
-                <label>車種: BNR32型 skyline Nismo</label>
-                <img src="../../img/NISSAN.jpg" alt="車" />
+        <h2><%= stationName %> の空いている車両一覧</h2>
+
+        <%
+            if (availableCars != null && !availableCars.isEmpty()) {
+                for (Car car : availableCars) {
+        %>
+            <div class="car-info">
+                <h3><%= car.carInfo %></h3>
+                <table>
+                    <tr>
+                        <td>駆動方式:</td>
+                        <td><%= car.driveType %></td>
+                    </tr>
+                    <tr>
+                        <td>安全装備:</td>
+                        <td><%= car.safetyFeatures %></td>
+                    </tr>
+                    <tr>
+                        <td>備考:</td>
+                        <td><%= car.notes %></td>
+                    </tr>
+                </table>
+                <h4>空き時間</h4>
+                <table>
+                    <tr>
+                        <th>時間帯</th>
+                        <th>空き状況</th>
+                    </tr>
+                    <%
+                    for (String time : car.availableTimes) {
+                    %>
+                    <tr>
+                        <td><%= time %></td>
+                        <td>空きあり</td>
+                    </tr>
+                    <%
+                    }
+                    for (int hour = 0; hour < 24; hour++) {
+                        String timeSlot = String.format("%02d:00:00", hour);
+                        if (!car.availableTimes.contains(timeSlot)) {
+                    %>
+                    <tr>
+                        <td><%= timeSlot %></td>
+                        <td>空きなし</td>
+                    </tr>
+                    <%
+                        }
+                    }
+                    %>
+                </table>
             </div>
-            <table class="info-table">
-                <tr>
-                    <td>駆動</td>
-                    <td>4WD</td>
-                </tr>
-                <tr>
-                    <td>安全装備</td>
-                    <td>ドライブレコーダー, ブレーキサポート, バックモニター</td>
-                </tr>
-                <tr>
-                    <td>備考</td>
-                    <td>ETC車載器</td>
-                </tr>
-            </table>
-        </div>
-        <table id="carShareTable">
-            <tr align="left">
-                <th colspan="42">12月11日</th>
-            </tr>
-            <tr>
-                <td colspan="4">09:00</td>
-                <td colspan="4">10:00</td>
-                <td colspan="4">11:00</td>
-                <td colspan="4">12:00</td>
-                <td colspan="4">13:00</td>
-                <td colspan="4">14:00</td>
-                <td colspan="4">15:00</td>
-                <td colspan="4">16:00</td>
-                <td colspan="4">17:00</td>
-            </tr>
-            <tr>
-                <td class="available"></td>
-                <td class="available"></td>
-                <td class="available"></td>
-                <td class="available"></td>
-                <td class="available"></td>
-                <td class="available"></td>
-                <td class="available"></td>
-                <td class="available"></td>
-                <td class="available"></td>
-                <td class="available"></td>
-                <td class="available"></td>
-                <td class="available"></td>
-                <td class="available"></td>
-                <td class="available"></td>
-                <td class="available"></td>
-                <td class="available"></td>
-                <td class="available"></td>
-                <td class="available"></td>
-                <td class="available"></td>
-                <td class="unavailable"></td>
-                <td class="unavailable"></td>
-                <td class="unavailable"></td>
-                <td class="unavailable"></td>
-                <td class="unavailable"></td>
-                <td class="unavailable"></td>
-                <td class="unavailable"></td>
-                <td class="available"></td>
-                <td class="available"></td>
-                <td class="available"></td>
-                <td class="available"></td>
-                <td class="available"></td>
-                <td class="available"></td>
-                <td class="available"></td>
-                <td class="available"></td>
-                <td class="available"></td>
-                <td class="available"></td>
-            </tr>
-        </table>
-        <div class="button-container" id="actionButtons" style="margin-top: 20px; justify-content: center;">
-            <button class="back-button" onclick="location.href='P56.html'">戻る</button>
-            <button class="confirm-button" onclick="location.href='P63_01.html'">入力内容確認画面へ</button>
+        <%
+                }
+            } else {
+        %>
+            <p>空き情報はありません。</p>
+        <%
+            }
+        %>
+
+        <div class="button-container">
+            <button onclick="location.href='P56.jsp'">戻る</button>
         </div>
     </main>
 </body>
-</html>
-
 </html>
