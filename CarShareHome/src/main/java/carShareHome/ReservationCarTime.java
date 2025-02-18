@@ -97,7 +97,7 @@ public class ReservationCarTime extends HttpServlet {
     	            Maker maker = new Maker();
     	            maker.setMakerID(rs.getString("maker_id"));
     	            maker.setMakerName(rs.getString("maker_name"));
-    	            car.setMaker(maker);
+    	            car.setMker(maker);
 
     	            // Modelオブジェクトの作成
     	            Model model = new Model();

@@ -9,6 +9,8 @@ public class CarData implements Serializable{
 	private Maker makerId;
 	private Model modelId;
 	private Station stationId;
+	private Maker maker;
+	private Model model;
 	
 	public CarData() {
 		super();
@@ -75,6 +77,22 @@ public class CarData implements Serializable{
 
 	public void setStationId(Station stationId) {
 		this.stationId = stationId;
+	}
+
+	public Maker getMaker() {
+		return maker;
+	}
+
+	public void setMaker(Maker maker) {
+		this.maker = maker;
+	}
+
+	public Model getModel() {
+		return model;
+	}
+
+	public void setModel(Model model) {
+		this.model = model;
 	}
 	
 	
