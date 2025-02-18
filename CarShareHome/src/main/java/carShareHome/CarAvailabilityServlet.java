@@ -14,15 +14,9 @@ public class CarAvailabilityServlet extends HttpServlet {
 	    String stationId = (String) request.getSession().getAttribute("stationId");
 	    String stationName = request.getParameter("stationName");
 
-	    // 受け取った開始時間と終了時間を取得
-	    String startHour = request.getParameter("startHour");
-	    String startMinute = request.getParameter("startMinute");
-	    String endHour = request.getParameter("endHour");
-	    String endMinute = request.getParameter("endMinute");
-
-	    // 日付時刻の組み立て
-	    String startDateTime = String.format("%sT%s:%s:00", request.getParameter("date"), startHour, startMinute);
-	    String endDateTime = String.format("%sT%s:%s:00", request.getParameter("date"), endHour, endMinute);
+	    // 受け取った開始日時と終了日時を取得
+	    String startDateTime = request.getParameter("datetime1");
+	    String endDateTime = request.getParameter("datetime2");
 
         String dbUrl = "jdbc:mysql://10.64.144.5:3306/23jya01"; // データベースのURL
         String dbUser = "23jya01"; // ユーザー名

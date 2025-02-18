@@ -1,12 +1,19 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="java.util.List" %>
-<%@ page import="java.util.ArrayList" %>
+<%@ page import="java.util.Calendar" %>
+<%@ page import="java.text.SimpleDateFormat" %>
 
 <%
     String customerName = (String) session.getAttribute("customerName");
     String stationIdValue = request.getParameter("stationid");
     String stationNameValue = request.getParameter("stationname"); // URLからステーション名を取得
     String stationDataValue = request.getParameter("stationdata"); // URLからステーションデータを取得
+
+    // 現在の日時を取得
+    Calendar calendar = Calendar.getInstance();
+    calendar.add(Calendar.MINUTE, 30); // 現在の時間に30分追加
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+
+    String minStartDateTime = dateFormat.format(calendar.getTime()); // 30分後の日時をフォーマット
 
     // セッションに値を設定
     session.setAttribute("stationId", stationIdValue);
@@ -70,41 +77,11 @@
                     <form action="CarAvailabilityServlet" method="post">
                         <div class="datetime-input">
                             <label for="datetime1">利用開始日時:</label>
-                            <select name="startHour" required>
-                                <%
-                                    for (int hour = 0; hour < 24; hour++) {
-                                        String hourValue = String.format("%02d", hour);
-                                %>
-                                    <option value="<%= hourValue %>"><%= hourValue %></option>
-                                <%
-                                    }
-                                %>
-                            </select>
-                            <select name="startMinute" required>
-                                <option value="00">00</option>
-                                <option value="15">15</option>
-                                <option value="30">30</option>
-                                <option value="45">45</option>
-                            </select>
+                            <input type="datetime-local" id="datetime1" name="datetime1" min="<%= minStartDateTime %>" required>
                         </div>
                         <div class="datetime-input">
                             <label for="datetime2">利用終了日時:</label>
-                            <select name="endHour" required>
-                                <%
-                                    for (int hour = 0; hour < 24; hour++) {
-                                        String hourValue = String.format("%02d", hour);
-                                %>
-                                    <option value="<%= hourValue %>"><%= hourValue %></option>
-                                <%
-                                    }
-                                %>
-                            </select>
-                            <select name="endMinute" required>
-                                <option value="00">00</option>
-                                <option value="15">15</option>
-                                <option value="30">30</option>
-                                <option value="45">45</option>
-                            </select>
+                            <input type="datetime-local" id="datetime2" name="datetime2" min="<%= minStartDateTime %>" required>
                         </div>
                         <input type="hidden" name="stationName" value="<%= stationNameValue %>">
                         <div class="button-container">
