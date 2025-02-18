@@ -1,12 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import ="model.Customer" %>
+<%@ page import="java.sql.Timestamp" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
-<%@ page import ="model.Station" %>
-<%@ page import ="model.CarData" %>
-<%@ page import ="model.KeyBox" %>
-<%@ page import ="model.Model" %>
+<%@ page import="model.Customer" %>
+<%@ page import="model.Station" %>
+<%@ page import="model.CarData" %>
+<%@ page import="model.KeyBox" %>
+<%@ page import="model.Model" %>
 
 <%
     String customerName = (String) session.getAttribute("customerName");
@@ -15,35 +16,19 @@
     String img = (String) session.getAttribute("car_img");
     String modelName = (String) session.getAttribute("modelName");
     String stationData = (String) session.getAttribute("stationData");
+    List<Timestamp[]> availableSlots = (List<Timestamp[]>) request.getAttribute("availableSlots");
 %>
 
 <!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TMC カーシェア</title>
     <link rel="stylesheet" href="css/nav.css">
     <link rel="stylesheet" href="css/P56.css">
     <link rel="stylesheet" href="css/P57.css">
     <link rel="stylesheet" href="css/P59.css">
     <link rel="stylesheet" href="css/timeTable.css">
-    <style>
-        .reservation-inputs {
-            display: flex;
-            flex-direction: column;
-            gap: 20px; /* 各項目の間隔 */
-        }
-        .time-group {
-            display: flex;
-            flex-direction: column;
-            gap: 10px; /* 各フィールドの間隔 */
-            border: 1px solid #ccc; /* 枠線 */
-            padding: 10px; /* パディング */
-            border-radius: 5px; /* 角を丸く */
-            background-color: #f9f9f9; /* 背景色 */
-        }
-    </style>
 </head>
 <body>
     <header>
@@ -52,6 +37,7 @@
         <h4 id="username"><%= customerName %></h4>
         <button class="logout-button" onclick="location.href='P29.jsp'">ログアウト</button>
     </header>
+
     <nav class="nav">
         <ul>
             <li class="nav-item gnav02"><a href="P53.html">予約・ステーション検索</a></li>
@@ -60,6 +46,7 @@
             <li class="nav-item gnav05"><a href="P76.html">ご登録情報の確認</a></li>
         </ul>
     </nav>
+
     <main>
         <h2>該当車種</h2>
         <div class="additional-info-container" id="additionalInfo">
@@ -82,7 +69,7 @@
                 </tr>
             </table>
         </div>
-        
+
         <div class="reservation-inputs">
             <div class="time-group">
                 <h3>利用開始情報</h3>
@@ -101,18 +88,48 @@
                 <label for="endTime">利用終了時間:</label>
                 <select id="endTime" name="endTime"></select>
             </div>
-        </div> 
+        </div>
 
         <div class="button-container" id="actionButtons" style="margin-top: 20px;">
             <button class="back-button" onclick="location.href='P56.jsp'">戻る</button>
             <form action="ReservationCarTime" method="post" style="display:inline;">
                 <input type="hidden" name="stationId" value="<%= stationId %>">
+                <input type="hidden" name="modelName" value="<%= modelName %>">
                 <input type="hidden" name="startCalendar" id="startCalendarInput" value="">
                 <input type="hidden" name="startTime" id="startTimeInput" value="">
                 <input type="hidden" name="endCalendar" id="endCalendarInput" value="">
                 <input type="hidden" name="endTime" id="endTimeInput" value="">
                 <button type="submit" class="confirm-button" onclick="setAvailabilityInputs()">空き状況確認</button>
             </form>
+        </div>
+
+        <!-- 空き状況表示エリア -->
+        <div id="availabilityResults" style="margin-top: 20px;">
+            <h2>空いている時間帯</h2>
+            <table border="1">
+                <tr>
+                    <th>開始時間</th>
+                    <th>終了時間</th>
+                </tr>
+                <%
+                    if (availableSlots != null && !availableSlots.isEmpty()) {
+                        for (Timestamp[] slot : availableSlots) {
+                %>
+                    <tr>
+                        <td><%= slot[0] %></td>
+                        <td><%= slot[1] %></td>
+                    </tr>
+                <%
+                        }
+                    } else {
+                %>
+                    <tr>
+                        <td colspan="2">空き状況がありません。</td>
+                    </tr>
+                <%
+                    }
+                %>
+            </table>
         </div>
     </main>
 
@@ -144,7 +161,6 @@
             // 時間の選択肢を追加
             addTimeOptions();
         };
-
         function addTimeOptions() {
             const startTimeSelect = document.getElementById('startTime');
             const endTimeSelect = document.getElementById('endTime');
@@ -175,3 +191,5 @@
     </script>
 </body>
 </html>
+        
+

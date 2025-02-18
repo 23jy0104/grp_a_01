@@ -6,6 +6,10 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,70 +17,131 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- * Servlet implementation class ReservationCarTime
- */
 @WebServlet("/ReservationCarTime")
 public class ReservationCarTime extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public ReservationCarTime() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.setCharacterEncoding("UTF-8");
-        response.setContentType("text/html; charset=UTF-8"); 
-        String startdate =request.getParameter("startCalender");
-        String starttime =request.getParameter("startTime");
-        String startDate =startdate+" "+starttime;
-        String enddate =request.getParameter("endCalender");
-        String endtime =request.getParameter("endTime");
-        String endDate =enddate+" "+endtime;
-        String stationid =request.getParameter("stationId");
-        String makername =request.getParameter("mekerName");
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
         
-        Connection con =null;
-        PreparedStatement ps =null;
-        ResultSet rs =null;
-        
+        String startdate = request.getParameter("startCalendar");
+        String starttime = request.getParameter("startTime");
+        String enddate = request.getParameter("endCalendar");
+        String endtime = request.getParameter("endTime");
+        String stationid = request.getParameter("stationId");
+        String modelName =request.getParameter("modelName");
+
+        // 入力チェック
+        if (startdate == null || startdate.trim().isEmpty() || 
+            starttime == null || starttime.trim().isEmpty() || 
+            enddate == null || enddate.trim().isEmpty() || 
+            endtime == null || endtime.trim().isEmpty()) {
+            
+            // エラーメッセージを設定
+            request.setAttribute("errorMessage", "すべてのフィールドを正しく入力してください。");
+            request.getRequestDispatcher("P59.jsp").forward(request, response);
+            return;
+        }
+
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+        Timestamp startTimestamp = null;
+        Timestamp endTimestamp = null;
+
         try {
-			Class.forName("com.mysql.jdbc.Driver");
-			String url = "jdbc:mysql://10.64.144.5:3306/23jya01";
-			String user = "23jya01";
-			String pass = "23jya01";
+            startTimestamp = new Timestamp(format.parse(startdate + " " + starttime).getTime());
+            endTimestamp = new Timestamp(format.parse(enddate + " " + endtime).getTime());
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("errorMessage", "日付のフォーマットが不正です。");
+            request.getRequestDispatcher("P59.jsp").forward(request, response);
+            return;
+        }
 
-			// データベース接続
-			con = DriverManager.getConnection(url, user, pass);
-			
-			String sql ="SELECT c.car_code, c.model_year, c.number, m.maker_name, mo.model_name\r\n"
-					+ "FROM car_db c\r\n"
-					+ "JOIN maker m ON c.maker_id = m.maker_id\r\n"
-					+ "JOIN model mo ON c.model_id = mo.model_id\r\n"
-					+ "JOIN keybox k ON c.car_code = k.car_code\r\n"
-					+ "WHERE k.station_id = '選択したステーションID'\r\n"
-					+ "  AND c.model_id = '選択した車種ID' /*ステーション+車種選択*/\r\n"
-					+ "  AND c.car_code NOT IN (\r\n"
-					+ "      SELECT car_code\r\n"
-					+ "      FROM reservation\r\n"
-					+ "      WHERE (start_date < '指定された終了日時' AND stop_date > '指定された開始日時')\r\n"
-					+ "  );";
-			
-			ps =con.prepareStatement(sql);
-		} catch (ClassNotFoundException e) {
-			// TODO 自動生成された catch ブロック
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO 自動生成された catch ブロック
-			e.printStackTrace();
-		}
-	}
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            String url = "jdbc:mysql://10.64.144.5:3306/23jya01";
+            String user = "23jya01";
+            String pass = "23jya01";
 
+            // データベース接続
+            con = DriverManager.getConnection(url, user, pass);
+
+            // 空いている時間帯を取得するSQLクエリ
+            String sql = "SELECT c.car_code, c.model_year, c.number, m.maker_name, mo.model_name "
+                    + "FROM car_db c "
+                    + "JOIN maker m ON c.maker_id = m.maker_id "
+                    + "JOIN model mo ON c.model_id = mo.model_id "
+                    + "JOIN keybox k ON c.car_code = k.car_code "
+                    + "WHERE k.station_id = ? "  // ステーションIDのプレースホルダ
+                    + "  AND c.model_id = ? "     // 車種IDのプレースホルダ
+                    + "  AND c.car_code NOT IN ( "
+                    + "      SELECT car_code "
+                    + "      FROM reservation "
+                    + "      WHERE (start_date < ? AND stop_date > ?) "
+                    + "  )";
+            String modelIdSql = "SELECT model_id FROM model WHERE model_name = ?";
+            PreparedStatement modelPs = con.prepareStatement(modelIdSql);
+            modelPs.setString(1, modelName);
+            ResultSet modelRs = modelPs.executeQuery();
+
+            String modelId = null;
+            if (modelRs.next()) {
+                modelId = modelRs.getString("model_id");
+            }
+            modelRs.close();
+            modelPs.close();
+         ps = con.prepareStatement(sql);
+         ps.setString(1, stationid);  // ステーションID
+         ps.setString(2, modelId);     // 車種ID (この変数は適切に設定する必要があります)
+         ps.setTimestamp(3, endTimestamp); // 終了日時
+         ps.setTimestamp(4, startTimestamp); // 開始日時
+
+            rs = ps.executeQuery();
+
+            // 空いている時間帯のロジック
+            List<Timestamp[]> availableSlots = new ArrayList<>();
+            Timestamp currentStart = startTimestamp;
+
+            while (rs.next()) {
+                Timestamp reservedStart = rs.getTimestamp("start_date");
+                Timestamp reservedEnd = rs.getTimestamp("stop_date");
+
+                // 予約の前に空いている時間を追加
+                if (currentStart.before(reservedStart)) {
+                    availableSlots.add(new Timestamp[]{currentStart, reservedStart});
+                }
+                // 次の開始時間を更新
+                currentStart = reservedEnd.after(currentStart) ? reservedEnd : currentStart;
+            }
+
+            // 最後の予約の後に空いている時間を追加
+            if (currentStart.before(endTimestamp)) {
+                availableSlots.add(new Timestamp[]{currentStart, endTimestamp});
+            }
+            
+            // 空いている時間帯をリクエスト属性に設定
+            request.setAttribute("availableSlots", availableSlots);
+
+            // P59.jspにフォワード
+            request.getRequestDispatcher("P59.jsp").forward(request, response);
+
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+            request.setAttribute("errorMessage", "データベースエラーが発生しました。");
+            request.getRequestDispatcher("P59.jsp").forward(request, response);
+        } finally {
+            // リソースのクリーンアップを行う
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                if (con != null) con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }
