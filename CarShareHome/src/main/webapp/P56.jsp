@@ -60,8 +60,13 @@
                     　・全車禁煙です。喫煙される場合は、クルマをとめ、喫煙設備のある場所でお願いします。<br>
                     　・車内で出た飲み物,食べ物などのゴミは、必ず各自でお持ち帰りください。<br><br>
                     アクセス:<br>
-                    　大久保駅北口から北西に進んでいただき、大久保通りをまっすぐ進んだ場所にございます。</th>
+                    　大久保駅北口から北西に進んでいただき、大久保通りをまっすぐ進んだ場所にございます。
+               </th>              
             </tr>
+            <tr>
+            	<th>ステーション情報</th>  
+               <th><%=stationDataValue %></th> 
+             </tr> 
         </table>
         
         <div class="flex-container">
@@ -89,19 +94,22 @@
 
             <div class="flex-item">
 			    <h3 class="sub-title">車種から探す</h3>
-			    <form action="ReservationCar" method="POST">
-			        <select id="carType" name="carType">
-			            <option value="">BNR32型 skyline Nismo</option>
-			            <option value="">NSX NA-1型 type-R</option>
-			            <option value="">GT-R R35 Nismo Special Edition T-spec</option>
-			        </select>
+			    <form action="ReservationCar" method="post">
+			        <input type="hidden" name="stationId" value="<%= stationIdValue %>">
+			        <input type="hidden" name="stationName" value="<%= stationNameValue %>">
 			
+			        <select id="carType" name="carType">
+			            <option value="BNR32型 skyline Nismo">BNR32型 skyline Nismo</option>
+			            <option value="NSX NA-1型 type-R">NSX NA-1型 type-R</option>
+			            <option value="GT-R R35 Nismo Special Edition T-spec">GT-R R35 Nismo Special Edition T-spec</option>
+			        </select>		
 			        <!-- 車種選択後の検索ボタン -->
 			        <div class="button-container">
 			            <input type="image" id="searchButton2" src="img/kensaku.gif" alt="検索" />
 			        </div>
 			    </form>
 			</div>
+
         </div>
     </main>
 </body>
