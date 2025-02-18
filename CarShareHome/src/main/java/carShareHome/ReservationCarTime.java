@@ -56,7 +56,18 @@ public class ReservationCarTime extends HttpServlet {
 			// データベース接続
 			con = DriverManager.getConnection(url, user, pass);
 			
-			String sql ="select ";
+			String sql ="SELECT c.car_code, c.model_year, c.number, m.maker_name, mo.model_name\r\n"
+					+ "FROM car_db c\r\n"
+					+ "JOIN maker m ON c.maker_id = m.maker_id\r\n"
+					+ "JOIN model mo ON c.model_id = mo.model_id\r\n"
+					+ "JOIN keybox k ON c.car_code = k.car_code\r\n"
+					+ "WHERE k.station_id = '選択したステーションID'\r\n"
+					+ "  AND c.model_id = '選択した車種ID' /*ステーション+車種選択*/\r\n"
+					+ "  AND c.car_code NOT IN (\r\n"
+					+ "      SELECT car_code\r\n"
+					+ "      FROM reservation\r\n"
+					+ "      WHERE (start_date < '指定された終了日時' AND stop_date > '指定された開始日時')\r\n"
+					+ "  );";
 			
 			ps =con.prepareStatement(sql);
 		} catch (ClassNotFoundException e) {
