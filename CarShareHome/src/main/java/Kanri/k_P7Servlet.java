@@ -9,47 +9,42 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import dao.CarDao;
-import dao.MakerDao;
-import dao.ModelDao;
+import dao.CarInfoDao;
+import model.CarInfo;
 
 @WebServlet("/k_P7Servlet")
 public class k_P7Servlet extends HttpServlet {
+    
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        MakerDao makerDao = new MakerDao();
-        ModelDao modelDao = new ModelDao();
-        CarDao carDao = new CarDao();
-
-        List<String> makers = null;
-        List<String> models = null;
-        List<String> carNumbers = null;
-        String errorMessage = null;
-
-        try {
-            makers = makerDao.getAllMakers();
-            models = modelDao.getAllModels();
-            carNumbers = carDao.getAllCarNumbers();
-            
-            // デバッグ用の出力
-            System.out.println("Makers: " + makers);
-            System.out.println("Models: " + models);
-            System.out.println("Car Numbers: " + carNumbers);
-        } catch (Exception e) {
-            errorMessage = "データの取得中にエラーが発生しました。";
-            e.printStackTrace(); // エラー詳細をスタックトレースで表示
-        } finally {
-            makerDao.connectionClose();
-            modelDao.connectionClose();
-            carDao.connectionClose();
-        }
-
-        // リクエスト属性に設定
-        request.setAttribute("makers", makers);
-        request.setAttribute("models", models);
-        request.setAttribute("carNumbers", carNumbers);
-        request.setAttribute("errorMessage", errorMessage);
-
+        // GETリクエストが来た場合の処理
+        String stationName = request.getParameter("stationName");
+        String stationAddress = request.getParameter("stationAddress");
+        
+        // 車両情報を最初に取得してリクエスト属性に設定（必要に応じて）
+        CarInfoDao carInfoDao = new CarInfoDao();
+        List<CarInfo> carInfoList = carInfoDao.getAllCarInfo();
+        
+        request.setAttribute("stationName", stationName);
+        request.setAttribute("stationAddress", stationAddress);
+        request.setAttribute("carInfoList", carInfoList);
+        
         // JSPにフォワード
+        request.getRequestDispatcher("k_P7.jsp").forward(request, response);
+    }
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String selectedPlate = request.getParameter("selectedPlate");
+
+        CarInfoDao carInfoDao = new CarInfoDao();
+        CarInfo carInfo = carInfoDao.getCarInfoByNumber(selectedPlate);
+
+        String stationName = request.getParameter("stationName");
+        String stationAddress = request.getParameter("stationAddress");
+
+        request.setAttribute("stationName", stationName);
+        request.setAttribute("stationAddress", stationAddress);
+        request.setAttribute("carInfo", carInfo);
+
         request.getRequestDispatcher("k_P7.jsp").forward(request, response);
     }
 }

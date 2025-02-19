@@ -63,4 +63,80 @@ public class CustomerDao {
         }
         return cs;
     }
+    
+    public ArrayList<Customer> getCustomersWithoutManager() {
+        ArrayList<Customer> customers = new ArrayList<>();
+        String sql = "SELECT customerId, customerName, customerKana, gender, customerPassword, tellNumber, fixedCall, email, birthDate, licenseNumber, licenceDate, postCode, customerAddress, creditId, omote, ura FROM customer WHERE manager_check IS NULL";
+
+        try (PreparedStatement pstmt = con.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
+            while (rs.next()) {
+                Customer customer = new Customer();
+                customer.setCustomerId(rs.getString("customerId"));
+                customer.setCustomerName(rs.getString("customerName"));
+                customer.setCustomerKana(rs.getString("customerKana"));
+                customer.setGender(rs.getString("gender"));
+                customer.setCustomerPassword(rs.getString("customerPassword"));
+                customer.setTellNumber(rs.getString("tellNumber"));
+                customer.setFixedCall(rs.getString("fixedCall"));
+                customer.setEmail(rs.getString("email"));
+                customer.setBirthDate(rs.getString("birthDate"));
+                customer.setLicenseNumber(rs.getString("licenseNumber"));
+                customer.setLicenceDate(rs.getString("licenceDate"));
+                customer.setPostCode(rs.getString("postCode"));
+                customer.setCustomerAddress(rs.getString("customerAddress"));
+                customer.setCreditId(rs.getString("creditId"));
+                customer.setOmote(rs.getBlob("omote"));
+                customer.setUra(rs.getBlob("ura"));
+                customers.add(customer);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // エラーの詳細を表示
+        }
+        return customers;
+    }
+    public ArrayList<Customer> getAllCustomers() {
+        ArrayList<Customer> customers = new ArrayList<>();
+        String sql = "SELECT customer_id, customer_name, e_mail FROM customer WHERE manager_check IS NULL"; // 必要なカラムを選択
+
+        try (PreparedStatement pstmt = con.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
+            while (rs.next()) {
+                Customer customer = new Customer();
+                customer.setCustomerId(rs.getString("customer_id")); // カラム名が正しいか確認
+                customer.setCustomerName(rs.getString("customer_name"));
+                customer.setEmail(rs.getString("e_mail"));
+                customers.add(customer);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // エラーの詳細を表示
+        }
+        return customers;
+    }
+    public Customer getCustomerById(String customerId) {
+        Customer customer = null;
+        String sql = "SELECT customer_name, tell_number, e_mail, license_number, license_date, " +
+                     "post_code, customer_address, omote_jpg, ura_jpg FROM customer WHERE customer_id = ?"; // 修正したカラム名を使用
+
+        try (PreparedStatement pstmt = con.prepareStatement(sql)) {
+            pstmt.setString(1, customerId);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                customer = new Customer();
+                customer.setCustomerId(customerId); // IDを設定
+                customer.setCustomerName(rs.getString("customer_name"));
+                customer.setTellNumber(rs.getString("tell_number"));
+                customer.setEmail(rs.getString("e_mail"));
+                customer.setLicenseNumber(rs.getString("license_number"));
+                customer.setLicenceDate(rs.getString("license_date"));
+                customer.setPostCode(rs.getString("post_code"));
+                customer.setCustomerAddress(rs.getString("customer_address"));
+                customer.setOmote(rs.getBlob("omote_jpg")); // 画像のパスを取得
+                customer.setUra(rs.getBlob("ura_jpg")); // 画像のパスを取得
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // エラーメッセージを表示
+        }
+        return customer;
+    }
 }

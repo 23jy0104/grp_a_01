@@ -8,7 +8,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ステーション検索</title>
-    <link rel="stylesheet" href="css/search.css">    
+    <link rel="stylesheet" href="css/search.css">
 </head>
 <body>
 
@@ -78,7 +78,7 @@
                         data.forEach(station => {
                             const row = document.createElement('tr');
                             row.innerHTML = '<td>' +
-                                '<a href="k_P7.jsp?stationName=' + encodeURIComponent(station.station_name) + 
+                                '<a href="k_P7Servlet?stationName=' + encodeURIComponent(station.station_name) + 
                                 '&stationAddress=' + encodeURIComponent(station.station_address) + '">' + 
                                 station.station_name + 
                                 '</a>' +
