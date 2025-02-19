@@ -50,7 +50,7 @@ public class PasswordCheckServlet extends HttpServlet {
                 } else if (currentPath.contains("k_P19.jsp")) {
                     request.getRequestDispatcher("/k_P21.jsp").forward(request, response);
                 } else if (currentPath.contains("k_P11.jsp")) {
-                    request.getRequestDispatcher("/k_P13.jsp").forward(request, response);
+                    request.getRequestDispatcher("/k_P13Servlet").forward(request, response);
                 } else {
                     request.getRequestDispatcher("/default.jsp").forward(request, response);
                 }

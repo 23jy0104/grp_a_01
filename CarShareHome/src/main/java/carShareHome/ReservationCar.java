@@ -34,8 +34,6 @@ public class ReservationCar extends HttpServlet {
         response.setContentType("text/html; charset=UTF-8");
 
         // リクエストパラメータの取得
-        String stationId = request.getParameter("stationId"); // 修正: stationid → stationId
-        String stationName = request.getParameter("stationName"); // 修正: stationname → stationName
         String carType = request.getParameter("carType");
         String path = "P59.jsp"; // デフォルトの転送先
 

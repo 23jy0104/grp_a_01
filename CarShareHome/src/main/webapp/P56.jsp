@@ -83,7 +83,7 @@
     <header>
         <img src="img/rog.png" alt="TMCロゴ">
         <h1>TMC カーシェア</h1>
-        <h4 id="username"><%= customerName %></h4>
+        <h4 id="username"><%= customerName %>さん</h4>
         <button class="logout-button" onclick="location.href='P29.jsp'">ログアウト</button>
     </header>
 

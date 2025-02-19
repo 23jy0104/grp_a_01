@@ -14,6 +14,11 @@ public class Reservation implements Serializable {
     private Customer customer;
     private Station station;
 
+    
+    
+	public Reservation() {
+		super();
+	}
 	public Reservation(String reservationId, String startDate, String stopDate, Customer customerId,
 			String finishId, int price, CarData carCode) {
 		super();
