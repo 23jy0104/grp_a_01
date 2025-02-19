@@ -1,5 +1,5 @@
 package carShareHome;
-// CarAvailabilityServlet.java
+
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
@@ -10,29 +10,40 @@ import javax.servlet.http.*;
 
 @WebServlet("/CarAvailabilityServlet")
 public class CarAvailabilityServlet extends HttpServlet {
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	    String stationId = (String) request.getSession().getAttribute("stationId");
-	    String stationName = request.getParameter("stationName");
+    private static final long serialVersionUID = 1L;
 
-	    // 受け取った開始日時と終了日時を取得
-	    String startDateTime = request.getParameter("datetime1");
-	    String endDateTime = request.getParameter("datetime2");
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // データベース接続テスト
+        if (!testDatabaseConnection(response)) {
+            return; // 接続失敗時は処理を終了
+        }
 
-        String dbUrl = "jdbc:mysql://10.64.144.5:3306/23jya01"; // データベースのURL
-        String dbUser = "23jya01"; // ユーザー名
-        String dbPassword = "23jya01"; // パスワード
+        String stationId = (String) request.getSession().getAttribute("stationId");
+        String stationName = request.getParameter("stationName");
+
+        // 受け取った開始日時と終了日時を取得
+        String startDate = request.getParameter("startDate");
+        String startTime = request.getParameter("startTime");
+        String endDate = request.getParameter("endDate");
+        String endTime = request.getParameter("endTime");
+
+        // 日時を組み合わせてISO形式に変換
+        String startDateTime = startDate + "T" + startTime;
+        String endDateTime = endDate + "T" + endTime;
 
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         List<Car> availableCars = new ArrayList<>(); // 車両オブジェクトのリスト
-
+        
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
+            String dbUrl = "jdbc:mysql://10.64.144.5:3306/23jya01"; // データベースのURL
+            String dbUser = "23jya01"; // ユーザー名
+            String dbPassword = "23jya01"; // パスワード
+            String sql = "SELECT car_code, car_info, drive_type, safety_features, notes FROM cars WHERE station_id = ?";
             conn = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
 
             // ステーションに関連する空いている車両を取得するSQLクエリ
-            String sql = "SELECT car_code, car_info, drive_type, safety_features, notes FROM cars WHERE station_id = ?";
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, stationId);
 
@@ -53,12 +64,45 @@ public class CarAvailabilityServlet extends HttpServlet {
             request.setAttribute("availableCars", availableCars);
             request.setAttribute("stationName", stationName); // ステーション名を渡す
             request.getRequestDispatcher("P57.jsp").forward(request, response);
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
+            response.getWriter().write("データベースエラーが発生しました。");
         } finally {
             if (rs != null) try { rs.close(); } catch (SQLException e) {}
             if (pstmt != null) try { pstmt.close(); } catch (SQLException e) {}
             if (conn != null) try { conn.close(); } catch (SQLException e) {}
+        }
+    }
+
+    // データベース接続をテストするメソッド
+    private boolean testDatabaseConnection(HttpServletResponse response) {
+        Connection conn = null;
+        try {
+            // JDBCドライバをロード
+            Class.forName("com.mysql.jdbc.Driver");
+            String dbUrl = "jdbc:mysql://10.64.144.5:3306/23jya01"; // データベースのURL
+            String dbUser = "23jya01"; // ユーザー名
+            String dbPassword = "23jya01"; // パスワード
+            
+            // データベースへの接続
+            conn = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
+            return true; // 接続成功
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace(); // エラーメッセージを表示
+            try {
+                response.getWriter().write("データベース接続に失敗しました。");
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+            return false; // 接続失敗
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close(); // 接続を閉じる
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 

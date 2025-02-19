@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"%>
 <%@ page import="java.util.Calendar" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 
@@ -11,9 +11,8 @@
     // 現在の日時を取得
     Calendar calendar = Calendar.getInstance();
     calendar.add(Calendar.MINUTE, 30); // 現在の時間に30分追加
-    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
-
-    String minStartDateTime = dateFormat.format(calendar.getTime()); // 30分後の日時をフォーマット
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    String minStartDate = dateFormat.format(calendar.getTime()); // 30分後の日付をフォーマット
 
     // セッションに値を設定
     session.setAttribute("stationId", stationIdValue);
@@ -30,6 +29,22 @@
     <link rel="stylesheet" href="css/nav.css">
     <link rel="stylesheet" href="css/P56.css">
     <link rel="stylesheet" href="css/timeTable.css">
+    <script>
+        function validateDates(event) {
+            const startDate = document.querySelector('input[name="startDate"]').value;
+            const startTime = document.querySelector('select[name="startTime"]').value;
+            const endDate = document.querySelector('input[name="endDate"]').value;
+            const endTime = document.querySelector('select[name="endTime"]').value;
+
+            const startDateTime = new Date(startDate + 'T' + startTime);
+            const endDateTime = new Date(endDate + 'T' + endTime);
+
+            if (endDateTime < startDateTime) {
+                event.preventDefault(); // フォーム送信をキャンセル
+                alert('利用終了日時は利用開始日時より後でなければなりません。');
+            }
+        }
+    </script>
 </head>
 <body>
     <header>
@@ -74,18 +89,46 @@
             <div class="flex-item">
                 <h3>空き情報から探す</h3>
                 <div class="input-container">
-                    <form action="CarAvailabilityServlet" method="post">
+                    <form action="CarAvailabilityServlet" method="post" onsubmit="validateDates(event)">
                         <div class="datetime-input">
                             <label for="datetime1">利用開始日時:</label>
-                            <input type="datetime-local" id="datetime1" name="datetime1" min="<%= minStartDateTime %>" required>
+                            <input type="date" name="startDate" min="<%= minStartDate %>" required>
+                            <select name="startTime" required>
+                                <%
+                                    for (int hour = 0; hour < 24; hour++) {
+                                        for (int minute = 0; minute < 60; minute += 15) {
+                                            String hourValue = String.format("%02d", hour);
+                                            String minuteValue = String.format("%02d", minute);
+                                            String timeValue = hourValue + ":" + minuteValue;
+                                %>
+                                    <option value="<%= timeValue %>"><%= timeValue %></option>
+                                <%
+                                            }
+                                        }
+                                %>
+                            </select>
                         </div>
                         <div class="datetime-input">
                             <label for="datetime2">利用終了日時:</label>
-                            <input type="datetime-local" id="datetime2" name="datetime2" min="<%= minStartDateTime %>" required>
+                            <input type="date" name="endDate" min="<%= minStartDate %>" required>
+                            <select name="endTime" required>
+                                <%
+                                    for (int hour = 0; hour < 24; hour++) {
+                                        for (int minute = 0; minute < 60; minute += 15) {
+                                            String hourValue = String.format("%02d", hour);
+                                            String minuteValue = String.format("%02d", minute);
+                                            String timeValue = hourValue + ":" + minuteValue;
+                                %>
+                                    <option value="<%= timeValue %>"><%= timeValue %></option>
+                                <%
+                                            }
+                                        }
+                                %>
+                            </select>
                         </div>
                         <input type="hidden" name="stationName" value="<%= stationNameValue %>">
                         <div class="button-container">
-                            <button type="submit" id="searchButton1">
+                            <button type="submit" id="searchButton1" style="border: none; background: none; padding: 0;">
                                 <img src="img/kensaku.gif" alt="検索" />
                             </button>
                         </div>
@@ -103,7 +146,7 @@
 
                 <div class="button-container">
                     <a href="P59.jsp">
-                        <input type="image" id="searchButton2" src="img/kensaku.gif" alt="検索" />
+                        <img src="img/kensaku.gif" alt="検索" style="cursor: pointer;" />
                     </a>
                 </div>
             </div>
