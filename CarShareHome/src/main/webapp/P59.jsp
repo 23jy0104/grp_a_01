@@ -4,27 +4,21 @@
 <%@ page import="java.util.Calendar" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.text.SimpleDateFormat" %>
-<%@ page import="model.Customer" %>
-<%@ page import="model.Station" %>
-<%@ page import="model.CarData" %>
-<%@ page import="model.KeyBox" %>
-<%@ page import="model.Model" %>
+<%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.Locale" %>
 
 <%
     String customerName = (String) session.getAttribute("customerName");
-    String stationId = (String) session.getAttribute("stationId");
     String img = (String) session.getAttribute("car_img");
     String modelName = (String) session.getAttribute("modelName");
-    String stationName = (String) session.getAttribute("stationName"); // 追加
-    String stationCode = (String) session.getAttribute("stationCode"); // 追加
-    List<Timestamp[]> availableSlots = (List<Timestamp[]>) request.getAttribute("availableSlots");
-
-    // カレンダーの日付処理
+    
     Calendar today = Calendar.getInstance();
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     Calendar oneMonthLater = Calendar.getInstance();
     oneMonthLater.add(Calendar.MONTH, 1);
+
+    // サーブレットから渡された予約時間スロットを取得
+    List<String> timeSlots = (List<String>) request.getAttribute("timeSlots");
 %>
 
 <!DOCTYPE html>
@@ -38,11 +32,11 @@
     <link rel="stylesheet" href="css/P59.css">
     <link rel="stylesheet" href="css/timeTable.css">
     <style>
-        /* 既存のCSSスタイルはそのまま */
+        /* CSSスタイルはそのまま */
         .calendar-container {
             display: flex;
-            justify-content: center; /* 中央配置 */
-            flex-wrap: wrap; /* 複数カレンダーの場合に折り返す */
+            justify-content: center;
+            flex-wrap: wrap;
         }
 
         .calendar {
@@ -57,15 +51,15 @@
         }
 
         .day {
-            width: 60px; /* マス目の幅を大きく */
-            height: 60px; /* マス目の高さを大きく */
+            width: 60px;
+            height: 60px;
             display: flex;
             justify-content: center;
             align-items: center;
             cursor: pointer;
             border: 1px solid #ccc;
             border-radius: 5px;
-            font-size: 18px; /* フォントサイズを調整 */
+            font-size: 18px;
         }
 
         .disabled {
@@ -84,9 +78,8 @@
             text-align: center;
         }
 
-        /* タイムテーブルのスタイル */
         .timetable {
-            display: none; /* 初期状態では非表示 */
+            display: none;
             margin-top: 20px;
         }
 
@@ -102,34 +95,34 @@
         }
 
         .reserved {
-            background-color: red; /* 予約不可の色 */
+            background-color: red;
             color: white;
             cursor: not-allowed;
         }
 
         .available {
-            background-color: blue; /* 予約可能の色 */
+            background-color: blue;
             color: white;
             cursor: pointer;
         }
 
         .selected {
-            background-color: green; /* 選択した時間の色 */
+            background-color: green;
         }
 
         .header-container {
             display: flex;
-            align-items: center; /* 縦方向の中央揃え */
-            justify-content: space-between; /* 左右にスペースを均等に配置 */
-            margin-bottom: 20px; /* 下に余白を追加 */
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
         }
 
         .back-button {
-            margin-left: 10px; /* ボタンに少し余白を追加 */
+            margin-left: 10px;
         }
 
         .button-container {
-            margin-top: 10px; /* ボタンの上に少し余白を追加 */
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -153,7 +146,6 @@
     <main>
         <div class="header-container">
             <h2>該当車種</h2>
-            <!-- 戻るボタンはここに配置 -->
         </div>
         <div class="additional-info-container" id="additionalInfo">
             <div>
@@ -178,7 +170,7 @@
 
         <h2>予約したい日付をクリックしてください。</h2>
         <br>
-        <div class="calendar-container"> <!-- カレンダーを囲むコンテナ -->
+        <div class="calendar-container">
         <%
             for (int monthOffset = 0; monthOffset < 2; monthOffset++) {
                 Calendar monthCalendar = Calendar.getInstance();
@@ -194,17 +186,13 @@
                 out.println("</div>");
                 out.println("<div class='days'>");
 
-                // 空白を表示
                 for (int i = 1; i < firstDayOfWeek; i++) {
                     out.println("<div class='day disabled'></div>");
                 }
 
-                // 日付を表示
                 for (int day = 1; day <= daysInMonth; day++) {
                     monthCalendar.set(Calendar.DAY_OF_MONTH, day);
                     String dateStr = sdf.format(monthCalendar.getTime());
-
-                    // 今日以前または1か月後以降の日付は無効化
                     boolean isDisabled = monthCalendar.before(today) || monthCalendar.after(oneMonthLater);
                     String className = isDisabled ? "day disabled" : "day";
                     
@@ -214,117 +202,121 @@
                 out.println("</div></div>");
             }
         %>
-        </div> <!-- カレンダーを囲むコンテナの終了 -->
-
-        <!-- 戻るボタンをカレンダーの下に配置 -->
-                <!-- 戻るボタンをカレンダーの下に配置 -->
-        <div class="button-container">
-            <button class="back-button" onclick="location.href='P56.jsp'">戻る</button> <!-- 戻るボタン -->
         </div>
 
-        <!-- タイムテーブルの表示 -->
+        <div class="button-container">
+            <button class="back-button" onclick="location.href='P56.jsp'">戻る</button>
+        </div>
+
         <div class="timetable" id="timetable">
             <h3 id="timetable-title">選択した日付のタイムテーブル</h3>
             <table>
                 <tbody id="timetable-body">
-                    <!-- JavaScriptで動的に行を追加 -->
+                    <%
+                        if (timeSlots != null && !timeSlots.isEmpty()) {
+                            for (String timeSlot : timeSlots) {
+                    %>
+                        <tr>
+                            <td><%= timeSlot %></td>
+                        </tr>
+                    <%
+                            }
+                        } else {
+                    %>
+                        <tr>
+                            <td>予約はありません。</td>
+                        </tr>
+                    <%
+                        }
+                    %>
                 </tbody>
             </table>
         </div>
 
-        <!-- 予約ボタン -->
         <div id="reserve-button-container" style="display: none; margin-top: 20px;">
-            <button id="reserve-button" onclick="reserve()">予約する</button>
+            <button id="reserve-button">予約する</button>
         </div>
 
+        <!-- 予約フォームの追加 -->
+        <form id="reservationForm" action="ReservationCarTime" method="post" style="display: none;">
+            <input type="hidden" name="selectedDate" id="selectedDate" />
+            <input type="hidden" name="customerName" value="<%= customerName %>" />
+            <input type="hidden" name="modelName" value="<%= modelName %>" />
+            <input type="hidden" name="selectedTimes" id="selectedTimes" />
+        </form>
+
         <script>
-    // 選択された時間を保持する配列
-    const selectedTimes = [];
+            const selectedTimes = [];
 
-    function selectDate(date) {
-        document.getElementById("timetable-title").textContent = date + " のタイムテーブル";
-        const timetableBody = document.getElementById("timetable-body");
-        timetableBody.innerHTML = ""; 
-        // 既存の行をクリア
+            function selectDate(date) {
+                document.getElementById("selectedDate").value = date; // 選択した日付をフォームにセット
+                document.getElementById("timetable-title").textContent = date + " のタイムテーブル";
+                const timetableBody = document.getElementById("timetable-body");
+                timetableBody.innerHTML = "";
 
-        // 1時間単位の時間を表示
-        const timeRow = document.createElement("tr");
-        for (let hour = 0; hour < 24; hour++) {
-            const timeCell = document.createElement("th");
-            timeCell.colSpan = 4; // 15分単位で4つのセルをまとめる
-            timeCell.textContent = (hour < 10 ? "0" : "") + hour + ":00"; // 1時間単位で表示
-            timeRow.appendChild(timeCell);
-        }
-        timetableBody.appendChild(timeRow);
+                const timeRow = document.createElement("tr");
+                for (let hour = 0; hour < 24; hour++) {
+                    const timeCell = document.createElement("th");
+                    timeCell.colSpan = 4; // 15分単位で4つのセルをまとめる
+                    timeCell.textContent = (hour < 10 ? "0" : "") + hour + ":00"; // 1時間単位で表示
+                    timeRow.appendChild(timeCell);
+                }
+                timetableBody.appendChild(timeRow);
 
-        const statusRow = document.createElement("tr");
-        for (let hour = 0; hour < 24; hour++) {
-            for (let quarter = 0; quarter < 4; quarter++) {
-                const statusCell = document.createElement("td");
-                const isReserved = (hour % 2 === 0 && quarter === 0); // 例: 偶数時間の最初の15分を予約済みとする
+                const statusRow = document.createElement("tr");
+                for (let hour = 0; hour < 24; hour++) {
+                    for (let quarter = 0; quarter < 4; quarter++) {
+                        const statusCell = document.createElement("td");
+                        const isReserved = timeSlots && timeSlots.includes((hour * 15 + quarter) * 15); // 予約済みかどうか
 
-                // 背景色を設定
-                if (isReserved) {
-                    statusCell.className = "reserved"; // 予約済みの場合、赤色背景
-                } else {
-                    statusCell.className = "available"; // 空きの場合、青色背景
-                    statusCell.style.cursor = "pointer"; // 空きの場合、クリック可能に
-
-                    // 時間のクリックイベント
-                    statusCell.onclick = function() {
-                        const selectedTime = hour * 15 + quarter; // 15分単位の時間を計算
-                        const timeDisplay = (hour < 10 ? "0" : "") + hour + ":" + (quarter * 15 < 10 ? "0" : "") + (quarter * 15); // フォーマットを作成
-                        const selectedIndex = selectedTimes.indexOf(selectedTime);
-                        
-                        if (selectedIndex > -1) {
-                            // 既に選択されている場合は解除
-                            selectedTimes.splice(selectedIndex, 1);
-                            statusCell.classList.remove("selected");
+                        // 背景色を設定
+                        if (isReserved) {
+                            statusCell.className = "reserved"; // 予約済みの場合、赤色背景
                         } else {
-                            // 未選択の場合は選択
-                            selectedTimes.push(selectedTime);
-                            statusCell.classList.add("selected");
+                            statusCell.className = "available"; // 空きの場合、青色背景
+                            statusCell.style.cursor = "pointer"; // 空きの場合、クリック可能に
+
+                            // 時間のクリックイベント
+                            statusCell.onclick = function() {
+                                const selectedTime = hour * 15 + quarter; // 15分単位の時間を計算
+                                const selectedIndex = selectedTimes.indexOf(selectedTime);
+                                
+                                if (selectedIndex > -1) {
+                                    // 既に選択されている場合は解除
+                                    selectedTimes.splice(selectedIndex, 1);
+                                    statusCell.classList.remove("selected");
+                                } else {
+                                    // 未選択の場合は選択
+                                    selectedTimes.push(selectedTime);
+                                    statusCell.classList.add("selected");
+                                }
+
+                                // 予約ボタンの表示/非表示
+                                document.getElementById("reserve-button-container").style.display = selectedTimes.length > 0 ? "block" : "none";
+                            };
                         }
 
-                        // 予約ボタンの表示/非表示
-                        document.getElementById("reserve-button-container").style.display = selectedTimes.length > 0 ? "block" : "none";
-                    };
+                        statusRow.appendChild(statusCell);
+                    }
                 }
+                timetableBody.appendChild(statusRow);
 
-                statusRow.appendChild(statusCell);
+                // タイムテーブルを表示
+                document.getElementById("timetable").style.display = "block";
+                
+                // 予約ボタンをクリックしたときの処理
+                document.getElementById("reserve-button").onclick = function() {
+                    if (selectedTimes.length === 0) {
+                        alert("予約する時間を選択してください。");
+                        return;
+                    }
+                    // 選択した時間をフォームにセット
+                    document.getElementById("selectedTimes").value = selectedTimes.join(","); // 配列をカンマ区切りの文字列に変換
+                    // フォームを送信
+                    document.getElementById("reservationForm").submit();
+                };
             }
-        }
-        timetableBody.appendChild(statusRow);
-
-        // タイムテーブルを表示
-        document.getElementById("timetable").style.display = "block";
-    }
-
-    function reserve() {
-        if (selectedTimes.length === 0) {
-            alert("予約する時間を選択してください。");
-            return;
-        }
-
-        // 予約処理のロジックをここに追加
-        alert("予約を完了しました。選択した時間: " + selectedTimes.map(t => {
-            const hour = Math.floor(t / 4);
-            const minutes = (t % 4) * 15;
-            return (hour < 10 ? "0" : "") + hour + ":" + (minutes < 10 ? "0" : "") + minutes; // 時間を表示
-        }).join(", "));
-        
-        // 必要に応じて、サーバーに予約情報を送信する処理を追加することができます。
-        // 例えば、AJAXを使用してサーバーにリクエストを送るなど。
-
-        // 予約完了後、選択をクリア
-        selectedTimes.length = 0;
-        document.getElementById("reserve-button-container").style.display = "none"; // ボタンを非表示に
-        const timetableBody = document.getElementById("timetable-body");
-        timetableBody.innerHTML = ""; // タイムテーブルをクリア
-        document.getElementById("timetable").style.display = "none"; // タイムテーブルを非表示に
-    }
-</script>
-
+        </script>
     </main>
 </body>
 </html>

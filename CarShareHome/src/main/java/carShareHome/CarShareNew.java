@@ -30,30 +30,32 @@ public class CarShareNew extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html; charset=UTF-8");
-
+	    
         String customerSei = request.getParameter("customerSei");
         String customerMei = request.getParameter("customerMei");
-        String customerName = customerSei + " " + customerMei;
+        String customerName =customerSei +" "+customerMei;
         String customerSeiKana = request.getParameter("customerSeiKana");
         String customerMeiKana = request.getParameter("customerMeiKana");
-        String customerKana = customerMeiKana +" "+ customerSeiKana;
+        String customerKana =customerSeiKana+" "+customerMeiKana;
         String gender = request.getParameter("gender");
-        String password = request.getParameter("password");
+        String birthday = request.getParameter("birthday");
+        String postcode = request.getParameter("postcode");
         String city = request.getParameter("city");
         String address = request.getParameter("address");
         String building = request.getParameter("building");
-        String customerAddress = city + address + building;
+        String customerAddress =city+" "+address+" "+building;
         String tellNumber = request.getParameter("TEL");
-        String eMail = request.getParameter("email");
-        Part omoteJpg = request.getPart("file_omote");
-        Part uraJpg = request.getPart("file_ura");
-        String postCode = request.getParameter("postcode");
-        String birthDate = request.getParameter("birthday");
+        String email = request.getParameter("email");
+        String password = request.getParameter("password");
+        String licenseNumber = request.getParameter("licenseNumber");
         String licenseDate = request.getParameter("licenseDate");
+        
+		String omoteJpg = request.getParameter("file_omote");
+		String uraJpg = request.getParameter("file_ura");
 
-        if (validateInputs(customerSei, customerMei, customerSeiKana, customerMeiKana, gender, birthDate, licenseDate, tellNumber, eMail)) {
-            Customer customer = new Customer();
-            String licenseNumber = request.getParameter("licenseNumber");
+        if (validateInputs(customerSei, customerMei, customerSeiKana, customerMeiKana, gender, birthday, licenseDate, tellNumber, email)) {
+            System.out.println("ここには来てるよ");
+        	Customer customer = new Customer();
 
             if (isLicenseNumberExists(licenseNumber)) {
                 request.setAttribute("errorMessage", "このライセンス番号は既に登録されています。");
@@ -64,30 +66,32 @@ public class CarShareNew extends HttpServlet {
                 customer.setGender(gender);
                 customer.setCustomerPassword(password);
                 customer.setTellNumber(tellNumber);
-                customer.setEmail(eMail);
-                customer.setBirthDate(birthDate);
+                customer.setEmail(email);
+                customer.setBirthDate(birthday);
                 customer.setLicenseNumber(licenseNumber);
                 customer.setLicenceDate(licenseDate);
                 customer.setCustomerAddress(customerAddress);
-                customer.setPostCode(postCode);
+                customer.setPostCode(postcode);
+                customer.setUra(uraJpg);
+                customer.setOmote(omoteJpg);
 
                 HttpSession session = request.getSession();
                 session.setAttribute("customer", customer);
 
-                try {
-                    byte[] omoteBytes = convertBlobToBytes(createBlobFromPart(omoteJpg));
-                    byte[] uraBytes = convertBlobToBytes(createBlobFromPart(uraJpg));
-                    
-                    session.setAttribute("omoteImage", omoteBytes);
-                    session.setAttribute("uraImage", uraBytes);
-
-                    RequestDispatcher rd = request.getRequestDispatcher("P20.jsp");
-                    rd.forward(request, response);
-                } catch (SQLException | IOException e) {
-                    e.printStackTrace();
-                    request.setAttribute("errorMessage", "画像処理中にエラーが発生しました。");
-                    forwardToErrorPage(request, response);
-                }
+				try {
+				    //byte[] omoteBytes = convertBlobToBytes(createBlobFromPart(omoteJpg));
+				    //byte[] uraBytes = convertBlobToBytes(createBlobFromPart(uraJpg));
+				    
+				    //session.setAttribute("omoteImage", omoteBytes);
+				    //session.setAttribute("uraImage", uraBytes);
+				
+				    RequestDispatcher rd = request.getRequestDispatcher("P20.jsp");
+				    rd.forward(request, response);
+				} catch (/*SQLException |*/ IOException e) {
+				    e.printStackTrace();
+				    request.setAttribute("errorMessage", "画像処理中にエラーが発生しました。");
+				    forwardToErrorPage(request, response);
+				}
             }
         } else {
             request.setAttribute("errorMessage", "入力データにエラーがあります。");

@@ -6,6 +6,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +36,8 @@ public class ReservationCarTime extends HttpServlet {
         HttpSession session = request.getSession();
         String stationId = (String) session.getAttribute("stationId");
         String modelName = (String) session.getAttribute("modelName");
-        
+        String selectedDate = request.getParameter("selectedDate"); // 選択した日付を取得
+
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -50,7 +52,7 @@ public class ReservationCarTime extends HttpServlet {
             // データベース接続
             con = DriverManager.getConnection(url, user, pass);
             
-            String sql = "SELECT c.car_code, c.model_year, c.number, m.maker_id, m.maker_name, mo.model_id, mo.model_name, start_date, stop_date " +
+            String sql = "SELECT c.car_code, c.model_year, c.number, m.maker_id, m.maker_name, mo.model_id, mo.model_name, r.start_date, r.stop_date " +
                          "FROM car_db c " +
                          "JOIN maker m ON c.maker_id = m.maker_id " +
                          "JOIN model mo ON c.model_id = mo.model_id " +
@@ -58,29 +60,38 @@ public class ReservationCarTime extends HttpServlet {
                          "JOIN reservation r ON r.car_code = c.car_code " +
                          "WHERE k.station_id = ? " +
                          "AND c.model_id = ? " +
-                         "AND start_date < '2024-01-26 23:59:59' " +
-                         "AND stop_date > '2024-01-26 00:00:00';";
+                         "AND r.start_date >= ? " + // 選択した日付以降
+                         "AND r.stop_date < DATE_ADD(?, INTERVAL 1 DAY);"; // 選択した日付の次の日まで
             
             ps = con.prepareStatement(sql);
             ps.setString(1, stationId);
             ps.setString(2, modelName);
+            ps.setString(3, selectedDate); // 選択した日付をパラメータに設定
+            ps.setString(4, selectedDate); // 同じく選択した日付を設定
             rs = ps.executeQuery();
             
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); // フォーマットを指定
+
             while (rs.next()) {
                 CarData carData = new CarData(); // CarDataのインスタンスを作成
-                Maker maker =new Maker();
-                Model model =new Model();
-                Reservation re =new Reservation();
+                Maker maker = new Maker();
+                Model model = new Model();
+                Reservation re = new Reservation();
+                
                 carData.setCarCode(rs.getString("car_code"));
                 carData.setModelYear(rs.getString("model_year"));
                 carData.setCarNumber(rs.getString("number"));
                 maker.setMakerName(rs.getString("maker_name"));
                 model.setModelName(rs.getString("model_name"));
-                re.setStartDate(rs.getString("start_date"));
-                re.setStopDate(rs.getString("stop_date"));
+
+                // TIMESTAMPをStringに変換
+                re.setStartDate(dateFormat.format(rs.getTimestamp("start_date"))); // Stringに変換
+                re.setStopDate(dateFormat.format(rs.getTimestamp("stop_date"))); // Stringに変換
+                
                 carDataList.add(carData); // リストに追加
             }
             request.setAttribute("carDataList", carDataList); // リストをリクエストにセット
+            request.setAttribute("hasResults", !carDataList.isEmpty()); // ヒットしたかどうかをリクエストにセット
             
             // JSPにフォワード
             request.getRequestDispatcher("P59.jsp").forward(request, response);
@@ -94,4 +105,3 @@ public class ReservationCarTime extends HttpServlet {
         }
     }
 }
-
