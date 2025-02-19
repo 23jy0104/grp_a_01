@@ -1,23 +1,42 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.util.Calendar" %>
 <%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="java.util.Locale" %>
 
 <%
     String customerName = (String) session.getAttribute("customerName");
     String stationIdValue = request.getParameter("stationid");
-    String stationNameValue = request.getParameter("stationname"); // URLからステーション名を取得
-    String stationDataValue = request.getParameter("stationdata"); // URLからステーションデータを取得
+    String stationNameValue = request.getParameter("stationname");
+    String stationDataValue = request.getParameter("stationdata");
 
     // 現在の日時を取得
     Calendar calendar = Calendar.getInstance();
-    calendar.add(Calendar.MINUTE, 30); // 現在の時間に30分追加
-    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-    String minStartDate = dateFormat.format(calendar.getTime()); // 30分後の日付をフォーマット
+    calendar.add(Calendar.MINUTE, 30);
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+    String minStartDateTime = dateFormat.format(calendar.getTime());
 
     // セッションに値を設定
     session.setAttribute("stationId", stationIdValue);
     session.setAttribute("stationdata", stationDataValue);
     session.setAttribute("stationName", stationNameValue);
+
+    // ステーション情報の取得
+    List<String[]> stations = (List<String[]>) session.getAttribute("stations");
+    String[][] stationsArray = null;
+
+    if (stations != null) {
+        // Listから配列に変換
+        stationsArray = new String[stations.size()][];
+        stationsArray = stations.toArray(stationsArray);
+    }
+
+    // 日付関連の変数を定義
+    Calendar today = Calendar.getInstance();
+    Calendar oneMonthLater = Calendar.getInstance();
+    oneMonthLater.add(Calendar.MONTH, 1);
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 %>
 
 <!DOCTYPE html>
@@ -29,28 +48,147 @@
     <link rel="stylesheet" href="css/nav.css">
     <link rel="stylesheet" href="css/P56.css">
     <link rel="stylesheet" href="css/timeTable.css">
-    <script>
-        function validateDates(event) {
-            const startDate = document.querySelector('input[name="startDate"]').value;
-            const startTime = document.querySelector('select[name="startTime"]').value;
-            const endDate = document.querySelector('input[name="endDate"]').value;
-            const endTime = document.querySelector('select[name="endTime"]').value;
-
-            const startDateTime = new Date(startDate + 'T' + startTime);
-            const endDateTime = new Date(endDate + 'T' + endTime);
-
-            if (endDateTime < startDateTime) {
-                event.preventDefault(); // フォーム送信をキャンセル
-                alert('利用終了日時は利用開始日時より後でなければなりません。');
-            }
+     <style>
+        .reservation-inputs {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
         }
-    </script>
+        .time-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .flex-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .flex-item {
+            flex: 1;
+            margin: 0 5px;
+        }
+
+        .button-container {
+            text-align: center;
+        }
+
+        select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+		.calendar-container {
+		    display: flex;
+		    justify-content: center; /* 中央寄せ */
+		    flex-wrap: nowrap; /* 折り返さない */
+		    padding: 10px; /* パディングを追加 */
+		    margin: 0 auto; /* 左右のマージンを自動で設定して中央に寄せる */
+		}
+		
+		.calendar {
+		    display: inline-block;
+		    margin: 10px; /* カレンダー間のマージン */
+		    width: 350px; /* カレンダーの幅を350pxに設定 */
+		    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 影を追加 */
+		}
+		
+		.days {
+		    display: grid;
+		    grid-template-columns: repeat(7, 1fr);
+		    gap: 5px;
+		}
+		
+		.day {
+		    width: 40px; /* マス目の幅を調整 */
+		    height: 40px; /* マス目の高さを調整 */
+		    display: flex;
+		    justify-content: center;
+		    align-items: center;
+		    cursor: pointer;
+		    border: 1px solid #ccc;
+		    border-radius: 5px;
+		    font-size: 14px; /* フォントサイズを調整 */
+		}
+		
+		.disabled {
+		    background-color: lightgray;
+		    cursor: not-allowed;
+		}
+		
+		.header {
+		    display: grid;
+		    grid-template-columns: repeat(7, 1fr);
+		    font-weight: bold;
+		    margin-bottom: 5px;
+		}
+		
+		.header div {
+		    text-align: center;
+		}
+
+		
+        .timetable {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .timetable table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .timetable th, .timetable td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .reserved {
+            background-color: red;
+            color: white;
+            cursor: not-allowed;
+        }
+
+        .available {
+            background-color: blue;
+            color: white;
+            cursor: pointer;
+        }
+
+        .selected {
+            background-color: green;
+        }
+
+        .header-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .back-button {
+            margin-left: 10px;
+        }
+
+        .button-container {
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
     <header>
         <img src="img/rog.png" alt="TMCロゴ">
         <h1>TMC カーシェア</h1>
-        <h4 id="username"><%= customerName %></h4>
+        <h4 id="username"><%= customerName %>さん</h4>
         <button class="logout-button" onclick="location.href='P29.jsp'">ログアウト</button>
     </header>
 
@@ -66,91 +204,218 @@
     <main>
         <h2>ステーション情報</h2>
         <button class="back-button" onclick="location.href='P55.jsp'">検索結果一覧に戻る</button>
-        <h3><%= stationNameValue %></h3>
-        
-        <table>
-            <tr>
-                <th>お知らせ</th>
-                <th>注意点</th>
-                <th>ステーション情報</th>
-                <th><%= stationDataValue %></th>
-            </tr>
-            <tr>
-                <td>ご乗車の際は、必ずご自身で安全点検をしてください。</td>
-                <td>
-                    ・全車禁煙です。喫煙される場合は、クルマをとめ、喫煙設備のある場所でお願いします。<br>
-                    ・車内で出た飲み物,食べ物などのゴミは、必ず各自でお持ち帰りください。
-                </td>
-                <td>ステーションの詳細情報がここに入ります。</td>
-            </tr>
-        </table>
+        <br>
+        <% if (stationsArray != null && stationsArray.length > 0) { %>
+            <h3><%= stationsArray[0][1] %></h3>
+            <table>
+                <tr>
+                    <th>お知らせ</th>
+                    <th>注意点:<br>
+                        ・ご乗車の際は、必ずご自身で安全点検をしてください。<br>
+                        ・全車禁煙です。喫煙される場合は、クルマをとめ、喫煙設備のある場所でお願いします。<br>
+                        ・車内で出た飲み物,食べ物などのゴミは、必ず各自でお持ち帰りください。<br><br>
+                        アクセス:<br>
+                        大久保駅北口から北西に進んでいただき、大久保通りをまっすぐ進んだ場所にございます。
+                    </th>
+                </tr>
+                <tr>
+                    <th>ステーション情報</th>
+                    <th><%= stationsArray[0][3] %></th>
+                </tr>
+            </table>
+        <% } else { %>
+            <h3>ステーション情報が見つかりませんでした。</h3>
+        <% } %>
 
         <div class="flex-container">
             <div class="flex-item">
                 <h3>空き情報から探す</h3>
-                <div class="input-container">
-                    <form action="CarAvailabilityServlet" method="post" onsubmit="validateDates(event)">
-                        <div class="datetime-input">
-                            <label for="datetime1">利用開始日時:</label>
-                            <input type="date" name="startDate" min="<%= minStartDate %>" required>
-                            <select name="startTime" required>
-                                <%
-                                    for (int hour = 0; hour < 24; hour++) {
-                                        for (int minute = 0; minute < 60; minute += 15) {
-                                            String hourValue = String.format("%02d", hour);
-                                            String minuteValue = String.format("%02d", minute);
-                                            String timeValue = hourValue + ":" + minuteValue;
-                                %>
-                                    <option value="<%= timeValue %>"><%= timeValue %></option>
-                                <%
-                                            }
-                                        }
-                                %>
-                            </select>
-                        </div>
-                        <div class="datetime-input">
-                            <label for="datetime2">利用終了日時:</label>
-                            <input type="date" name="endDate" min="<%= minStartDate %>" required>
-                            <select name="endTime" required>
-                                <%
-                                    for (int hour = 0; hour < 24; hour++) {
-                                        for (int minute = 0; minute < 60; minute += 15) {
-                                            String hourValue = String.format("%02d", hour);
-                                            String minuteValue = String.format("%02d", minute);
-                                            String timeValue = hourValue + ":" + minuteValue;
-                                %>
-                                    <option value="<%= timeValue %>"><%= timeValue %></option>
-                                <%
-                                            }
-                                        }
-                                %>
-                            </select>
-                        </div>
-                        <input type="hidden" name="stationName" value="<%= stationNameValue %>">
-                        <div class="button-container">
-                            <button type="submit" id="searchButton1" style="border: none; background: none; padding: 0;">
-                                <img src="img/kensaku.gif" alt="検索" />
-                            </button>
-                        </div>
-                    </form>
+                <div class="calendar-container"> <!-- カレンダーを囲むコンテナ -->
+                <%
+                    for (int monthOffset = 0; monthOffset < 2; monthOffset++) {
+                        Calendar monthCalendar = Calendar.getInstance();
+                        monthCalendar.add(Calendar.MONTH, monthOffset);
+                        monthCalendar.set(Calendar.DAY_OF_MONTH, 1);
+                        int daysInMonth = monthCalendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+                        int firstDayOfWeek = monthCalendar.get(Calendar.DAY_OF_WEEK);
+                        
+                        out.println("<div class='calendar'>");
+                        out.println("<h3>" + monthCalendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.JAPANESE) + " " + monthCalendar.get(Calendar.YEAR) + "</h3>");
+                        out.println("<div class='header'>");
+                        out.println("<div>日</div><div>月</div><div>火</div><div>水</div><div>木</div><div>金</div><div>土</div>");
+                        out.println("</div>");
+                        out.println("<div class='days'>");
+
+                        // 空白を表示
+                        for (int i = 1; i < firstDayOfWeek; i++) {
+                            out.println("<div class='day disabled'></div>");
+                        }
+
+                        // 日付を表示
+                        for (int day = 1; day <= daysInMonth; day++) {
+                            monthCalendar.set(Calendar.DAY_OF_MONTH, day);
+                            String dateStr = sdf.format(monthCalendar.getTime());
+
+                            // 今日以前または1か月後以降の日付は無効化
+                            boolean isDisabled = monthCalendar.before(today) || monthCalendar.after(oneMonthLater);
+                            String className = isDisabled ? "day disabled" : "day";
+                            
+                            out.println("<div class='" + className + "' " + (isDisabled ? "" : "onclick='selectDate(\"" + dateStr + "\")'") + ">" + day + "</div>");
+                        }
+
+                        out.println("</div></div>");
+                    }
+                %>
                 </div>
             </div>
-
             <div class="flex-item">
-                <h3>車種から探す</h3>
-                <select id="carType" name="carType">
-                    <option value="BNR32型 skyline Nismo">BNR32型 skyline Nismo</option>
-                    <option value="NSX NA-1型 type-R">NSX NA-1型 type-R</option>
-                    <option value="GT-R R35 Nismo Special Edition T-spec">GT-R R35 Nismo Special Edition T-spec</option>
-                </select>
-
-                <div class="button-container">
-                    <a href="P59.jsp">
-                        <img src="img/kensaku.gif" alt="検索" style="cursor: pointer;" />
-                    </a>
-                </div>
+                <h3 class="sub-title">車種から探す</h3>
+                <form action="ReservationCar" method="post">
+                    <input type="hidden" name="stationId" value="<%= stationIdValue %>">
+                    <input type="hidden" name="stationName" value="<%= stationNameValue %>">
+                    <select id="carType" name="carType">
+                        <option value="BNR32型 skyline Nismo">BNR32型 skyline Nismo</option>
+                        <option value="NSX NA-1型 type-R">NSX NA-1型 type-R</option>
+                        <option value="GT-R R35 Nismo Special Edition T-spec">GT-R R35 Nismo Special Edition T-spec</option>
+                    </select>
+                    <div class="button-container">
+                        <input type="image" id="searchButton2" src="img/kensaku.gif" alt="検索" />
+                    </div>
+                </form>
             </div>
         </div>
     </main>
+
+    <script>
+        // 今日の日付から1か月間の日付を設定する
+        window.onload = function() {
+            const startDateSelect = document.getElementById('startDate');
+            const endDateSelect = document.getElementById('endDate');
+            const today = new Date();
+            const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+
+            // 1か月間の日付を追加
+            for (let i = 0; i < 30; i++) {
+                const date = new Date(today);
+                date.setDate(today.getDate() + i);
+                const formattedDate = date.toLocaleDateString('ja-JP', options);
+
+                const option = document.createElement('option');
+                option.value = formattedDate;
+                option.textContent = formattedDate;
+                startDateSelect.appendChild(option);
+
+                // 終了日も同じリストを使用するため追加
+                const endOption = document.createElement('option');
+                endOption.value = formattedDate;
+                endOption.textContent = formattedDate;
+                endDateSelect.appendChild(endOption);
+            }
+
+            // 時間の選択肢を追加
+            addTimeOptions();
+        };
+
+        // 選択された時間を保持する配列
+        const selectedTimes = [];
+
+        function selectDate(date) {
+            document.getElementById("timetable-title").textContent = date + " のタイムテーブル";
+            const timetableBody = document.getElementById("timetable-body");
+            timetableBody.innerHTML = ""; 
+            // 既存の行をクリア
+
+            // 1時間単位の時間を表示
+            const timeRow = document.createElement("tr");
+            for (let hour = 0; hour < 24; hour++) {
+                const timeCell = document.createElement("th");
+                timeCell.colSpan = 4; // 15分単位で4つのセルをまとめる
+                timeCell.textContent = (hour < 10 ? "0" : "") + hour + ":00"; // 1時間単位で表示
+                timeRow.appendChild(timeCell);
+            }
+            timetableBody.appendChild(timeRow);
+
+            const statusRow = document.createElement("tr");
+            for (let hour = 0; hour < 24; hour++) {
+                for (let quarter = 0; quarter < 4; quarter++) {
+                    const statusCell = document.createElement("td");
+                    const isReserved = (hour % 2 === 0 && quarter === 0); // 例: 偶数時間の最初の15分を予約済みとする
+
+                    // 背景色を設定
+                    if (isReserved) {
+                        statusCell.className = "reserved"; // 予約済みの場合、赤色背景
+                    } else {
+                        statusCell.className = "available"; // 空きの場合、青色背景
+                        statusCell.style.cursor = "pointer"; // 空きの場合、クリック可能に
+
+                        // 時間のクリックイベント
+                        statusCell.onclick = function() {
+                            const selectedTime = hour * 4 + quarter; // 15分単位の時間を計算
+                            const timeDisplay = (hour < 10 ? "0" : "") + hour + ":" + (quarter * 15 < 10 ? "0" : "") + (quarter * 15); // フォーマットを作成
+                            const selectedIndex = selectedTimes.indexOf(selectedTime);
+                            
+                            if (selectedIndex > -1) {
+                                // 既に選択されている場合は解除
+                                selectedTimes.splice(selectedIndex, 1);
+                                statusCell.classList.remove("selected");
+                            } else {
+                                // 未選択の場合は選択
+                                selectedTimes.push(selectedTime);
+                                statusCell.classList.add("selected");
+                            }
+
+                            // 予約ボタンの表示/非表示
+                            document.getElementById("reserve-button-container").style.display = selectedTimes.length > 0 ? "block" : "none";
+                        };
+                    }
+
+                    statusRow.appendChild(statusCell);
+                }
+            }
+            timetableBody.appendChild(statusRow);
+
+            // タイムテーブルを表示
+            document.getElementById("timetable").style.display = "block";
+        }
+
+        function reserve() {
+            if (selectedTimes.length === 0) {
+                alert("予約する時間を選択してください。");
+                return;
+            }
+
+            // 予約処理のロジックをここに追加
+            alert("予約を完了しました。選択した時間: " + selectedTimes.map(t => {
+                const hour = Math.floor(t / 4);
+                const minutes = (t % 4) * 15;
+                return (hour < 10 ? "0" : "") + hour + ":" + (minutes < 10 ? "0" : "") + minutes; // 時間を表示
+            }).join(", "));
+            
+            // 必要に応じて、サーバーに予約情報を送信する処理を追加することができます。
+            // 例えば、AJAXを使用してサーバーにリクエストを送るなど。
+
+            // 予約完了後、選択をクリア
+            selectedTimes.length = 0;
+            document.getElementById("reserve-button-container").style.display = "none"; // ボタンを非表示に
+            const timetableBody = document.getElementById("timetable-body");
+            timetableBody.innerHTML = ""; // タイムテーブルをクリア
+            document.getElementById("timetable").style.display = "none"; // タイムテーブルを非表示に
+        }
+    </script>
+    
+    <!-- タイムテーブル表示用のHTML -->
+    <div id="timetable" class="timetable">
+        <h3 id="timetable-title"></h3>
+        <table>
+            <thead>
+                <tr id="timetable-header"></tr>
+            </thead>
+            <tbody id="timetable-body"></tbody>
+        </table>
+        <div id="reserve-button-container" style="display:none;">
+            <button onclick="reserve()">予約する</button>
+        </div>
+    </div>
 </body>
 </html>
+                        
