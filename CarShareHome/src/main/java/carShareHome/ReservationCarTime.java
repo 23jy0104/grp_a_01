@@ -32,17 +32,20 @@ public class ReservationCarTime extends HttpServlet {
         String stationId = (String) session.getAttribute("stationId");
         String modelName = (String) session.getAttribute("modelName");
         
+        // クリックした日付を取得
+        String startDate = request.getParameter("startCalendar") + " 00:00:00"; // 00:00:00を追加
+        String endDate = request.getParameter("endCalendar") + " 23:59:59"; // 23:59:59を追加
+
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
         List<CarData> carDataList = new ArrayList<>(); // CarDataのリストを作成
-        
+
         try {
             Class.forName("com.mysql.jdbc.Driver");
             String url = "jdbc:mysql://10.64.144.5:3306/23jya01";
             String user = "23jya01";
             String pass = "23jya01";
-
 
             // データベース接続
             con = DriverManager.getConnection(url, user, pass);
@@ -55,19 +58,21 @@ public class ReservationCarTime extends HttpServlet {
                          "JOIN reservation r ON r.car_code = c.car_code " +
                          "WHERE k.station_id = ? " +
                          "AND c.model_id = ? " +
-                         "AND start_date < '2024-01-26 23:59:59' " +
-                         "AND stop_date > '2024-01-26 00:00:00';";
+                         "AND start_date < ? " +
+                         "AND stop_date > ?;";
             
             ps = con.prepareStatement(sql);
             ps.setString(1, stationId);
             ps.setString(2, modelName);
+            ps.setString(3, startDate); // ここで23:59:59を適用
+            ps.setString(4, endDate); // ここで00:00:00を適用
             rs = ps.executeQuery();
             
             while (rs.next()) {
                 CarData carData = new CarData(); // CarDataのインスタンスを作成
-                Maker maker =new Maker();
-                Model model =new Model();
-                Reservation re =new Reservation();
+                Maker maker = new Maker();
+                Model model = new Model();
+                Reservation re = new Reservation();
                 carData.setCarCode(rs.getString("car_code"));
                 carData.setModelYear(rs.getString("model_year"));
                 carData.setCarNumber(rs.getString("number"));
@@ -89,7 +94,8 @@ public class ReservationCarTime extends HttpServlet {
             try { if (ps != null) ps.close(); } catch (SQLException e) { e.printStackTrace(); }
             try { if (con != null) con.close(); } catch (SQLException e) { e.printStackTrace(); }
         }
-
     }
+
+
 }
 
