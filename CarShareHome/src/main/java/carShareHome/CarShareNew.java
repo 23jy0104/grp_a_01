@@ -6,6 +6,7 @@ import java.sql.SQLException;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +17,7 @@ import javax.servlet.http.Part;
 import model.Customer;
 
 @WebServlet("/CarShareNew")
+@MultipartConfig()
 public class CarShareNew extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
@@ -36,7 +38,7 @@ public class CarShareNew extends HttpServlet {
         String customerName = customerSei + " " + customerMei;
         String customerSeiKana = request.getParameter("customerSeiKana");
         String customerMeiKana = request.getParameter("customerMeiKana");
-        String customerKana = customerMeiKana +" "+ customerSeiKana;
+        String customerKana = customerSeiKana +" "+ customerMeiKana;
         String gender = request.getParameter("gender");
         String password = request.getParameter("password");
         String city = request.getParameter("city");
@@ -44,7 +46,8 @@ public class CarShareNew extends HttpServlet {
         String building = request.getParameter("building");
         String customerAddress = city + address + building;
         String tellNumber = request.getParameter("TEL");
-        String eMail = request.getParameter("email");
+        String eMail = request.getParameter("email");       
+        
         Part omoteJpg = request.getPart("file_omote");
         Part uraJpg = request.getPart("file_ura");
         String postCode = request.getParameter("postcode");

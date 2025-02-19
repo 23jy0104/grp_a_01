@@ -1,4 +1,5 @@
 package carShareHome;
+
 import java.io.IOException;
 import java.sql.Blob;
 import java.sql.Connection;
@@ -35,23 +36,24 @@ public class CreditNew extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	 request.setCharacterEncoding("UTF-8");
-         response.setContentType("text/html; charset=UTF-8");
-    	
-    	// 顧客データを取得
+        request.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html; charset=UTF-8");
+
+        // 顧客データを取得
         String customerName = request.getParameter("customerName");
         String customerKana = request.getParameter("customerKana");
         String gender = request.getParameter("gender");
         String password = request.getParameter("password");
-        String birthDateStr =request.getParameter("birthDate");
+        String birthDateStr = request.getParameter("birthDate");
         String email = request.getParameter("email");
-        String tellNumber =request.getParameter("tellNumber");
+        String tellNumber = request.getParameter("tellNumber");
         String postCode = request.getParameter("postcode");
-        String customerAddress =request.getParameter("customerAddress");
+        String customerAddress = request.getParameter("customerAddress");
         String licenseNumber = request.getParameter("licenseNumber");
         String licenseDateStr = request.getParameter("licenseDate");
-        System.out.println(password);
-        String hashedPassword =PasswordHasher.hashPassword(password);
+
+        String hashedPassword = PasswordHasher.hashPassword(password);
+
         // セッションから画像データを取得
         HttpSession session = request.getSession();
         byte[] omoteBytes = (byte[]) session.getAttribute("omoteImage");
@@ -64,7 +66,7 @@ public class CreditNew extends HttpServlet {
         // データベースに登録する処理
         try {
             // データベース接続情報
-            String jdbcUrl = "jdbc:mysql://10.64.144.5:3306/23jya01";
+            String jdbcUrl = "jdbc:mysql://10.64.144.5:3306/23jya01?useUnicode=true&characterEncoding=UTF-8";
             String dbUser = "23jya01";
             String dbPassword = "23jya01";
 
