@@ -2,7 +2,6 @@
     pageEncoding="UTF-8"%>
 <%@ page import="java.sql.Timestamp" %>
 <%@ page import="java.util.List" %>
-<%@ page import="java.util.ArrayList" %>
 <%@ page import="model.Customer" %>
 <%@ page import="model.Station" %>
 <%@ page import="model.CarData" %>
@@ -15,7 +14,6 @@
     String stationId = (String) session.getAttribute("stationId");
     String img = (String) session.getAttribute("car_img");
     String modelName = (String) session.getAttribute("modelName");
-    String stationData = (String) session.getAttribute("stationData");
     List<Timestamp[]> availableSlots = (List<Timestamp[]>) request.getAttribute("availableSlots");
 %>
 
@@ -103,66 +101,38 @@
             </form>
         </div>
 
-<<<<<<< HEAD
         <!-- 空き状況表示エリア -->
         <div id="availabilityResults" style="margin-top: 20px;">
             <h2>空いている時間帯</h2>
             <table border="1">
-                <tr>
-                    <th>開始時間</th>
-                    <th>終了時間</th>
-                </tr>
-                <%
-                    if (availableSlots != null && !availableSlots.isEmpty()) {
-                        for (Timestamp[] slot : availableSlots) {
-                %>
-                    <tr>
-                        <td><%= slot[0] %></td>
-                        <td><%= slot[1] %></td>
-                    </tr>
-                <%
-                        }
-                    } else {
-                %>
-                    <tr>
-                        <td colspan="2">空き状況がありません。</td>
-                    </tr>
-                <%
-                    }
-                %>
-            </table>
-        </div>
-=======
-        <%-- 空き状況を表示するためのコードを追加 --%>
-        <% List<CarData> availableCars = (List<CarData>) request.getAttribute("availableCars"); %>
-        <% if (availableCars != null && !availableCars.isEmpty()) { %>
-            <h3>空き状況</h3>
-            <table class="availability-table">
                 <thead>
                     <tr>
-                        <th>車両コード</th>
-                        <th>モデル年</th>
-                        <th>ナンバー</th>
-                        <th>メーカー名</th>
-                        <th>モデル名</th>
+                        <th>開始時間</th>
+                        <th>終了時間</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <% for (CarData car : availableCars) { %>
+                    <%
+                        if (availableSlots != null && !availableSlots.isEmpty()) {
+                            for (Timestamp[] slot : availableSlots) {
+                    %>
                         <tr>
-                            <td><%= car.getCarCode() %></td>
-                            <td><%= car.getModelYear() %></td>
-                            <td><%= car.getCarNumber() %></td>
-                            <td><%= car.getMaker().getMakerName() %></td>
-                                                       <td><%= car.getModel().getModelName() %></td>
+                            <td><%= slot[0] %></td>
+                            <td><%= slot[1] %></td>
                         </tr>
-                    <% } %>
+                    <%
+                            }
+                        } else {
+                    %>
+                        <tr>
+                            <td colspan="2">空き状況がありません。</td>
+                        </tr>
+                    <%
+                        }
+                    %>
                 </tbody>
             </table>
-        <% } else { %>
-            <p>空きがありません。</p>
-        <% } %>
->>>>>>> branch 'newmain' of https://github.com/23jy0104/grp_a_01.git
+        </div>
     </main>
 
     <script>
@@ -192,7 +162,9 @@
 
             // 時間の選択肢を追加
             addTimeOptions();
+            fetchAvailableSlots(); // ページ読み込み時に空き状況を取得
         };
+
         function addTimeOptions() {
             const startTimeSelect = document.getElementById('startTime');
             const endTimeSelect = document.getElementById('endTime');
@@ -213,6 +185,49 @@
             }
         }
 
+        function fetchAvailableSlots() {
+            const startDate = new Date();
+            const endDate = new Date();
+            endDate.setHours(startDate.getHours() + 1); // 1時間後までの空き状況を取得
+
+            const apiUrl = `https://api.example.com/availableSlots?start=${startDate.toISOString()}&end=${endDate.toISOString()}`;
+
+            fetch(apiUrl)
+                .then(response => {
+                    if (!response.ok) throw new Error('Network response was not ok');
+                    return response.json();
+                })
+                .then(data => {
+                    const availabilityResults = document.getElementById('availabilityResults');
+                    const tableBody = availabilityResults.querySelector('tbody');
+                    tableBody.innerHTML = ''; // 既存の行をクリア
+
+                    if (data.length > 0) {
+                        data.forEach(slot => {
+                            const row = document.createElement('tr');
+                            const startCell = document.createElement('td');
+                            const endCell = document.createElement('td');
+                            
+                            // APIからのデータ形式に応じて調整
+                            startCell.textContent = new Date(slot.start).toLocaleString('ja-JP');
+                            endCell.textContent = new Date(slot.end).toLocaleString('ja-JP');
+                            
+                            row.appendChild(startCell);
+                            row.appendChild(endCell);
+                            tableBody.appendChild(row);
+                        });
+                    } else {
+                        const row = document.createElement('tr');
+                        const cell = document.createElement('td');
+                        cell.colSpan = 2;
+                        cell.textContent = '空き状況がありません。';
+                        row.appendChild(cell);
+                        tableBody.appendChild(row);
+                    }
+                })
+                .catch(error => console.error('Error fetching available slots:', error));
+        }
+
         function setAvailabilityInputs() {
             // フォームの隠しフィールドに値を設定
             document.getElementById('startCalendarInput').value = document.getElementById('startCalendar').value;
@@ -223,8 +238,3 @@
     </script>
 </body>
 </html>
-<<<<<<< HEAD
-        
-=======
->>>>>>> branch 'newmain' of https://github.com/23jy0104/grp_a_01.git
-
