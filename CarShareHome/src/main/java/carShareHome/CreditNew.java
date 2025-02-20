@@ -1,7 +1,6 @@
 package carShareHome;
 
 import java.io.IOException;
-import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -16,7 +15,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import model.PasswordHasher;
 
@@ -51,14 +49,9 @@ public class CreditNew extends HttpServlet {
         String customerAddress = request.getParameter("customerAddress");
         String licenseNumber = request.getParameter("licenseNumber");
         String licenseDateStr = request.getParameter("licenseDate");
-
+        String file_omote =request.getParameter("omote");
+        String file_ura =request.getParameter("ura");
         String hashedPassword = PasswordHasher.hashPassword(password);
-
-        // セッションから画像データを取得
-        HttpSession session = request.getSession();
-        byte[] omoteBytes = (byte[]) session.getAttribute("omoteImage");
-        byte[] uraBytes = (byte[]) session.getAttribute("uraImage");
-
         // 日付の変換
         java.sql.Date birthDate = convertStringToSqlDate(birthDateStr);
         java.sql.Date licenseDate = convertStringToSqlDate(licenseDateStr);
@@ -85,21 +78,9 @@ public class CreditNew extends HttpServlet {
             preparedStatement.setDate(9, licenseDate);
             preparedStatement.setString(10, postCode);
             preparedStatement.setString(11, customerAddress);
-            
-            // 画像データをBlobとして設定
-            if (omoteBytes != null) {
-                Blob omoteBlob = new javax.sql.rowset.serial.SerialBlob(omoteBytes);
-                preparedStatement.setBlob(12, omoteBlob);
-            } else {
-                preparedStatement.setNull(12, java.sql.Types.BLOB);
-            }
-
-            if (uraBytes != null) {
-                Blob uraBlob = new javax.sql.rowset.serial.SerialBlob(uraBytes);
-                preparedStatement.setBlob(13, uraBlob);
-            } else {
-                preparedStatement.setNull(13, java.sql.Types.BLOB);
-            }
+            preparedStatement.setString(12, file_omote);
+            preparedStatement.setString(13, file_ura);
+       
 
             // SQLを実行
             preparedStatement.executeUpdate();

@@ -17,8 +17,8 @@
    	String licenseDate = request.getParameter("licenseDate");
     String birthDate = request.getParameter("birthDate"); // 生年月日も取得
     String password = request.getParameter("password");
-    String omoteImage = request.getParameter("omoteImage"); // Base64エンコードされた表面画像
-    String uraImage = request.getParameter("uraImage"); // Base64エンコードされた裏面画像
+    String file_omote = request.getParameter("file_omote");
+    String file_ura = request.getParameter("file_ura");
 %>
 <!-- クレジットカード情報入力ページ -->
 <!DOCTYPE html>
@@ -51,8 +51,8 @@
         <input type="hidden" name="licenseDate" value="<%= licenseDate %>">
         <input type="hidden" name="birthDate" value="<%= birthDate %>"> <!-- 生年月日を隠しフィールドとして追加 -->
         <input type="hidden" name="hashedPassword" value="<%= password %>"> <!-- ハッシュ化されたパスワードを保持 -->
-		<input type= "hideen" name ="omote" value ="<%=omoteImage %>">
-		<input type ="hidden" name ="ura" value ="<%=uraImage %>">
+		<input type= "hidden" name ="omote" value ="<%=file_omote %>">
+		<input type ="hidden" name ="ura" value ="<%=file_ura %>">
 
         <div class="form-group">
             <label for="credit_number">

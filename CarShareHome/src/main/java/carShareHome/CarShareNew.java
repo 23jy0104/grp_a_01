@@ -3,8 +3,6 @@ package carShareHome;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.sql.Blob;
-import java.sql.SQLException;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -61,7 +59,7 @@ public class CarShareNew extends HttpServlet {
         String licenseDate = request.getParameter("licenseDate");
         System.out.println(path);
         omoteJpg.write(path + File.separator+file_omote);
-        uraJpg.write(path +File.separatorChar +file_ura); 
+        uraJpg.write(path +File.separator +file_ura); 
         
         if (validateInputs(customerSei, customerMei, customerSeiKana, customerMeiKana, gender, birthday, licenseDate, tellNumber, email)) {
         	Customer customer = new Customer();
@@ -88,15 +86,10 @@ public class CarShareNew extends HttpServlet {
                 session.setAttribute("customer", customer);
 
 				try {
-				    byte[] omoteBytes = convertBlobToBytes(createBlobFromPart(omoteJpg));
-				    byte[] uraBytes = convertBlobToBytes(createBlobFromPart(uraJpg));
-				    
-				    session.setAttribute("omoteImage", omoteBytes);
-				    session.setAttribute("uraImage", uraBytes);
 				    
 				    RequestDispatcher rd = request.getRequestDispatcher("P20.jsp");
 				    rd.forward(request, response);
-				} catch (SQLException | IOException e) {
+				} catch (IOException e) {
 				    e.printStackTrace();
 				    request.setAttribute("errorMessage", "画像処理中にエラーが発生しました。");
 				    forwardToErrorPage(request, response);
@@ -110,17 +103,6 @@ public class CarShareNew extends HttpServlet {
 
     private boolean validateInputs(String sei, String mei, String seiKana, String meiKana, String gender, String birthDate, String licenseDate, String tellNumber, String email) {
         return sei != null && mei != null && seiKana != null && meiKana != null && gender != null && birthDate != null && licenseDate != null && tellNumber != null && email != null;
-    }
-
-    private Blob createBlobFromPart(Part part) throws SQLException, IOException {
-        try (var inputStream = part.getInputStream()) {
-            byte[] blobData = inputStream.readAllBytes();
-            return new javax.sql.rowset.serial.SerialBlob(blobData);
-        }
-    }
-
-    private byte[] convertBlobToBytes(Blob blob) throws SQLException {
-        return blob.getBytes(1, (int) blob.length());
     }
 
     private boolean isLicenseNumberExists(String licenseNumber) {

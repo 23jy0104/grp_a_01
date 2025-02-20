@@ -21,24 +21,9 @@
     // Blobをbyte[]に変換してBase64エンコード
     String omoteBase64 = null;
     String uraBase64 = null;
-    Blob omote = customer.getOmote();
-    Blob ura = customer.getUra();
-    try {
-        if (omote != null) {
-            byte[] omoteBytes = omote.getBytes(1, (int) omote.length());
-            omoteBase64 = Base64.getEncoder().encodeToString(omoteBytes);
-        }
-        if (ura != null) {
-            byte[] uraBytes = ura.getBytes(1, (int) ura.length());
-            uraBase64 = Base64.getEncoder().encodeToString(uraBytes);
-        }
-    } catch (SQLException e) {
-        e.printStackTrace();
-        // エラーメッセージを表示する場合
-        omoteBase64 = "画像の取得に失敗しました";
-        uraBase64 = "画像の取得に失敗しました";
-    }
-    System.out.printLn()
+    String file_omote =customer.getOmote();
+    String file_ura =customer.getUra();
+    System.out.println(file_omote);
 %>
 
 <!--基本情報の確認ページ-->
@@ -112,7 +97,6 @@
                 <form action="P22.jsp" method="post">
                     <input type="hidden" name="customerName"    value="<%= customerName %>">
                     <input type="hidden" name="customerKana"    value="<%= customerKana %>">
-                    <% System.out.println("P20.jsp:"+customerKana); %>
                     <input type="hidden" name="gender"          value="<%= gender %>">
                     <input type="hidden" name="email"           value="<%= email %>">
                     <input type="hidden" name="password"        value="<%=password %>">
@@ -122,8 +106,8 @@
                     <input type="hidden" name="birthDate"       value ="<%= birthDate %>">
                     <input type="hidden" name="licenseNumber"   value="<%= licenseNumber %>">
                     <input type="hidden" name="licenseDate"     value="<%= licenseDate %>">
-                    <input type="hidden" name="omoteImage"      value="<%= omoteBase64 %>">
-                    <input type="hidden" name="uraImage"        value="<%= uraBase64 %>">
+                    <input type="hidden" name="file_omote"      value="<%= file_omote %>">
+                    <input type="hidden" name="file_ura"        value="<%= file_ura %>">
                     <input type="submit" value="クレジット情報のご入力へ">
                 </form>
             </div>
