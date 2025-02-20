@@ -17,6 +17,7 @@
         }
 
         function openCustomerManagement() {
+        	console.log("こんにちは");
             window.location.href = "k_P11.jsp"; 
         }
     </script>

@@ -151,4 +151,20 @@ public class CustomerDao {
             e.printStackTrace(); // エラーメッセージを表示
         }
     }
+    
+    public void deleteCustomer(String customerId) {
+        String sql = "DELETE FROM customer WHERE customer_id = ?"; // 顧客を削除するSQL文
+
+        try (PreparedStatement pstmt = con.prepareStatement(sql)) {
+            pstmt.setString(1, customerId); // 顧客IDを設定
+            int rowsAffected = pstmt.executeUpdate(); // 実行して影響を受けた行数を取得
+            if (rowsAffected > 0) {
+                System.out.println("顧客 ID: " + customerId + " が削除されました。");
+            } else {
+                System.out.println("顧客 ID: " + customerId + " は存在しません。");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // エラーメッセージを表示
+        }
+    }
 }

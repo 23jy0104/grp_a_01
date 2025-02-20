@@ -9,36 +9,12 @@
     <link rel="stylesheet" href="css/vehicleCon.css">  
     <script>
     function sendLicenseInfo() {
-        var customerId = "<%= request.getAttribute("customerId") %>";
-        var customerName = "<%= request.getAttribute("customerName") %>";
-        console.log("中Customer ID:", customerId);
-        console.log("中Customer Name:", customerName);
-        
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "processLicenseInfo", true);
-        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                var result = JSON.parse(xhr.responseText);
-                if (result.managerCheck === "?") {
-                    alert("判定OK");
-                    console.log("Sending Customer ID:", customerId);
-                    window.location.href = "k_P18Servlet?customerId=" + encodeURIComponent(customerId) + "&customer_name=" + encodeURIComponent(customerName);
-                } else {
-                    alert("判定NG");
-                    window.location.href = "k_P13Servlet";
-                }
-            }
-            console.log("外Customer ID:", customerId);
-            console.log("外Customer Name:", customerName);
-        };
-        xhr.send("customerId=" + encodeURIComponent(customerId) + "&customerName=" + encodeURIComponent(customerName));
+        window.location.href = "k_P13Servlet"; // サーブレットにリダイレクト
     }
-
     </script>
 </head>
 <body>
-    <h1>顧客情報登録画面</h1>
+    <h1>顧客登録完了画面</h1>
     <table>
         <tr>
             <th>顧客申請者名</th>
@@ -83,7 +59,7 @@
     </table>
 
     <div class="button-container">
-        <button onclick="sendLicenseInfo()" class="send">免許証情報を送る</button>
+        <button onclick="sendLicenseInfo()" class="send">申請一覧に戻る</button>
     </div>
 </body>
 </html>
