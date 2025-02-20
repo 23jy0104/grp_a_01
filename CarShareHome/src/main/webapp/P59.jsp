@@ -11,7 +11,15 @@
     String customerName = (String) session.getAttribute("customerName");
     String img = (String) session.getAttribute("car_img");
     String modelName = (String) session.getAttribute("modelName");
+<<<<<<< HEAD
     
+=======
+    String stationName = (String) session.getAttribute("stationName");
+    String stationCode = (String) session.getAttribute("stationCode");
+    List<Timestamp[]> availableSlots = (List<Timestamp[]>) request.getAttribute("availableSlots");
+
+    // カレンダーの日付処理
+>>>>>>> branch 'newmain' of https://github.com/23jy0104/grp_a_01.git
     Calendar today = Calendar.getInstance();
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     Calendar oneMonthLater = Calendar.getInstance();
@@ -193,6 +201,10 @@
                 for (int day = 1; day <= daysInMonth; day++) {
                     monthCalendar.set(Calendar.DAY_OF_MONTH, day);
                     String dateStr = sdf.format(monthCalendar.getTime());
+<<<<<<< HEAD
+=======
+
+>>>>>>> branch 'newmain' of https://github.com/23jy0104/grp_a_01.git
                     boolean isDisabled = monthCalendar.before(today) || monthCalendar.after(oneMonthLater);
                     String className = isDisabled ? "day disabled" : "day";
                     
@@ -204,10 +216,25 @@
         %>
         </div>
 
+<<<<<<< HEAD
         <div class="button-container">
             <button class="back-button" onclick="location.href='P56.jsp'">戻る</button>
         </div>
 
+=======
+        <div class="button-container" id="actionButtons" style="margin-top: 20px;">
+            <button class="back-button" onclick="location.href='P56.jsp'">戻る</button>
+            <form action="ReservationCarTime" method="post" style="display:inline;">
+                <input type="hidden" name="stationId" value="<%= stationId %>">
+                <input type="hidden" name="modelName" value="<%= modelName %>">
+                <input type="hidden" name="startCalendar" id="startCalendarInput" value="">
+                <input type="hidden" name="startTime" id="startTimeInput" value="">
+                <input type="hidden" name="endCalendar" id="endCalendarInput" value="">
+                <input type="hidden" name="endTime" id="endTimeInput" value="">
+            </form>
+        </div>
+        <!-- タイムテーブルの表示 -->
+>>>>>>> branch 'newmain' of https://github.com/23jy0104/grp_a_01.git
         <div class="timetable" id="timetable">
             <h3 id="timetable-title">選択した日付のタイムテーブル</h3>
             <table>
@@ -249,11 +276,18 @@
             const selectedTimes = [];
 
             function selectDate(date) {
+<<<<<<< HEAD
                 document.getElementById("selectedDate").value = date; // 選択した日付をフォームにセット
                 document.getElementById("timetable-title").textContent = date + " のタイムテーブル";
                 const timetableBody = document.getElementById("timetable-body");
                 timetableBody.innerHTML = "";
+=======
+                // 選択した日付を隠しフィールドに設定
+                document.getElementById("startCalendarInput").value = date + " 00:00:00";
+                document.getElementById("endCalendarInput").value = date + " 23:59:59";
+>>>>>>> branch 'newmain' of https://github.com/23jy0104/grp_a_01.git
 
+<<<<<<< HEAD
                 const timeRow = document.createElement("tr");
                 for (let hour = 0; hour < 24; hour++) {
                     const timeCell = document.createElement("th");
@@ -262,13 +296,40 @@
                     timeRow.appendChild(timeCell);
                 }
                 timetableBody.appendChild(timeRow);
+=======
+                // タイムテーブルのタイトルを設定
+                document.getElementById("timetable-title").textContent = date + " のタイムテーブル";
+                const timetableBody = document.getElementById("timetable-body");
+                timetableBody.innerHTML = ""; 
+>>>>>>> branch 'newmain' of https://github.com/23jy0104/grp_a_01.git
 
+<<<<<<< HEAD
                 const statusRow = document.createElement("tr");
                 for (let hour = 0; hour < 24; hour++) {
                     for (let quarter = 0; quarter < 4; quarter++) {
                         const statusCell = document.createElement("td");
                         const isReserved = timeSlots && timeSlots.includes((hour * 15 + quarter) * 15); // 予約済みかどうか
+=======
+                // 1時間単位の時間を表示
+                const timeRow = document.createElement("tr");
+                for (let hour = 0; hour < 24; hour++) {
+                    const timeCell = document.createElement("th");
+                    timeCell.colSpan = 4; // 15分単位で4つのセルをまとめる
+                    timeCell.textContent = (hour < 10 ? "0" : "") + hour + ":00"; // 1時間単位で表示
+                    timeRow.appendChild(timeCell);
+                }
+                timetableBody.appendChild(timeRow);
+>>>>>>> branch 'newmain' of https://github.com/23jy0104/grp_a_01.git
 
+<<<<<<< HEAD
+=======
+                const statusRow = document.createElement("tr");
+                for (let hour = 0; hour < 24; hour++) {
+                    for (let quarter = 0; quarter < 4; quarter++) {
+                        const statusCell = document.createElement("td");
+                        const isReserved = checkIfReserved(hour, quarter); // 予約済みかどうかをチェックする関数を作成
+
+>>>>>>> branch 'newmain' of https://github.com/23jy0104/grp_a_01.git
                         // 背景色を設定
                         if (isReserved) {
                             statusCell.className = "reserved"; // 予約済みの場合、赤色背景
@@ -298,9 +359,35 @@
 
                         statusRow.appendChild(statusCell);
                     }
+<<<<<<< HEAD
+=======
                 }
                 timetableBody.appendChild(statusRow);
 
+                // タイムテーブルを表示
+                document.getElementById("timetable").style.display = "block";
+
+                // フォームをサーブレットに送信する場合
+                // 例: 予約状況を確認するボタンを自動的にクリック
+                // ここではボタンをクリックする代わりに、タイムテーブルを表示するためにサーブレットにデータを送信するように調整できます
+                document.querySelector('form[action="ReservationCarTime"]').submit();
+            }
+
+            function checkIfReserved(hour, quarter) {
+                // サーブレットから取得したデータを用いて予約済みかどうかを判定するロジックを実装
+                // ここでは仮のデータとして1時間の最初の15分を予約済みとしています
+                return (hour % 2 === 0 && quarter === 0); // 例として
+            }
+
+            function reserve() {
+                if (selectedTimes.length === 0) {
+                    alert("予約する時間を選択してください。");
+                    return;
+>>>>>>> branch 'newmain' of https://github.com/23jy0104/grp_a_01.git
+                }
+                timetableBody.appendChild(statusRow);
+
+<<<<<<< HEAD
                 // タイムテーブルを表示
                 document.getElementById("timetable").style.display = "block";
                 
@@ -315,9 +402,30 @@
                     // フォームを送信
                     document.getElementById("reservationForm").submit();
                 };
+=======
+                // 予約処理のロジックをここに追加
+                alert("予約を完了しました。選択した時間: " + selectedTimes.map(t => {
+                    const hour = Math.floor(t / 4);
+                    const minutes = (t % 4) * 15;
+                    return (hour < 10 ? "0" : "") + hour + ":" + (minutes < 10 ? "0" : "") + minutes; // 時間を表示
+                }).join(", "));
+                
+                // 必要に応じて、サーバーに予約情報を送信する処理を追加することができます。
+                // 例えば、AJAXを使用してサーバーにリクエストを送るなど。
+
+                // 予約完了後、選択をクリア
+                selectedTimes.length = 0;
+                document.getElementById("reserve-button-container").style.display = "none"; // ボタンを非表示に
+                const timetableBody = document.getElementById("timetable-body");
+                timetableBody.innerHTML = ""; // タイムテーブルをクリア
+                document.getElementById("timetable").style.display = "none"; // タイムテーブルを非表示に
+>>>>>>> branch 'newmain' of https://github.com/23jy0104/grp_a_01.git
             }
         </script>
+<<<<<<< HEAD
+=======
+
+>>>>>>> branch 'newmain' of https://github.com/23jy0104/grp_a_01.git
     </main>
 </body>
 </html>
-

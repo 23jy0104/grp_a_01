@@ -111,15 +111,12 @@
                 <form action="P22.jsp" method="post">
                     <input type="hidden" name="customerName"    value="<%= customerName %>">
                     <input type="hidden" name="customerKana"    value="<%= customerKana %>">
+                    <% System.out.println("P20.jsp:"+customerKana); %>
                     <input type="hidden" name="gender"          value="<%= gender %>">
                     <input type="hidden" name="email"           value="<%= email %>">
-<<<<<<< HEAD
-                    <input type="hidden" name="tellNumber"      value="<%= tellNumber %>">
-=======
                     <input type="hidden" name="password"        value="<%=password %>">
                     <input type="hidden" name="tellNumber"      value="<%= tellNumber %>">
                     <input type="hidden" name="postcode"        value ="<%=postcode %>">
->>>>>>> branch 'main' of https://github.com/23jy0104/grp_a_01.git
                     <input type="hidden" name="customerAddress" value="<%= customerAddress %>">
                     <input type="hidden" name="birthDate"       value ="<%= birthDate %>">
                     <input type="hidden" name="licenseNumber"   value="<%= licenseNumber %>">

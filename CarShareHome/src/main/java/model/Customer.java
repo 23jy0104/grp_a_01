@@ -1,6 +1,8 @@
 package model;
 import java.io.Serializable;
 
+import javax.servlet.http.Part;
+
 public class Customer implements Serializable{
 	private String customerId;
 	private String customerName;
@@ -16,8 +18,8 @@ public class Customer implements Serializable{
 	private String postCode;
 	private String customerAddress;
 	private String creditId;
-	private String omote;
-	private String ura;
+	private Part omote;
+	private Part ura;
 	
 	public Customer() {
 		super();
@@ -32,7 +34,7 @@ public class Customer implements Serializable{
     }
 
 	public Customer(String customerId, String customerName, String customerKana, String gender, String customerPassword, String tellNumber, String fixedCall,String email, String birthDate,
-			String licenseNumber, String licenceDate,String postCode, String customerAddress, String creditId, String omote, String ura) {
+			String licenseNumber, String licenceDate,String postCode, String customerAddress, String creditId, Part omote, Part ura) {
 		super();
 		this.customerId = customerId;
 		this.customerName = customerName;
@@ -123,20 +125,20 @@ public class Customer implements Serializable{
 		this.creditId = creditId;
 	}
 
-	public String getOmote() {
+	public Part getOmote() {
 		return omote;
 	}
 
-	public void setOmote(String omote) {
+	public void setOmote(Part omote) {
 		this.omote = omote;
 	}
 
-	public String getUra() {
+	public Part getUra() {
 		return ura;
 	}
 
-	public void setUra(String ura) {
-		this.ura = ura;
+	public void setUra(Part uraJpg) {
+		this.ura = uraJpg;
 	}
 
 	public String getLicenseNumber() {

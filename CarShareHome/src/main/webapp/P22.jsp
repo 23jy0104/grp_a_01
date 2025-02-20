@@ -6,19 +6,8 @@
 	response.setContentType("text/html; charset=UTF-8");
     // セッションからデータを取得
     String customerName = request.getParameter("customerName");
-<<<<<<< HEAD
-    String customerKana = (String) session.getAttribute("customerNameKana");
-    String gender = (String) session.getAttribute("gender");
-    String email = (String) session.getAttribute("email");
-    String tellNumber = (String) session.getAttribute("tellNumber");
-    String customerAddress = (String) session.getAttribute("customerAddress");
-    String licenseNumber = (String) session.getAttribute("licenseNumber");
-   	String licenseDate = (String) session.getAttribute("licenseDate");
-    String birthDate = (String) session.getAttribute("birthDate"); // 生年月日も取得
-    String hashedPassword = (String) session.getAttribute("hashedPassword");
-	System.out.println(customerName);
-=======
-    String customerKana = request.getParameter("customerNameKana");
+    String customerKana = request.getParameter("customerKana");
+    System.out.println("P22.jsp:"+customerKana);
     String gender =request.getParameter("gender");
     String email = request.getParameter("email");
     String postcode =request.getParameter("postcode");
@@ -28,8 +17,8 @@
    	String licenseDate = request.getParameter("licenseDate");
     String birthDate = request.getParameter("birthDate"); // 生年月日も取得
     String password = request.getParameter("password");
-
->>>>>>> branch 'main' of https://github.com/23jy0104/grp_a_01.git
+    String omoteImage = request.getParameter("omoteImage"); // Base64エンコードされた表面画像
+    String uraImage = request.getParameter("uraImage"); // Base64エンコードされた裏面画像
 %>
 <!-- クレジットカード情報入力ページ -->
 <!DOCTYPE html>
@@ -62,6 +51,8 @@
         <input type="hidden" name="licenseDate" value="<%= licenseDate %>">
         <input type="hidden" name="birthDate" value="<%= birthDate %>"> <!-- 生年月日を隠しフィールドとして追加 -->
         <input type="hidden" name="hashedPassword" value="<%= password %>"> <!-- ハッシュ化されたパスワードを保持 -->
+		<input type= "hideen" name ="omote" value ="<%=omoteImage %>">
+		<input type ="hidden" name ="ura" value ="<%=uraImage %>">
 
         <div class="form-group">
             <label for="credit_number">
