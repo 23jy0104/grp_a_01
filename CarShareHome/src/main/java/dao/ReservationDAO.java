@@ -87,4 +87,52 @@ public class ReservationDAO {
         System.out.println("取得した予約数: " + reservations.size());
         return reservations;
     }
+    
+    public List<Reservation> getReservationsWithFinishDate(String customerId) {
+        List<Reservation> reservations = new ArrayList<>();
+        String sql = "SELECT r.*, c.customer_id, c.customer_name, s.station_name, s.station_id " +
+                     "FROM reservation r " +
+                     "JOIN customer c ON r.customer_id = c.customer_id " +
+                     "JOIN keybox kb ON r.car_code = kb.car_code " +
+                     "JOIN station s ON kb.station_id = s.station_id " +
+                     "WHERE r.customer_id = ? AND r.finish_date IS NOT NULL";
+
+        try (PreparedStatement pstmt = con.prepareStatement(sql)) {
+            pstmt.setString(1, customerId); // customerIdを設定
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    String reservationId = rs.getString("reservation_id");
+                    String startDate = rs.getString("start_date");
+                    String stopDate = rs.getString("stop_date");
+                    Station station = new Station(rs.getString("station_id"), rs.getString("station_name"));
+                    Customer customer = new Customer(rs.getString("customer_id"));
+                    customer.setCustomerName(rs.getString("customer_name")); // customerNameを設定
+                    String finishDate = rs.getString("finish_date");
+                    int price = rs.getInt("price");
+                    CarData carData = new CarData(rs.getString("car_code"));
+
+                    // Reservationオブジェクトを作成
+                    Reservation reservation = new Reservation(
+                        reservationId,
+                        startDate,
+                        stopDate,
+                        customer,
+                        station,
+                        finishDate,
+                        price,
+                        carData
+                    );
+
+                    reservations.add(reservation);
+                    System.out.println("予約ID: " + reservation.getReservationId() + ", 顧客名: " + customer.getCustomerName());
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        System.out.println("取得した予約数: " + reservations.size());
+        return reservations;
+    }
+
 }

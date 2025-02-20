@@ -139,4 +139,16 @@ public class CustomerDao {
         }
         return customer;
     }
+    
+    public void updateManagerCheck(String customerId, String managerCheck) {
+        String sql = "UPDATE customer SET manager_check = ? WHERE customer_id = ?";
+
+        try (PreparedStatement pstmt = con.prepareStatement(sql)) {
+            pstmt.setString(1, managerCheck);
+            pstmt.setString(2, customerId);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(); // エラーメッセージを表示
+        }
+    }
 }
