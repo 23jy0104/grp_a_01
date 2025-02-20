@@ -92,7 +92,7 @@
                 </tr>
             </table>
             <p><%=email %></p>
-            <button class="informationchange" onclick="location.href='UC07_01.html'">会員情報の変更</button>    
+            <button class="informationchange" onclick="location.href='P79.jsp'">住所情報の変更</button>    
     </div>
     <h3>各種手続き</h3>
     <a href="P95.jsp">パスワード変更</a><br>

@@ -11,15 +11,9 @@
     String customerName = (String) session.getAttribute("customerName");
     String img = (String) session.getAttribute("car_img");
     String modelName = (String) session.getAttribute("modelName");
-<<<<<<< HEAD
-    
-=======
     String stationName = (String) session.getAttribute("stationName");
     String stationCode = (String) session.getAttribute("stationCode");
     List<Timestamp[]> availableSlots = (List<Timestamp[]>) request.getAttribute("availableSlots");
-
-    // カレンダーの日付処理
->>>>>>> branch 'newmain' of https://github.com/23jy0104/grp_a_01.git
     Calendar today = Calendar.getInstance();
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     Calendar oneMonthLater = Calendar.getInstance();
