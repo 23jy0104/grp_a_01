@@ -16,6 +16,14 @@ public class k_P15Servlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // クエリパラメータからcustomerIdを取得
         String customerId = request.getParameter("customerId");
+        System.out.println("サーブレット Customer ID: " + customerId); // デバッグ用メッセージ
+
+        if (customerId == null || customerId.isEmpty()) {
+            System.err.println("Customer ID is missing or empty."); // エラーメッセージ
+            request.setAttribute("errorMessage", "Customer ID is required.");
+            request.getRequestDispatcher("error.jsp").forward(request, response); // エラーページにリダイレクト
+            return;
+        }
 
         // CustomerDaoを使用して顧客情報を取得
         CustomerDao customerDao = new CustomerDao();
@@ -33,6 +41,8 @@ public class k_P15Servlet extends HttpServlet {
             request.setAttribute("customerAddress", customer.getCustomerAddress());
             request.setAttribute("omoteJpg", customer.getOmote());
             request.setAttribute("uraJpg", customer.getUra());
+        } else {
+            System.err.println("No customer found with ID: " + customerId);
         }
 
         // JSPにフォワード

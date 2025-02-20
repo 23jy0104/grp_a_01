@@ -38,7 +38,7 @@ public class UseHistory extends HttpServlet {
         ReservationDAO reservationDAO = new ReservationDAO();
 
         // 利用履歴を取得
-        List<Reservation> usedReservations = reservationDAO.getAllReservations(customerId); // customerIdを引数として渡す
+        List<Reservation> usedReservations = reservationDAO.getReservationsWithFinishDate(customerId); // customerIdを引数として渡す
 
         // リクエスト属性に設定
         request.setAttribute("customerId", customerId);
