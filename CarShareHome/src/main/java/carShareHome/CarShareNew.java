@@ -1,6 +1,8 @@
 package carShareHome;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.sql.Blob;
 import java.sql.SQLException;
 
@@ -53,9 +55,14 @@ public class CarShareNew extends HttpServlet {
         String licenseNumber = request.getParameter("licenseNumber");       
         Part omoteJpg = request.getPart("file_omote");
         Part uraJpg = request.getPart("file_ura");
+        String file_omote =Paths.get(omoteJpg.getSubmittedFileName()).getFileName().toString();
+        String file_ura =Paths.get(uraJpg.getSubmittedFileName()).getFileName().toString();
+        String path =getServletContext().getRealPath("upload");
         String licenseDate = request.getParameter("licenseDate");
+        System.out.println(path);
+        omoteJpg.write(path + File.separator+file_omote);
+        uraJpg.write(path +File.separatorChar +file_ura); 
         
-
         if (validateInputs(customerSei, customerMei, customerSeiKana, customerMeiKana, gender, birthday, licenseDate, tellNumber, email)) {
         	Customer customer = new Customer();
 
@@ -74,8 +81,8 @@ public class CarShareNew extends HttpServlet {
                 customer.setLicenceDate(licenseDate);
                 customer.setCustomerAddress(customerAddress);
                 customer.setPostCode(postcode);
-                customer.setUra(uraJpg);
-                customer.setOmote(omoteJpg);
+                customer.setUra(file_omote);
+                customer.setOmote(file_ura);
 
                 HttpSession session = request.getSession();
                 session.setAttribute("customer", customer);
@@ -86,7 +93,7 @@ public class CarShareNew extends HttpServlet {
 				    
 				    session.setAttribute("omoteImage", omoteBytes);
 				    session.setAttribute("uraImage", uraBytes);
-				
+				    
 				    RequestDispatcher rd = request.getRequestDispatcher("P20.jsp");
 				    rd.forward(request, response);
 				} catch (SQLException | IOException e) {

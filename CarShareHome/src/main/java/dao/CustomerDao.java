@@ -86,8 +86,8 @@ public class CustomerDao {
                 customer.setPostCode(rs.getString("postCode"));
                 customer.setCustomerAddress(rs.getString("customerAddress"));
                 customer.setCreditId(rs.getString("creditId"));
-                customer.setOmote(rs.getBlob("omote"));
-                customer.setUra(rs.getBlob("ura"));
+                customer.setOmote(rs.getString("omote"));
+                customer.setUra(rs.getString("ura"));
                 customers.add(customer);
             }
         } catch (SQLException e) {
@@ -131,8 +131,8 @@ public class CustomerDao {
                 customer.setLicenceDate(rs.getString("license_date"));
                 customer.setPostCode(rs.getString("post_code"));
                 customer.setCustomerAddress(rs.getString("customer_address"));
-                customer.setOmote(rs.getBlob("omote_jpg")); // 画像のパスを取得
-                customer.setUra(rs.getBlob("ura_jpg")); // 画像のパスを取得
+                customer.setOmote(rs.getString("omote_jpg")); // 画像のパスを取得
+                customer.setUra(rs.getString("ura_jpg")); // 画像のパスを取得
             }
         } catch (SQLException e) {
             e.printStackTrace(); // エラーメッセージを表示

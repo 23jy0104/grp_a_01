@@ -1,8 +1,6 @@
 package model;
 import java.io.Serializable;
 
-import javax.servlet.http.Part;
-
 public class Customer implements Serializable{
 	private String customerId;
 	private String customerName;
@@ -18,8 +16,8 @@ public class Customer implements Serializable{
 	private String postCode;
 	private String customerAddress;
 	private String creditId;
-	private Part omote;
-	private Part ura;
+	private String omote;
+	private String ura;
 	
 	public Customer() {
 		super();
@@ -34,7 +32,7 @@ public class Customer implements Serializable{
     }
 
 	public Customer(String customerId, String customerName, String customerKana, String gender, String customerPassword, String tellNumber, String fixedCall,String email, String birthDate,
-			String licenseNumber, String licenceDate,String postCode, String customerAddress, String creditId, Part omote, Part ura) {
+			String licenseNumber, String licenceDate,String postCode, String customerAddress, String creditId, String omote,String ura) {
 		super();
 		this.customerId = customerId;
 		this.customerName = customerName;
@@ -125,21 +123,6 @@ public class Customer implements Serializable{
 		this.creditId = creditId;
 	}
 
-	public Part getOmote() {
-		return omote;
-	}
-
-	public void setOmote(Part omote) {
-		this.omote = omote;
-	}
-
-	public Part getUra() {
-		return ura;
-	}
-
-	public void setUra(Part uraJpg) {
-		this.ura = uraJpg;
-	}
 
 	public String getLicenseNumber() {
 		return licenseNumber;
@@ -184,6 +167,18 @@ public class Customer implements Serializable{
 	}
 	public void setPostCode(String postCode) {
 		this.postCode = postCode;
+	}
+	public String getOmote() {
+		return omote;
+	}
+	public void setOmote(String omote) {
+		this.omote = omote;
+	}
+	public String getUra() {
+		return ura;
+	}
+	public void setUra(String ura) {
+		this.ura = ura;
 	}
 	
 	

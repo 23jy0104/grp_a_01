@@ -32,14 +32,7 @@ public class ReservationCarTime extends HttpServlet {
         HttpSession session = request.getSession();
         String stationId = (String) session.getAttribute("stationId");
         String modelName = (String) session.getAttribute("modelName");
-<<<<<<< HEAD
-        String selectedDate = request.getParameter("selectedDate"); // 選択した日付を取得
-=======
-        
-        // クリックした日付を取得
-        String startDate = request.getParameter("startCalendar") + " 00:00:00"; // 00:00:00を追加
-        String endDate = request.getParameter("endCalendar") + " 23:59:59"; // 23:59:59を追加
->>>>>>> branch 'newmain' of https://github.com/23jy0104/grp_a_01.git
+        String selectedDate = request.getParameter("selectedDate"); // 選択した日付を
 
         Connection con = null;
         PreparedStatement ps = null;
@@ -63,24 +56,15 @@ public class ReservationCarTime extends HttpServlet {
                          "JOIN reservation r ON r.car_code = c.car_code " +
                          "WHERE k.station_id = ? " +
                          "AND c.model_id = ? " +
-<<<<<<< HEAD
-                         "AND r.start_date >= ? " + // 選択した日付以降
-                         "AND r.stop_date < DATE_ADD(?, INTERVAL 1 DAY);"; // 選択した日付の次の日まで
-=======
                          "AND start_date < ? " +
                          "AND stop_date > ?;";
->>>>>>> branch 'newmain' of https://github.com/23jy0104/grp_a_01.git
             
             ps = con.prepareStatement(sql);
             ps.setString(1, stationId);
             ps.setString(2, modelName);
-<<<<<<< HEAD
             ps.setString(3, selectedDate); // 選択した日付をパラメータに設定
             ps.setString(4, selectedDate); // 同じく選択した日付を設定
-=======
-            ps.setString(3, startDate); // ここで23:59:59を適用
-            ps.setString(4, endDate); // ここで00:00:00を適用
->>>>>>> branch 'newmain' of https://github.com/23jy0104/grp_a_01.git
+
             rs = ps.executeQuery();
             
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); // フォーマットを指定
@@ -90,10 +74,6 @@ public class ReservationCarTime extends HttpServlet {
                 Maker maker = new Maker();
                 Model model = new Model();
                 Reservation re = new Reservation();
-<<<<<<< HEAD
-                
-=======
->>>>>>> branch 'newmain' of https://github.com/23jy0104/grp_a_01.git
                 carData.setCarCode(rs.getString("car_code"));
                 carData.setModelYear(rs.getString("model_year"));
                 carData.setCarNumber(rs.getString("number"));
