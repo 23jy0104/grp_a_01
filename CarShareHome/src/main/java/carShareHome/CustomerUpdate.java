@@ -30,30 +30,27 @@ public class CustomerUpdate extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html; charset=UTF-8");
-        String postcode =request.getParameter("postCode");
-        
+        String postcode =request.getParameter("postcode");
+        String customerId =request.getParameter("customerId");
         String address1 =request.getParameter("address1");
         String address2 =request.getParameter("address2");
         String apartment =request.getParameter("apartment");
-        
         String customerAddress =address1 +" "+address2 +" "+apartment;
-        
-        String tellNumber =request.getParameter("TEL");
-        String email =request.getParameter("newEmail");
-        
-        if (validateInputs(customerAddress,tellNumber,email)) {
+        String tellNumber =request.getParameter("tellNumber");
+        if (validateInputs(customerAddress,tellNumber)) {
         	Customer customer = new Customer();
+        		customer.setCustomerId(customerId);
                 customer.setTellNumber(tellNumber);
-                customer.setEmail(email);
                 customer.setCustomerAddress(customerAddress);
                 customer.setPostCode(postcode);
-
                 HttpSession session = request.getSession();
                 session.setAttribute("customer", customer);
-
+                System.out.println(postcode);
+                System.out.println(customerAddress);
+                System.out.println(tellNumber);
 				try {
 				    
-				    RequestDispatcher rd = request.getRequestDispatcher("P20.jsp");
+				    RequestDispatcher rd = request.getRequestDispatcher("P82.jsp");
 				    rd.forward(request, response);
 				} catch (IOException e) {
 				    e.printStackTrace();
@@ -66,8 +63,8 @@ public class CustomerUpdate extends HttpServlet {
         }
     }
 
-    private boolean validateInputs( String customerAddress, String tellNumber, String email) {
-        return customerAddress!=null && tellNumber != null && email != null;
+    private boolean validateInputs( String customerAddress, String tellNumber) {
+        return customerAddress!=null && tellNumber != null;
     }
 
 

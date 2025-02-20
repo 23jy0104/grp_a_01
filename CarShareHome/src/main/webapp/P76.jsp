@@ -4,18 +4,18 @@
 <%@ page import="java.util.Date" %>
 <%
     String customerName = (String) session.getAttribute("customerName");
-String customerId = (String) request.getAttribute("customerId");
-	String customerKana =(String) session.getAttribute("customerKana");
-	String email =(String)session.getAttribute("email");
-	String tellNumber =(String)session.getAttribute("tellNumber");
-	String postCode =(String)session.getAttribute("postCode");
-	String customerAddress =(String)session.getAttribute("customerAddress");
-	Date licenseDate =(Date)session.getAttribute("licenseDate");
+    String customerKana = (String) session.getAttribute("customerKana");
+    String email = (String) session.getAttribute("email");
+    String tellNumber = (String) session.getAttribute("tellNumber");
+    String postCode = (String) session.getAttribute("postCode");
+    String customerAddress = (String) session.getAttribute("customerAddress");
+    Date licenseDate = (Date) session.getAttribute("licenseDate");
+
+    // リクエスト属性からの情報取得
+    String updatedTellNumber = (String) request.getAttribute("tellNumber");
+    String updatedPostCode = (String) request.getAttribute("postCode");
+    String updatedCustomerAddress = (String) request.getAttribute("customerAddress");
 %>
-<!--登録情報変更入力画面-->
-
-<!--登録情報の確認-->
-
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -35,7 +35,7 @@ String customerId = (String) request.getAttribute("customerId");
         <ul>
             <li class="nav-item gnav02"><a href="P53.jsp">予約・ステーション検索</a></li>
             <li class="nav-item gnav03"><a href="P65.jsp">予約確認・変更・取り消し</a></li>
-            <li class="nav-item gnav04"><a href="UseHistory?customerId=<%= customerId %>&customerName=<%= customerName %>">ご利用履歴</a></li>
+            <li class="nav-item gnav04"><a href="P74.jsp">ご利用履歴</a></li>
             <li class="nav-item gnav05"><a href="P76.jsp">ご登録情報の確認</a></li>
         </ul>
     </nav>
@@ -45,55 +45,78 @@ String customerId = (String) request.getAttribute("customerId");
             <tr>
                 <th class="howtouse">決済方法</th>
             </tr>
-        </table>
-        <p>クレジット
-            <button class="change" onclick="location.href='P88.jsp'" style="float: right;">変更する</button>
-        </p>
-        
-        <table>
-            <th class="howtouse">氏名</th>
+            <tr>
+                <td>クレジット
+                    <button class="change" onclick="location.href='P88.jsp'" style="float: right;">変更する</button>
+                </td>
             </tr>
         </table>
-        <p><%=customerName %></p>
+        
+        <table>
+            <tr>
+                <th class="howtouse">氏名</th>
+            </tr>
+            <tr>
+                <td><%= customerName %></td>
+            </tr>
+        </table>
         <table>
             <tr>
                 <th class="howtouse">氏名フリガナ</th>
             </tr>
+            <tr>
+                <td><%= customerKana %></td>
+            </tr>
         </table>
-        <p><%=customerKana %></p>
         <table>
             <tr>
                 <th class="howtouse">住所</th>
             </tr>
+            <tr>
+                <td>
+                    <%= updatedPostCode != null ? updatedPostCode : postCode %><br>
+                    <%= updatedCustomerAddress != null ? updatedCustomerAddress : customerAddress %>
+                </td>
+            </tr>
         </table>
-        <p><%=postCode %>
-            <br><%=customerAddress %>
-        </p>
         <table>
             <tr>
                 <th class="howtouse">電話番号(携帯)</th>
             </tr>
+            <tr>
+                <td>
+                    <%= updatedTellNumber != null ? updatedTellNumber : tellNumber %>
+                </td>
+            </tr>
         </table>
-        <p><%=tellNumber %></p>
         <table>
             <tr>
                 <th class="howtouse">運転免許証有効期限</th>
             </tr>
+            <tr>
+                <td><%= licenseDate %></td>
+            </tr>
         </table>
-        <p><%=licenseDate %></p>
         <table>
             <tr>
                 <th class="howtouse">安心補償サービス</th>
             </tr>
+            <tr>
+                <td>自動加入</td>
+            </tr>
         </table>
-            <p>自動加入</p>
-            <table>
-                <tr>
-                    <th class="howtouse">ご登録メールアドレス</th>
-                </tr>
-            </table>
-            <p><%=email %></p>
-            <button class="informationchange" onclick="location.href='P79.jsp'">住所情報の変更</button>    
+        <table>
+            <tr>
+                <th class="howtouse">ご登録メールアドレス</th>
+            </tr>
+            <tr>
+                <td>
+                    <%= email %>
+                    <button class="change" onclick="location.href='P87.jsp'" style="float: right;">変更する</button>
+                </td>
+            </tr>
+        </table>
+        <button class="informationchange" onclick="location.href='P79.jsp'">住所情報の変更</button>    
     </div>
     <h3>各種手続き</h3>
     <a href="P95.jsp">パスワード変更</a><br>

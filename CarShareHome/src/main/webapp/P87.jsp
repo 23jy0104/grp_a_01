@@ -5,8 +5,7 @@
 <% 
 String customerName = (String) session.getAttribute("customerName");
 String customerKana =(String) session.getAttribute("customerKana");
-String tellNumber =(String)session.getAttribute("tellNumber");
-
+String email =(String)session.getAtteribute("email");
 %>
 
 <!--変更後の登録情報の確認-->
@@ -41,7 +40,7 @@ String tellNumber =(String)session.getAttribute("tellNumber");
     </nav>
     <h1>登録情報の変更</h1>
     <div class="usage">
-        <form action="CustomerUpdate" method="post">
+        <form action="CustomerEmailUpdate" method="post">
             <table>
                 <th class="howtouse">氏名</th>
             </table>
@@ -53,53 +52,21 @@ String tellNumber =(String)session.getAttribute("tellNumber");
                 </tr>
             </table>
             <p><%=customerKana %></p>
-
             <table>
                 <tr>
-                    <th class="howtouse">郵便番号<span style="color: red;">※必須</span></th>
+                    <th class="howtouse">現在のメールアドレス</th>
+                </tr>
+            </table>
+            <p><%=email %></p>
+            <table>
+                <tr>
+                    <th class="howtouse">メールアドレス<span style="color: red;">※必須</span></th>
                 </tr>
             </table>
             <div class="form-group">
-                〒<input type="text" name="postcode" placeholder="例：169-0073" required>
+                <input type="text" name="postCode" placeholder="taro.time@example.com" required>
             </div>
 
-            <table>
-                <tr>
-                    <th class="howtouse">都道府県/市区町村<span style="color: red;">※必須</span></th>
-                </tr>
-            </table>
-            <div class="form-group">
-                <input type="text" name="address1" placeholder="例：東京都新宿区" required>
-            </div>
-
-            <table>
-                <tr>
-                    <th class="howtouse">町名・番地など<span style="color: red;">※必須</span></th>
-                </tr>
-            </table>
-            <div class="form-group">
-                <input type="text" name="address2" placeholder="例：百人町1-25-4" required>
-            </div>
-
-            <table>
-                <tr>
-                    <th class="howtouse">アパート名・マンション名・号室</th>
-                </tr>
-            </table>
-            <div class="form-group">
-                <input type="text" name="apartment" placeholder="例：日電マンション305">
-            </div>
-
-            <table>
-                <tr>
-                    <th class="howtouse">携帯電話番号<span style="color: red;">※必須</span></th>
-                </tr>
-            </table>
-            <div class="form-group">
-                <input type="text" name="tellNumber" placeholder="例：09012345678" value="<%= tellNumber%>">
-            </div>
-
-            <table>
             <button class="informationchange" type="submit">変更する</button>    
         </form>
         <button type="button" onclick ="location.href='P76.jsp'">前の画面に戻る</button>
