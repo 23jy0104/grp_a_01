@@ -16,6 +16,8 @@
         String makerName = request.getParameter("makerName");
         String modelName = request.getParameter("modelName");
         String modelYear = request.getParameter("modelYear");
+        
+        String errorMessage = (String) request.getAttribute("errorMessage");
     %>
     <h1><%= stationName != null ? stationName : "ステーション名がありません" %>ステーション　車両登録情報</h1>
     <table>
@@ -36,6 +38,13 @@
             <td><%= selectedPlate != null ? selectedPlate : "未設定" %></td>
         </tr>
     </table>
+    
+	<% if (errorMessage != null) { %>
+        <script>
+            alert("<%= errorMessage %>");
+            window.location.href = "k_P4.jsp"; // 閉じるボタンを押したら遷移
+        </script>
+    <% } %>
 
     <div class="button-container">
         <button onclick="document.location.href='k_P4.jsp'">検索画面に戻る</button>
