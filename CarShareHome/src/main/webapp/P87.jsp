@@ -5,7 +5,8 @@
 <% 
 String customerName = (String) session.getAttribute("customerName");
 String customerKana =(String) session.getAttribute("customerKana");
-String email =(String)session.getAtteribute("email");
+String email =(String)session.getAttribute("email");
+
 %>
 
 <!--変更後の登録情報の確認-->
@@ -38,37 +39,41 @@ String email =(String)session.getAtteribute("email");
             <li class="nav-item gnav05"><a href="./P76.jsp">ご登録情報の確認</a></li>
         </ul>
     </nav>
-    <h1>登録情報の変更</h1>
+    <h1>メールアドレス情報の変更</h1>
     <div class="usage">
-        <form action="CustomerEmailUpdate" method="post">
-            <table>
-                <th class="howtouse">氏名</th>
-            </table>
-            <p><%=customerName %></p>
-
-            <table>
-                <tr>
-                    <th class="howtouse">氏名フリガナ</th>
-                </tr>
-            </table>
-            <p><%=customerKana %></p>
-            <table>
-                <tr>
-                    <th class="howtouse">現在のメールアドレス</th>
-                </tr>
-            </table>
-            <p><%=email %></p>
-            <table>
-                <tr>
-                    <th class="howtouse">メールアドレス<span style="color: red;">※必須</span></th>
-                </tr>
-            </table>
-            <div class="form-group">
-                <input type="text" name="postCode" placeholder="taro.time@example.com" required>
-            </div>
-
-            <button class="informationchange" type="submit">変更する</button>    
-        </form>
+        <form action="EmailUpdate" method="post">
+		    <table>
+		        <th class="howtouse">氏名</th>
+		    </table>
+		    <p><%=customerName %></p>
+		
+		    <table>
+		        <tr>
+		            <th class="howtouse">氏名フリガナ</th>
+		        </tr>
+		    </table>
+		    <p><%=customerKana %></p>
+		
+		    <table>
+		        <tr>
+		            <th class="howtouse">現在のメールアドレス</th>
+		        </tr>
+		        <tr>
+		            <td>
+		                <%= email %>
+		            </td>
+		        </tr>
+		    </table>
+		    <table>
+		        <tr>
+		            <th class="howtouse">変更後のメールアドレス<span style="color: red;">※必須</span></th>
+		        </tr>
+		    </table>
+		    <div class="form-group">
+		        <input type="email" id="email" name="email" placeholder="例：〇〇〇〇〇〇〇〇＠〇〇〇〇〇〇.ne.jp" required>
+		    </div>
+		    <button class="informationchange" type="submit">変更する</button>    
+		</form>
         <button type="button" onclick ="location.href='P76.jsp'">前の画面に戻る</button>
     </div>
 </body>

@@ -14,7 +14,8 @@
     // リクエスト属性からの情報取得
     String updatedTellNumber = (String) request.getAttribute("tellNumber");
     String updatedPostCode = (String) request.getAttribute("postCode");
-    String updatedCustomerAddress = (String) request.getAttribute("customerAddress");
+    String updatedCustomerAddress = (String) request.getAttribute("customerAddress");   
+    String updatedEmail = (String) request.getAttribute("email"); // 新しいメールアドレスを取得
 %>
 <!DOCTYPE html>
 <html lang="ja">
@@ -111,7 +112,7 @@
             </tr>
             <tr>
                 <td>
-                    <%= email %>
+                   <%= updatedEmail != null ? updatedEmail : email %>
                     <button class="change" onclick="location.href='P87.jsp'" style="float: right;">変更する</button>
                 </td>
             </tr>
