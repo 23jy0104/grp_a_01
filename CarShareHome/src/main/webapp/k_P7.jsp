@@ -36,62 +36,44 @@
         System.out.println("ステーション住所: " + (stationAddress != null ? stationAddress : "未設定"));
     %>
     <h1><%= stationName != null ? stationName : "ステーション名がありません" %></h1>
-    <p>住所: <%= stationAddress != null ? stationAddress : "住所がありません" %></p>
 
-    <div class="input-container">
-        <div class="select-container">
-            ナンバープレート　　<select id="plate">
-                <option value="">--選択してください--</option>
-                <% 
-                    List<CarInfo> carInfoListFromRequest = (List<CarInfo>) request.getAttribute("carInfoList");
-                    if (carInfoListFromRequest != null) {
-                        for (CarInfo carInfo : carInfoListFromRequest) {
-                            String number = carInfo.getNumber();
-                            System.out.println("ナンバープレート: " + number);
-                %>
-                <option value="<%= number %>"><%= number %></option>
-                <%
-                        }
-                    } else {
-                %>
-                <option value="">ナンバープレート情報がありません</option>
-                <%
+   	<div class="input-container">
+    <div class="select-container">
+        ナンバープレート　　<select id="plate">
+            <option value="">--選択してください--</option>
+            <% 
+                List<CarInfo> carInfoListFromRequest = (List<CarInfo>) request.getAttribute("carInfoList");
+                if (carInfoListFromRequest != null) {
+                    for (CarInfo carInfo : carInfoListFromRequest) {
+                        String number = carInfo.getNumber();
+            %>
+            <option value="<%= number %>"><%= number %></option>
+            <%
                     }
-                %>
-            </select>
-        </div>
-        <div class="button-container">
-            <form action="k_P7Servlet" method="post">
-                <input type="hidden" name="selectedPlate" id="selectedPlate">
-                <button type="button" onclick="submitForm()">検索</button>
-            </form>
-        </div>
+                } else {
+            %>
+            <option value="">ナンバープレート情報がありません</option>
+            <%
+                }
+            %>
+        </select>
     </div>
-
-    <div id="result-container" style="display: none;">
-        <div id="result-table-container"></div>
-        <div class="button-container">
-            <button onclick="register()">登録する</button>
-        </div>
+    <div class="button-container">
+        <form id="searchForm" action="CarInfoServlet" method="post">
+            <input type="hidden" name="selectedPlate" id="selectedPlate">
+            <input type="hidden" name="stationName" value="<%= stationName != null ? stationName : "" %>">
+            <input type="hidden" name="stationAddress" value="<%= stationAddress != null ? stationAddress : "" %>">
+            <button type="button" onclick="submitForm()">検索</button>
+        </form>
     </div>
+</div>
 
-    <script>
-        function submitForm() {
-            const plate = document.getElementById('plate').value;
-            if (plate) {
-                document.getElementById('selectedPlate').value = plate;
-                document.forms[0].submit(); // フォームを送信
-            } else {
-                alert('ナンバープレートを選択してください。');
-            }
-        }
-    </script>
 
-    <% 
-        CarInfo carInfo = (CarInfo) request.getAttribute("carInfo");
-        if (carInfo != null) {
-    %>
-        <div id="result-container">
+    <div id="result-container">
+        <% 
+            CarInfo carInfo = (CarInfo) request.getAttribute("carInfo");
+            if (carInfo != null) {
+        %>
             <table>
                 <tr>
                     <td>車両メーカー</td>
@@ -110,18 +92,61 @@
                     <td><%= carInfo.getNumber() %></td>
                 </tr>
             </table>
-        </div>
-    <% 
-        } else {
-    %>
-        <p>選択されたナンバープレートに対する情報が見つかりませんでした。</p>
-    <% 
-        }
-    %>
+            <div class="button-container">
+                <button onclick="register()">登録する</button>
+            </div>
+        <% 
+            } else {
+                // 車両情報がない場合の処理
+            }
+        %>
+    </div>
 
     <script>
+	    function submitForm() {
+	        const plate = document.getElementById('plate').value;
+	        if (plate) {
+	            document.getElementById('selectedPlate').value = plate;
+	            document.getElementById('searchForm').submit(); // フォームを送信
+	        } else {
+	            alert('ナンバープレートを選択してください。');
+	        }
+	    }
+
         function register() {
-            window.location.href = "P10.html"; // 登録処理（ページ遷移）
+            const plate = "<%= carInfo != null ? carInfo.getNumber() : "" %>";
+            const stationName = "<%= stationName != null ? stationName : "" %>";
+            const stationAddress = "<%= stationAddress != null ? stationAddress : "" %>";
+            const makerName = "<%= carInfo != null ? carInfo.getMakerName() : "" %>";
+            const modelName = "<%= carInfo != null ? carInfo.getModelName() : "" %>";
+            const modelYear = "<%= carInfo != null ? carInfo.getModelYear() : "" %>";
+
+            if (plate) {
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = 'RegisterCarServlet'; // サーブレットのURL
+
+                // 各パラメータをフォームに追加
+                form.appendChild(createHiddenInput('selectedPlate', plate));
+                form.appendChild(createHiddenInput('stationName', stationName));
+                form.appendChild(createHiddenInput('stationAddress', stationAddress));
+                form.appendChild(createHiddenInput('makerName', makerName));
+                form.appendChild(createHiddenInput('modelName', modelName));
+                form.appendChild(createHiddenInput('modelYear', modelYear));
+
+                document.body.appendChild(form);
+                form.submit(); // フォームを送信
+            } else {
+                alert('ナンバープレートを選択してください。');
+            }
+        }
+
+        function createHiddenInput(name, value) {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = name;
+            input.value = value;
+            return input;
         }
     </script>
 </body>

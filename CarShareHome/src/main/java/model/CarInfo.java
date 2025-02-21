@@ -12,6 +12,7 @@ public class CarInfo {
         this.modelName = modelName;
         this.modelYear = modelYear;
     }
+    
 
     public String getMakerName() {
         return makerName;

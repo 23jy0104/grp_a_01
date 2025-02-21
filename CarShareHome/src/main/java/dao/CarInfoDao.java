@@ -73,4 +73,71 @@ public class CarInfoDao {
         }
         return carInfo; // ナンバープレートに対応する情報がない場合はnullを返す
     }
+    
+    // 車両をkeyboxに追加するメソッド
+    public boolean addCarToKeybox(String selectedPlate, String stationName, String stationAddress) {
+        // 空いているkeybox_idを取得
+        Integer availableKeyboxId = getAvailableKeyboxId(stationName, stationAddress);
+
+        if (availableKeyboxId == null) {
+            System.out.println("すべてのkeybox_idが埋まっています。");
+            return false;
+        }
+
+        // keyboxに車両を追加
+        String sql = "INSERT INTO keybox (keybox_id, station_id, car_code) " +
+                     "VALUES (?, (SELECT station_id FROM station WHERE station_name = ? AND station_address = ? LIMIT 1), " +
+                     "(SELECT car_code FROM car_db WHERE number = ? LIMIT 1))";
+
+        try (Connection con = DriverManager.getConnection(URL, USER, PASSWORD);
+             PreparedStatement pstmt = con.prepareStatement(sql)) {
+
+            pstmt.setInt(1, availableKeyboxId);
+            pstmt.setString(2, stationName);
+            pstmt.setString(3, stationAddress);
+            pstmt.setString(4, selectedPlate);
+
+            int rowsAffected = pstmt.executeUpdate();
+            System.out.println("挿入行数: " + rowsAffected);
+            return rowsAffected > 0; // 成功した場合はtrueを返す
+        } catch (SQLException e) {
+            e.printStackTrace(); // エラーの詳細を出力
+            return false; // 失敗した場合はfalseを返す
+        }
+    }
+    // 使用可能なkeybox_idを取得するメソッド
+    private Integer getAvailableKeyboxId(String stationName, String stationAddress) {
+        // station_idを取得するためのサブクエリ
+        String sql = "SELECT keybox_id FROM keybox WHERE station_id = (" +
+                     "SELECT station_id FROM station WHERE station_name = ? AND station_address = ? LIMIT 1" +
+                     ") ORDER BY keybox_id ASC";
+
+        try (Connection con = DriverManager.getConnection(URL, USER, PASSWORD);
+             PreparedStatement pstmt = con.prepareStatement(sql)) {
+
+            pstmt.setString(1, stationName);
+            pstmt.setString(2, stationAddress);
+            
+            ResultSet rs = pstmt.executeQuery();
+
+            // 1から6までのkeybox_idをチェック
+            boolean[] usedIds = new boolean[7]; // 1-indexedで使うため、0は未使用
+
+            while (rs.next()) {
+                int keyboxId = rs.getInt("keybox_id");
+                usedIds[keyboxId] = true; // 使用中のIDをマーク
+            }
+
+            // 空いている最小のkeybox_idを返す
+            for (int i = 1; i <= 6; i++) {
+                if (!usedIds[i]) {
+                    return i; // 空いているIDを返す
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null; // 空いているIDがない場合はnullを返す
+    }
+
 }

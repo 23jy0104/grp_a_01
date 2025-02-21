@@ -68,7 +68,7 @@ public class StationDao {
                      "LEFT JOIN keybox kb ON s.station_id = kb.station_id " +
                      "WHERE s.station_address LIKE ? " +
                      "GROUP BY s.station_id, s.station_name, s.station_address " +
-                     "HAVING COUNT(kb.car_code) < 3";
+                     "HAVING COUNT(kb.car_code) < 7";
 
 
         try (PreparedStatement pstmt = con.prepareStatement(sql)) {

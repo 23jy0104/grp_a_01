@@ -15,19 +15,24 @@ import model.CarInfo;
 @WebServlet("/k_P7Servlet")
 public class k_P7Servlet extends HttpServlet {
     
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // GETリクエストが来た場合の処理
         String stationName = request.getParameter("stationName");
         String stationAddress = request.getParameter("stationAddress");
-        
+        String selectedPlate = request.getParameter("selectedPlate");
+
         // 車両情報を最初に取得してリクエスト属性に設定（必要に応じて）
         CarInfoDao carInfoDao = new CarInfoDao();
         List<CarInfo> carInfoList = carInfoDao.getAllCarInfo();
-        
+
         request.setAttribute("stationName", stationName);
         request.setAttribute("stationAddress", stationAddress);
         request.setAttribute("carInfoList", carInfoList);
         
+        // 選択されたナンバープレートに基づく車両情報を取得
+        CarInfo carInfo = carInfoDao.getCarInfoByNumber(selectedPlate);
+        request.setAttribute("carInfo", carInfo);
+
         // JSPにフォワード
         request.getRequestDispatcher("k_P7.jsp").forward(request, response);
     }
