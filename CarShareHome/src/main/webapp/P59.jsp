@@ -218,47 +218,12 @@
 
         <script>
         function selectDate(date) {
-            // サーブレットにPOSTリクエストを送信
-            fetch('ReservationCarTime', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body: 'date=' + encodeURIComponent(date)
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                updateTimetable(data);
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
+            // 選択した日付を持ってReservationCarTimeに遷移
+            window.location.href = 'ReservationCarTime?date=' + encodeURIComponent(date);
         }
-        function updateTimetable(slots) {
-            const timetableBody = document.getElementById('timetable-body');
-            timetableBody.innerHTML = ''; // 既存の内容をクリア
 
-            slots.forEach(slot => {
-                const row = document.createElement('tr');
-                const timeCell = document.createElement('td');
-                const statusCell = document.createElement('td');
-                
-                timeCell.textContent = slot.time;
-                statusCell.textContent = slot.status;
 
-                row.appendChild(timeCell);
-                row.appendChild(statusCell);
-                timetableBody.appendChild(row);
-            });
 
-            // タイムテーブルを表示
-            document.getElementById('timetable').style.display = 'block';
-        }
 
         </script>
 
