@@ -9,12 +9,6 @@ String email =(String)session.getAttribute("email");
 
 %>
 
-<!--変更後の登録情報の確認-->
-
-<!--登録情報変更入力画面-->
-
-<!-- 変更後の登録情報の確認 -->
-
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -23,6 +17,24 @@ String email =(String)session.getAttribute("email");
     <title>TMC カーシェア</title>
     <link rel="stylesheet" href="css/nav.css">
     <link rel="stylesheet" href="css/check.css">
+    <script>
+        function validateForm() {
+            var emailInput = document.getElementById("email").value;
+            var errorMessage = document.getElementById("error-message");
+
+            // エラーメッセージを初期化
+            errorMessage.textContent = "";
+
+            // メールアドレスの入力がない場合
+            if (emailInput.trim() === "") {
+                errorMessage.textContent = "※メールアドレスは必須です。";
+                errorMessage.style.color = "red"; // 赤色に設定
+                return false; // フォーム送信をキャンセル
+            }
+
+            return true; // フォーム送信を続行
+        }
+    </script>
 </head>
 <body>
     <header>
@@ -41,39 +53,40 @@ String email =(String)session.getAttribute("email");
     </nav>
     <h1>メールアドレス情報の変更</h1>
     <div class="usage">
-        <form action="EmailUpdate" method="post">
-		    <table>
-		        <th class="howtouse">氏名</th>
-		    </table>
-		    <p><%=customerName %></p>
-		
-		    <table>
-		        <tr>
-		            <th class="howtouse">氏名フリガナ</th>
-		        </tr>
-		    </table>
-		    <p><%=customerKana %></p>
-		
-		    <table>
-		        <tr>
-		            <th class="howtouse">現在のメールアドレス</th>
-		        </tr>
-		        <tr>
-		            <td>
-		                <%= email %>
-		            </td>
-		        </tr>
-		    </table>
-		    <table>
-		        <tr>
-		            <th class="howtouse">変更後のメールアドレス<span style="color: red;">※必須</span></th>
-		        </tr>
-		    </table>
-		    <div class="form-group">
-		        <input type="email" id="email" name="email" placeholder="例：〇〇〇〇〇〇〇〇＠〇〇〇〇〇〇.ne.jp" required>
-		    </div>
-		    <button class="informationchange" type="submit">変更する</button>    
-		</form>
+        <form action="EmailUpdate" method="post" onsubmit="return validateForm();"> <!-- validateForm を呼び出す -->
+            <table>
+                <th class="howtouse">氏名</th>
+            </table>
+            <p><%=customerName %></p>
+
+            <table>
+                <tr>
+                    <th class="howtouse">氏名フリガナ</th>
+                </tr>
+            </table>
+            <p><%=customerKana %></p>
+
+            <table>
+                <tr>
+                    <th class="howtouse">現在のメールアドレス</th>
+                </tr>
+                <tr>
+                    <td>
+                        <%= email %>
+                    </td>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <th class="howtouse">変更後のメールアドレス<span style="color: red;">※必須</span></th>
+                </tr>
+            </table>
+            <div class="form-group">
+                <input type="email" id="email" name="email" placeholder="例：〇〇〇〇〇〇〇〇＠〇〇〇〇〇〇.ne.jp">
+            </div>
+            <div id="error-message"></div> <!-- エラーメッセージを表示するための要素 -->
+            <button class="informationchange" type="submit">変更する</button>    
+        </form>
         <button type="button" onclick ="location.href='P76.jsp'">前の画面に戻る</button>
     </div>
 </body>

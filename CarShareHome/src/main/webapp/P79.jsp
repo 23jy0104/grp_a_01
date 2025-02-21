@@ -23,6 +23,34 @@ String tellNumber =(String)session.getAttribute("tellNumber");
     <title>TMC カーシェア</title>
     <link rel="stylesheet" href="css/nav.css">
     <link rel="stylesheet" href="css/check.css">
+    <script>
+        function validateForm() {
+            let postcode = document.forms["customerForm"]["postcode"].value;
+            let address1 = document.forms["customerForm"]["address1"].value;
+            let address2 = document.forms["customerForm"]["address2"].value;
+            let tellNumber = document.forms["customerForm"]["tellNumber"].value;
+            let errorMessages = [];
+
+            if (!postcode) {
+                errorMessages.push("※郵便番号は必須です。");
+            }
+            if (!address1) {
+                errorMessages.push("※都道府県/市区町村は必須です。");
+            }
+            if (!address2) {
+                errorMessages.push("町名・番地などは必須です。");
+            }
+            if (!tellNumber) {
+                errorMessages.push("※携帯電話番号は必須です。");
+            }
+
+            if (errorMessages.length > 0) {
+                document.getElementById("errorMessages").innerHTML = errorMessages.join("<br>").fontcolor("red");
+                return false; // フォーム送信を防ぐ
+            }
+            return true; // フォーム送信を続行
+        }
+    </script>
 </head>
 <body>
     <header>
@@ -41,7 +69,8 @@ String tellNumber =(String)session.getAttribute("tellNumber");
     </nav>
     <h1>登録情報の変更</h1>
     <div class="usage">
-        <form action="CustomerUpdate" method="post">
+        <form name="customerForm" action="CustomerUpdate" method="post" onsubmit="return validateForm()">
+            <div id="errorMessages"></div>
             <table>
                 <th class="howtouse">氏名</th>
             </table>
@@ -60,7 +89,7 @@ String tellNumber =(String)session.getAttribute("tellNumber");
                 </tr>
             </table>
             <div class="form-group">
-                〒<input type="text" name="postcode" placeholder="例：169-0073" required>
+                〒<input type="text" name="postcode" placeholder="例：169-0073">
             </div>
 
             <table>
@@ -69,7 +98,7 @@ String tellNumber =(String)session.getAttribute("tellNumber");
                 </tr>
             </table>
             <div class="form-group">
-                <input type="text" name="address1" placeholder="例：東京都新宿区" required>
+                <input type="text" name="address1" placeholder="例：東京都新宿区" >
             </div>
 
             <table>
@@ -78,7 +107,7 @@ String tellNumber =(String)session.getAttribute("tellNumber");
                 </tr>
             </table>
             <div class="form-group">
-                <input type="text" name="address2" placeholder="例：百人町1-25-4" required>
+                <input type="text" name="address2" placeholder="例：百人町1-25-4">
             </div>
 
             <table>
@@ -99,10 +128,10 @@ String tellNumber =(String)session.getAttribute("tellNumber");
                 <input type="text" name="tellNumber" placeholder="例：09012345678" value="<%= tellNumber%>">
             </div>
 
-            <table>
             <button class="informationchange" type="submit">変更する</button>    
         </form>
         <button type="button" onclick ="location.href='P76.jsp'">前の画面に戻る</button>
     </div>
 </body>
 </html>
+

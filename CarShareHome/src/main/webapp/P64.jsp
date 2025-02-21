@@ -1,7 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
+<%@ page import ="model.Customer" %>
+<%@ page import ="model.Station" %>
+<%@ page import ="model.Reservation" %>
+<%@ page import ="model.CarData" %>
+<%
+ String customerId=(String)session.getAttribute("customerId");
+ String customerName =(String)session.getAttribute("customerName");
+ 
+%>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -13,10 +20,10 @@
 </head>
 <body>
     <header>
-        <img src="../../img/rog.png" alt="TMCロゴ">
+        <img src="img/rog.png" alt="TMCロゴ">
         <h1>TMC カーシェア</h1>
         <div class="user-info">
-            <h4 id="username">23jy0000様</h4>
+            <h4 id="username"><%=customerName %>さん</h4>
             <button class="logout-button" onclick="location.href='P29.html'">ログアウト</button>
         </div>
     </header>

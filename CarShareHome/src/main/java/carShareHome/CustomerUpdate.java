@@ -45,18 +45,8 @@ public class CustomerUpdate extends HttpServlet {
                 customer.setPostCode(postcode);
                 HttpSession session = request.getSession();
                 session.setAttribute("customer", customer);
-                System.out.println(postcode);
-                System.out.println(customerAddress);
-                System.out.println(tellNumber);
-				try {
-				    
-				    RequestDispatcher rd = request.getRequestDispatcher("P82.jsp");
-				    rd.forward(request, response);
-				} catch (IOException e) {
-				    e.printStackTrace();
-				    request.setAttribute("errorMessage", "画像処理中にエラーが発生しました。");
-				    forwardToErrorPage(request, response);
-				}
+                RequestDispatcher rd =request.getRequestDispatcher("P82.jsp");
+                rd.forward(request, response);
         } else {
             request.setAttribute("errorMessage", "入力データにエラーがあります。");
             forwardToErrorPage(request, response);
