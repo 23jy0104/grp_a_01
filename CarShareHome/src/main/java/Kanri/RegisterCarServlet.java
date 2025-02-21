@@ -41,8 +41,8 @@ public class RegisterCarServlet extends HttpServlet {
             request.getRequestDispatcher("k_P10.jsp").forward(request, response);
         } else {
             // 失敗した場合の処理
-            request.setAttribute("errorMessage", "車両の登録に失敗しました。");
-            request.getRequestDispatcher("/error.jsp").forward(request, response);
+            request.setAttribute("errorMessage", "このステーションは車両の登録上限です。ステーションを選びなおしてください。");
+            request.getRequestDispatcher("/k_P10.jsp").forward(request, response);
         }
     }
 }
