@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -28,9 +29,9 @@ public class ReservationCarTime extends HttpServlet {
     	request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html; charset=UTF-8");
         
-        String date = request.getParameter("date");
-        List<ReservationTime> slots = reservationManager.getReservedSlots(date);
-        
+        String selectedDate = request.getParameter("selectedDate");
+        List<ReservationTime> slots = reservationManager.getReservedSlots(selectedDate);
+        System.out.println("こんなところにも入ってるよ");
         response.setContentType("application/json; charset=UTF-8");
         PrintWriter out = response.getWriter();
         
@@ -50,12 +51,14 @@ public class ReservationCarTime extends HttpServlet {
         jsonBuilder.append("]");
         out.print(jsonBuilder.toString());
         out.flush();
+        RequestDispatcher rd = request.getRequestDispatcher("P59.jsp");
+        rd.forward(request, response);
     }
 
 
     public List<ReservationTime> getReservedSlots(String date) {
         List<ReservationTime> slots = new ArrayList<>();
-        String query = "SELECT time, status FROM reservations WHERE date = ?"; // 予約テーブルのクエリ
+        String query = "SELECT start_date FROM Reservation WHERE start_date != ? "; // 予約テーブルのクエリ
 
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {

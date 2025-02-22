@@ -10,13 +10,15 @@
 <%@ page import="model.KeyBox" %>
 <%@ page import="model.Model" %>
 <%@ page import="java.util.Locale" %>
-
+<%@ page import="model.ReservationTime" %>
 <%
     String customerName = (String) session.getAttribute("customerName");
     String stationId = (String) session.getAttribute("stationId");
     String img = (String) session.getAttribute("car_img");
     String modelName = (String) session.getAttribute("modelName");
-    String stationName = (String) session.getAttribute("stationName"); // 追加
+    
+    String stationName =(String)session.getAttribute("stationName");
+    String stationData = (String)session.getAttribute("stationData");
     String stationCode = (String) session.getAttribute("stationCode"); // 追加
     List<Timestamp[]> availableSlots = (List<Timestamp[]>) request.getAttribute("availableSlots");
 
@@ -24,7 +26,7 @@
     Calendar today = Calendar.getInstance();
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     Calendar oneMonthLater = Calendar.getInstance();
-    oneMonthLater.add(Calendar.MONTH, 1);
+    oneMonthLater.add(Calendar.MONTH, 1); 
 %>
 
 <!DOCTYPE html>
@@ -137,7 +139,7 @@
     <header>
         <img src="img/rog.png" alt="TMCロゴ">
         <h1>TMC カーシェア</h1>
-        <h4 id="username"><%= customerName %></h4>
+        <h4 id="username"><%= customerName %>さん</h4>
         <button class="logout-button" onclick="location.href='P29.jsp'">ログアウト</button>
     </header>
 
@@ -157,7 +159,7 @@
         </div>
         <div class="additional-info-container" id="additionalInfo">
             <div>
-                <label><%= modelName %>さん</label>
+                <label><%= modelName %></label>
                 <img src="img/<%= img %>" alt="車" />
             </div>
             <table class="info-table">
@@ -218,13 +220,66 @@
 
         <script>
         function selectDate(date) {
-            // 選択した日付を持ってReservationCarTimeに遷移
-            window.location.href = 'ReservationCarTime?date=' + encodeURIComponent(date);
+        	fetch('/CarShareHome/carShareHome/ReservationCarTime', {
+        	    method: 'POST', // POSTメソッドを指定
+        	    headers: {
+        	        'Content-Type': 'application/json; charset=UTF-8', // 適切なヘッダーを設定
+        	    },
+        	    body: JSON.stringify({ date: date }) // JSON形式でボディにデータを追加
+        	})
+            .then(response => response.json())
+            .then(data => {
+                displayTimetable(data, date);
+            })
+            .catch(error => console.error('Error fetching data:', error));
         }
 
 
+        function displayTimetable(data, date) {
+            const timetableBody = document.getElementById('timetable-body');
+            timetableBody.innerHTML = ''; // 以前の内容をクリア
 
+            // タイムテーブルのタイトルを設定
+            document.getElementById('timetable-title').innerText = date + ' の予約スロット';
 
+            // データを表示
+            data.forEach(slot => {
+                const row = document.createElement('tr');
+                const timeCell = document.createElement('td');
+                const statusCell = document.createElement('td');
+
+                timeCell.innerText = slot.time;
+                statusCell.innerText = slot.status;
+                row.appendChild(timeCell);
+                row.appendChild(statusCell);
+
+                // ステータスに応じたクラスを追加
+                if (slot.status === 'reserved') {
+                    row.classList.add('reserved');
+                } else {
+                    row.classList.add('available');
+                    row.onclick = function() {
+                        // 時間を選択したら、フォームを表示
+                        document.getElementById('reserve-button-container').style.display = 'block';
+                        document.getElementById('selected-time').value = slot.time; // 選択した時間をフォームに設定
+                    };
+                }
+
+                timetableBody.appendChild(row);
+            });
+
+            // タイムテーブルを表示
+            document.getElementById('timetable').style.display = 'block';
+        }
+
+        function submitReservation() {
+            const startTime = document.getElementById('start_time').value;
+            const stopTime = document.getElementById('stop_time').value;
+            const selectedTime = document.getElementById('selected-time').value;
+
+            // 入力された時間を持ってReservationOKサーブレットに遷移
+            window.location.href = 'ReservationOK?start_time=' + encodeURIComponent(startTime) + '&stop_time=' + encodeURIComponent(stopTime) + '&selected_time=' + encodeURIComponent(selectedTime);
+        }
         </script>
 
         <!-- タイムテーブルの表示 -->
@@ -240,12 +295,17 @@
                 <tbody id="timetable-body"></tbody>
             </table>
             <div id="reserve-button-container" style="display:none;">
+                <input type="hidden" id="selected-time" name="selected_time">
+                <label for="start_time">開始時間:</label>
+                <input type="time" id="start_time" name="start_time">
+                <label for="stop_time">終了時間:</label>
+                <input type="time" id="stop_time" name="stop_time">
                 <button type="button" onclick="submitReservation()">予約する</button>
             </div>
         </div>
-
         <div class="button-container">
-            <button class="back-button" onclick="location.href='P56.jsp'">戻る</button> <!-- 戻るボタン -->
+            <button class="back-button" onclick="location.href='P56.jsp'">戻る</button>
+
         </div>
     </main>
 </body>

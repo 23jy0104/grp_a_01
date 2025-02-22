@@ -9,6 +9,7 @@
 <%@ page import="java.util.ArrayList" %>
 
 <%@ page import="java.util.Locale" %>
+<%@ page import ="model.Station" %>
 
 
 
@@ -17,13 +18,8 @@
  String customerName = (String) session.getAttribute("customerName");
 
  String stationIdValue = request.getParameter("stationid");
-
- String stationNameValue = request.getParameter("stationname");
-
- String stationDataValue = request.getParameter("stationdata");
-
-
-
+ String stationNameValue =request.getParameter("stationname");
+ String stationDataValue =request.getParameter("stationdata");
  // 現在の日時を取得
 
  Calendar calendar = Calendar.getInstance();
@@ -34,38 +30,9 @@
 
  String minStartDateTime = dateFormat.format(calendar.getTime());
 
-
-
- // セッションに値を設定
-
- session.setAttribute("stationId", stationIdValue);
-
- session.setAttribute("stationdata", stationDataValue);
-
- session.setAttribute("stationName", stationNameValue);
-
-
-
- // ステーション情報の取得
-
- List<String[]> stations = (List<String[]>) session.getAttribute("stations");
-
- String[][] stationsArray = null;
-
-
-
- if (stations != null) {
-
- // Listから配列に変換
-
- stationsArray = new String[stations.size()][];
-
- stationsArray = stations.toArray(stationsArray);
-
- }
-
-
-
+String stationId =  (String)session.getAttribute("stationId");
+String stationData =(String)session.getAttribute("stationData");
+String stationName =(String)session.getAttribute("stationName");
  // 日付関連の変数を定義
 
  Calendar today = Calendar.getInstance();
@@ -75,6 +42,7 @@
  oneMonthLater.add(Calendar.MONTH, 1);
 
  SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+//P56.jsp
 
 %>
 
@@ -395,10 +363,18 @@
 			 <button class="back-button" onclick="location.href='P55.jsp'">検索結果一覧に戻る</button>
 			
 		 	<br>
-		
-			 <% if (stationsArray != null && stationsArray.length > 0) { %>
 			
-			 <h3><%= stationsArray[0][1] %></h3>
+			 <h3><%if(stationNameValue!=null){
+				 	%>
+				 	<%=stationNameValue%>
+				 	<%
+			 	   }else{
+			 		   %>
+			 		   
+			 		  <%=stationName%>
+			 		  <%
+			 	   }
+				 %></h3>
 		
 		 <table>
 		
@@ -426,19 +402,21 @@
 			
 			 	 <th>ステーション情報</th>
 			
-			 	 <th><%= stationsArray[0][3] %></th>
+			 	 <th><%if(stationDataValue!=null){
+				 	%>
+				 	<%=stationDataValue%>
+				 	<%
+			 	   }else{
+			 		   %>
+			 		   
+			 		  <%=stationData%>
+			 		  <%
+			 	   }
+				 %></th>
 			
 			 </tr>
 			
 		 </table>
-		
-			 <% } else { %>
-			
-			 <h3>ステーション情報が見つかりませんでした。</h3>
-			
-			 <% } %>
-		
-		
 		
 			 <div class="flex-container">
 			
@@ -531,6 +509,8 @@
 		 <input type="hidden" name="stationId" value="<%= stationIdValue %>">
 		
 		 <input type="hidden" name="stationName" value="<%= stationNameValue %>">
+		 
+		 <input type ="hidden" name ="stationData" value ="<%=stationDataValue %>">
 		
 		 <input type="hidden" name="startDate" id="startDate" value="">
 		
@@ -670,22 +650,20 @@
 		
 		 // 既に選択されている場合は解除
 		
-		 selectedTimes.splice(selectedIndex, 1);
-		
-		 statusCell.classList.remove("selected");
+			 selectedTimes.splice(selectedIndex, 1);
+			
+			 statusCell.classList.remove("selected");
 		
 		 } else {
 		
 		 // 未選択の場合は選択
 		
-		 selectedTimes.push(selectedTime);
-		
-		 statusCell.classList.add("selected");
+			 selectedTimes.push(selectedTime);
+			
+			 statusCell.classList.add("selected");
 		
 		 }
-		
-		
-		
+			
 		 // 予約ボタンの表示/非表示
 		
 		 document.getElementById("reserve-button-container").style.display = selectedTimes.length > 0 ? "block" : "none";
@@ -693,26 +671,18 @@
 		 };
 		
 		 }
-		
-		
-		
 		 statusRow.appendChild(statusCell);
 		
 		 }
 		
 		 }
 		
-		 timetableBody.appendChild(statusRow);
-		
-		
-		
+		 timetableBody.appendChild(statusRow);		
 		 // タイムテーブルを表示
 		
 		 document.getElementById("timetable").style.display = "block";
 		
 		 }
-		
-		
 		
 		 function submitReservation() {
 		
@@ -722,9 +692,7 @@
 		
 		 document.getElementById('startTime').value = selectedTimesString; // 開始時間に設定
 		
-		 document.getElementById('endTime').value = selectedTimesString; // 終了時間にも設定（必要に応じて変更）
-		
-		
+		 document.getElementById('endTime').value = selectedTimesString; // 終了時間にも設定（必要に応じて変更）		
 		
 		 // フォームを送信
 		
@@ -733,9 +701,6 @@
 		 }
 		
 		</script>
-		
-		
-		
 	</body>
 
 </html>

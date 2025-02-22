@@ -35,7 +35,10 @@ public class ReservationCar extends HttpServlet {
 
         // リクエストパラメータの取得
         String carType = request.getParameter("carType");
-        String path = "P59.jsp"; // デフォルトの転送先
+        String stationId =request.getParameter("stationId");
+        String stationName =request.getParameter("stationName");
+        String stationData =request.getParameter("stationData");
+        String path = ""; // デフォルトの転送先
 
         // データベース接続に必要な変数
         Connection conn = null;
@@ -68,10 +71,10 @@ public class ReservationCar extends HttpServlet {
             if (rs.next()) {
                 // セッションに必要なデータを設定
                 request.getSession().setAttribute("modelName", rs.getString("model_name"));
-                request.getSession().setAttribute("stationId", rs.getString("station_id")); // 修正: stationid → stationId
+                request.getSession().setAttribute("stationId", stationId); // 修正: stationid → stationId
                 request.getSession().setAttribute("car_img", rs.getString("car_img"));
-                request.getSession().setAttribute("stationName", rs.getString("station_name"));
-                request.getSession().setAttribute("stationData", rs.getString("station_data"));
+                request.getSession().setAttribute("stationName",stationName);
+                request.getSession().setAttribute("stationData",stationData );
                 path ="P59.jsp";
             } else {
                 // データが見つからなかった場合の処理
