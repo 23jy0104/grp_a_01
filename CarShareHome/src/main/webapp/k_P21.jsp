@@ -9,24 +9,22 @@
     <title>システム管理課</title>
     <script>
         function signout() {
-            window.location = "k_top.jsp"; // サインアウトの処理をここに記述
-        }
-
-        function goBack() {
-            window.location.href = "k_P25.jsp"; // 戻るボタンでP25.htmlに遷移
+            window.location = "k_top.jsp";
         }
     </script>
 </head>
 <body>
     <div class="container">
         <h1>顧客情報検索画面</h1>
-        <input type="text" placeholder="名前(カナ)スペースなし" required>
-        <input type="number" placeholder="電話番号ハイフンなし" required>
+        <form id="searchForm" action="k_P21Servlet" method="post">
+            <input type="text" name="name" placeholder="名前(カナ)スペースなし" required>
+            <input type="text" name="tell" placeholder="電話番号ハイフンなし" required>
 
-        <div class="button-container">
-            <button class="go-back" onclick="goBack()">検索</button>
-            <button class="signout" onclick="signout()">サインアウト</button>
-        </div>
+            <div class="button-container">
+                <button type="submit" class="search">検索</button>
+                <button type="button" class="signout" onclick="signout()">サインアウト</button>
+            </div>
+        </form>
     </div>
 </body>
 </html>

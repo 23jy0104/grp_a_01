@@ -6,7 +6,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
 
 import model.Customer;
 
@@ -38,7 +37,7 @@ public class CustomerDao {
         }
     }
 
-    // 顧客を検索するメソッド
+   /* // 顧客を検索するメソッド
     public ArrayList<Customer> searchCustomer(String name, Date birthDate) {
         ArrayList<Customer> cs = new ArrayList<>();
         String sql = "SELECT customerName, customerId, phoneNumber, email, birthDate FROM customer WHERE customerName LIKE ? AND birthDate = ?";
@@ -62,7 +61,7 @@ public class CustomerDao {
             e.printStackTrace();
         }
         return cs;
-    }
+    }*/
     
     public ArrayList<Customer> getCustomersWithoutManager() {
         ArrayList<Customer> customers = new ArrayList<>();
@@ -166,5 +165,26 @@ public class CustomerDao {
         } catch (SQLException e) {
             e.printStackTrace(); // エラーメッセージを表示
         }
+    }
+    
+    public  Customer searchCustomerBykanatel(String customerKana , String tellNumber) {
+    	String sql = "SELECT * FROM customer WHERE customer_kana = ? AND tell_number = ?;";
+    	Customer customer = null;
+    	try(PreparedStatement pstmt = con.prepareStatement(sql)) {
+    		pstmt.setString(1, customerKana);
+    		pstmt.setString(2, tellNumber);
+    		ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                customer = new Customer();
+                customer.setCustomerId(rs.getString("customer_id"));
+                customer.setCustomerName(rs.getString("customer_name"));
+                customer.setTellNumber(rs.getString("tell_number"));
+                customer.setEmail(rs.getString("e_mail"));
+                customer.setBirthDate(rs.getString("birth_date"));
+            }
+    	}catch(SQLException e) {
+    		e.printStackTrace();
+    	}
+    	return customer;
     }
 }
