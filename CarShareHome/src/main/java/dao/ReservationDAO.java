@@ -12,6 +12,7 @@ import model.CarData;
 import model.Customer;
 import model.Reservation;
 import model.Station;
+import model.henkyakuData;
 
 public class ReservationDAO {
     private Connection con = null;
@@ -134,5 +135,35 @@ public class ReservationDAO {
         System.out.println("取得した予約数: " + reservations.size());
         return reservations;
     }
-
+    public henkyakuData getUsage(String customerId) {
+    	henkyakuData henkyaku = null;
+    	String sql = "SELECT s.station_name,m.model_name,car.number,r.start_date"
+	    			+ " FROM customer AS c"
+	    			+ " INNER JOIN reservation AS r"
+	    			+ " ON c.customer_id = r.customer_id"
+	    			+ " INNER JOIN car_db AS car"
+	    			+ " ON r.car_code = car.car_code"
+	    			+ " INNER JOIN keybox AS k"
+	    			+ " ON car.car_code = k.car_code"
+	    			+ " INNER JOIN station AS s"
+	    			+ " ON k.station_id = s.station_id"
+	    			+ " INNER JOIN model AS m"
+	    			+ " ON car.model_id = m.model_id"
+	    			+ " WHERE c.customer_id = ?"
+	    			+ " AND r.finish_date IS NULL;";
+    	try(PreparedStatement pstmt = con.prepareStatement(sql)) {
+    		pstmt.setString(1, customerId);
+    		ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                henkyaku = new henkyakuData();
+                henkyaku.setStationName(rs.getString("station_name"));
+                henkyaku.setNumber(rs.getString("number"));
+                henkyaku.setCarName(rs.getString("model_name"));
+                henkyaku.setStartDate(rs.getString("start_date"));
+            }
+    	}catch(SQLException e) {
+    		e.printStackTrace();
+    	}
+    	return henkyaku;
+    }
 }

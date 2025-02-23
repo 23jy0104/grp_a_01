@@ -46,6 +46,12 @@ button:hover {
 .go-back:hover {
     background-color: #218838; /* ホバー時の色 */
 }
+.search {
+	background-color: #28a745;
+}
+.search:hover {
+	background-color: #218838;
+}
 .signout {
     display: block; /* ブロック要素として表示 */
     margin: 20px 0; /* 上下の余白 */
