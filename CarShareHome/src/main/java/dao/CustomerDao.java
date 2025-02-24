@@ -114,7 +114,7 @@ public class CustomerDao {
     }
     public Customer getCustomerById(String customerId) {
         Customer customer = null;
-        String sql = "SELECT customer_name, tell_number, e_mail, license_number, license_date, " +
+        String sql = "SELECT customer_name, tell_number, e_mail, license_number, license_date,birth_date, " +
                      "post_code, customer_address, omote_jpg, ura_jpg FROM customer WHERE customer_id = ?"; // 修正したカラム名を使用
 
         try (PreparedStatement pstmt = con.prepareStatement(sql)) {
@@ -126,6 +126,7 @@ public class CustomerDao {
                 customer.setCustomerName(rs.getString("customer_name"));
                 customer.setTellNumber(rs.getString("tell_number"));
                 customer.setEmail(rs.getString("e_mail"));
+                customer.setBirthDate(rs.getString("birth_date"));
                 customer.setLicenseNumber(rs.getString("license_number"));
                 customer.setLicenceDate(rs.getString("license_date"));
                 customer.setPostCode(rs.getString("post_code"));

@@ -37,25 +37,35 @@
         <tr>
             <th colspan="2" class="information">利用状況</th>
         </tr>
-        <tr>
-            <th>ステーション</th>
-            <td>${henkyaku.stationName}</td>
-        </tr>
-        <tr>
-            <th>ナンバー</th>
-            <td>${henkyaku.number}</td>
-        </tr>
-        <tr>
-        	<th>車種</th>
-        	<td>${henkyaku.carName}</td>
-        </tr>
-        <tr>
-            <th>利用開始日時</th>
-            <td>${henkyaku.startDate}</td>
-        </tr>
+        <c:if test="${empty(errMessage)}">
+	        <tr>
+	            <th>ステーション</th>
+	            <td>${henkyaku.stationName}</td>
+	        </tr>
+	        <tr>
+	            <th>ナンバー</th>
+	            <td>${henkyaku.number}</td>
+	        </tr>
+	        <tr>
+	        	<th>車種</th>
+	        	<td>${henkyaku.carName}</td>
+	        </tr>
+	        <tr>
+	            <th>利用開始日時</th>
+	            <td>${henkyaku.startDate}</td>
+	        </tr>
+        </c:if>
+        <c:if test="${!empty(errMessage)}">
+	        <tr>
+	            <td colspan="2"><span style="color: red;">${errMessage}</span></td>
+	        </tr>
+        </c:if>
     </table>
-    <div class="button-container">
-        <button onclick="location.href='P29.html'">返却処理</button>
-    </div>
+        <form class="button-container" action="k_P25Servlet" method="post">
+            <input type="hidden" name="customerId" value="${customer.customerId}">
+            <input type="hidden" name="stationId" value="${henkyaku.stationId}">
+            <input type="hidden" name="reservationId" value="${henkyaku.reservationId}">
+            <button type="submit">返却処理</button>
+        </form>
 </body>
 </html>

@@ -1,20 +1,15 @@
 package model;
 
-public class henkyakuData {
+public class HenkyakuData {
 	private String stationName;
     private String carName;
     private String number;
     private String startDate;
-    
-	public henkyakuData(String stationName, String carName, String number, String startDate) {
-		super();
-		this.stationName = stationName;
-		this.carName = carName;
-		this.number = number;
-		this.startDate = startDate;
-	}
-	
-	public henkyakuData() {
+    private String stationId;
+    private String keyboxId;
+    private String reservationId;
+
+	public HenkyakuData() {
 		super();
 	}
 
@@ -42,4 +37,29 @@ public class henkyakuData {
 	public void setStartDate(String startDate) {
 		this.startDate = startDate;
 	}
+
+	public String getStationId() {
+		return stationId;
+	}
+
+	public void setStationId(String stationId) {
+		this.stationId = stationId;
+	}
+
+	public String getKeyboxId() {
+		return keyboxId;
+	}
+
+	public void setKeyboxId(String keyboxId) {
+		this.keyboxId = keyboxId;
+	}
+
+	public String getReservationId() {
+		return reservationId;
+	}
+
+	public void setReservationId(String reservationId) {
+		this.reservationId = reservationId;
+	}
+	
 }
