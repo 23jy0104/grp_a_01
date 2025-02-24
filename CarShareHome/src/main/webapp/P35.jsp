@@ -14,6 +14,7 @@
     <img src="img/rog.png" alt="TMC Logo"/>
     <h1>TMC カーシェア</h1>
     <h2>パスワード再発行(入力)</h2>
+    ${customerId}
     <div class="login-container">
         <form>
             <table>
