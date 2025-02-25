@@ -6,6 +6,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +33,6 @@ public class ReservationCarTime extends HttpServlet {
         String carCode = request.getParameter("carCode");
         String startTimeHour = request.getParameter("startTimeHour");
         String startTimeMinute = request.getParameter("startTimeMinute");
-        System.out.println("ReservationCarTime："+selectedDate+":"+carCode+":"+startTimeHour+":"+startTimeMinute);
         
         List<ReservationTime> reservationTimes = new ArrayList<>();
         List<ReservationTime> availableSlots = new ArrayList<>();
@@ -43,72 +44,63 @@ public class ReservationCarTime extends HttpServlet {
             final String pass = "23jya01";
 
             // 予約があるか確認するクエリ
-            String sql = "SELECT start_date, stop_date, car.car_code, s.station_id " +
-                         "FROM keybox k " +
-                         "INNER JOIN station s ON s.station_id = k.station_id " +
-                         "INNER JOIN reservation r ON r.car_code = k.car_code " +
-                         "INNER JOIN car_db car ON car.car_code = k.car_code " +
-                         "INNER JOIN model m ON m.model_id = car.model_id " +
-                         "WHERE k.car_code = ? AND start_date <= ?"
-                         + "AND r.finish_date is null";
+            String sql = "SELECT start_date, stop_date FROM reservation WHERE car_code = ? AND finish_date IS NULL";
             try (Connection con = DriverManager.getConnection(url, user, pass);
                  PreparedStatement pstmt = con.prepareStatement(sql)) {
 
                 // 予約済みの時間を取得
                 String startDateTime = selectedDate + " " + startTimeHour + ":" + startTimeMinute + ":00";
                 pstmt.setString(1, carCode);
-                pstmt.setString(2, startDateTime);
 
                 ResultSet rs = pstmt.executeQuery();
                 while (rs.next()) {
-                    String startDate = rs.getString("start_date");
-                    String stopDate = rs.getString("stop_date");
-                    ReservationTime reservationTime = new ReservationTime(startDate, stopDate, "予約不可");
+                    Timestamp startDate = rs.getTimestamp("start_date");
+                    Timestamp stopDate = rs.getTimestamp("stop_date");
+
+                    // TimestampをHH:mm形式のStringに変換
+                    SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+                    String reservedStartTime = sdf.format(startDate);
+                    String reservedEndTime = sdf.format(stopDate);
+
+                    ReservationTime reservationTime = new ReservationTime(reservedStartTime, reservedEndTime, "予約不可");
                     reservationTimes.add(reservationTime);
                 }
 
+                // 入力された時間を基に24時間後の時間を計算
+                Timestamp inputTime = Timestamp.valueOf(selectedDate + " " + startTimeHour + ":" + startTimeMinute + ":00");
+                Timestamp endTime24HoursLater = new Timestamp(inputTime.getTime() + 24 * 60 * 60 * 1000); // 24時間後
+
                 // 予約可能な時間帯を設定
-             // 予約可能な時間帯を設定
-                for (int hour = Integer.parseInt(startTimeHour); hour < Integer.parseInt(startTimeHour) + 24; hour++) {
-                    for (int minute = (hour == Integer.parseInt(startTimeHour) ? Integer.parseInt(startTimeMinute) : 0); minute < 60; minute += 15) {
-                        String startTime = String.format("%02d:%02d", hour % 24, minute);
-                        int nextMinute = minute + 15;
-                        int nextHour = hour;
+                for (long time = inputTime.getTime(); time < endTime24HoursLater.getTime(); time += 15 * 60 * 1000) { // 15分ごと
+                    Timestamp startTime = new Timestamp(time);
+                    Timestamp endTime = new Timestamp(time + 15 * 60 * 1000);
 
-                        // 次の時間を計算（開始時間から15分後）
-                        if (nextMinute >= 60) {
-                            nextMinute = 0;
-                            nextHour++;
-                        }
+                    // 予約済み時間との重複チェック
+                    boolean isBooked = false;
+                    for (ReservationTime reserved : reservationTimes) {
+                        // reservedの時間もString型として扱う必要があるため変換
+                        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+                        String reservedStartTime = reserved.getStartTime(); // HH:mm形式
+                        String reservedEndTime = reserved.getEndTime(); // HH:mm形式
 
-                        String endTime = String.format("%02d:%02d", nextHour % 24, nextMinute);
-
-                        // 予約済み時間との重複チェック
-                        boolean isBooked = false;
-                        for (ReservationTime reserved : reservationTimes) {
-                            String reservedStartTime = reserved.getStartTime(); // 予約済みの開始時間
-                            String reservedEndTime = reserved.getEndTime(); // 予約済みの終了時間
-
-                            // 重複判定を強化
-                         // 重複判定を強化
-                            if (startTime.compareTo(reservedEndTime) < 0 && endTime.compareTo(reservedStartTime) > 0) {
-                                isBooked = true; // 予約が重複している場合
-                                break; // ループを抜ける
-                            }
-
-                        }
-
-                        // 予約状態を判定してリストに追加
-                        if (!isBooked) {
-                            availableSlots.add(new ReservationTime(startTime, endTime, "予約可能"));
+                        // 重複判定
+                        if (startTime.compareTo(Timestamp.valueOf(selectedDate + " " + reservedEndTime + ":00")) < 0 &&
+                            endTime.compareTo(Timestamp.valueOf(selectedDate + " " + reservedStartTime + ":00")) > 0) {
+                            isBooked = true; // 予約が重複している場合
+                            break; // ループを抜ける
                         }
                     }
-                }
 
-                // 予約済み時間を出力（デバッグ用）
-                System.out.println("予約済み時間:");
-                for (ReservationTime reserved : reservationTimes) {
-                    System.out.println(reserved.getStartTime() + " - " + reserved.getEndTime());
+                    // 予約状態を判定してリストに追加
+                    if (!isBooked) {
+                        String availableStartTime = String.format("%tH:%tM", startTime, startTime);
+                        String availableEndTime = String.format("%tH:%tM", endTime, endTime);
+                        availableSlots.add(new ReservationTime(availableStartTime, availableEndTime, "予約可能"));
+                    } else {
+                        String unavailableStartTime = String.format("%tH:%tM", startTime, startTime);
+                        String unavailableEndTime = String.format("%tH:%tM", endTime, endTime);
+                        availableSlots.add(new ReservationTime(unavailableStartTime, unavailableEndTime, "予約不可")); // 予約不可の状態も追加
+                    }
                 }
 
                 // 予約済み時間と予約可能時間を結合

@@ -6,6 +6,9 @@
 <%@ page import="java.util.Locale" %>
 <%@ page import="model.ReservationTime" %>
 <%@ page import="java.util.ArrayList" %>
+<%@ page import="java.util.Map" %>
+<%@ page import="java.util.HashMap" %>
+
 
 <%
 String customerName = (String) session.getAttribute("customerName");
@@ -258,47 +261,52 @@ String endDate = (String) session.getAttribute("endDate");
 
         <!-- サーブレットの結果を表示するタイムテーブル -->
         <h2>予約状況</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>時間帯</th>
-                    <th>状態</th>
-                </tr>
-            </thead>
-            <tbody>
-                <%
-                    if (combinedList != null && !combinedList.isEmpty()) {
-                        for (ReservationTime time : combinedList) {
-                            String startTime = time.getStartTime();
-                            String endTime = time.getEndTime();
-                            String status = time.getStatus();
+		<table>
+		    <thead>
+		        <tr>
+		            <th>時間帯</th>
+		            <th>状態</th>
+		        </tr>
+		    </thead>
+		    <tbody>
+		        <%
+		        // 予約状況を表示するためのタイムテーブルを動的に生成
+		        if (combinedList != null && !combinedList.isEmpty()) {
+		            for (ReservationTime time : combinedList) {
+		                String startTime = time.getStartTime();
+		                String endTime = time.getEndTime();
+		                String status = time.getStatus();
+		
+		                // 予約状態に応じて行のクラスを設定
+		                String rowClass;
+		                if (status.equals("予約不可")) {
+		                    rowClass = "unavailable"; // 予約不可
+		                } else if (status.equals("予約済み")) {
+		                    rowClass = "booked"; // 予約済み
+		                } else {
+		                    rowClass = "available"; // 予約可能
+		                }
+		        %>
+		                <tr class="<%= rowClass %>">
+		                    <td><%= startTime + " - " + endTime %></td>
+		                    <td><%= status %></td>
+		                </tr>
+		        <%
+		            }
+		        } else {
+		        %>
+		            <tr>
+		                <td colspan="2">データがありません。</td>
+		            </tr>
+		        <%
+		        }
+		        %>
+		    </tbody>
+		</table>
 
-                            // 予約状態に応じて行のクラスを設定
-                            String rowClass; 
-                            if (status.equals("予約不可")) {
-                                rowClass = "unavailable"; // 予約不可
-                            } else if (status.equals("予約済み")) {
-                                rowClass = "booked"; // 予約済み
-                            } else {
-                                rowClass = "available"; // 予約可能
-                            }
-                %>
-                            <tr class="<%= rowClass %>">
-                                <td><%= startTime + " - " + endTime %></td>
-                                <td><%= status %></td>
-                            </tr>
-                <%
-                        }
-                    } else {
-                %>
-                    <tr>
-                        <td colspan="2">データがありません。</td>
-                    </tr>
-                <%
-                    }
-                %>
-            </tbody>
-        </table>
+
+
+
     </main>
 </body>
 </html>
