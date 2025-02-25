@@ -26,26 +26,30 @@
     <ul>
         <li class="nav-item gnav02"><a href="P49.jsp">予約・ステーション検索</a></li>
         <li class="nav-item gnav03"><a href="P39.jsp">料金</a></li>
-        <li class="nav-item gnav04"><a href="P43.">利用方法</a></li>
+        <li class="nav-item gnav04"><a href="P43.jsp">利用方法</a></li>
         <li class="nav-item gnav05"><a href="P46.jsp">車種</a></li>
     </ul>
 </nav>
 
-    <div class="column">
-        <h2 class="column_title001">住所/ステーション名から探す</h2>
-        <div>
-            <input type="radio" id="adr" name="localSearchKbn" checked="checked" value="1" />
-            <label for="adr">住所</label>
-            <input type="radio" id="stationNm" name="localSearchKbn" value="2" class="ml20" />
-            <label for="stationNm">ステーション名</label>
-			<form action="LoginNGStaionSarch"method="post">
-	            <div class="input-group">
-	                <input type="text" id="nameAdr-s" name="stationAddress" placeholder="住所やステーション名を入力" style="ime-mode:active;" />
-	                <input type="image" id="doNameAdrSearch" src="img/kensaku.gif" onclick="location.href='P51.jsp'" alt="検索" />
-	            </div>
-	            <p class="notes">例）有楽町、新宿、六本木</p>
-	        </form>
-        </div>
+<div class="column">
+    <h2 class="column_title001">住所/ステーション名から探す</h2>
+    <div>
+        <form action="LoginNGStationSarch" method="post">
+            <div>
+                <input type="radio" id="adr" name="address" value="1" checked="checked" />
+                <label for="adr">住所</label>
+                
+                <input type="radio" id="stationNm" name="address" value="2" class="ml20" />
+                <label for="stationNm">ステーション名</label>
+            </div>
+            <div class="input-group">
+                <input type="text" id="nameAdr-s" name="stationAddress" placeholder="住所やステーション名を入力" style="ime-mode:active;" required />
+                <input type="submit" id="doNameAdrSearch" value="検索" />
+            </div>
+            <p class="notes">例）有楽町、新宿、六本木</p>
+        </form>
     </div>
+</div>
+
 </body>
 </html>

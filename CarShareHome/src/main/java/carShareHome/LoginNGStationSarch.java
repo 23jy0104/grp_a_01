@@ -16,59 +16,58 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- * Servlet implementation class Station
- */
-@WebServlet("/LoginNGStaionSarch")
+@WebServlet("/LoginNGStationSarch")
 public class LoginNGStationSarch extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
+    private static final long serialVersionUID = 1L;
+
     public LoginNGStationSarch() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html; charset=UTF-8");
         String stationAddress = request.getParameter("stationAddress");
+        String addressType = request.getParameter("address");
         String path = "";
-        
+
         try {
             Class.forName("com.mysql.jdbc.Driver");
             final String url = "jdbc:mysql://10.64.144.5:3306/23jya01";
             final String user = "23jya01";
             final String pass = "23jya01";
-            
-            String sql = "select * From Station where station_Name LIKE ?";
-            List<String[]> stations = new ArrayList<>(); // ステーション情報を格納するリスト
-            
+
+            String sql;
+            if ("1".equals(addressType)) {
+                // 住所で検索
+                sql = "SELECT * FROM Station WHERE station_address LIKE ?";
+            } else {
+                // ステーション名で検索
+                sql = "SELECT * FROM Station WHERE station_name LIKE ?";
+            }
+
+            List<String[]> stations = new ArrayList<>();
+
             try (Connection con = DriverManager.getConnection(url, user, pass);
                  PreparedStatement pstmt = con.prepareStatement(sql)) {
                  
                 pstmt.setString(1, "%" + stationAddress + "%");
                 ResultSet rs = pstmt.executeQuery();
-                
+
                 while (rs.next()) {
                     String[] station = new String[4];
-                    station[0] =rs.getString("station_id");
+                    station[0] = rs.getString("station_id");
                     station[1] = rs.getString("station_name");
                     station[2] = rs.getString("station_address");
-                    station[3] =rs.getString("station_data");
-                    stations.add(station); // ステーション情報をリストに追加
+                    station[3] = rs.getString("station_data");
+                    stations.add(station);
                 }
-                
+
                 if (!stations.isEmpty()) {
-                    request.getSession().setAttribute("stations", stations); // リストをリクエスト属性に設定
-                    path = "P51.jsp"; // ステーション情報を表示するJSP
+                    request.getSession().setAttribute("stations", stations);
+                    path = "P51.jsp";
                 } else {
-                    path = "P49.jsp"; // データが見つからない場合の遷移
+                    path = "P49.jsp";
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -76,7 +75,7 @@ public class LoginNGStationSarch extends HttpServlet {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-        
+
         RequestDispatcher rd = request.getRequestDispatcher(path);
         rd.forward(request, response);
     }

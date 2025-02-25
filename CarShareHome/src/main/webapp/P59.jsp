@@ -1,26 +1,19 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="java.sql.Timestamp" %>
 <%@ page import="java.util.Calendar" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.text.SimpleDateFormat" %>
-<%@ page import="model.Customer" %>
-<%@ page import="model.Station" %>
-<%@ page import="model.CarData" %>
-<%@ page import="model.KeyBox" %>
-<%@ page import="model.Model" %>
 <%@ page import="java.util.Locale" %>
 <%@ page import="model.ReservationTime" %>
+
 <%
     String customerName = (String) session.getAttribute("customerName");
     String stationId = (String) session.getAttribute("stationId");
     String img = (String) session.getAttribute("car_img");
     String modelName = (String) session.getAttribute("modelName");
-    String carCode =(String)session.getAttribute("car_code");
     
-    String stationName =(String)session.getAttribute("stationName");
-    String stationData = (String)session.getAttribute("stationData");
-    List<Timestamp[]> availableSlots = (List<Timestamp[]>) request.getAttribute("availableSlots");
+    String selectedDate = (String) request.getAttribute("selectedDate"); // selectedDateを取得
+    List<Timestamp[]> availableSlotsFromRequest = (List<Timestamp[]>) request.getAttribute("availableSlots"); // 予約可能スロットを取得
 
     // カレンダーの日付処理
     Calendar today = Calendar.getInstance();
@@ -82,13 +75,8 @@
             margin-bottom: 5px;
         }
 
-        .header div {
-            text-align: center;
-        }
-
         /* タイムテーブルのスタイル */
         .timetable {
-            display: none; /* 初期状態では非表示 */
             margin-top: 20px;
         }
 
@@ -155,7 +143,6 @@
     <main>
         <div class="header-container">
             <h2>該当車種</h2>
-            <!-- 戻るボタンはここに配置 -->
         </div>
         <div class="additional-info-container" id="additionalInfo">
             <div>
@@ -180,7 +167,7 @@
 
         <h2>予約したい日付をクリックしてください。</h2>
         <br>
-        <div class="calendar-container"> <!-- カレンダーを囲むコンテナ -->
+        <div class="calendar-container">
         <%
             for (int monthOffset = 0; monthOffset < 2; monthOffset++) {
                 Calendar monthCalendar = Calendar.getInstance();
@@ -205,70 +192,61 @@
                 for (int day = 1; day <= daysInMonth; day++) {
                     monthCalendar.set(Calendar.DAY_OF_MONTH, day);
                     String dateStr = sdf.format(monthCalendar.getTime());
-
+                
                     // 今日以前または1か月後以降の日付は無効化
                     boolean isDisabled = monthCalendar.before(today) || monthCalendar.after(oneMonthLater);
                     String className = isDisabled ? "day disabled" : "day";
                     
-                    out.println("<div class='" + className + "' " + (isDisabled ? "" : "onclick='selectDate(\"" + dateStr + "\")'") + ">" + day + "</div>");
+                    out.println("<div class='" + className + "' " + (isDisabled ? "" : "onclick='location.href=\"/CarShareHome/ReservationCarTime?selectedDate=" + dateStr + "&stationId=" + stationId + "&modelName=" + modelName + "\"'") + ">" + day + "</div>");
                 }
 
                 out.println("</div></div>");
             }
         %>
         </div> <!-- カレンダーを囲むコンテナの終了 -->
-		<script>
-		function selectDate(dateStr) {
-		    // 日付をサーブレットに送信
-		    const form = document.createElement("form");
-		    form.method = "POST";
-		    form.action = "ReservationCarTime"; // サーブレットのパス
 
-		    // 日付の入力
-		    const dateInput = document.createElement("input");
-		    dateInput.type = "hidden";
-		    dateInput.name = "selectedDate"; // サーブレットで受け取るパラメータ名
-		    dateInput.value = dateStr;
-
-		    // carCodeの入力
-		    const carCodeInput = document.createElement("input");
-		    carCodeInput.type = "hidden";
-		    carCodeInput.name = "carCode"; // サーブレットで受け取るパラメータ名
-		    carCodeInput.value = "<%= carCode %>"; // セッションから取得した値を設定
-
-		    // stationIdの入力
-		    const stationIdInput = document.createElement("input");
-		    stationIdInput.type = "hidden";
-		    stationIdInput.name = "stationId"; // サーブレットで受け取るパラメータ名
-		    stationIdInput.value = "<%= stationId %>"; // セッションから取得した値を設定
-
-		    // フォームにフィールドを追加
-		    form.appendChild(dateInput);
-		    form.appendChild(carCodeInput);
-		    form.appendChild(stationIdInput);
-		    
-		    document.body.appendChild(form);
-		    form.submit(); // フォームを送信
-		}
-
-	</script>
         <div class="button-container">
-    <button class="back-button" onclick="location.href='P56.jsp'">戻る</button>
-		</div>
-		
-		<% 
-		    String reservationResult = (String) request.getAttribute("reservationResult");
-		    if (reservationResult != null) { 
-		%>
-		    <div class="reservation-result">
-		        <p><%= reservationResult %></p>
-		    </div>
-		<% 
-		    } 
-		%>
+            <button class="back-button" onclick="location.href='P56.jsp'">戻る</button>
+        </div>
 
-        
-    </main>
+        <!-- タイムテーブルの追加 -->
+        <div class="timetable">
+            <h2>予約時間帯</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>開始時間</th>
+                        <th>終了時間</th>
+                        <th>ステータス</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <%
+                    List<ReservationTime> combinedList = (List<ReservationTime>) request.getAttribute("combinedList");
+                    if (combinedList != null && !combinedList.isEmpty()) {
+                        combinedList.sort((a, b) -> a.getStartTime().compareTo(b.getStartTime())); // ソート
+
+                        for (ReservationTime time : combinedList) {
+                %>
+                    <tr>
+                        <td><%= time.getStartTime() %></td>
+                        <td><%= time.getEndTime() %></td>
+                        <td><%= time.getStatus() %></td>
+                    </tr>
+                <%
+                        }
+                    } else {
+                %>
+                    <tr>
+                        <td colspan="3">予約はありません。</td>
+                    </tr>
+                <%
+                    }
+                %>
+            </tbody>
+        </table>
+    </div>
+</main>
 </body>
 </html>
 

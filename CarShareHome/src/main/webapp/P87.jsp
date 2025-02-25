@@ -18,23 +18,32 @@ String email =(String)session.getAttribute("email");
     <link rel="stylesheet" href="css/nav.css">
     <link rel="stylesheet" href="css/check.css">
     <script>
-        function validateForm() {
-            var emailInput = document.getElementById("email").value;
-            var errorMessage = document.getElementById("error-message");
+	    function validateForm() {
+	        var emailInput = document.getElementById("email").value;
+	        var errorMessage = document.getElementById("error-message");
+	
+	        // エラーメッセージを初期化
+	        errorMessage.textContent = "";
+	
+	        // メールアドレスの入力がない場合
+	        if (emailInput.trim() === "") {
+	            errorMessage.textContent = "※メールアドレスは必須です。";
+	            errorMessage.style.color = "red"; // 赤色に設定
+	            return false; // フォーム送信をキャンセル
+	        }
+	
+	        // メールアドレスの形式をチェック
+	        var emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+	        if (!emailPattern.test(emailInput)) {
+	            errorMessage.textContent = "※メールアドレスの形式が不正です。";
+	            errorMessage.style.color = "red"; // 赤色に設定
+	            return false; // フォーム送信をキャンセル
+	        }
+	
+	        return true; // フォーム送信を続行
+	    }
+	</script>
 
-            // エラーメッセージを初期化
-            errorMessage.textContent = "";
-
-            // メールアドレスの入力がない場合
-            if (emailInput.trim() === "") {
-                errorMessage.textContent = "※メールアドレスは必須です。";
-                errorMessage.style.color = "red"; // 赤色に設定
-                return false; // フォーム送信をキャンセル
-            }
-
-            return true; // フォーム送信を続行
-        }
-    </script>
 </head>
 <body>
     <header>
