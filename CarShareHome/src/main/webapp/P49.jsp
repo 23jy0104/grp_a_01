@@ -43,7 +43,7 @@
                 <label for="stationNm">ステーション名</label>
             </div>
             <div class="input-group">
-                <input type="text" id="nameAdr-s" name="stationAddress" placeholder="住所やステーション名を入力" style="ime-mode:active;" required />
+                <input type="text" id="nameAdr-s" name="stationAddress" placeholder="住所やステーション名を入力" style="ime-mode:active;" />
                 <input type="submit" id="doNameAdrSearch" value="検索" />
             </div>
             <p class="notes">例）有楽町、新宿、六本木</p>

@@ -5,21 +5,28 @@
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="java.util.Locale" %>
 <%@ page import="model.ReservationTime" %>
+<%@ page import="java.util.ArrayList" %>
 
 <%
     String customerName = (String) session.getAttribute("customerName");
+	String carCode =(String)session.getAttribute("carCode");
+	System.out.println(carCode);
     String stationId = (String) session.getAttribute("stationId");
     String img = (String) session.getAttribute("car_img");
     String modelName = (String) session.getAttribute("modelName");
     
     String selectedDate = (String) request.getAttribute("selectedDate"); // selectedDateを取得
-    List<Timestamp[]> availableSlotsFromRequest = (List<Timestamp[]>) request.getAttribute("availableSlots"); // 予約可能スロットを取得
+    List<ReservationTime> combinedList = (List<ReservationTime>) request.getAttribute("combinedList"); // 予約状況を取得
 
     // カレンダーの日付処理
     Calendar today = Calendar.getInstance();
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     Calendar oneMonthLater = Calendar.getInstance();
     oneMonthLater.add(Calendar.MONTH, 1); 
+
+    // セッションから開始日と終了日を取得
+    String startDate = (String) session.getAttribute("startDate");
+    String endDate = (String) session.getAttribute("endDate");
 %>
 
 <!DOCTYPE html>
@@ -33,7 +40,6 @@
     <link rel="stylesheet" href="css/P59.css">
     <link rel="stylesheet" href="css/timeTable.css">
     <style>
-        /* 既存のCSSスタイルはそのまま */
         .calendar-container {
             display: flex;
             justify-content: center; /* 中央配置 */
@@ -43,6 +49,9 @@
         .calendar {
             display: inline-block;
             margin: 10px;
+            border: 1px solid #ccc; /* カレンダーの枠 */
+            border-radius: 5px;
+            padding: 10px;
         }
 
         .days {
@@ -52,20 +61,25 @@
         }
 
         .day {
-            width: 60px; /* マス目の幅を大きく */
-            height: 60px; /* マス目の高さを大きく */
+            width: 60px;
+            height: 60px;
             display: flex;
             justify-content: center;
             align-items: center;
             cursor: pointer;
             border: 1px solid #ccc;
             border-radius: 5px;
-            font-size: 18px; /* フォントサイズを調整 */
+            font-size: 18px;
+            background-color: white; /* 背景色を追加 */
         }
 
         .disabled {
             background-color: lightgray;
             cursor: not-allowed;
+        }
+
+        .selectedStart {
+            background-color: orange; /* 開始日の色 */
         }
 
         .header {
@@ -75,51 +89,28 @@
             margin-bottom: 5px;
         }
 
-        /* タイムテーブルのスタイル */
-        .timetable {
-            margin-top: 20px;
+        .button-container {
+            margin-top: 10px;
         }
 
-        .timetable table {
+        table {
             width: 100%;
             border-collapse: collapse;
+            margin-top: 20px;
         }
-
-        .timetable th, .timetable td {
+        th, td {
             border: 1px solid #ccc;
             padding: 10px;
             text-align: center;
         }
-
-        .reserved {
-            background-color: red; /* 予約不可の色 */
-            color: white;
-            cursor: not-allowed;
+        .booked {
+            background-color: lightcoral; /* 予約済みの色 */
         }
-
         .available {
-            background-color: blue; /* 予約可能の色 */
-            color: white;
-            cursor: pointer;
+            background-color: lightgreen; /* 予約可能の色 */
         }
-
-        .selected {
-            background-color: green; /* 選択した時間の色 */
-        }
-
-        .header-container {
-            display: flex;
-            align-items: center; /* 縦方向の中央揃え */
-            justify-content: space-between; /* 左右にスペースを均等に配置 */
-            margin-bottom: 20px; /* 下に余白を追加 */
-        }
-
-        .back-button {
-            margin-left: 10px; /* ボタンに少し余白を追加 */
-        }
-
-        .button-container {
-            margin-top: 10px; /* ボタンの上に少し余白を追加 */
+        .unavailable {
+            background-color: lightcoral; /* 予約不可の色 */
         }
     </style>
 </head>
@@ -149,26 +140,20 @@
                 <label><%= modelName %></label>
                 <img src="img/<%= img %>" alt="車" />
             </div>
-            <table class="info-table">
-                <tr>
-                    <td>駆動</td>
-                    <td>4WD</td>
-                </tr>
-                <tr>
-                    <td>安全装備</td>
-                    <td>ドライブレコーダー, ブレーキサポート, バックモニター</td>
-                </tr>
-                <tr>
-                    <td>備考</td>
-                    <td>ETC車載器</td>
-                </tr>
-            </table>
         </div>
 
         <h2>予約したい日付をクリックしてください。</h2>
         <br>
         <div class="calendar-container">
         <%
+            // 予約済み時間帯のリストを作成
+            List<String> bookedDates = new ArrayList<>();
+            if (combinedList != null) {
+                for (ReservationTime reservation : combinedList) {
+                    bookedDates.add(reservation.getStartTime()); // 予約の開始時間をリストに追加
+                }
+            }
+
             for (int monthOffset = 0; monthOffset < 2; monthOffset++) {
                 Calendar monthCalendar = Calendar.getInstance();
                 monthCalendar.add(Calendar.MONTH, monthOffset);
@@ -195,9 +180,21 @@
                 
                     // 今日以前または1か月後以降の日付は無効化
                     boolean isDisabled = monthCalendar.before(today) || monthCalendar.after(oneMonthLater);
-                    String className = isDisabled ? "day disabled" : "day";
+                    String className = "day";
                     
-                    out.println("<div class='" + className + "' " + (isDisabled ? "" : "onclick='location.href=\"/CarShareHome/ReservationCarTime?selectedDate=" + dateStr + "&stationId=" + stationId + "&modelName=" + modelName + "\"'") + ">" + day + "</div>");
+                    // 予約済みの確認
+                    if (bookedDates.contains(dateStr)) {
+                        className += " disabled"; // 予約済みの場合は無効化
+                    } else if (startDate != null && startDate.equals(dateStr)) {
+                        className += " selectedStart"; // 開始日選択
+                    }
+
+                    // 日付がクリック可能であればイベントを追加
+                    if (!isDisabled) {
+                        out.println("<div class='" + className + "' onclick='handleDateClick(\"" + dateStr + "\")'>" + day + "</div>");
+                    } else {
+                        out.println("<div class='" + className + "'>" + day + "</div>");
+                    }
                 }
 
                 out.println("</div></div>");
@@ -208,45 +205,104 @@
         <div class="button-container">
             <button class="back-button" onclick="location.href='P56.jsp'">戻る</button>
         </div>
+        
+        <!-- 開始時間の入力フィールド -->
+        <div id="startTimeContainer" style="display:none; margin-top: 20px; border: 1px solid #ccc; padding: 15px; border-radius: 5px; background-color: #f9f9f9;">
+            <h3>利用開始時間を選択してください</h3>
+                        <form action="ReservationCarTime" method="post">
+                <label for="startTime" style="font-weight: bold;">利用開始時間:</label>
+                <div style="display: flex; align-items: center; margin: 10px 0;">
+                    <select id="startTimeHour" name="startTimeHour" required style="margin-right: 5px; padding: 5px;">
+                        <option value="">-- 時間を選択 --</option>
+                        <%
+                        for (int hour = 0; hour < 24; hour++) {
+                            String hourStr = String.format("%02d", hour);
+                        %>
+                            <option value="<%= hourStr %>"><%= hourStr %></option>
+                        <%
+                        }
+                        %>
+                    </select>
+                    
+                    <select id="startTimeMinute" name="startTimeMinute" required style="padding: 5px;">
+                        <option value="">-- 分を選択 --</option>
+                        <option value="00">00分</option>
+                        <option value="15">15分</option>
+                        <option value="30">30分</option>
+                        <option value="45">45分</option>
+                    </select>
+                </div>
+                
+                <input type="hidden" id="selectedDate" name="selectedDate">
+                <input type="hidden" id="stationId" name="stationId" value="<%= stationId %>"> <!-- stationIdを隠しフィールドに追加 -->
+                <input type="hidden" id="modelName" name="carCode" value="<%= carCode %>"> <!-- modelNameを隠しフィールドに追加 -->
+                
+                <button type="submit" style="padding: 10px 15px; background-color: orange; color: white; border: none; border-radius: 5px; cursor: pointer;">検索</button>
+            </form>
+        </div>
 
-        <!-- タイムテーブルの追加 -->
-        <div class="timetable">
-            <h2>予約時間帯</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>開始時間</th>
-                        <th>終了時間</th>
-                        <th>ステータス</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <%
-                    List<ReservationTime> combinedList = (List<ReservationTime>) request.getAttribute("combinedList");
+        <script>
+            let isDateSelected = false; // 日付が選択されたかどうかのフラグ
+
+            function handleDateClick(selectedDate) {
+                if (!isDateSelected) {
+                    // 開始日が未選択なら、開始時間の入力フィールドを表示
+                    document.getElementById('startTimeContainer').style.display = 'block';
+                    document.getElementById('selectedDate').value = selectedDate; // 隠しフィールドに選択した日付を設定
+                    isDateSelected = true; // 日付を選択したフラグを立てる
+                } else {
+                    // すでに日付が選択されている場合はアラートを表示
+                    alert('すでに日付が選択されています。');
+                }
+            }
+        </script>
+
+        <!-- サーブレットの結果を表示するタイムテーブル -->
+        <h2>予約状況</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>時間帯</th>
+                    <th>状態</th>
+                </tr>
+            </thead>
+            <tbody>
+                <%
+                    // combinedListがnullまたは空でないか確認
                     if (combinedList != null && !combinedList.isEmpty()) {
-                        combinedList.sort((a, b) -> a.getStartTime().compareTo(b.getStartTime())); // ソート
-
+                        // 予約状況の表示
                         for (ReservationTime time : combinedList) {
+                            String startTime = time.getStartTime();
+                            String endTime = time.getEndTime();
+                            String status = time.getStatus();
+                            
+                            // 予約済みか予約可能かで行のクラスを設定
+                            String rowClass = "available"; // 初期状態を予約可能に設定
+                            if (status.equals("予約済み")) {
+                                rowClass = "booked"; // 予約済みの場合
+                            } else if (status.equals("予約不可")) {
+                                rowClass = "unavailable"; // 予約不可の場合
+                            }
                 %>
-                    <tr>
-                        <td><%= time.getStartTime() %></td>
-                        <td><%= time.getEndTime() %></td>
-                        <td><%= time.getStatus() %></td>
-                    </tr>
+                        <tr class="<%= rowClass %>">
+                            <td><%= startTime + " - " + endTime %></td>
+                            <td><%= status %></td>
+                        </tr>
                 <%
                         }
                     } else {
                 %>
                     <tr>
-                        <td colspan="3">予約はありません。</td>
+                        <td colspan="2">データがありません。</td>
                     </tr>
                 <%
                     }
                 %>
+                
             </tbody>
         </table>
-    </div>
-</main>
+
+    </main>
 </body>
 </html>
-
+           
