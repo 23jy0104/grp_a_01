@@ -30,6 +30,8 @@ public class k_P13Servlet extends HttpServlet {
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	request.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html;charset=UTF-8");
         CustomerDao customerDao = new CustomerDao(); // CustomerDaoのインスタンスを作成
         List<Customer> customerList = customerDao.getAllCustomers(); // 顧客情報を取得
 

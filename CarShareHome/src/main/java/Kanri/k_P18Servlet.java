@@ -14,6 +14,8 @@ import model.Customer;
 @WebServlet("/k_P18Servlet")
 public class k_P18Servlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	request.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html;charset=UTF-8");
         // クエリパラメータからcustomerIdを取得
         String customerId = request.getParameter("customerId");
         String customerName = request.getParameter("customer_name");
