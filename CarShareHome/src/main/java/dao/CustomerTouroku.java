@@ -135,4 +135,36 @@ public class CustomerTouroku implements UserDao {
         }
         return ary;
     }
+
+	@Override
+	public Customer getUserByCustomerId(String customerId) {
+		Customer customer = null;
+		String sql = "SELECT * FROM customer WHERE customer_id = ?";
+		try (PreparedStatement pstmt = con.prepareStatement(sql)) {
+			pstmt.setString(1, customerId);
+			ResultSet rs = pstmt.executeQuery();
+			if (rs.next()) {
+				customer = new Customer(
+						String.valueOf(rs.getInt("customer_Id")),
+						rs.getString("customer_Name"),
+						rs.getString("customer_kana"),
+						rs.getString("gender"),
+						rs.getString("customer_Password"),
+						rs.getString("tell_number"),
+						rs.getString("fixed_call"),
+						rs.getString("e_mail"),
+						rs.getString("birth_date"), // String型で取得
+						rs.getString("license_number"),
+						rs.getString("license_date"), // String型で取得
+						rs.getString("post_code"),
+						rs.getString("customer_address"),
+						rs.getString("credit_id"),
+						rs.getString("omote_jpg"),
+						rs.getString("ura_jpg"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return customer;
+	}
 }
