@@ -1,17 +1,31 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="java.util.List" %>
+<%@ page import="java.net.URLDecoder" %>
+<%@ page import="model.CarData" %>
 
 <%
-    List<Car> availableCars = (List<Car>) request.getAttribute("availableCars");
-    String stationName = (String) request.getAttribute("stationName");
+    String customerName = (String) session.getAttribute("customerName");
+    List<CarData> availableCars = (List<CarData>) request.getSession().getAttribute("availableCars"); // セッションから空いている車両のリストを取得
+    List<String> availableTimes = (List<String>) request.getAttribute("availableTimes"); // 空き時間を取得
+
+    // メッセージの取得
+    String message = request.getParameter("message");
+    if (message != null) {
+        message = URLDecoder.decode(message, "UTF-8"); // URLデコード
+    }
+
+    // エラーメッセージの取得
+    String errorMessage = request.getParameter("error");
+    if (errorMessage != null) {
+        errorMessage = URLDecoder.decode(errorMessage, "UTF-8"); // URLデコード
+    }
 %>
 
 <!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TMC カーシェア - 空車情報</title>
+    <title>TMC カーシェア - 車両情報</title>
     <link rel="stylesheet" href="css/nav.css">
     <link rel="stylesheet" href="css/P57.css">
 </head>
@@ -19,6 +33,7 @@
     <header>
         <img src="img/rog.png" alt="TMCロゴ">
         <h1>TMC カーシェア</h1>
+        <h4 id="username"><%= customerName %>さん</h4>
         <button class="logout-button" onclick="location.href='P29.jsp'">ログアウト</button>
     </header>
 
@@ -32,68 +47,69 @@
     </nav>
 
     <main>
-        <h2><%= stationName %> の空いている車両一覧</h2>
+        <h2>空いている車両情報</h2>
 
         <%
-            if (availableCars != null && !availableCars.isEmpty()) {
-                for (Car car : availableCars) {
+            // メッセージがある場合は表示
+            if (message != null) {
         %>
-            <div class="car-info">
-                <h3><%= car.carInfo %></h3>
-                <table>
-                    <tr>
-                        <td>駆動方式:</td>
-                        <td><%= car.driveType %></td>
-                    </tr>
-                    <tr>
-                        <td>安全装備:</td>
-                        <td><%= car.safetyFeatures %></td>
-                    </tr>
-                    <tr>
-                        <td>備考:</td>
-                        <td><%= car.notes %></td>
-                    </tr>
-                </table>
-                <h4>空き時間</h4>
-                <table>
-                    <tr>
-                        <th>時間帯</th>
-                        <th>空き状況</th>
-                    </tr>
-                    <%
-                    for (String time : car.availableTimes) {
-                    %>
-                    <tr>
-                        <td><%= time %></td>
-                        <td>空きあり</td>
-                    </tr>
-                    <%
-                    }
-                    for (int hour = 0; hour < 24; hour++) {
-                        String timeSlot = String.format("%02d:00:00", hour);
-                        if (!car.availableTimes.contains(timeSlot)) {
-                    %>
-                    <tr>
-                        <td><%= timeSlot %></td>
-                        <td>空きなし</td>
-                    </tr>
-                    <%
-                        }
-                    }
-                    %>
-                </table>
+            <div class="message">
+                <p><%= message %></p>
             </div>
+        <%
+            }
+
+            // エラーメッセージがある場合は表示
+            if (errorMessage != null) {
+        %>
+            <div class="error-message">
+                <p><%= errorMessage %></p>
+            </div>
+        <%
+            }
+
+            // 空いている車両がある場合の処理
+            if (availableCars != null && !availableCars.isEmpty()) {
+                for (CarData car : availableCars) {
+        %>
+                <div class="car-item">
+                    <h3><%= car.getModelYear() != null ? car.getModelYear() : "車種情報がありません" %></h3>
+                    <img src="img/<%= car.getCarImage() != null ? car.getCarImage() : "default.png" %>" alt="車" />
+                    <table class="info-table">
+                        <tr>
+                            <td>駆動</td>
+                            <td>4WD</td> <!-- 駆動情報は固定 -->
+                        </tr>
+                        <tr>
+                            <td>安全装備</td>
+                            <td>ドライブレコーダー, ブレーキサポート, バックモニター</td> <!-- 安全装備は固定 -->
+                        </tr>
+                        <tr>
+                            <td>備考</td>
+                            <td>ETC車載器</td> <!-- 備考は固定 -->
+                        </tr>
+                    </table>
+                </div>
         <%
                 }
             } else {
-        %>
-            <p>空き情報はありません。</p>
-        <%
+                out.print("<p>空いている車両はありません。</p>");
             }
         %>
 
-        <div class="button-container">
-            <button onclick="location.href='P56.jsp'">戻る</button>
+        <div class="available-times">
+            <h3>空き時間</h3>
+            <%
+                if (availableTimes != null && !availableTimes.isEmpty()) {
+                    out.print("<ul>");
+                    for (String time : availableTimes) {
+                        out.print("<li>" + time + "</li>");
+                    }
+                    out.print("</ul>");
+                } else {
+                    out.print("<p>空きなし</p>");
+                }
+            %>
         </div>
     </main>
 </body>
