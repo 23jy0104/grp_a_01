@@ -16,6 +16,8 @@ import model.CarInfo;
 public class k_P7Servlet extends HttpServlet {
     
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html;charset=UTF-8");
         // GETリクエストが来た場合の処理
         String stationName = request.getParameter("stationName");
         String stationAddress = request.getParameter("stationAddress");
@@ -38,10 +40,16 @@ public class k_P7Servlet extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	request.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html;charset=UTF-8");
         String selectedPlate = request.getParameter("selectedPlate");
 
         CarInfoDao carInfoDao = new CarInfoDao();
         CarInfo carInfo = carInfoDao.getCarInfoByNumber(selectedPlate);
+        if(carInfo == null || carInfo.equals("")) {
+			request.setAttribute("errMessage", "該当ステーションが見つかりませんでした。");
+			request.getRequestDispatcher("k_P4.jsp").forward(request, response);
+		}else {
 
         String stationName = request.getParameter("stationName");
         String stationAddress = request.getParameter("stationAddress");
@@ -51,5 +59,6 @@ public class k_P7Servlet extends HttpServlet {
         request.setAttribute("carInfo", carInfo);
 
         request.getRequestDispatcher("k_P7.jsp").forward(request, response);
+		}
     }
 }

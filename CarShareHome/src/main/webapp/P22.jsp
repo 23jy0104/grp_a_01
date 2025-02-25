@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-	<%@ page import="javax.servlet.http.HttpSession" %>
+<%@ page import="javax.servlet.http.HttpSession" %>
 <%
 	request.setCharacterEncoding("UTF-8");
 	response.setContentType("text/html; charset=UTF-8");
@@ -14,7 +14,7 @@
     String tellNumber =request.getParameter("tellNumber");
     String customerAddress = request.getParameter("customerAddress");
     String licenseNumber =request.getParameter("licenseNumber");
-   	String licenseDate = request.getParameter("licenseDate");
+    String licenseDate = request.getParameter("licenseDate");
     String birthDate = request.getParameter("birthDate"); // 生年月日も取得
     String password = request.getParameter("password");
     String file_omote = request.getParameter("file_omote");
@@ -30,6 +30,28 @@
     <link rel="stylesheet" href="css/credit.css">
 </head>
 <body>
+    <script>
+        function validateForm(event) {
+            const creditNumber = document.getElementById('credit_number').value;
+            const errorContainer = document.getElementById('errorContainer');
+
+            // エラーメッセージをクリア
+            errorContainer.innerHTML = '';
+
+            // 正規表現で16桁の数字をチェック
+            const regex = /^\d{16}$/;
+            if (!regex.test(creditNumber)) {
+                event.preventDefault(); // フォーム送信をキャンセル
+                errorContainer.innerHTML = 'クレジットカード番号は16桁の数字でなければなりません。';
+                return false;
+            }
+
+            return true; // バリデーションを通過した場合
+        }
+
+        // フォームのsubmitイベントにバリデーションを追加
+        document.querySelector('form').addEventListener('submit', validateForm);
+    </script>
 
     <header>
         <div class="logo">
@@ -43,16 +65,16 @@
         <input type="hidden" name="customerKana" value="<%= customerKana %>">
         <input type="hidden" name="gender" value="<%= gender %>">
         <input type="hidden" name="email" value="<%= email %>">
-        <input type="hidden" name ="postcode" value ="<%=postcode %>">
-        <input type ="hidden" name="password" value ="<%=password %>">
+        <input type="hidden" name="postcode" value="<%= postcode %>">
+        <input type="hidden" name="password" value="<%= password %>">
         <input type="hidden" name="tellNumber" value="<%= tellNumber %>">
         <input type="hidden" name="customerAddress" value="<%= customerAddress %>">
         <input type="hidden" name="licenseNumber" value="<%= licenseNumber %>">
         <input type="hidden" name="licenseDate" value="<%= licenseDate %>">
         <input type="hidden" name="birthDate" value="<%= birthDate %>"> <!-- 生年月日を隠しフィールドとして追加 -->
         <input type="hidden" name="hashedPassword" value="<%= password %>"> <!-- ハッシュ化されたパスワードを保持 -->
-		<input type= "hidden" name ="omote" value ="<%=file_omote %>">
-		<input type ="hidden" name ="ura" value ="<%=file_ura %>">
+        <input type="hidden" name="omote" value="<%= file_omote %>">
+        <input type="hidden" name="ura" value="<%= file_ura %>">
 
         <div class="form-group">
             <label for="credit_number">

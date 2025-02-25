@@ -37,31 +37,24 @@ public class CustomerDao {
         }
     }
 
-   /* // 顧客を検索するメソッド
-    public ArrayList<Customer> searchCustomer(String name, Date birthDate) {
-        ArrayList<Customer> cs = new ArrayList<>();
-        String sql = "SELECT customerName, customerId, phoneNumber, email, birthDate FROM customer WHERE customerName LIKE ? AND birthDate = ?";
+    // 顧客を検索するメソッド
+    public Customer searchCustomer(String email ,String tel, String birthDate) {
+        String sql = "SELECT * FROM customer WHERE e_mail = ? AND tell_number = ? AND birth_date = ?";
+        Customer cus = null;
         try (PreparedStatement state = con.prepareStatement(sql)) {
-            state.setString(1, "%" + name + "%");
-            state.setDate(2, new java.sql.Date(birthDate.getTime()));
+        	state.setString(1 ,email);
+        	state.setString(2 ,tel);
+        	state.setString(3 ,birthDate);
             ResultSet rs = state.executeQuery();
-            while (rs.next()) {
-                Customer cus = new Customer();
-                cus.setCustomerName(rs.getString("customerName")); // 姓と名を設定
-                cus.setCustomerId(rs.getString("customerId"));
-
-                cus.settellNumber(rs.getString("tellNumber"));
-
-                cus.settellNumber(rs.getString("phoneNumber"));
-                cus.setEmail(rs.getString("email"));
-                cus.setBirthDate(rs.getString("birthDate"));
-                cs.add(cus);
+            if (rs.next()) {
+            	cus = new Customer();
+                cus.setCustomerId(rs.getString("customer_id"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return cs;
-    }*/
+        return cus;
+    }
     
     public ArrayList<Customer> getCustomersWithoutManager() {
         ArrayList<Customer> customers = new ArrayList<>();
@@ -114,7 +107,7 @@ public class CustomerDao {
     }
     public Customer getCustomerById(String customerId) {
         Customer customer = null;
-        String sql = "SELECT customer_name, tell_number, e_mail, license_number, license_date, " +
+        String sql = "SELECT customer_name, tell_number, e_mail, license_number, license_date,birth_date, " +
                      "post_code, customer_address, omote_jpg, ura_jpg FROM customer WHERE customer_id = ?"; // 修正したカラム名を使用
 
         try (PreparedStatement pstmt = con.prepareStatement(sql)) {
@@ -126,6 +119,7 @@ public class CustomerDao {
                 customer.setCustomerName(rs.getString("customer_name"));
                 customer.setTellNumber(rs.getString("tell_number"));
                 customer.setEmail(rs.getString("e_mail"));
+                customer.setBirthDate(rs.getString("birth_date"));
                 customer.setLicenseNumber(rs.getString("license_number"));
                 customer.setLicenceDate(rs.getString("license_date"));
                 customer.setPostCode(rs.getString("post_code"));

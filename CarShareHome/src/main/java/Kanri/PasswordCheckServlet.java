@@ -14,6 +14,8 @@ import dao.ManagerDao;
 @WebServlet("/PasswordCheckServlet")
 public class PasswordCheckServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	request.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html;charset=UTF-8");
         String userId = request.getParameter("userId");
         String password = request.getParameter("password");
         String currentPath = request.getParameter("currentPath"); // 現在のパスを取得

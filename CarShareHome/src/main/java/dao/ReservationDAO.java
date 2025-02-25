@@ -10,9 +10,9 @@ import java.util.List;
 
 import model.CarData;
 import model.Customer;
+import model.HenkyakuData;
 import model.Reservation;
 import model.Station;
-import model.henkyakuData;
 
 public class ReservationDAO {
     private Connection con = null;
@@ -135,9 +135,9 @@ public class ReservationDAO {
         System.out.println("取得した予約数: " + reservations.size());
         return reservations;
     }
-    public henkyakuData getUsage(String customerId) {
-    	henkyakuData henkyaku = null;
-    	String sql = "SELECT s.station_name,m.model_name,car.number,r.start_date"
+    public HenkyakuData getUsage(String customerId) {
+    	HenkyakuData henkyaku = null;
+    	String sql = "SELECT s.station_name,m.model_name,car.number,r.start_date ,k.keybox_id ,k.station_id ,reservation_id"
 	    			+ " FROM customer AS c"
 	    			+ " INNER JOIN reservation AS r"
 	    			+ " ON c.customer_id = r.customer_id"
@@ -155,11 +155,46 @@ public class ReservationDAO {
     		pstmt.setString(1, customerId);
     		ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-                henkyaku = new henkyakuData();
+                henkyaku = new HenkyakuData();
                 henkyaku.setStationName(rs.getString("station_name"));
                 henkyaku.setNumber(rs.getString("number"));
                 henkyaku.setCarName(rs.getString("model_name"));
                 henkyaku.setStartDate(rs.getString("start_date"));
+                henkyaku.setStationId(rs.getString("station_id"));
+                henkyaku.setKeyboxId(rs.getString("keybox_id"));
+                henkyaku.setReservationId(rs.getString("reservation_id"));
+                
+            }
+    	}catch(SQLException e) {
+    		e.printStackTrace();
+    	}
+    	return henkyaku;
+    }
+    public HenkyakuData getUsageById(String reservationId) {
+    	HenkyakuData henkyaku = null;
+    	String sql = "SELECT s.station_name,m.model_name,car.number,r.start_date ,k.keybox_id ,k.station_id ,reservation_id"
+	    			+ " FROM reservation AS r"
+	    			+ " INNER JOIN car_db AS car"
+	    			+ " ON r.car_code = car.car_code"
+	    			+ " INNER JOIN keybox AS k"
+	    			+ " ON car.car_code = k.car_code"
+	    			+ " INNER JOIN station AS s"
+	    			+ " ON k.station_id = s.station_id"
+	    			+ " INNER JOIN model AS m"
+	    			+ " ON car.model_id = m.model_id"
+	    			+ " WHERE r.reservation_id = ?";
+    	try(PreparedStatement pstmt = con.prepareStatement(sql)) {
+    		pstmt.setString(1, reservationId);
+    		ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                henkyaku = new HenkyakuData();
+                henkyaku.setStationName(rs.getString("station_name"));
+                henkyaku.setNumber(rs.getString("number"));
+                henkyaku.setCarName(rs.getString("model_name"));
+                henkyaku.setStartDate(rs.getString("start_date"));
+                henkyaku.setStationId(rs.getString("station_id"));
+                henkyaku.setKeyboxId(rs.getString("keybox_id"));
+                henkyaku.setReservationId(rs.getString("reservation_id"));
             }
     	}catch(SQLException e) {
     		e.printStackTrace();

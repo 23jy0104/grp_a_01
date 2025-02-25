@@ -10,106 +10,155 @@
     <title>TMC カーシェア</title>
     <link rel="stylesheet" href="css/step.css"> 
     <script>
-        function validateForm(event) {
-            event.preventDefault(); // フォーム送信を防ぐ
-            let errorMessages = [];
-            
-            const sei = document.getElementById('sei');
-            const mei = document.getElementById('mei');
-            const seikana = document.getElementById('seikana');
-            const meikana = document.getElementById('meikana');
-            const gender = document.querySelector('input[name="gender"]:checked');
-            const birthday = document.getElementById('birthday');
-            const postcode = document.getElementById('postcode');
-            const prefecture = document.getElementById('prefecture');
-            const address = document.getElementById('address');
-            const phonenumber = document.getElementById('TEL');
-            const mailaddress = document.getElementById('e_mail');
-            const password = document.getElementById("password");
-            const ageinpassword = document.getElementById("agein_password");
-            const licensenumber = document.getElementById('driver_licence_number');
-            const licensetype = document.getElementById('type');
-            const fileomote = document.getElementById('file_omote').files[0];
-            const fileura = document.getElementById('file_ura').files[0];
+    function validateForm(event) {
+        event.preventDefault(); // フォーム送信を防ぐ
+        let errorMessages = [];
 
-            // 入力フィールドをリセット
-            const inputs = [sei, mei, seikana, meikana, birthday, postcode, prefecture, address, phonenumber, mailaddress, password, ageinpassword, licensenumber, licensetype];
-            inputs.forEach(input => {
-                input.style.backgroundColor = ''; // 背景色をリセット
-            });
+        // 既存の要素の取得
+        const sei = document.getElementById('sei');
+        const mei = document.getElementById('mei');
+        const seikana = document.getElementById('seikana');
+        const meikana = document.getElementById('meikana');
+        const gender = document.querySelector('input[name="gender"]:checked');
+        const birthday = document.getElementById('birthday');
+        const postcode = document.getElementById('postcode');
+        const prefecture = document.getElementById('prefecture');
+        const address = document.getElementById('address');
+        const phonenumber = document.getElementById('TEL');
+        const mailaddress = document.getElementById('e_mail');
+        const password = document.getElementById("password");
+        const ageinpassword = document.getElementById("agein_password");
+        const licensenumber = document.getElementById('driver_licence_number');
+        const licensetype = document.getElementById('type');
+        const fileomote = document.getElementById('file_omote').files[0];
+        const fileura = document.getElementById('file_ura').files[0];
+        const licenseDate = document.getElementsByName('licenseDate')[0]; // 有効期限
+        const acquisitionDate = document.getElementsByName('licenseCatchDate')[0]; // 取得年月日
 
-            if (!sei.value) {
-                errorMessages.push("※姓が未入力です。");
-                sei.style.backgroundColor = '#ffcccc'; // 薄い赤色
-            }
-            if (!mei.value) {
-                errorMessages.push("※名が未入力です。");
-                mei.style.backgroundColor = '#ffcccc'; // 薄い赤色
-            }
-            if (!seikana.value) {
-                errorMessages.push("※姓カナが未入力です。");
-                seikana.style.backgroundColor = '#ffcccc'; // 薄い赤色
-            }
-            if (!meikana.value) {
-                errorMessages.push("※名カナが未入力です。");
-                meikana.style.backgroundColor = '#ffcccc'; // 薄い赤色
-            }
-            if (!gender) {
-                errorMessages.push("※性別が選択されていません。");
-            }
-            if (!birthday.value) {
-                errorMessages.push("※誕生日が未入力です。");
-                birthday.style.backgroundColor = '#ffcccc'; // 薄い赤色
-            }
-            if (!postcode.value) {
-                errorMessages.push('※郵便番号が未入力です。');
-                postcode.style.backgroundColor = '#ffcccc'; // 薄い赤色
-            }
-            if (prefecture.value === "") {
-                errorMessages.push("※都道府県を選択してください。");
-                prefecture.style.backgroundColor = '#ffcccc'; // 薄い赤色
-            }
-            if (!address.value) {
-                errorMessages.push("※市区町村が未入力です。");
-                address.style.backgroundColor = '#ffcccc'; // 薄い赤色
-            }
-            if (!phonenumber.value) {
-                errorMessages.push("※携帯電話番号が未入力です。");
-                phonenumber.style.backgroundColor = '#ffcccc'; // 薄い赤色
-            }
-            if (!mailaddress.value) {
-                errorMessages.push("※メールアドレスが未入力です。");
-                mailaddress.style.backgroundColor = '#ffcccc'; // 薄い赤色
-            }
-            if (!password.value) {
-                errorMessages.push("※パスワードが未入力です。");
-                password.style.backgroundColor = '#ffcccc'; // 薄い赤色
-            }
-            if (!ageinpassword.value) {
-                errorMessages.push("※パスワード確認用が未入力です。");
-                ageinpassword.style.backgroundColor = '#ffcccc'; // 薄い赤色
-            }
-            if (password.value !== ageinpassword.value) {
-                errorMessages.push("※パスワードと確認用パスワードが一致しません。");
-            }
-            if (!licensenumber.value) {
-                errorMessages.push("※免許証番号が未入力です。");
-                licensenumber.style.backgroundColor = '#ffcccc'; // 薄い赤色
-            }
-            if (licensetype.value === "") {
-                errorMessages.push("※免許証種別が未選択です。");
-                licensetype.style.backgroundColor = '#ffcccc'; // 薄い赤色
-            }
-            if (!fileomote) {
-                errorMessages.push("※免許証(表面)写真が選択されていません。");
-            }
-            if (!fileura) {
-                errorMessages.push("※免許証(裏面)写真が選択されていません。");
-            }
+        // 入力フィールドをリセット
+        const inputs = [sei, mei, seikana, meikana, birthday, postcode, prefecture, address, phonenumber, mailaddress, password, ageinpassword, licensenumber, licensetype, licenseDate, acquisitionDate];
+        inputs.forEach(input => {
+            input.style.backgroundColor = ''; // 背景色をリセット
+        });
 
-            // エラーメッセージを表示
-            displayErrors(errorMessages);
+        // 既存のバリデーション
+        if (!sei.value) {
+            errorMessages.push("※姓が未入力です。");
+            sei.style.backgroundColor = '#ffcccc'; // 薄い赤色
         }
+        if (!mei.value) {
+            errorMessages.push("※名が未入力です。");
+            mei.style.backgroundColor = '#ffcccc'; // 薄い赤色
+        }
+        if (!seikana.value || !/^[\u30A1-\u30F6]+$/.test(seikana.value)) {
+            errorMessages.push("※姓カナが未入力またはカタカナではありません。");
+            seikana.style.backgroundColor = '#ffcccc'; // 薄い赤色
+        }
+        if (!meikana.value || !/^[\u30A1-\u30F6]+$/.test(meikana.value)) {
+            errorMessages.push("※名カナが未入力またはカタカナではありません。");
+            meikana.style.backgroundColor = '#ffcccc'; // 薄い赤色
+        }
+        if (!gender) {
+            errorMessages.push("※性別が選択されていません。");
+        }
+        if (!birthday.value) {
+            errorMessages.push("※誕生日が未入力です。");
+            birthday.style.backgroundColor = '#ffcccc'; // 薄い赤色
+        } else {
+            const birthDate = new Date(birthday.value);
+            const today = new Date();
+            const age = today.getFullYear() - birthDate.getFullYear();
+            const m = today.getMonth() - birthDate.getMonth();
+            if (age < 18 || (age === 18 && m < 0)) {
+                errorMessages.push("※18歳未満の方は登録できません。");
+            }
+        }
+        if (!postcode.value || !/^\d{7}$/.test(postcode.value)) {
+            errorMessages.push('※郵便番号はハイフンなしの7桁の数字で入力してください。');
+            postcode.style.backgroundColor = '#ffcccc'; // 薄い赤色
+        }
+        if (prefecture.value === "") {
+            errorMessages.push("※都道府県を選択してください。");
+            prefecture.style.backgroundColor = '#ffcccc'; // 薄い赤色
+        }
+        if (!address.value) {
+            errorMessages.push("※市区町村が未入力です。");
+            address.style.backgroundColor = '#ffcccc'; // 薄い赤色
+        }
+        if (!phonenumber.value || !/^\d+$/.test(phonenumber.value)) {
+            errorMessages.push("※携帯電話番号が未入力または数字ではありません。");
+            phonenumber.style.backgroundColor = '#ffcccc'; // 薄い赤色
+        }
+        if (!mailaddress.value) {
+            errorMessages.push("※メールアドレスが未入力です。");
+            mailaddress.style.backgroundColor = '#ffcccc'; // 薄い赤色
+        } else if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(mailaddress.value)) {
+            errorMessages.push("※メールアドレスの形式が不正です。");
+            mailaddress.style.backgroundColor = '#ffcccc'; // 薄い赤色
+        }
+        if (!password.value) {
+            errorMessages.push("※パスワードが未入力です。");
+            password.style.backgroundColor = '#ffcccc'; // 薄い赤色
+        }
+        if (!ageinpassword.value) {
+            errorMessages.push("※パスワード確認用が未入力です。");
+            ageinpassword.style.backgroundColor = '#ffcccc'; // 薄い赤色
+        }
+        if (password.value !== ageinpassword.value) {
+            errorMessages.push("※パスワードと確認用パスワードが一致しません。");
+        }
+        if (!licensenumber.value || !/^\d+$/.test(licensenumber.value)) {
+            errorMessages.push("※免許証番号が未入力または数字ではありません。");
+            licensenumber.style.backgroundColor = '#ffcccc'; // 薄い赤色
+        }
+        if (licensetype.value === "") {
+            errorMessages.push("※免許証種別が未選択です。");
+            licensetype.style.backgroundColor = '#ffcccc'; // 薄い赤色
+        }
+
+        // 有効期限のチェック
+        if (!licenseDate.value) {
+            errorMessages.push("※有効期限が未入力です。");
+            licenseDate.style.backgroundColor = '#ffcccc'; // 薄い赤色
+        } else {
+            const licenseExpiryDate = new Date(licenseDate.value);
+            if (licenseExpiryDate <= new Date()) {
+                errorMessages.push("※有効期限は現在の日よりも後でなければなりません。");
+                licenseDate.style.backgroundColor = '#ffcccc'; // 薄い赤色
+            }
+        }
+
+        // 取得年月日のチェック
+        if (!acquisitionDate.value) {
+            errorMessages.push("※免許取得年月日が未入力です。");
+            acquisitionDate.style.backgroundColor = '#ffcccc'; // 薄い赤色
+        } else {
+            const licenseAcquisitionDate = new Date(acquisitionDate.value);
+            if (licenseAcquisitionDate >= new Date()) {
+                errorMessages.push("※免許取得年月日は現在の日よりも前でなければなりません。");
+                acquisitionDate.style.backgroundColor = '#ffcccc'; // 薄い赤色
+            }
+        }
+
+        // 画像ファイルのチェック
+        const validImageTypes = ['image/jpeg', 'image/png', 'image/gif'];
+        if (fileomote && !validImageTypes.includes(fileomote.type)) {
+            errorMessages.push("※免許証(表面)は画像ファイル（JPEG, PNG, GIF）のみアップロードできます。");
+        }
+        if (fileura && !validImageTypes.includes(fileura.type)) {
+            errorMessages.push("※免許証(裏面)は画像ファイル（JPEG, PNG, GIF）のみアップロードできます。");
+        }
+        if (!fileomote) {
+            errorMessages.push("※免許証(表面)写真が選択されていません。");
+        }
+        if (!fileura) {
+            errorMessages.push("※免許証(裏面)写真が選択されていません。");
+        }
+
+        // エラーメッセージを表示
+        displayErrors(errorMessages);
+    }
+
 
         function displayErrors(errorMessages) {
             const errorContainer = document.getElementById('errorMessages');
