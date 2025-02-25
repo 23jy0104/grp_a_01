@@ -46,6 +46,10 @@ public class k_P7Servlet extends HttpServlet {
 
         CarInfoDao carInfoDao = new CarInfoDao();
         CarInfo carInfo = carInfoDao.getCarInfoByNumber(selectedPlate);
+        if(carInfo == null || carInfo.equals("")) {
+			request.setAttribute("errMessage", "該当ステーションが見つかりませんでした。");
+			request.getRequestDispatcher("k_P4.jsp").forward(request, response);
+		}else {
 
         String stationName = request.getParameter("stationName");
         String stationAddress = request.getParameter("stationAddress");
@@ -55,5 +59,6 @@ public class k_P7Servlet extends HttpServlet {
         request.setAttribute("carInfo", carInfo);
 
         request.getRequestDispatcher("k_P7.jsp").forward(request, response);
+		}
     }
 }

@@ -61,11 +61,17 @@
 	        </tr>
         </c:if>
     </table>
-        <form class="button-container" action="k_P25Servlet" method="post">
+    <c:if test="${empty(errMessage)}">
+        <form class="button-container" action="k_P25Servlet" method="post" style="display: inline">
             <input type="hidden" name="customerId" value="${customer.customerId}">
             <input type="hidden" name="stationId" value="${henkyaku.stationId}">
             <input type="hidden" name="reservationId" value="${henkyaku.reservationId}">
             <button type="submit">返却処理</button>
         </form>
+    </c:if>
+    <br>
+    <div class="button-container">
+       	<button onclick="location.href='k_P21.jsp'">顧客情報検索に戻る</button>
+   	</div>
 </body>
 </html>

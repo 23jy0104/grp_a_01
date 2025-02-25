@@ -1,8 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.util.List" %>
 <%@ page import="model.Station" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<!DOCTYPE html> <html lang="ja"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>ステーション検索</title> <link rel="stylesheet" href="css/search.css"> </head> <body>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ステーション検索</title>
+    <link rel="stylesheet" href="css/search.css">
+</head>
+<body>
 
 <h1>ステーション検索</h1>
 <div>
@@ -36,16 +45,17 @@
         </tr>
         <%
                 }
-            } else {
-        %>
-        <tr>
-            <td colspan="2">ステーションが見つかりませんでした。</td>
-        </tr>
-        <%
             }
         %>
+        <c:if test="${!empty(errMessage)}">
+            <tr>
+                <td colspan="2"><span style="color: red;">${errMessage}</span></td>
+            </tr>
+        </c:if>
     </tbody>
 </table>
+
+<div id="noResultsMessage" style="color: red; display: none;">該当ステーションが見つかりませんでした。</div>
 
 <script>
     document.getElementById('searchBtn').addEventListener('click', function() {
@@ -66,6 +76,8 @@
             .then(data => {
                 const resultsBody = document.getElementById('resultsBody');
                 resultsBody.innerHTML = '';
+                const noResultsMessage = document.getElementById('noResultsMessage');
+                noResultsMessage.style.display = 'none'; // メッセージを非表示にする
 
                 if (Array.isArray(data) && data.length > 0) {
                     data.forEach(station => {
@@ -82,6 +94,7 @@
                     document.getElementById('resultsTable').style.display = 'table';
                 } else {
                     document.getElementById('resultsTable').style.display = 'none';
+                    noResultsMessage.style.display = 'block'; // メッセージを表示する
                 }
             })
             .catch(error => {
@@ -92,4 +105,5 @@
 </script>
 
 <button class="logout" onclick="location.href='k_top.jsp'">サインアウト</button>
-</body> </html>
+</body>
+</html>
