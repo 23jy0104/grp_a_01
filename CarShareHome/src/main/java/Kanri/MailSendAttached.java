@@ -1,7 +1,6 @@
 package Kanri;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Date;
 import java.util.Properties;
 
@@ -52,9 +51,6 @@ public class MailSendAttached extends HttpServlet {
 		
 		// メール送信
 		this.send(from, to, subject, body);
-
-		// HTML出力
-		this.disp(request, response);
 	}
 
 	private void send(String from, String to, String subject, String body) {
@@ -95,24 +91,4 @@ public class MailSendAttached extends HttpServlet {
 			e.printStackTrace();
 		}
 	}
-
-	private void disp(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.setCharacterEncoding("UTF-8");
-		response.setContentType("text/html; charset=UTF-8");
-		PrintWriter out = response.getWriter();
-
-		out.println("<!DOCTYPE html>");
-		out.println("<html lang=ja>");
-		out.println("<head>");
-		out.println("<meta charset=\"UTF-8\" >");
-		out.println("<title>送信確認</title>");
-		out.println("</head>");
-		out.println("<body>");
-		out.println("    <h1>メール送信</h1>");
-		out.println("    <p>メールを送りました。添付ファイルをご確認ください。</p>");
-		out.println("    <a href=\"MailFormAttached.jsp\">メール入力に戻る</a>");
-		out.println("</body>");
-		out.println("</html>");
-	}
-
 }
