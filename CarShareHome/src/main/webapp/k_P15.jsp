@@ -11,6 +11,9 @@
     function sendLicenseInfo() {
         var customerId = "<%= request.getAttribute("customerId") %>";
         var customerName = "<%= request.getAttribute("customerName") %>";
+        var email = "<%= request.getAttribute("email") %>";
+        
+        
         console.log("中Customer ID:", customerId);
         console.log("中Customer Name:", customerName);
         
@@ -20,13 +23,13 @@
         xhr.onreadystatechange = function() {
             if (xhr.readyState === 4 && xhr.status === 200) {
                 var result = JSON.parse(xhr.responseText);
-                if (result.managerCheck === "?") {
+                if (result.managerCheck === "○") {
                     alert("判定OK");
                     console.log("Sending Customer ID:", customerId);
-                    window.location.href = "k_P18Servlet?customerId=" + encodeURIComponent(customerId) + "&customer_name=" + encodeURIComponent(customerName);
+                    window.location.href = "OKServlet?customerId=" + encodeURIComponent(customerId) + "&email=" + encodeURIComponent(email);
                 } else {
                     alert("判定NG");
-                    window.location.href = "k_P13Servlet";
+                    window.location.href = "NGServlet?email=" + encodeURIComponent(email);
                 }
             }
             console.log("外Customer ID:", customerId);
