@@ -69,3 +69,40 @@ th {
     background-color: #d8d8d8;
     font-weight: bold;
 }
+/* フォーム全体のスタイル */
+.table-section {
+    margin-top: 20px;
+}
+
+/* 各入力フィールドのスタイル */
+input[type="date"],
+select {
+    width: 150px; /* 幅を指定 */
+    padding: 10px; /* 内側の余白 */
+    margin: 5px 0; /* 上下の余白 */
+    border: 1px solid #ccc; /* ボーダー */
+    border-radius: 5px; /* 角を丸く */
+    font-size: 16px; /* フォントサイズ */
+}
+
+/* フォームのラベルスタイル */
+label {
+    font-weight: bold; /* 太字 */
+    margin-right: 10px; /* ラベルとフィールドの間の余白 */
+}
+
+/* ボタンのスタイル */
+input[type="submit"] {
+    background-color: #4CAF50; /* ボタンの背景色 */
+    color: white; /* テキストの色 */
+    padding: 10px 15px; /* 内側の余白 */
+    border: none; /* ボーダーなし */
+    border-radius: 5px; /* 角を丸く */
+    cursor: pointer; /* カーソルをポインタに */
+    font-size: 16px; /* フォントサイズ */
+}
+
+/* ボタンのホバー効果 */
+input[type="submit"]:hover {
+    background-color: #45a049; /* ホバー時の背景色 */
+}

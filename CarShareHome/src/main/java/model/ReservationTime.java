@@ -3,31 +3,31 @@ package model;
 import java.io.Serializable;
 
 public class ReservationTime implements Serializable {
-private String startTime; // 開始時間
-private String endTime;   // 終了時間
+private String startDateTime; // 開始時間
+private String endDateTime;   // 終了時間
 private String status;
 
 
-public ReservationTime(String startTime, String endTime, String status) {
-    this.startTime = startTime;
-    this.endTime = endTime;
+public ReservationTime(String startDateTime, String endDateTime, String status) {
+    this.startDateTime = startDateTime;
+    this.endDateTime = endDateTime;
     this.status = status;
 }
 
-public String getStartTime() {
-    return startTime;
+public String getStartDateTime() {
+    return startDateTime;
 }
 
-public void setStartTime(String startTime) {
-    this.startTime = startTime;
+public void setStartDateTime(String startDateTime) {
+    this.startDateTime = startDateTime;
 }
 
-public String getEndTime() {
-    return endTime;
+public String getEndDateTime() {
+    return endDateTime;
 }
 
-public void setEndTime(String endTime) {
-    this.endTime = endTime;
+public void setEndDateTime(String endDateTime) {
+    this.endDateTime = endDateTime;
 }
 
 public String getStatus() {

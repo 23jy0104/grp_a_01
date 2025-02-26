@@ -21,9 +21,14 @@ public class DiscountCalculatorServlet extends HttpServlet {
     private static final int INSURANCE_FEE = 550; // 保険料金
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String startTimestamp = request.getParameter("startTime");
-        String endTimestamp = request.getParameter("endTime");
-
+        String startTimestamp = (String)request.getSession().getAttribute("startDate");
+        String endTimestamp = (String)request.getSession().getAttribute("endDate");
+        String stationId =(String)request.getSession().getAttribute("stationId");
+        String carCode =(String)request.getSession().getAttribute("carCode");
+        String img =(String)request.getSession().getAttribute("img");
+        String stationName =(String)request.getSession().getAttribute("stationName");
+        String modelName =(String)request.getSession().getAttribute("modelName");
+        String number =(String)request.getSession().getAttribute("number");
         // 時間の計算
         long durationInMillis = calculateDuration(startTimestamp, endTimestamp);
         int durationHours = (int) (durationInMillis / (1000 * 60 * 60)); // ミリ秒を時間に変換
@@ -38,7 +43,17 @@ public class DiscountCalculatorServlet extends HttpServlet {
 
         // 結果をリクエストに設定
         request.setAttribute("totalCost", totalCost);
-        request.getRequestDispatcher("result.jsp").forward(request, response); // 結果をresult.jspにフォワード
+        
+        
+        request.setAttribute("stationId", stationId);
+        request.setAttribute("carCode", carCode);
+        request.setAttribute("img",img);
+        request.setAttribute("stationName", stationName);
+        request.setAttribute("modelName", modelName);
+        request.setAttribute("number", number);
+        request.setAttribute("startTimestamp", startTimestamp); 
+        request.setAttribute("endTimestamp", endTimestamp);
+        request.getRequestDispatcher("P63.jsp").forward(request, response); // 結果をresult.jspにフォワード
     }
 
     private long calculateDuration(String startTimestamp, String endTimestamp) {

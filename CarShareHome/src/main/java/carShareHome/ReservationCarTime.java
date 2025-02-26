@@ -58,51 +58,56 @@ public class ReservationCarTime extends HttpServlet {
                     Timestamp startDate = rs.getTimestamp("start_date");
                     Timestamp stopDate = rs.getTimestamp("stop_date");
 
-                    // TimestampをHH:mm形式のStringに変換
-                    SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-                    String reservedStartTime = sdf.format(startDate);
-                    String reservedEndTime = sdf.format(stopDate);
+                    // 日付と時間を結合した形式で取得
+                    SimpleDateFormat sdfDateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                    String reservedStartTime = sdfDateTime.format(startDate);
+                    String reservedEndTime = sdfDateTime.format(stopDate);
 
                     ReservationTime reservationTime = new ReservationTime(reservedStartTime, reservedEndTime, "予約不可");
                     reservationTimes.add(reservationTime);
                 }
 
                 // 入力された時間を基に24時間後の時間を計算
-                Timestamp inputTime = Timestamp.valueOf(selectedDate + " " + startTimeHour + ":" + startTimeMinute + ":00");
+                Timestamp inputTime = Timestamp.valueOf(startDateTime);
                 Timestamp endTime24HoursLater = new Timestamp(inputTime.getTime() + 24 * 60 * 60 * 1000); // 24時間後
 
                 // 予約可能な時間帯を設定
-                for (long time = inputTime.getTime(); time < endTime24HoursLater.getTime(); time += 60 * 60 * 1000) { // 15分ごと
+             // 予約可能な時間帯を設定
+                for (long time = inputTime.getTime(); time < endTime24HoursLater.getTime(); time += 60 * 60 * 1000) { // 1時間ごと
+                    SimpleDateFormat sdfDateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                     Timestamp startTime = new Timestamp(time);
-                    Timestamp endTime = new Timestamp(time + 15 * 60 * 1000);
+                    Timestamp endTime = new Timestamp(time + 60 * 60 * 1000); // 1時間後
 
                     // 予約済み時間との重複チェック
                     boolean isBooked = false;
                     for (ReservationTime reserved : reservationTimes) {
-                        // reservedの時間もString型として扱う必要があるため変換
-                        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-                        String reservedStartTime = reserved.getStartTime(); // HH:mm形式
-                        String reservedEndTime = reserved.getEndTime(); // HH:mm形式
+                        // 予約済みの開始・終了日時を取得
+                        String reservedStartTime = reserved.getStartDateTime(); // "yyyy-MM-dd HH:mm" 形式
+                        String reservedEndTime = reserved.getEndDateTime();     // "yyyy-MM-dd HH:mm" 形式
+
+                        // 秒を追加して、正しい形式に変換
+                        Timestamp reservedStartDateTime = Timestamp.valueOf(reservedStartTime + ":00");
+                        Timestamp reservedEndDateTime = Timestamp.valueOf(reservedEndTime + ":00");
 
                         // 重複判定
-                        if (startTime.compareTo(Timestamp.valueOf(selectedDate + " " + reservedEndTime + ":00")) < 0 &&
-                            endTime.compareTo(Timestamp.valueOf(selectedDate + " " + reservedStartTime + ":00")) > 0) {
+                        if (startTime.compareTo(reservedEndDateTime) < 0 && endTime.compareTo(reservedStartDateTime) > 0) {
                             isBooked = true; // 予約が重複している場合
                             break; // ループを抜ける
                         }
                     }
 
                     // 予約状態を判定してリストに追加
+                    String availableStartTime = sdfDateTime.format(startTime);
+                    String availableEndTime = sdfDateTime.format(endTime);
                     if (!isBooked) {
-                        String availableStartTime = String.format("%tH:%tM", startTime, startTime);
-                        String availableEndTime = String.format("%tH:%tM", endTime, endTime);
                         availableSlots.add(new ReservationTime(availableStartTime, availableEndTime, "予約可能"));
                     } else {
-                        String unavailableStartTime = String.format("%tH:%tM", startTime, startTime);
-                        String unavailableEndTime = String.format("%tH:%tM", endTime, endTime);
-                        availableSlots.add(new ReservationTime(unavailableStartTime, unavailableEndTime, "予約不可")); // 予約不可の状態も追加
+                        availableSlots.add(new ReservationTime(availableStartTime, availableEndTime, "予約不可"));
                     }
                 }
+
+
+
 
                 // 予約済み時間と予約可能時間を結合
                 List<ReservationTime> combinedList = new ArrayList<>(reservationTimes);

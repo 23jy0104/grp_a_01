@@ -10,7 +10,8 @@
 <%@ page import="java.util.HashMap" %>
 <%@ page import ="model.Customer" %>
 <%@ page import ="model.Station" %>
-
+<%@ page import="java.util.Date" %>
+<%@ page import="java.text.SimpleDateFormat" %>
 
 <%
 String stationName=(String)session.getAttribute("stationName");
@@ -157,7 +158,7 @@ String endDate = (String) session.getAttribute("endDate");
             List<String> bookedDates = new ArrayList<>();
             if (combinedList != null) {
                 for (ReservationTime reservation : combinedList) {
-                    bookedDates.add(reservation.getStartTime()); // 予約の開始時間をリストに追加
+                    bookedDates.add(reservation.getStartDateTime()); // 予約の開始時間をリストに追加
                 }
             }
 
@@ -264,46 +265,61 @@ String endDate = (String) session.getAttribute("endDate");
                     document.getElementById('selectedDate').value = selectedDate; // 隠しフィールドに選択した日付を設定
                     isDateSelected = true; // 日付を選択したフラグを立てる
                 } else {
-                    // すでに日付が選択されている場合はアラートを表示
-                    alert('すでに日付が選択されています。');
+                	document.getElementById('startTimeContainer').style.display = 'block';
+                    document.getElementById('selectedDate').value = selectedDate; // 隠しフィールドに選択した日付を設定
+                    isDateSelected = true; // 日付を選択したフラグを立てる
                 }
             }
         </script>
         <!-- サーブレットの結果を表示するタイムテーブル -->
 		<table id="carShareTable">
-    <tbody>
-        <tr>
-            <td colspan="96" class="time-cell"><%= selectedDate != null ? selectedDate : "日付と空き状況を確認したい開始時間を入力してください。" %></td>
-        </tr>
-        <tr>
-		            <%
-		            
-		            // 予約状況を表示するためのタイムテーブルを動的に生成
-		            if (combinedList != null && !combinedList.isEmpty()) {
-		                // 1行目を飛ばすため、indexを1から開始
-		                for (int i = 1; i < combinedList.size(); i++) {
-		                    ReservationTime time = combinedList.get(i);
-		                    String startTime = time.getStartTime();
-		                    String endTime = time.getEndTime();
-		                    
-		                    // 時間帯を1時間表示
-		                    String displayTime = startTime + " ～ " + endTime;
-		            %>
-		                <td class="time-cell" colspan="4"><%= displayTime %></td>
-		            <%
-		                }
-		            }
-		            %>
+		    <tbody>
+		        <tr>
+		            <td colspan="96" class="time-cell">
+		                <%= selectedDate != null ? selectedDate : "日付と空き状況を確認したい開始時間を入力してください。" %>
+		            </td>
 		        </tr>
+		       <tr>
+				    <%
+				    // 予約状況を表示するためのタイムテーブルを動的に生成
+				    if (combinedList != null && !combinedList.isEmpty()) {
+				        // 1行目を飛ばすため、インデックスを1から開始
+				        for (int i = 1; i < combinedList.size(); i++) {
+				            ReservationTime time = combinedList.get(i);
+				            String startDateTime = time.getStartDateTime(); // "yyyy-MM-dd HH:mm" 形式
+				            String endDateTime = time.getEndDateTime();     // "yyyy-MM-dd HH:mm" 形式
+				
+				            // 時間を表示するためのフォーマット設定
+				            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+				            SimpleDateFormat outputFormat = new SimpleDateFormat("HH:mm");
+				
+				            // 文字列をDateに変換
+				            Date startDateObj = inputFormat.parse(startDateTime);
+				            Date endDateObj = inputFormat.parse(endDateTime);
+				
+				            // フォーマットした時間を取得
+				            String formattedStartTime = outputFormat.format(startDateObj);
+				            String formattedEndTime = outputFormat.format(endDateObj);
+				
+				            // 時間帯を表示
+				            String displayTime = formattedStartTime + " ～ " + formattedEndTime;
+				    %>
+				            <td class="time-cell" colspan="4"><%= displayTime %></td>
+				    <%
+				        }
+				    }
+				    %>
+				</tr>
+
 		        <tr>
 		            <%
 		            // 状態を表示する行
 		            if (combinedList != null && !combinedList.isEmpty()) {
-		                // 状態行も1行目を飛ばすため、indexを1から開始
+		                // 状態行も1行目を飛ばすため、インデックスを1から開始
 		                for (int i = 1; i < combinedList.size(); i++) {
 		                    ReservationTime time = combinedList.get(i);
 		                    String status = time.getStatus();
-		                    
+		
 		                    // 予約状態に応じて状態のクラスを設定
 		                    String rowClass;
 		                    if (status.equals("予約不可")) {
@@ -321,25 +337,21 @@ String endDate = (String) session.getAttribute("endDate");
 		            <%
 		                    }
 		                }
-		            
-		            
-		            
 		            %>
-		            
-		            
 		        </tr>
 		    </tbody>
 		</table>
-		 <a href="ReservationOK?stationId=<%= stationId %>&carCode=<%= carCode %>&car_img=<%=img %>&modelName=<%=modelName %>" id="reservationLink" style="display:none;">予約入力画面へ</a>
-
-		  <% 
-		  	}
-		            
-		            %>
+		
+		<a href="ReservationCon?stationId=<%= stationId %>&carCode=<%= carCode %>&img=<%= img %>&modelName=<%= modelName %>" id="reservationLink" style="display:none;">予約入力画面へ</a>
+		
+		<%
+		    } // combinedList のチェックが終わったら閉じる
+		%>
 		<script>
-        // タイムテーブルが生成された後にリンクを表示
-        document.getElementById('reservationLink').style.display = 'block';
-    </script>
+		    // タイムテーブルが生成された後にリンクを表示
+		    document.getElementById('reservationLink').style.display = 'block';
+		</script>
+
     </main>
 </body>
 </html>
