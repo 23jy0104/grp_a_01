@@ -24,7 +24,6 @@ public class ReservationOK extends HttpServlet {
 		String img =request.getParameter("img");
 		String modelName=request.getParameter("modelName");
 
-		System.out.println(stationId);
 		System.out.println(img);
 		System.out.println(modelName);
         

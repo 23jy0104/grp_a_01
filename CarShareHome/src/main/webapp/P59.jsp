@@ -13,6 +13,8 @@
 
 
 <%
+String stationName=(String)session.getAttribute("stationName");
+String stationData=(String)session.getAttribute("stationData");
 String customerId =(String)session.getAttribute("customerId");
 String customerName = (String) session.getAttribute("customerName");
 String carCode = (String) session.getAttribute("carCode");
@@ -208,7 +210,14 @@ String endDate = (String) session.getAttribute("endDate");
         </div> <!-- カレンダーを囲むコンテナの終了 -->
 
         <div class="button-container">
-                       <button class="back-button" onclick="location.href='P56.jsp'">戻る</button>
+              <div class="button-container">
+			    <form action="P56.jsp" method="post">
+			        <input type="hidden" name="stationId" value="<%= stationId %>">
+			        <input type="hidden" name="stationData" value="<%= stationData %>">
+			        <input type="hidden" name="stationName" value="<%= stationName %>">
+			        <button type="submit" class="back-button">戻る</button>
+			    </form>
+			</div>
         </div>
         
         <!-- 開始時間の入力フィールド -->
@@ -240,7 +249,7 @@ String endDate = (String) session.getAttribute("endDate");
                 
                 <input type="hidden" id="selectedDate" name="selectedDate">
                 <input type="hidden" id="stationId" name="stationId" value="<%= stationId %>"> <!-- stationIdを隠しフィールドに追加 -->
-                <input type="hidden" id="modelName" name="carCode" value="<%= carCode %>"> <!-- carCodeを隠しフィールドに追加 -->
+                <input type="hidden" id="car_code" name="carCode" value="<%=carCode %>"> <!-- carCodeを隠しフィールドに追加 -->
                 <button type="submit" style="padding: 10px 15px; background-color: orange; color: white; border: none; border-radius: 5px; cursor: pointer;">検索</button>
             </form>
         </div>
@@ -318,12 +327,10 @@ String endDate = (String) session.getAttribute("endDate");
 		            %>
 		            
 		            
-		            
-		            
 		        </tr>
 		    </tbody>
 		</table>
-		 <a href="ReservationOK?stationId=<%= stationId %>&carCode=<%= carCode %>&car_img <%=img %>&modelName<%=modelName %>" id="reservationLink" style="display:none;">予約入力画面へ</a>
+		 <a href="ReservationOK?stationId=<%= stationId %>&carCode=<%= carCode %>&car_img=<%=img %>&modelName=<%=modelName %>" id="reservationLink" style="display:none;">予約入力画面へ</a>
 
 		  <% 
 		  	}

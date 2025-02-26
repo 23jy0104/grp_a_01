@@ -31,6 +31,7 @@ public class ReservationCarTime extends HttpServlet {
         
         String selectedDate = request.getParameter("selectedDate");
         String carCode = request.getParameter("carCode");
+        System.out.println(carCode);
         String stationId =request.getParameter("stationId");
         String startTimeHour = request.getParameter("startTimeHour");
         String startTimeMinute = request.getParameter("startTimeMinute");
@@ -71,7 +72,7 @@ public class ReservationCarTime extends HttpServlet {
                 Timestamp endTime24HoursLater = new Timestamp(inputTime.getTime() + 24 * 60 * 60 * 1000); // 24時間後
 
                 // 予約可能な時間帯を設定
-                for (long time = inputTime.getTime(); time < endTime24HoursLater.getTime(); time += 15 * 60 * 1000) { // 15分ごと
+                for (long time = inputTime.getTime(); time < endTime24HoursLater.getTime(); time += 60 * 60 * 1000) { // 15分ごと
                     Timestamp startTime = new Timestamp(time);
                     Timestamp endTime = new Timestamp(time + 15 * 60 * 1000);
 

@@ -61,10 +61,11 @@ public class ReservationCar extends HttpServlet {
                          "INNER JOIN station s ON k.station_id = s.station_id " +
                          "INNER JOIN car_db car ON k.car_code = car.car_code " +
                          "INNER JOIN model m ON m.model_id = car.model_id " +
-                         "WHERE model_name = ?";
+                         "WHERE model_name = ? and s.station_id = ?";
 
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, carType); // carTypeを使う
+            pstmt.setString(2, stationId);
 
             // クエリの実行
             rs = pstmt.executeQuery();
