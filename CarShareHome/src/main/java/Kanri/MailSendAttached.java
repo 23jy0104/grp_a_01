@@ -1,8 +1,12 @@
 package Kanri;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
@@ -22,6 +26,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import service.CreateQR;
+
 /**
  * Servlet implementation class MailSendAttached
  */
@@ -35,22 +41,47 @@ public class MailSendAttached extends HttpServlet {
 //	private final String host = "10.42.129.3";					// メールサーバのIPアドレス（@1252）
 //	private final String host = "localhost";
 
-	private final String from = "【システムの送信元メールアドレス】";
-	private final String host = "【メールサーバのホスト名 or IPアドレス】";
-	private final String fileName = "【添付するファイル名（フルパス）】";
+	private final String from = "gr0101a@jynet.jec.ac.jp";
+	private final String host = "10.64.144.9";
+	private final String fileName = "qr_code.png";
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
 
 		String to = request.getParameter("to");
-		String subject = request.getParameter("subject");
-		String body = "こんにちわ、" + to + "様\n";
-		body += request.getParameter("body");
-		body += "\r\n21jyxxxxより";
+		String subject = "利用開始のお知らせ";
+		String body = String.format(
+		    "この度は、TMCカーシェアにご利用いただきありがとうございます。\r\n\r\n" +
+		    "お客様のご予約された車両のQRコードをお送りいたします。\r\n" +
+		    "つきましては、添付された画像をご確認ください。\r\n\r\n" +
+		    "お客様のキーボックスは\r\n" +
+		    "登録条件を満たしていなかったため\r\n" +
+		    "その他の理由\r\n\r\n" +
+		    "今後のご利用をお待ちしております。再度申請される場合は、必要な情報を再確認の上、申請をお願いいたします。\r\n" +
+		    "http://localhost:8080/CarShareHome/P4.jsp\r\n\r\n" +
+		    "今後ともTMCカーシェアをよろしくお願いいたします。\r\n" +
+		    "---\r\nTMCカーシェアチーム"
+		);
+		try {
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			Timer timer = new Timer(false);
+			CreateQR.createQr("boxがあきました。"); //QR読み込み後に表示される文字を取得
+			TimerTask task = new TimerTask() {
+	 
+				@Override
+				public void run() {
+					// メール送信
+					send(from, to, subject, body);
+					
+					timer.cancel();
+				}
+			};
+			timer.schedule(task, sdf.parse("2025-02-26 16:07:00"));  // <-ここにDaoからとてきたstart_timeをString型で入れる
+		}catch(ParseException e) {
+			e.printStackTrace();
+		}
 		
-		// メール送信
-		this.send(from, to, subject, body);
 	}
 
 	private void send(String from, String to, String subject, String body) {
