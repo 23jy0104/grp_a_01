@@ -8,18 +8,19 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.Map" %>
 <%@ page import="java.util.HashMap" %>
+<%@ page import ="model.Customer" %>
+<%@ page import ="model.Station" %>
 
 
 <%
+String customerId =(String)session.getAttribute("customerId");
 String customerName = (String) session.getAttribute("customerName");
 String carCode = (String) session.getAttribute("carCode");
 String stationId = (String) session.getAttribute("stationId");
 String img = (String) session.getAttribute("car_img");
 String modelName = (String) session.getAttribute("modelName");
-
 String selectedDate = (String) request.getAttribute("selectedDate"); // selectedDateを取得
 List<ReservationTime> combinedList = (List<ReservationTime>) request.getAttribute("combinedList"); // 予約状況を取得
-
 // カレンダーの日付処理
 Calendar today = Calendar.getInstance();
 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -30,6 +31,7 @@ oneMonthLater.add(Calendar.MONTH, 1);
 String startDate = (String) session.getAttribute("startDate");
 String endDate = (String) session.getAttribute("endDate");
 %>
+
 
 <!DOCTYPE html>
 <html lang="ja">
@@ -145,7 +147,7 @@ String endDate = (String) session.getAttribute("endDate");
             </div>
         </div>
 
-        <h2>予約したい日付をクリックしてください。</h2>
+        <h2>空き状況を確認したい日付をクリックしてください。</h2>
         <br>
         <div class="calendar-container">
         <%
@@ -239,7 +241,6 @@ String endDate = (String) session.getAttribute("endDate");
                 <input type="hidden" id="selectedDate" name="selectedDate">
                 <input type="hidden" id="stationId" name="stationId" value="<%= stationId %>"> <!-- stationIdを隠しフィールドに追加 -->
                 <input type="hidden" id="modelName" name="carCode" value="<%= carCode %>"> <!-- carCodeを隠しフィールドに追加 -->
-                
                 <button type="submit" style="padding: 10px 15px; background-color: orange; color: white; border: none; border-radius: 5px; cursor: pointer;">検索</button>
             </form>
         </div>
@@ -259,13 +260,15 @@ String endDate = (String) session.getAttribute("endDate");
                 }
             }
         </script>
-
         <!-- サーブレットの結果を表示するタイムテーブル -->
-		<h2>予約状況</h2>
 		<table id="carShareTable">
-		    <tbody>
-		        <tr>
+    <tbody>
+        <tr>
+            <td colspan="96" class="time-cell"><%= selectedDate != null ? selectedDate : "日付と空き状況を確認したい開始時間を入力してください。" %></td>
+        </tr>
+        <tr>
 		            <%
+		            
 		            // 予約状況を表示するためのタイムテーブルを動的に生成
 		            if (combinedList != null && !combinedList.isEmpty()) {
 		                // 1行目を飛ばすため、indexを1から開始
@@ -309,12 +312,27 @@ String endDate = (String) session.getAttribute("endDate");
 		            <%
 		                    }
 		                }
-		            }
+		            
+		            
+		            
 		            %>
+		            
+		            
+		            
+		            
 		        </tr>
 		    </tbody>
 		</table>
-			
+		 <a href="ReservationOK?stationId=<%= stationId %>&carCode=<%= carCode %>&car_img <%=img %>&modelName<%=modelName %>" id="reservationLink" style="display:none;">予約入力画面へ</a>
+
+		  <% 
+		  	}
+		            
+		            %>
+		<script>
+        // タイムテーブルが生成された後にリンクを表示
+        document.getElementById('reservationLink').style.display = 'block';
+    </script>
     </main>
 </body>
 </html>

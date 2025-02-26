@@ -31,9 +31,9 @@ public class ReservationCarTime extends HttpServlet {
         
         String selectedDate = request.getParameter("selectedDate");
         String carCode = request.getParameter("carCode");
+        String stationId =request.getParameter("stationId");
         String startTimeHour = request.getParameter("startTimeHour");
         String startTimeMinute = request.getParameter("startTimeMinute");
-        
         List<ReservationTime> reservationTimes = new ArrayList<>();
         List<ReservationTime> availableSlots = new ArrayList<>();
 
@@ -70,10 +70,10 @@ public class ReservationCarTime extends HttpServlet {
                 Timestamp inputTime = Timestamp.valueOf(selectedDate + " " + startTimeHour + ":" + startTimeMinute + ":00");
                 Timestamp endTime24HoursLater = new Timestamp(inputTime.getTime() + 24 * 60 * 60 * 1000); // 24時間後
 
-             // 予約可能な時間帯を設定
-                for (long time = inputTime.getTime(); time < endTime24HoursLater.getTime(); time += 60 * 60 * 1000) { // 1時間ごと
+                // 予約可能な時間帯を設定
+                for (long time = inputTime.getTime(); time < endTime24HoursLater.getTime(); time += 15 * 60 * 1000) { // 15分ごと
                     Timestamp startTime = new Timestamp(time);
-                    Timestamp endTime = new Timestamp(time + 60 * 60 * 1000); // 1時間後
+                    Timestamp endTime = new Timestamp(time + 15 * 60 * 1000);
 
                     // 予約済み時間との重複チェック
                     boolean isBooked = false;
@@ -103,11 +103,12 @@ public class ReservationCarTime extends HttpServlet {
                     }
                 }
 
-
                 // 予約済み時間と予約可能時間を結合
                 List<ReservationTime> combinedList = new ArrayList<>(reservationTimes);
                 combinedList.addAll(availableSlots);
                 request.setAttribute("combinedList", combinedList);
+                request.setAttribute("selectedDate", selectedDate);
+                request.setAttribute("stationId", stationId);
             }
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();

@@ -16,7 +16,7 @@
 <body>
 
 <header>
-    <img src="../../img/rog.png" alt="TMCロゴ">
+    <img src="img/rog.png" alt="TMCロゴ">
     <h1>TMC カーシェア</h1>
     <div class="user-info">
         <h4 id="username">23jy0000様</h4>

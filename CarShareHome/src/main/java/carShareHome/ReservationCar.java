@@ -71,7 +71,7 @@ public class ReservationCar extends HttpServlet {
             if (rs.next()) {
                 // セッションに必要なデータを設定
                 request.getSession().setAttribute("modelName", rs.getString("model_name"));
-                request.getSession().setAttribute("stationId", stationId); // 修正: stationid → stationId
+                request.getSession().setAttribute("stationId",stationId); // 修正: stationid → stationId
                 request.getSession().setAttribute("car_img", rs.getString("car_img"));
                 request.getSession().setAttribute("carCode", rs.getString("car_code")); // car_codeを追加
                 request.getSession().setAttribute("stationName",stationName);

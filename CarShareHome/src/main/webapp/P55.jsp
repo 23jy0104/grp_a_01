@@ -59,7 +59,7 @@
             	String stationId   =station[0];
             	String stationName = station[1];
                 String stationdata = station[3];
-                String detailUrl = "P56.jsp?stationid"+stationId+"&stationname=" + stationName +"&stationdata="+ stationdata; 
+                String detailUrl = "P56.jsp?stationid="+stationId+"&stationname=" + stationName +"&stationdata="+ stationdata; 
         %>
             <tr>
                 <td><%= station[1] %></td>

@@ -18,12 +18,15 @@
  String customerName = (String) session.getAttribute("customerName");
 
  String stationIdValue = request.getParameter("stationid");
+ System.out.println(stationIdValue);
  String stationNameValue =request.getParameter("stationname");
  String stationDataValue =request.getParameter("stationdata");
  // 現在の日時を取得
-
  Calendar calendar = Calendar.getInstance();
 
+ session.setAttribute("stationId", stationIdValue);
+ session.setAttribute("stationName", stationNameValue);
+ session.setAttribute("stationData", stationDataValue);
  calendar.add(Calendar.MINUTE, 30);
 
  SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
@@ -511,14 +514,6 @@ String stationName =(String)session.getAttribute("stationName");
 		 <input type="hidden" name="stationName" value="<%= stationNameValue %>">
 		 
 		 <input type ="hidden" name ="stationData" value ="<%=stationDataValue %>">
-		
-		 <input type="hidden" name="startDate" id="startDate" value="">
-		
-		 <input type="hidden" name="startTime" id="startTime" value="">
-		
-		 <input type="hidden" name="endDate" id="endDate" value="">
-		
-		 <input type="hidden" name="endTime" id="endTime" value="">
 		
 		 
 		

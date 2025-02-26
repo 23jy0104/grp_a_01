@@ -16,22 +16,18 @@ public class ReservationOK extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
 		response.setContentType("text/html; charset=UTF-8");
-		String selectedDate = request.getParameter("selectedDate");
-        String carCode = request.getParameter("carCode");
-        String startTimeHour = request.getParameter("startTimeHour");
-        String startTimeMinute = request.getParameter("startTimeMinute");
-        String endTimeHour =request.getParameter("endTimeMinute");
-        String endTimeMinute =request.getParameter("endTimeMinute");
+		String stationId =request.getParameter("stationId");
+		String carCode =request.getParameter("carCode");
+		String img =request.getParameter("img");
+		String modelName=request.getParameter("modelName");
+
+		System.out.println(stationId);
+		System.out.println(img);
+		System.out.println(modelName);
         
-        System.out.println("OKサーブレット："+selectedDate);
-        System.out.println(carCode);
-        System.out.println(startTimeHour);
-        System.out.println(startTimeMinute);
-        System.out.println(endTimeHour);
-        System.out.println(endTimeMinute);
         
 	
 	}
