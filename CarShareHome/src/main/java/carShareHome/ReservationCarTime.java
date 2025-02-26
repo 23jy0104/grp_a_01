@@ -70,10 +70,10 @@ public class ReservationCarTime extends HttpServlet {
                 Timestamp inputTime = Timestamp.valueOf(selectedDate + " " + startTimeHour + ":" + startTimeMinute + ":00");
                 Timestamp endTime24HoursLater = new Timestamp(inputTime.getTime() + 24 * 60 * 60 * 1000); // 24時間後
 
-                // 予約可能な時間帯を設定
-                for (long time = inputTime.getTime(); time < endTime24HoursLater.getTime(); time += 15 * 60 * 1000) { // 15分ごと
+             // 予約可能な時間帯を設定
+                for (long time = inputTime.getTime(); time < endTime24HoursLater.getTime(); time += 60 * 60 * 1000) { // 1時間ごと
                     Timestamp startTime = new Timestamp(time);
-                    Timestamp endTime = new Timestamp(time + 15 * 60 * 1000);
+                    Timestamp endTime = new Timestamp(time + 60 * 60 * 1000); // 1時間後
 
                     // 予約済み時間との重複チェック
                     boolean isBooked = false;
@@ -102,6 +102,7 @@ public class ReservationCarTime extends HttpServlet {
                         availableSlots.add(new ReservationTime(unavailableStartTime, unavailableEndTime, "予約不可")); // 予約不可の状態も追加
                     }
                 }
+
 
                 // 予約済み時間と予約可能時間を結合
                 List<ReservationTime> combinedList = new ArrayList<>(reservationTimes);

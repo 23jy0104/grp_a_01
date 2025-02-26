@@ -95,25 +95,26 @@ String endDate = (String) session.getAttribute("endDate");
             margin-top: 10px;
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        th, td {
-            border: 1px solid #ccc;
-            padding: 10px;
-            text-align: center;
-        }
-        .booked {
-            background-color: lightcoral; /* 予約済みの色 */
-        }
-        .available {
-            background-color: lightgreen; /* 予約可能の色 */
-        }
-        .unavailable {
-            background-color: lightcoral; /* 予約不可の色 */
-        }
+	    #carShareTable {
+	        border-collapse: collapse; /* ボーダーの重なりをなくす */
+	        width: 100%; /* テーブルの幅を100%に */
+	    }
+	    th, td {
+	        border: 1px solid #000; /* セルのボーダー */
+	        padding: 8px; /* パディング */
+	        text-align: left; /* 左寄せ */
+	    }
+	    .available {
+	        background-color: lightgreen; /* 予約可能の色 */
+	    }
+	    .unavailable {
+	        background-color: red; /* 予約不可の色 */
+	    }
+	    .booked {
+	        background-color: blue; /* 予約済みの色 */
+	    }
+
+
     </style>
 </head>
 <body>
@@ -210,9 +211,9 @@ String endDate = (String) session.getAttribute("endDate");
         
         <!-- 開始時間の入力フィールド -->
         <div id="startTimeContainer" style="display:none; margin-top: 20px; border: 1px solid #ccc; padding: 15px; border-radius: 5px; background-color: #f9f9f9;">
-            <h3>利用開始時間を選択してください</h3>
+            <h3>空き状況確認</h3>
             <form action="ReservationCarTime" method="post">
-                <label for="startTime" style="font-weight: bold;">利用開始時間:</label>
+                <label for="startTime" style="font-weight: bold;">確認したい開始時間:</label>
                 <div style="display: flex; align-items: center; margin: 10px 0;">
                     <select id="startTimeHour" name="startTimeHour" required style="margin-right: 5px; padding: 5px;">
                         <option value="">-- 時間を選択 --</option>
@@ -260,53 +261,60 @@ String endDate = (String) session.getAttribute("endDate");
         </script>
 
         <!-- サーブレットの結果を表示するタイムテーブル -->
-        <h2>予約状況</h2>
-		<table>
-		    <thead>
-		        <tr>
-		            <th>時間帯</th>
-		            <th>状態</th>
-		        </tr>
-		    </thead>
+		<h2>予約状況</h2>
+		<table id="carShareTable">
 		    <tbody>
-		        <%
-		        // 予約状況を表示するためのタイムテーブルを動的に生成
-		        if (combinedList != null && !combinedList.isEmpty()) {
-		            for (ReservationTime time : combinedList) {
-		                String startTime = time.getStartTime();
-		                String endTime = time.getEndTime();
-		                String status = time.getStatus();
-		
-		                // 予約状態に応じて行のクラスを設定
-		                String rowClass;
-		                if (status.equals("予約不可")) {
-		                    rowClass = "unavailable"; // 予約不可
-		                } else if (status.equals("予約済み")) {
-		                    rowClass = "booked"; // 予約済み
-		                } else {
-		                    rowClass = "available"; // 予約可能
+		        <tr>
+		            <%
+		            // 予約状況を表示するためのタイムテーブルを動的に生成
+		            if (combinedList != null && !combinedList.isEmpty()) {
+		                // 1行目を飛ばすため、indexを1から開始
+		                for (int i = 1; i < combinedList.size(); i++) {
+		                    ReservationTime time = combinedList.get(i);
+		                    String startTime = time.getStartTime();
+		                    String endTime = time.getEndTime();
+		                    
+		                    // 時間帯を1時間表示
+		                    String displayTime = startTime + " ～ " + endTime;
+		            %>
+		                <td class="time-cell" colspan="4"><%= displayTime %></td>
+		            <%
 		                }
-		        %>
-		                <tr class="<%= rowClass %>">
-		                    <td><%= startTime + " - " + endTime %></td>
-		                    <td><%= status %></td>
-		                </tr>
-		        <%
 		            }
-		        } else {
-		        %>
-		            <tr>
-		                <td colspan="2">データがありません。</td>
-		            </tr>
-		        <%
-		        }
-		        %>
+		            %>
+		        </tr>
+		        <tr>
+		            <%
+		            // 状態を表示する行
+		            if (combinedList != null && !combinedList.isEmpty()) {
+		                // 状態行も1行目を飛ばすため、indexを1から開始
+		                for (int i = 1; i < combinedList.size(); i++) {
+		                    ReservationTime time = combinedList.get(i);
+		                    String status = time.getStatus();
+		                    
+		                    // 予約状態に応じて状態のクラスを設定
+		                    String rowClass;
+		                    if (status.equals("予約不可")) {
+		                        rowClass = "unavailable"; // 予約不可色変更
+		                    } else if (status.equals("予約済み")) {
+		                        rowClass = "booked"; // 予約済み
+		                    } else {
+		                        rowClass = "available"; // 予約可能
+		                    }
+		
+		                    // 15分ごとに状態を表示
+		                    for (int j = 0; j < 4; j++) { // 1時間を4つの15分に分割
+		            %>
+		                <td class="<%= rowClass %>"></td> <!-- 状態 -->
+		            <%
+		                    }
+		                }
+		            }
+		            %>
+		        </tr>
 		    </tbody>
 		</table>
-
-
-
-
+			
     </main>
 </body>
 </html>
