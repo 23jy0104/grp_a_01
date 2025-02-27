@@ -2,8 +2,6 @@
 <%@ page import="java.util.List" %>
 <%@ page import="model.ReservationTime" %>
 <%@ page import="java.text.SimpleDateFormat" %>
-<%@ page import="java.util.HashMap" %>
-<%@ page import="java.util.Map" %>
 
 <%
     // セッションから顧客情報を取得
@@ -16,6 +14,7 @@
     List<String> carCodes = (List<String>) request.getAttribute("carCodes");
     List<String> carImages = (List<String>) request.getAttribute("carImages");
     List<String> carModels = (List<String>) request.getAttribute("carModels");
+    List<ReservationTime> combinedList = (List<ReservationTime>) request.getAttribute("combinedList"); // 予約情報と空車情報
 %>
 
 <!DOCTYPE html>
@@ -48,15 +47,18 @@
 
         <div class="car-list">
             <%
-                if (availableCarModels == null || availableCarModels.isEmpty()) {
+                if (combinedList == null || combinedList.isEmpty()) {
                     out.println("<p>空いている車両はありません。</p>");
                 } else {
-                    for (String carModel : availableCarModels) {
-                        String carImg = ""; // 各車両の画像パスを取得する処理を追加する必要があります
+                    for (ReservationTime reservationTime : combinedList) {
+                        String status = reservationTime.getStatus(); // "予約可能" または "予約不可"
+                        String startTime = reservationTime.getStartDateTime();
+                        String endTime = reservationTime.getEndDateTime();
+                        String carModel = reservationTime.getModelName(); // モデル名を取得
 
-                        // carCodesから画像を取得するロジックをここに追加
-                        for (int i = 0; i < carCodes.size(); i++) {
-                            if (carCodes.get(i).equals(carModel)) {
+                        String carImg = ""; // 各車両の画像パスを取得する処理を追加する必要があります
+                        for (int i = 0; i < carModels.size(); i++) {
+                            if (carModels.get(i).equals(carModel)) {
                                 carImg = carImages.get(i);
                                 break;
                             }
@@ -73,10 +75,11 @@
                         <th>終了時間</th>
                         <th>状態</th>
                     </tr>
-                    <%
-                        // 予約情報がない場合は、予約時間を表示しない
-                        out.println("<tr><td colspan='3'>予約情報がありません。</td></tr>");
-                    %>
+                    <tr>
+                        <td><%= startTime %></td>
+                        <td><%= endTime %></td>
+                        <td><%= status %></td>
+                    </tr>
                 </table>
             </div>
 

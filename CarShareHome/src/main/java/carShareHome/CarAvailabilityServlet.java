@@ -61,7 +61,8 @@ public class CarAvailabilityServlet extends HttpServlet {
                                      + "FROM Reservation r "
                                      + "INNER JOIN car_db car ON r.car_code = car.car_code "
                                      + "INNER JOIN model m ON m.model_id = car.model_id "
-                                     + "WHERE r.finish_date IS NULL AND r.station_id = ?";
+                                     + "INNER JOIN keybox k ON k.car_code =r.car_code"
+                                     + "WHERE r.finish_date IS NULL AND k.station_id = ?";
 
             try (Connection con = DriverManager.getConnection(url, user, pass);
                  PreparedStatement availableCarsStmt = con.prepareStatement(availableCarsSql);
@@ -143,6 +144,7 @@ public class CarAvailabilityServlet extends HttpServlet {
                 request.setAttribute("stationName", stationName);
 
                 // 結果を出力
+                System.out.println("combinedList:"+combinedList);
                 System.out.println("Selected Date: " + selectedDate);
                 System.out.println("Start Time: " + startTimeHour + ":" + startTimeMinute);
                 System.out.println("Station ID: " + stationId);
