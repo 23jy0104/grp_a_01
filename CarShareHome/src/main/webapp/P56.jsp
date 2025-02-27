@@ -6,7 +6,8 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="model.Station" %>
 
-<%	
+<%
+//hoge
 	String customerName = (String) session.getAttribute("customerName");
 	List<String[]> stations = (List<String[]>) session.getAttribute("stations"); // ステーション情報を取得
 	String stationIdValue   =request.getParameter("stationid");
