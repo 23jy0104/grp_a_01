@@ -25,7 +25,7 @@ public class CarAvailabilityServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html; charset=UTF-8");
-        String path = "";
+        String path = ""; // 遷移先のパスを適切に設定してください
         String selectedDate = request.getParameter("selectedDate");
         String startTimeHour = request.getParameter("startTimeHour");
         String startTimeMinute = request.getParameter("startTimeMinute");
@@ -33,13 +33,13 @@ public class CarAvailabilityServlet extends HttpServlet {
 
         List<ReservationTime> reservationTimes = new ArrayList<>();
         List<ReservationTime> availableSlots = new ArrayList<>();
-        List<String> availableCarModels = new ArrayList<>(); // 空いている車種を格納するリスト
+        List<String> availableCarModels = new ArrayList<>();
 
         // 車両情報を格納するリストを作成
         List<String> carCodes = new ArrayList<>();
         List<String> carImages = new ArrayList<>();
         List<String> carModels = new ArrayList<>();
-        String stationName = ""; // 最後に使用するステーション名を格納する変数を用意
+        String stationName = "";
 
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -47,46 +47,59 @@ public class CarAvailabilityServlet extends HttpServlet {
             final String user = "23jya01";
             final String pass = "23jya01";
 
-            // 予約があるか確認するクエリ
-            String sql = "SELECT start_date, stop_date, k.car_code, m.model_name, car.car_img, s.station_name "
-                    + "FROM keybox k "
-                    + "INNER JOIN Reservation r ON r.car_code = k.car_code "
-                    + "INNER JOIN car_db car ON car.car_code = k.car_code "
-                    + "INNER JOIN model m ON m.model_id = car.model_id "
-                    + "INNER JOIN station s ON s.station_id = k.station_id "
-                    + "WHERE k.station_id = ? AND r.finish_date IS NULL";
+            // 空いている車両を取得するクエリ
+            String availableCarsSql = "SELECT k.car_code, m.model_name, car.car_img, s.station_name "
+                                       + "FROM keybox k "
+                                       + "INNER JOIN car_db car ON car.car_code = k.car_code "
+                                       + "INNER JOIN model m ON m.model_id = car.model_id "
+                                       + "INNER JOIN station s ON s.station_id = k.station_id "
+                                       + "LEFT JOIN Reservation r ON r.car_code = k.car_code AND r.finish_date IS NULL "
+                                       + "WHERE k.station_id = ? AND r.car_code IS NULL";
+
+            // 予約情報を取得するクエリ
+            String reservationsSql = "SELECT r.car_code, r.start_date, r.finish_date, m.model_name "
+                                     + "FROM Reservation r "
+                                     + "INNER JOIN car_db car ON r.car_code = car.car_code "
+                                     + "INNER JOIN model m ON m.model_id = car.model_id "
+                                     + "WHERE r.finish_date IS NULL AND r.station_id = ?";
 
             try (Connection con = DriverManager.getConnection(url, user, pass);
-                 PreparedStatement pstmt = con.prepareStatement(sql)) {
+                 PreparedStatement availableCarsStmt = con.prepareStatement(availableCarsSql);
+                 PreparedStatement reservationsStmt = con.prepareStatement(reservationsSql)) {
 
-                pstmt.setString(1, stationId);
-                ResultSet rs = pstmt.executeQuery();
+                // 空いている車両を取得
+                availableCarsStmt.setString(1, stationId);
+                ResultSet availableCarsRs = availableCarsStmt.executeQuery();
 
-                while (rs.next()) {
-                    // 予約の取得
-                    Timestamp startDate = rs.getTimestamp("start_date");
-                    Timestamp stopDate = rs.getTimestamp("stop_date");
-                    String carCode = rs.getString("car_code");
-                    String modelName = rs.getString("model_name");
-                    String img = rs.getString("car_img");
-                    stationName = rs.getString("station_name"); // 最後の車両のステーション名を取得
-
-                    SimpleDateFormat sdfDateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-                    String reservedStartTime = sdfDateTime.format(startDate);
-                    String reservedEndTime = sdfDateTime.format(stopDate);
-
-                    ReservationTime reservationTime = new ReservationTime(reservedStartTime, reservedEndTime, "予約不可");
-                    reservationTimes.add(reservationTime);
+                while (availableCarsRs.next()) {
+                    String carCode = availableCarsRs.getString("car_code");
+                    String modelName = availableCarsRs.getString("model_name");
+                    String img = availableCarsRs.getString("car_img");
+                    stationName = availableCarsRs.getString("station_name");
 
                     // 車両情報をリストに追加
                     carCodes.add(carCode);
                     carModels.add(modelName);
                     carImages.add(img);
-                    
-                    // 予約済みの車両モデルをリストに追加
+
+                    // 空いている車両モデルをリストに追加
                     if (!availableCarModels.contains(modelName)) {
-                        availableCarModels.add(modelName); // 重複チェック
+                        availableCarModels.add(modelName);
                     }
+                }
+
+                // 予約情報を取得
+                reservationsStmt.setString(1, stationId);
+                ResultSet reservationsRs = reservationsStmt.executeQuery();
+
+                while (reservationsRs.next()) {
+                    String carCode = reservationsRs.getString("car_code");
+                    Timestamp startDate = reservationsRs.getTimestamp("start_date");
+                    Timestamp finishDate = reservationsRs.getTimestamp("finish_date");
+                    String modelName = reservationsRs.getString("model_name");
+
+                    // ReservationTimeオブジェクトを作成しリストに追加
+                    reservationTimes.add(new ReservationTime(startDate.toString(), finishDate.toString(), modelName));
                 }
 
                 // 入力された時間を基に24時間後の時間を計算
@@ -100,11 +113,8 @@ public class CarAvailabilityServlet extends HttpServlet {
 
                     boolean isBooked = false;
                     for (ReservationTime reserved : reservationTimes) {
-                        String reservedStartTime = reserved.getStartDateTime();
-                        String reservedEndTime = reserved.getEndDateTime();
-
-                        Timestamp reservedStartDateTime = Timestamp.valueOf(reservedStartTime + ":00");
-                        Timestamp reservedEndDateTime = Timestamp.valueOf(reservedEndTime + ":00");
+                        Timestamp reservedStartDateTime = Timestamp.valueOf(reserved.getStartDateTime());
+                        Timestamp reservedEndDateTime = Timestamp.valueOf(reserved.getEndDateTime());
 
                         if (startTime.compareTo(reservedEndDateTime) < 0 && endTime.compareTo(reservedStartDateTime) > 0) {
                             isBooked = true;
@@ -124,13 +134,23 @@ public class CarAvailabilityServlet extends HttpServlet {
                 List<ReservationTime> combinedList = new ArrayList<>(reservationTimes);
                 combinedList.addAll(availableSlots);
                 request.setAttribute("combinedList", combinedList);
-                request.setAttribute("availableCarModels", availableCarModels); // 空いている車種をリクエストにセット
+                request.setAttribute("availableCarModels", availableCarModels);
                 request.setAttribute("selectedDate", selectedDate);
                 request.setAttribute("stationId", stationId);
                 request.setAttribute("carCodes", carCodes);
                 request.setAttribute("carImages", carImages);
                 request.setAttribute("carModels", carModels);
-                request.setAttribute("stationName", stationName); // 最後のステーション名を設定
+                request.setAttribute("stationName", stationName);
+
+                // 結果を出力
+                System.out.println("Selected Date: " + selectedDate);
+                System.out.println("Start Time: " + startTimeHour + ":" + startTimeMinute);
+                System.out.println("Station ID: " + stationId);
+                System.out.println("Station Name: " + stationName);
+                System.out.println("Car Codes: " + carCodes);
+                System.out.println("Car Models: " + carModels);
+                System.out.println("Car Images: " + carImages);
+                System.out.println("Available Car Models: " + availableCarModels);
                 path = "P57.jsp";
             }
         } catch (ClassNotFoundException | SQLException e) {

@@ -1,12 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.util.List" %>
-<%@ page import ="model.ReservationTime" %>
+<%@ page import="model.ReservationTime" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="java.util.HashMap" %>
 <%@ page import="java.util.Map" %>
-<%@ page import ="model.Model" %>
-<%@ page import ="model.CarData" %>
-<%@ page import="java.util.ArrayList" %>
 
 <%
     // セッションから顧客情報を取得
@@ -14,11 +11,8 @@
     String customerId = (String) session.getAttribute("customerId");
 
     // リクエストから車両情報を取得
-    List<ReservationTime> combinedList = (List<ReservationTime>) request.getAttribute("combinedList");
     String stationName = (String) request.getAttribute("stationName");
-    String stationId = (String) request.getAttribute("stationId");
-
-    // 他の車両情報をリクエストから取得
+    List<String> availableCarModels = (List<String>) request.getAttribute("availableCarModels");
     List<String> carCodes = (List<String>) request.getAttribute("carCodes");
     List<String> carImages = (List<String>) request.getAttribute("carImages");
     List<String> carModels = (List<String>) request.getAttribute("carModels");
@@ -54,39 +48,24 @@
 
         <div class="car-list">
             <%
-                // 車両ごとの情報を保持するマップを作成
-                Map<String, List<ReservationTime>> carMap = new HashMap<>();
+                if (availableCarModels == null || availableCarModels.isEmpty()) {
+                    out.println("<p>空いている車両はありません。</p>");
+                } else {
+                    for (String carModel : availableCarModels) {
+                        String carImg = ""; // 各車両の画像パスを取得する処理を追加する必要があります
 
-                // combinedListをループして、車両ごとに予約時間をマップに追加
-                for (ReservationTime reservation : combinedList) {
-                    String carCode = reservation.getCarCode(); // 車両コードを取得
-                    
-                    if (!carMap.containsKey(carCode)) {
-                        carMap.put(carCode, new ArrayList<ReservationTime>());
-                    }
-                    carMap.get(carCode).add(reservation);
-                }
-
-                // 車両ごとにループして表示
-                for (Map.Entry<String, List<ReservationTime>> entry : carMap.entrySet()) {
-                    String carCode = entry.getKey();
-                    List<ReservationTime> reservations = entry.getValue();
-                    String carName = reservations.get(0).getModelName(); // 最初の予約からモデル名を取得
-                    String carImg = ""; // 各車両の画像パスを設定
-
-                    // carImagesから画像を取得
-                    for (int i = 0; i < carCodes.size(); i++) {
-                        if (carCodes.get(i).equals(carCode)) {
-                            carImg = carImages.get(i);
-                            System.out.println(carImg);
-                            break;
+                        // carCodesから画像を取得するロジックをここに追加
+                        for (int i = 0; i < carCodes.size(); i++) {
+                            if (carCodes.get(i).equals(carModel)) {
+                                carImg = carImages.get(i);
+                                break;
+                            }
                         }
-                    }
             %>
 
             <div class="car-item">
-                <h3><%= carName %></h3>
-                <img src="img/<%= carImg %>" alt="<%= carName %>の画像" class="car-image">
+                <h3><%= carModel %></h3>
+                <img src="img/<%= carImg %>" alt="<%= carModel %>の画像" class="car-image">
                 <h4>タイムテーブル</h4>
                 <table>
                     <tr>
@@ -95,25 +74,15 @@
                         <th>状態</th>
                     </tr>
                     <%
-                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-                        for (ReservationTime reservation : reservations) {
-                            String startTime = reservation.getStartDateTime();
-                            String endTime = reservation.getEndDateTime();
-                            String status = reservation.getStatus();
-                    %>
-                    <tr>
-                        <td><%= startTime %></td>
-                        <td><%= endTime %></td>
-                        <td><%= status %></td>
-                    </tr>
-                    <%
-                        }
+                        // 予約情報がない場合は、予約時間を表示しない
+                        out.println("<tr><td colspan='3'>予約情報がありません。</td></tr>");
                     %>
                 </table>
             </div>
 
             <%
-                } // 車両ごとのループ終了
+                    } // 車両ごとのループ終了
+                }
             %>
         </div>
 
