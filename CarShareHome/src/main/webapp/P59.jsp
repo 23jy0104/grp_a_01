@@ -326,33 +326,34 @@ String endDate = (String) session.getAttribute("endDate");
 				</tr>
 
 		        <tr>
-		            <%
-		            // 状態を表示する行
-		            if (combinedList != null && !combinedList.isEmpty()) {
-		                // 状態行も1行目を飛ばすため、インデックスを1から開始
-		                for (int i = 1; i < combinedList.size(); i++) {
-		                    ReservationTime time = combinedList.get(i);
-		                    String status = time.getStatus();
-		
-		                    // 予約状態に応じて状態のクラスを設定
-		                    String rowClass;
-		                    if (status.equals("予約不可")) {
-		                        rowClass = "unavailable"; // 予約不可色変更
-		                    } else if (status.equals("予約済み")) {
-		                        rowClass = "booked"; // 予約済み
-		                    } else {
-		                        rowClass = "available"; // 予約可能
-		                    }
-		
-		                    // 15分ごとに状態を表示
-		                    for (int j = 0; j < 4; j++) { // 1時間を4つの15分に分割
-		            %>
-		                <td class="<%= rowClass %>"></td> <!-- 状態 -->
-		            <%
-		                    }
-		                }
-		            %>
-		        </tr>
+				    <%
+				    // 状態を表示する行
+				    if (combinedList != null && !combinedList.isEmpty()) {
+				        // 状態行の表示を開始
+				        for (int i = 0; i < combinedList.size(); i++) { // 0から開始
+				            ReservationTime time = combinedList.get(i);
+				            String status = time.getStatus();
+				
+				            // 予約状態に応じて状態のクラスを設定
+				            String rowClass;
+				            if (status.equals("予約不可")) {
+				                rowClass = "unavailable"; // 予約不可色変更
+				            } else if (status.equals("予約済み")) {
+				                rowClass = "booked"; // 予約済み
+				            } else {
+				                rowClass = "available"; // 予約可能
+				            }
+				
+				            // 15分ごとに状態を表示
+				            for (int j = 0; j < 4; j++) { // 1時間を4つの15分に分割
+				    %>
+				                <td class="<%= rowClass %>"></td> <!-- 状態 -->
+				    <%
+				            }
+				        }
+				    }
+				    %>
+				</tr>
 		    </tbody>
 		</table>
 		

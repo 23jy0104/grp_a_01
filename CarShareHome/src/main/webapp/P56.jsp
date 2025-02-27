@@ -10,8 +10,8 @@
 
 <%@ page import="java.util.Locale" %>
 <%@ page import ="model.Station" %>
+
 <%
-//p56.jsp hoge
  String customerName = (String) session.getAttribute("customerName");
 
  String stationIdValue = request.getParameter("stationid");
@@ -42,6 +42,7 @@ String stationName =(String)session.getAttribute("stationName");
  oneMonthLater.add(Calendar.MONTH, 1);
 
  SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
 %>
 
 
