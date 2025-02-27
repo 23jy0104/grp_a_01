@@ -37,6 +37,7 @@ public class ReservationCarTime extends HttpServlet {
         String startTimeMinute = request.getParameter("startTimeMinute");
         List<ReservationTime> reservationTimes = new ArrayList<>();
         List<ReservationTime> availableSlots = new ArrayList<>();
+        int yoyaku = 0;
 
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -101,6 +102,7 @@ public class ReservationCarTime extends HttpServlet {
                     String availableEndTime = sdfDateTime.format(endTime);
                     if (!isBooked) {
                         availableSlots.add(new ReservationTime(availableStartTime, availableEndTime, "予約可能"));
+                        yoyaku += 1;
                     } else {
                         availableSlots.add(new ReservationTime(availableStartTime, availableEndTime, "予約不可"));
                     }
@@ -115,6 +117,7 @@ public class ReservationCarTime extends HttpServlet {
                 request.setAttribute("combinedList", combinedList);
                 request.setAttribute("selectedDate", selectedDate);
                 request.setAttribute("stationId", stationId);
+                request.setAttribute("yoyaku", yoyaku);
             }
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();

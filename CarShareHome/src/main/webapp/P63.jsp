@@ -15,10 +15,11 @@ String img = (String)session.getAttribute("img");
 String modelName = (String)session.getAttribute("modelName");
 String number =(String)session.getAttribute("number");
 String stationName=(String)session.getAttribute("stationName");
-String startTimestamp =(String)session.getAttribute("startTimeStamp");
-String endTimestamp =(String)session.getAttribute("endTimestamp");
-String totalCost =(String)session.getAttribute("totalCost");
+String startDate =(String)session.getAttribute("startDate");
+String endDate =(String)session.getAttribute("endDate");
+Integer totalCost = (Integer) session.getAttribute("totalCost");
 %>
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -51,7 +52,7 @@ String totalCost =(String)session.getAttribute("totalCost");
             <div class="flex-container">
                 <div class="image-section"></div>
                     <img src="img/<%=img %>" alt="車両" style="width: 400px; height: auto; margin-top: 10px;">
-                    <p><%=modelName %><br><%=number %><br>（ダークシルバー）</p>
+                    <p><%=img %><br><%=number %><br></p>
                 </div>
                 <div class="table-section">
                     <table>
@@ -61,15 +62,15 @@ String totalCost =(String)session.getAttribute("totalCost");
                         </tr>
                         <tr>
                             <td class="highlight">利用開始日時</td>
-                            <td><%=startTimestamp %></td>
+                            <td><%=startDate %></td>
                         </tr>
                         <tr>
                             <td class="highlight">利用終了日時</td>
-                            <td><%=endTimestamp %></td>
+                            <td><%=endDate %></td>
                         </tr>
                         <tr>
                             <td class="highlight">課金予定時間</td>
-                            <td><%=totalCost %></td>
+                            <td><%=totalCost %>円</td>
                         </tr>
                     </table>
                 </div>
@@ -80,9 +81,10 @@ String totalCost =(String)session.getAttribute("totalCost");
             <form action ="Reg" method ="post">
             <input type ="hidden" id ="stationId" name="stationId" value ="<%=stationId %>">
             <input type ="hidden" id ="carCode" name ="carCode" value ="<%=carCode %>">
-            <input type ="hidden" id ="startTimestamp" name ="startTimestamp" value="<%=startTimestamp%>">
-            <input type ="hidden" id="endTimestamp" name="endTimestamp"value="<%=endTimestamp %>">
+            <input type ="hidden" id ="startTimestamp" name ="startTimestamp" value="<%=startDate%>">
+            <input type ="hidden" id="endTimestamp" name="endTimestamp"value="<%=endDate %>">
             <input type ="hidden" id ="totalCost" name ="totalCost" value ="<%=totalCost %>">
+            <button type="submit" class="action-button">予約登録</button>
             </form>
         </div>
     </main>

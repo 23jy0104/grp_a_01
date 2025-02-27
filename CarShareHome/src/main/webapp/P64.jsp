@@ -7,6 +7,15 @@
 <%
  String customerId=(String)session.getAttribute("customerId");
  String customerName =(String)session.getAttribute("customerName");
+ String carCode =(String)session.getAttribute("carCode");
+ String stationId = (String)session.getAttribute("stationId");
+ String img = (String)session.getAttribute("img");
+ String modelName = (String)session.getAttribute("modelName");
+ String number =(String)session.getAttribute("number");
+ String stationName=(String)session.getAttribute("stationName");
+ String startDate =(String)session.getAttribute("startDate");
+ String endDate =(String)session.getAttribute("endDate");
+ Integer totalCost = (Integer) session.getAttribute("totalCost");
  
 %>
 <!DOCTYPE html>
@@ -24,15 +33,15 @@
         <h1>TMC カーシェア</h1>
         <div class="user-info">
             <h4 id="username"><%=customerName %>さん</h4>
-            <button class="logout-button" onclick="location.href='P29.html'">ログアウト</button>
+            <button class="logout-button" onclick="location.href='P29.jsp'">ログアウト</button>
         </div>
     </header>
     <nav class="nav">
         <ul>
-            <li class="nav-item gnav02"><a href="P53.html">予約・ステーション検索</a></li>
-            <li class="nav-item gnav03"><a href="P65.html">予約確認・変更・取り消し</a></li>
+            <li class="nav-item gnav02"><a href="P53.jsp">予約・ステーション検索</a></li>
+            <li class="nav-item gnav03"><a href="P65.jsp">予約確認・変更・取り消し</a></li>
             <li class="nav-item gnav04"><a href="UseHistory?customerId=<%= customerId %>&customerName=<%= customerName %>">ご利用履歴</a></li>
-            <li class="nav-item gnav05"><a href="P76.html">ご登録情報の確認</a></li>
+            <li class="nav-item gnav05"><a href="P76.jsp">ご登録情報の確認</a></li>
         </ul>
     </nav>
     <main>
@@ -41,30 +50,26 @@
         <div class="content">
             <div class="flex-container">
                 <div class="image-section"></div>
-                    <img src="img/NISSAN.jpg" alt="サンプル画像" style="width: 400px; height: auto; margin-top: 10px;">
-                    <p>BNR32型 skyline Nismo<br>新宿 わ ‥32<br>（ダークシルバー）</p>
+                    <img src="img/<%=img %>" alt="車両" style="width: 400px; height: auto; margin-top: 10px;">
+                    <p><%=img %><br><%=number %><br></p>
                 </div>
                 <div class="table-section">
                     <table>
                         <tr>
                             <td class="highlight">ステーション名</td>
-                            <td>新宿1ステーション</td>
+                            <td>${stationName }</td>
                         </tr>
                         <tr>
                             <td class="highlight">利用開始日時</td>
-                            <td>2024年12月11日13時30分</td>
+                            <td>${startDate }</td>
                         </tr>
                         <tr>
                             <td class="highlight">利用終了日時</td>
-                            <td>2024年12月11日15時00分</td>
-                        </tr>
-                        <tr>
-                            <td class="highlight">利用予定時間</td>
-                            <td>1時間30分</td>
+                            <td>${endDate }</td>
                         </tr>
                         <tr>
                             <td class="highlight">課金予定時間</td>
-                            <td>2,640円</td>
+                            <td>${totalCost }円</td>
                         </tr>
                     </table>
                 </div>

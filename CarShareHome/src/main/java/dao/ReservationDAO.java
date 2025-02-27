@@ -201,4 +201,25 @@ public class ReservationDAO {
     	}
     	return henkyaku;
     }
+    
+    public boolean setReservation(String startDate ,String endDate ,String customerId ,Integer totalCost ,String carCode) {
+    		boolean yoyaku = false;
+    	String sql = "INSERT INTO reservation(start_date,stop_date,customer_id,time_date,finish_date,price,car_code)"
+    			+ "VALUE"
+    			+ "(?,?,?,null,null,?,?);";
+    	try(PreparedStatement pstmt = con.prepareStatement(sql)) {
+    		pstmt.setString(1, startDate);
+    		pstmt.setString(2, endDate);
+    		pstmt.setString(3, customerId);
+    		pstmt.setInt(4, totalCost);
+    		pstmt.setString(5, carCode);
+    		pstmt.executeUpdate();
+        	yoyaku = true;
+        	System.out.println("予約が追加されました。");
+    	}catch(SQLException e) {
+    		e.printStackTrace();
+    		System.out.println("予約が追加できませんでした。");
+    	}
+    	return yoyaku;
+    }
 }
