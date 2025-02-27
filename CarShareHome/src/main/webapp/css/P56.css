@@ -51,11 +51,11 @@ th:first-child {
 .datetime-input {
     display: flex; /* フレックスボックスを使用 */
     flex-direction: column; /* 縦方向に配置 */
-    margin-bottom: 15px; /* 入力ボックスの間隔を広げる */
+    margin-bottom: 3px; /* 入力ボックスの間隔を狭くする */
 }
 
 .datetime-input label {
-    margin-bottom: 5px; /* ラベルと入力ボックスの間隔 */
+    margin-bottom: 3px; /* ラベルと入力ボックスの間隔を狭くする */
 }
 
 .datetime-input input {
@@ -72,38 +72,26 @@ h3 {
 
 .flex-container {
     display: flex; /* フレックスボックスを使用 */
-    justify-content: center; /* 子要素を中央に配置 */
-    align-items: flex-start; /* 縦方向の配置を上に揃える */
+    justify-content: space-between; /* 子要素のスペースを均等に配置 */
+    align-items: flex-start; /* 上に揃える */
     margin-top: 30px; /* 上のマージンを設定 */
-    flex-wrap: wrap; /* 要素が折り返すのを許可 */
-    padding: 0px 10px 10px 10px;
-}
-
-.flex-container {
-    display: flex; /* フレックスボックスを使用 */
-    justify-content: center; /* 子要素を中央に配置 */
-    align-items: flex-start; /* 縦方向の配置を上に揃える */
-    margin-top: 30px; /* 上のマージンを設定 */
-    flex-wrap: wrap; /* 要素が折り返すのを許可 */
-    width: 100%; /* 親要素の幅を100%に */
+    padding: 0 20px; /* 左右のパディングを追加 */
 }
 
 .flex-item {
     display: flex; /* 子要素をフレックスボックスとして扱う */
     flex-direction: column; /* 縦方向に配置 */
     align-items: center; /* 中央寄せ */
-    margin: 0 50px; /* 左右のマージンを50pxに設定 */
+    margin: 0 20px; /* 左右のマージンを調整 */
     max-width: 400px; /* 最大幅を設定 */
     flex: 1; /* 各要素が均等にスペースを取る */
     box-sizing: border-box; /* 幅計算にパディングを含める */
-    height: 250px;
+    height: 250px; /* 高さを固定 */
 }
-
-
 /* 車種選択リストのスタイル */
 select {
     width: 80%; /* 幅を広げる */
     padding: 10px; /* パディングを追加して余白を確保 */
     margin-bottom: 20px; /* 下のマージンを調整 */
-    margin-top: 59px;
+    margin-top: 59px; /* この値を調整しても良い */
 }

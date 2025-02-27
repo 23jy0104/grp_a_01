@@ -4,7 +4,6 @@
 <%@ page import="java.util.Date" %>
 <%
     String customerName = (String) session.getAttribute("customerName");
-	String customerId = (String) session.getAttribute("customerId");
     String customerKana = (String) session.getAttribute("customerKana");
     String email = (String) session.getAttribute("email");
     String tellNumber = (String) session.getAttribute("tellNumber");
@@ -37,7 +36,7 @@
         <ul>
             <li class="nav-item gnav02"><a href="P53.jsp">予約・ステーション検索</a></li>
             <li class="nav-item gnav03"><a href="P65.jsp">予約確認・変更・取り消し</a></li>
-            <li class="nav-item gnav04"><a href="UseHistory?customerId=<%= customerId %>&customerName=<%= customerName %>">ご利用履歴</a></li>
+            <li class="nav-item gnav04"><a href="P74.jsp">ご利用履歴</a></li>
             <li class="nav-item gnav05"><a href="P76.jsp">ご登録情報の確認</a></li>
         </ul>
     </nav>
