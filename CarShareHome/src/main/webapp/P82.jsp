@@ -1,5 +1,23 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import ="model.Customer" %>
+
+<%	
+	Customer customer = (Customer) session.getAttribute("customer");
+	String customerId =(String)session.getAttribute("customerId");
+	String customerName = (String) session.getAttribute("customerName");
+	String customerKana =(String) session.getAttribute("customerKana");
+	String customerAddress=customer.getCustomerAddress();
+	String postcode =customer.getPostCode();
+	String tellNumber =customer.getTellNumber();
+	
+	System.out.println("P82.jsp:"+customerId);
+	System.out.println(customerName);
+	System.out.println(customerKana);
+	System.out.println(postcode);
+	System.out.println(customerAddress);
+	System.out.println(tellNumber);
+%>
 <!--変更後の登録情報の確認-->
 
 <!DOCTYPE html>
@@ -21,71 +39,44 @@
         <ul>
             <li class="nav-item gnav02"><a href="P53.jsp">予約・ステーション検索</a></li>
             <li class="nav-item gnav03"><a href="P65.jsp">予約確認・変更・取り消し</a></li>
-            <li class="nav-item gnav04"><a href="P74.jsp">ご利用履歴</a></li>
+            <li class="nav-item gnav04"><a href="UseHistory?customerId=<%= customerId %>&customerName=<%= customerName %>">ご利用履歴</a></li>
             <li class="nav-item gnav05"><a href="P76.jsp">ご登録情報の確認</a></li>
         </ul>
     </nav>
     <h1>登録情報の確認</h1>
     <div class="usage">
         <table>
-            <tr>
-                <th class="howtouse">決済方法</th>
-            </tr>
-        </table>
-        <p>クレジット
-            <button class="change" onclick="location.href='P88.jsp'" style="float: right;">変更する</button>
-        </p>
-
-        <table>
             <th class="howtouse">氏名</th>
             </tr>
         </table>
-        <p>〇〇　〇〇</p>
+        <p><%=customerName %></p>
         <table>
             <tr>
                 <th class="howtouse">氏名フリガナ</th>
             </tr>
         </table>
-        <p>〇〇〇〇　〇〇〇〇</p>
+        <p><%=customerKana %></p>
         <table>
             <tr>
                 <th class="howtouse">住所</th>
             </tr>
         </table>
-        <p>〒000-0000
-            <br>東京都新宿区百人町1-25-4
+        <p>〒<%=postcode %>
+            <br><%=customerAddress %>
         </p>
         <table>
             <tr>
                 <th class="howtouse">電話番号(携帯)</th>
             </tr>
         </table>
-        <p>〇〇〇-〇〇〇〇-〇〇〇〇</p>
-        <table>
-            <tr>
-                <th class="howtouse">運転免許証種別</th>
-            </tr>
-        </table>
-         <p>普通自動車免許</p>
-        <table>
-            <tr>
-                <th class="howtouse">有効期限</th>
-            </tr>
-        </table>
-        <p>〇〇〇〇(令和〇年)〇〇月〇〇日</p>
-        <table>
-            <tr>
-                <th class="howtouse">安心補償サービス</th>
-            </tr>
-        </table>
-            <p>自動加入</p>
-            <table>
-                <tr>
-                    <th class="howtouse">ご登録メールアドレス</th>
-                </tr>
-            </table>
-            <p>〇〇〇〇〇〇＠〇〇〇〇〇〇</p>
+        <p><%=tellNumber %></p>
+        <form action ="CustomerNewUpdate" method ="post">
+        	<input type ="hidden" name="customerId" value="<%=customerId %>">
+        	<input type ="hidden" name="postcode" value="<%=postcode %>">
+        	<input type="hidden" name="customerAddress" value="<%=customerAddress %>">
+        	<input type="hidden" name="tellNumber"value="<%=tellNumber %>">
             <button class="informationchange" onclick="location.href='P76.jsp'">変更確定</button>
+         </form>
             <button class="informationchange" onclick="location.href='P76.jsp'">入力画面に戻る</button>
     </div>
 </html>

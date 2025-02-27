@@ -25,7 +25,7 @@
 
 <nav class="nav">
     <ul>
-        <li class="nav-item"><a href="../../html/home/UC02_01_S1_S2.html">ステーション検索</a></li>
+        <li class="nav-item"><a href="P49.jsp">ステーション検索</a></li>
         <li class="nav-item active"><a href="P40.jsp">料金</a></li>
         <li class="nav-item"><a href="P43.jsp">利用方法</a></li>
         <li class="nav-item"><a href="P46.jsp">車種</a></li>
@@ -70,12 +70,8 @@
                 <td>24時間まで</td>
                 <td>34240円</td>
             </tr>
-            <tr>
-                <td>以降1日毎</td>
-                <td>18240円</td>
-            </tr>
         </table>
-        <p style="color: red;">※走行による距離代は発生しません。</p>
+        <p style="color: red;">※走行による距離代は発生しません。24時間以内の利用に限ります。</p>
     </div>
 </div>
 </body>

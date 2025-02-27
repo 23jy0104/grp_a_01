@@ -12,11 +12,11 @@
 
 <div class="maincontents">
     <img src="img/rog.png" alt="TMC Logo"/>
-    <button onclick="location.href='P29.html'" class="top-right-button">予約・ログイン　▶</button>
+    <button onclick="location.href='P29.jsp'" class="top-right-button">予約・ログイン　▶</button>
     <h1>TMC カーシェア</h1>
     <h2>パスワード再発行(入力)</h2>
     <div class="login-container">
-        <form>
+        <form action="P31Servlet" method="post">
             <table>
                 <tr>
                     <td><label for="email">ご登録メールアドレス<span style="color: red;">【必須】</span></label></td>
@@ -28,7 +28,7 @@
                 <tr>
                     <td><label for="name">電話番号<span style="color: red;">【必須】</span></label></td>
                     <td>
-                        <input type="text" id="name" name="name" required ></br>
+                        <input type="text" id="tel" name="tel" required ></br>
                         <span>例:09012345678 ハイフンなし<span style="color: red;">※半角数字</span>
                     </td>
                 </tr>
@@ -40,8 +40,8 @@
                 </tr>
             </table>
             <div class="button-container">
-                <button type="submit" onclick="location.href='P29.jsp'" class="btn">ログイン画面に戻る</button>
-                <button type="submit" onclick="location.href='P34.jsp'" class="btn">送信</button>
+                <button type="button" onclick="location.href='P29.jsp'" class="btn">ログイン画面に戻る</button>
+                <button type="submit" class="btn">送信</button>
             </div>
         </form>
     </div>

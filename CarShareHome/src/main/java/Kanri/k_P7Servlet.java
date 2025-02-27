@@ -9,47 +9,56 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import dao.CarDao;
-import dao.MakerDao;
-import dao.ModelDao;
+import dao.CarInfoDao;
+import model.CarInfo;
 
 @WebServlet("/k_P7Servlet")
 public class k_P7Servlet extends HttpServlet {
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        MakerDao makerDao = new MakerDao();
-        ModelDao modelDao = new ModelDao();
-        CarDao carDao = new CarDao();
+    
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html;charset=UTF-8");
+        // GETリクエストが来た場合の処理
+        String stationName = request.getParameter("stationName");
+        String stationAddress = request.getParameter("stationAddress");
+        String selectedPlate = request.getParameter("selectedPlate");
 
-        List<String> makers = null;
-        List<String> models = null;
-        List<String> carNumbers = null;
-        String errorMessage = null;
+        // 車両情報を最初に取得してリクエスト属性に設定（必要に応じて）
+        CarInfoDao carInfoDao = new CarInfoDao();
+        List<CarInfo> carInfoList = carInfoDao.getAllCarInfo();
 
-        try {
-            makers = makerDao.getAllMakers();
-            models = modelDao.getAllModels();
-            carNumbers = carDao.getAllCarNumbers();
-            
-            // デバッグ用の出力
-            System.out.println("Makers: " + makers);
-            System.out.println("Models: " + models);
-            System.out.println("Car Numbers: " + carNumbers);
-        } catch (Exception e) {
-            errorMessage = "データの取得中にエラーが発生しました。";
-            e.printStackTrace(); // エラー詳細をスタックトレースで表示
-        } finally {
-            makerDao.connectionClose();
-            modelDao.connectionClose();
-            carDao.connectionClose();
-        }
-
-        // リクエスト属性に設定
-        request.setAttribute("makers", makers);
-        request.setAttribute("models", models);
-        request.setAttribute("carNumbers", carNumbers);
-        request.setAttribute("errorMessage", errorMessage);
+        request.setAttribute("stationName", stationName);
+        request.setAttribute("stationAddress", stationAddress);
+        request.setAttribute("carInfoList", carInfoList);
+        
+        // 選択されたナンバープレートに基づく車両情報を取得
+        CarInfo carInfo = carInfoDao.getCarInfoByNumber(selectedPlate);
+        request.setAttribute("carInfo", carInfo);
 
         // JSPにフォワード
         request.getRequestDispatcher("k_P7.jsp").forward(request, response);
+    }
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	request.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html;charset=UTF-8");
+        String selectedPlate = request.getParameter("selectedPlate");
+
+        CarInfoDao carInfoDao = new CarInfoDao();
+        CarInfo carInfo = carInfoDao.getCarInfoByNumber(selectedPlate);
+        if(carInfo == null || carInfo.equals("")) {
+			request.setAttribute("errMessage", "該当ステーションが見つかりませんでした。");
+			request.getRequestDispatcher("k_P4.jsp").forward(request, response);
+		}else {
+
+        String stationName = request.getParameter("stationName");
+        String stationAddress = request.getParameter("stationAddress");
+
+        request.setAttribute("stationName", stationName);
+        request.setAttribute("stationAddress", stationAddress);
+        request.setAttribute("carInfo", carInfo);
+
+        request.getRequestDispatcher("k_P7.jsp").forward(request, response);
+		}
     }
 }

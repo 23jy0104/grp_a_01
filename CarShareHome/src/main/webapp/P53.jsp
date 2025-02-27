@@ -25,26 +25,39 @@
         <ul>
             <li class="nav-item gnav02"><a href="P53.jsp">予約・ステーション検索</a></li>
             <li class="nav-item gnav03"><a href="P65.jsp">予約確認・変更・取り消し</a></li>
-            <li class="nav-item gnav04"><a href="UseHistory?customerName=<%= customerName %>">ご利用履歴</a></li>
+            <li class="nav-item gnav04"><a href="UseHistory?customerId=<%= customerId %>&customerName=<%= customerName %>">ご利用履歴</a></li>
             <li class="nav-item gnav05"><a href="P76.jsp">ご登録情報の確認</a></li>
         </ul>
     </nav>
 
     <div class="column">
-        <h2 class="column_title001">住所/ステーション名から探す</h2>
-        <div>
-            <input type="radio" id="adr" name="localSearchKbn" checked="checked" value="1" />
-            <label for="adr">住所</label>
-            <input type="radio" id="stationNm" name="localSearchKbn" value="2" class="ml20" />
-            <label for="stationNm">ステーション名</label>
-			<form action="LoginOKStationSearch"method="post">
-	            <div class="input-group">
-	                <input type="text" id="nameAdr-s" name="stationAddress" placeholder="住所やステーション名を入力" style="ime-mode:active;" />
-	                <input type="image" id="doNameAdrSearch" src="img/kensaku.gif"  alt="検索" />
-	            </div>
-	            <p class="notes">例）有楽町、新宿、六本木</p>
-	        </form>
-        </div>
+    <h2 class="column_title001">住所/ステーション名から探す</h2>
+    <div>
+        <form action="LoginOKStationSearch" method="post">
+            <div>
+                <input type="radio" id="adr" name="address" value="1" checked="checked" />
+                <label for="adr">住所</label>
+                
+                <input type="radio" id="stationNm" name="address" value="2" class="ml20" />
+                <label for="stationNm">ステーション名</label>
+            </div>
+            <div class="input-group">
+                <input type="text" id="nameAdr-s" name="stationAddress" placeholder="住所やステーション名を入力" style="ime-mode:active;"  />
+                <input type="submit" id="doNameAdrSearch" value="検索" />
+            </div>
+            <p class="notes">例）有楽町、新宿、六本木</p>
+        </form>
+        <% 
+		    String errorMessage = (String) request.getAttribute("errorMessage");
+		    if (errorMessage != null) { 
+		%>
+		    <div style="color: red;">
+		        <p><%= errorMessage %></p>
+		    </div>
+		<% 
+		    } 
+		%>
     </div>
+</div>
 </body>
 </html>

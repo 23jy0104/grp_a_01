@@ -6,7 +6,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
 
 import model.Customer;
 
@@ -39,28 +38,147 @@ public class CustomerDao {
     }
 
     // 顧客を検索するメソッド
-    public ArrayList<Customer> searchCustomer(String name, Date birthDate) {
-        ArrayList<Customer> cs = new ArrayList<>();
-        String sql = "SELECT customerName, customerId, phoneNumber, email, birthDate FROM customer WHERE customerName LIKE ? AND birthDate = ?";
+    public Customer searchCustomer(String email ,String tel, String birthDate) {
+        String sql = "SELECT * FROM customer WHERE e_mail = ? AND tell_number = ? AND birth_date = ?";
+        Customer cus = null;
         try (PreparedStatement state = con.prepareStatement(sql)) {
-            state.setString(1, "%" + name + "%");
-            state.setDate(2, new java.sql.Date(birthDate.getTime()));
+        	state.setString(1 ,email);
+        	state.setString(2 ,tel);
+        	state.setString(3 ,birthDate);
             ResultSet rs = state.executeQuery();
-            while (rs.next()) {
-                Customer cus = new Customer();
-                cus.setCustomerName(rs.getString("customerName")); // 姓と名を設定
-                cus.setCustomerId(rs.getString("customerId"));
-
-                cus.settellNumber(rs.getString("tellNumber"));
-
-                cus.settellNumber(rs.getString("phoneNumber"));
-                cus.setEmail(rs.getString("email"));
-                cus.setBirthDate(rs.getString("birthDate"));
-                cs.add(cus);
+            if (rs.next()) {
+            	cus = new Customer();
+                cus.setCustomerId(rs.getString("customer_id"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return cs;
+        return cus;
+    }
+    
+    public ArrayList<Customer> getCustomersWithoutManager() {
+        ArrayList<Customer> customers = new ArrayList<>();
+        String sql = "SELECT customerId, customerName, customerKana, gender, customerPassword, tellNumber, fixedCall, email, birthDate, licenseNumber, licenceDate, postCode, customerAddress, creditId, omote, ura FROM customer WHERE manager_check IS NULL";
+
+        try (PreparedStatement pstmt = con.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
+            while (rs.next()) {
+                Customer customer = new Customer();
+                customer.setCustomerId(rs.getString("customerId"));
+                customer.setCustomerName(rs.getString("customerName"));
+                customer.setCustomerKana(rs.getString("customerKana"));
+                customer.setGender(rs.getString("gender"));
+                customer.setCustomerPassword(rs.getString("customerPassword"));
+                customer.setTellNumber(rs.getString("tellNumber"));
+                customer.setFixedCall(rs.getString("fixedCall"));
+                customer.setEmail(rs.getString("email"));
+                customer.setBirthDate(rs.getString("birthDate"));
+                customer.setLicenseNumber(rs.getString("licenseNumber"));
+                customer.setLicenceDate(rs.getString("licenceDate"));
+                customer.setPostCode(rs.getString("postCode"));
+                customer.setCustomerAddress(rs.getString("customerAddress"));
+                customer.setCreditId(rs.getString("creditId"));
+                customer.setOmote(rs.getString("omote"));
+                customer.setUra(rs.getString("ura"));
+                customers.add(customer);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // エラーの詳細を表示
+        }
+        return customers;
+    }
+    public ArrayList<Customer> getAllCustomers() {
+        ArrayList<Customer> customers = new ArrayList<>();
+        String sql = "SELECT customer_id, customer_name, e_mail FROM customer WHERE manager_check IS NULL"; // 必要なカラムを選択
+
+        try (PreparedStatement pstmt = con.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
+            while (rs.next()) {
+                Customer customer = new Customer();
+                customer.setCustomerId(rs.getString("customer_id")); // カラム名が正しいか確認
+                customer.setCustomerName(rs.getString("customer_name"));
+                customer.setEmail(rs.getString("e_mail"));
+                customers.add(customer);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // エラーの詳細を表示
+        }
+        return customers;
+    }
+    public Customer getCustomerById(String customerId) {
+        Customer customer = null;
+        String sql = "SELECT customer_name, tell_number, e_mail, license_number, license_date,birth_date, " +
+                     "post_code, customer_address, omote_jpg, ura_jpg FROM customer WHERE customer_id = ?"; // 修正したカラム名を使用
+
+        try (PreparedStatement pstmt = con.prepareStatement(sql)) {
+            pstmt.setString(1, customerId);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                customer = new Customer();
+                customer.setCustomerId(customerId); // IDを設定
+                customer.setCustomerName(rs.getString("customer_name"));
+                customer.setTellNumber(rs.getString("tell_number"));
+                customer.setEmail(rs.getString("e_mail"));
+                customer.setBirthDate(rs.getString("birth_date"));
+                customer.setLicenseNumber(rs.getString("license_number"));
+                customer.setLicenceDate(rs.getString("license_date"));
+                customer.setPostCode(rs.getString("post_code"));
+                customer.setCustomerAddress(rs.getString("customer_address"));
+                customer.setOmote(rs.getString("omote_jpg")); // 画像のパスを取得
+                customer.setUra(rs.getString("ura_jpg")); // 画像のパスを取得
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // エラーメッセージを表示
+        }
+        return customer;
+    }
+    
+    public void updateManagerCheck(String customerId, String managerCheck) {
+        String sql = "UPDATE customer SET manager_check = ? WHERE customer_id = ?";
+
+        try (PreparedStatement pstmt = con.prepareStatement(sql)) {
+            pstmt.setString(1, managerCheck);
+            pstmt.setString(2, customerId);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(); // エラーメッセージを表示
+        }
+    }
+    
+    public void deleteCustomer(String customerId) {
+        String sql = "DELETE FROM customer WHERE customer_id = ?"; // 顧客を削除するSQL文
+
+        try (PreparedStatement pstmt = con.prepareStatement(sql)) {
+            pstmt.setString(1, customerId); // 顧客IDを設定
+            int rowsAffected = pstmt.executeUpdate(); // 実行して影響を受けた行数を取得
+            if (rowsAffected > 0) {
+                System.out.println("顧客 ID: " + customerId + " が削除されました。");
+            } else {
+                System.out.println("顧客 ID: " + customerId + " は存在しません。");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // エラーメッセージを表示
+        }
+    }
+    
+    public  Customer searchCustomerBykanatel(String customerKana , String tellNumber) {
+    	String sql = "SELECT * FROM customer WHERE customer_kana = ? AND tell_number = ?;";
+    	Customer customer = null;
+    	try(PreparedStatement pstmt = con.prepareStatement(sql)) {
+    		pstmt.setString(1, customerKana);
+    		pstmt.setString(2, tellNumber);
+    		ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                customer = new Customer();
+                customer.setCustomerId(rs.getString("customer_id"));
+                customer.setCustomerName(rs.getString("customer_name"));
+                customer.setTellNumber(rs.getString("tell_number"));
+                customer.setEmail(rs.getString("e_mail"));
+                customer.setBirthDate(rs.getString("birth_date"));
+            }
+    	}catch(SQLException e) {
+    		e.printStackTrace();
+    	}
+    	return customer;
     }
 }

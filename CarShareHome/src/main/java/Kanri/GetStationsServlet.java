@@ -16,15 +16,16 @@ import model.Station;
 @WebServlet("/getStations")
 public class GetStationsServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	request.setCharacterEncoding("UTF-8");
+		response.setContentType("text/html; charset=UTF-8");
         String address = request.getParameter("address");
-
         StationDao stationDao = new StationDao();
         List<Station> stations = stationDao.getStationsByAddress(address);
         stationDao.connectionClose();
+        System.out.println(stations);
 
         response.setContentType("application/json; charset=UTF-8");
         PrintWriter out = response.getWriter();
-        
         out.print("[");
         for (int i = 0; i < stations.size(); i++) {
             Station station = stations.get(i);

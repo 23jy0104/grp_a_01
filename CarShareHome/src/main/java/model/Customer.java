@@ -1,6 +1,5 @@
 package model;
 import java.io.Serializable;
-import java.sql.Blob;
 
 public class Customer implements Serializable{
 	private String customerId;
@@ -17,8 +16,8 @@ public class Customer implements Serializable{
 	private String postCode;
 	private String customerAddress;
 	private String creditId;
-	private Blob omote;
-	private Blob ura;
+	private String omote;
+	private String ura;
 	
 	public Customer() {
 		super();
@@ -33,7 +32,7 @@ public class Customer implements Serializable{
     }
 
 	public Customer(String customerId, String customerName, String customerKana, String gender, String customerPassword, String tellNumber, String fixedCall,String email, String birthDate,
-			String licenseNumber, String licenceDate,String postCode, String customerAddress, String creditId, Blob omote, Blob ura) {
+			String licenseNumber, String licenceDate,String postCode, String customerAddress, String creditId, String omote,String ura) {
 		super();
 		this.customerId = customerId;
 		this.customerName = customerName;
@@ -124,21 +123,6 @@ public class Customer implements Serializable{
 		this.creditId = creditId;
 	}
 
-	public Blob getOmote() {
-		return omote;
-	}
-
-	public void setOmote(Blob omote) {
-		this.omote = omote;
-	}
-
-	public Blob getUra() {
-		return ura;
-	}
-
-	public void setUra(Blob ura) {
-		this.ura = ura;
-	}
 
 	public String getLicenseNumber() {
 		return licenseNumber;
@@ -183,6 +167,18 @@ public class Customer implements Serializable{
 	}
 	public void setPostCode(String postCode) {
 		this.postCode = postCode;
+	}
+	public String getOmote() {
+		return omote;
+	}
+	public void setOmote(String omote) {
+		this.omote = omote;
+	}
+	public String getUra() {
+		return ura;
+	}
+	public void setUra(String ura) {
+		this.ura = ura;
 	}
 	
 	

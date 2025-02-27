@@ -4,15 +4,16 @@ import java.io.Serializable;
 
 public class KeyBox implements Serializable{
 	private String keyboxId;
-	private Station stationId;
-	private CarData carCode;
+	private String stationId;
+	private String carCode;
 	private String failure_availability;
+	private String keyboxStatus;
 	
 	public KeyBox() {
 		super();
 	}
 
-	public KeyBox(String keyboxId, Station stationId, CarData carCode, String failure_availability) {
+	public KeyBox(String keyboxId, String stationId, String carCode, String failure_availability) {
 		super();
 		this.keyboxId = keyboxId;
 		this.stationId = stationId;
@@ -28,19 +29,19 @@ public class KeyBox implements Serializable{
 		this.keyboxId = keyboxId;
 	}
 
-	public Station getStationId() {
+	public String getStationId() {
 		return stationId;
 	}
 
-	public void setStationId(Station stationId) {
+	public void setStationId(String stationId) {
 		this.stationId = stationId;
 	}
 
-	public CarData getCarCode() {
+	public String getCarCode() {
 		return carCode;
 	}
 
-	public void setCarCode(CarData carCode) {
+	public void setCarCode(String carCode) {
 		this.carCode = carCode;
 	}
 
@@ -51,6 +52,13 @@ public class KeyBox implements Serializable{
 	public void setFailure_availability(String failure_availability) {
 		this.failure_availability = failure_availability;
 	}
-	
+
+	public String getKeyboxStatus() {
+		return keyboxStatus;
+	}
+
+	public void setKeyboxStatus(String keyboxStatus) {
+		this.keyboxStatus = keyboxStatus;
+	}
 	
 }

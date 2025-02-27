@@ -1,10 +1,12 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.util.List"%>
+<%@ page import="model.Customer"%>
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>システム管理課</title>
+    <title>顧客申請一覧</title>
     <link rel="stylesheet" href="css/vehicleCon.css">  
 </head>
 <body>
@@ -14,22 +16,31 @@
             <th>顧客申請者名</th>
             <th>メールアドレス</th>
         </tr>
+        <% 
+            List<Customer> customerList = (List<Customer>) request.getAttribute("customerList");
+            if (customerList != null && !customerList.isEmpty()) {
+                for (Customer customer : customerList) {
+                    // コンソールに顧客情報を表示
+                    System.out.println("顧客名: " + customer.getCustomerName() + ", メールアドレス: " + customer.getEmail());
+        %>
         <tr>
-            <td><a href="P15.html">〇〇〇〇</a></td>
-            <td>23jy0000@jec.ac.jp</td>
-        </tr>
+		    <td>
+		        <a href="k_P15Servlet?customerId=<%= customer.getCustomerId() %>&customerName=<%= customer.getCustomerName() %>">
+		            <%= customer.getCustomerName() %>
+		        </a>
+		    </td>
+		    <td><%= customer.getEmail() %></td>
+		</tr>
+        <% 
+                }
+            } else {
+        %>
         <tr>
-            <td><a href="P15.html">〇〇〇〇</a></td>
-            <td>23jy0001@jec.ac.jp</td>
+            <td colspan="2">顧客情報がありません。</td>
         </tr>
-        <tr>
-            <td><a href="P15.html">〇〇〇〇</a></td>
-            <td>23jy0002@jec.ac.jp</td>
-        </tr>
-        <tr>
-            <td><a href="P15.html">〇〇〇〇</a></td>
-            <td>23jy0003@jec.ac.jp</td>
-        </tr>
+        <% 
+            }
+        %>
     </table>
     <div class="button-container">
         <button onclick="location.href='k_top.jsp'">サインアウト</button>

@@ -50,8 +50,8 @@ public class CustomerTouroku implements UserDao {
 			pstmt.setString(10, customer.getLicenceDate()); // String型で直接設定
 			pstmt.setString(11, customer.getPostCode());
 			pstmt.setString(12, customer.getCustomerAddress());
-			pstmt.setBlob(13, customer.getOmote());
-			pstmt.setBlob(14, customer.getUra());
+			pstmt.setString(13, customer.getOmote());
+			pstmt.setString(14, customer.getUra());
 
 			int affected = pstmt.executeUpdate();
 			if (affected > 0) {
@@ -86,8 +86,8 @@ public class CustomerTouroku implements UserDao {
 						rs.getString("post_code"),
 						rs.getString("customer_address"),
 						rs.getString("credit_id"),
-						rs.getBlob("omote_jpg"),
-						rs.getBlob("ura_jpg"));
+						rs.getString("omote_jpg"),
+						rs.getString("ura_jpg"));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -126,8 +126,8 @@ public class CustomerTouroku implements UserDao {
                 one.setLicenceDate(rs.getString("license_date")); // String型で設定
                 one.setPostCode(rs.getString("post_code"));
                 one.setCustomerAddress(rs.getString("customer_address"));
-                one.setOmote(rs.getBlob("omote_jpg"));
-                one.setUra(rs.getBlob("ura_jpg"));
+                one.setOmote(rs.getString("omote_jpg"));
+                one.setUra(rs.getString("ura_jpg"));
                 ary.add(one);
             }
         } catch (SQLException e) {
@@ -135,4 +135,36 @@ public class CustomerTouroku implements UserDao {
         }
         return ary;
     }
+
+	@Override
+	public Customer getUserByCustomerId(String customerId) {
+		Customer customer = null;
+		String sql = "SELECT * FROM customer WHERE customer_id = ?";
+		try (PreparedStatement pstmt = con.prepareStatement(sql)) {
+			pstmt.setString(1, customerId);
+			ResultSet rs = pstmt.executeQuery();
+			if (rs.next()) {
+				customer = new Customer(
+						String.valueOf(rs.getInt("customer_Id")),
+						rs.getString("customer_Name"),
+						rs.getString("customer_kana"),
+						rs.getString("gender"),
+						rs.getString("customer_Password"),
+						rs.getString("tell_number"),
+						rs.getString("fixed_call"),
+						rs.getString("e_mail"),
+						rs.getString("birth_date"), // String型で取得
+						rs.getString("license_number"),
+						rs.getString("license_date"), // String型で取得
+						rs.getString("post_code"),
+						rs.getString("customer_address"),
+						rs.getString("credit_id"),
+						rs.getString("omote_jpg"),
+						rs.getString("ura_jpg"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return customer;
+	}
 }
