@@ -4,7 +4,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
 
-<% 
+<%
 	String customerName = (String) session.getAttribute("customerName");
 	String customerId = (String) session.getAttribute("customerId");
     List<String[]> stations = (List<String[]>) session.getAttribute("stations"); // ステーション情報を取得
