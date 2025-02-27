@@ -1,11 +1,27 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.util.List" %>
+<%@ page import ="model.ReservationTime" %>
+<%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="java.util.HashMap" %>
+<%@ page import="java.util.Map" %>
+<%@ page import ="model.Model" %>
+<%@ page import ="model.CarData" %>
+<%@ page import="java.util.ArrayList" %>
 
 <%
-    List<Car> availableCars = (List<Car>) request.getAttribute("availableCars");
-    String stationName = (String) request.getAttribute("stationName");
+    // セッションから顧客情報を取得
     String customerName = (String) session.getAttribute("customerName");
-	String customerId = (String) session.getAttribute("customerId");
+    String customerId = (String) session.getAttribute("customerId");
+
+    // リクエストから車両情報を取得
+    List<ReservationTime> combinedList = (List<ReservationTime>) request.getAttribute("combinedList");
+    String stationName = (String) request.getAttribute("stationName");
+    String stationId = (String) request.getAttribute("stationId");
+
+    // 他の車両情報をリクエストから取得
+    List<String> carCodes = (List<String>) request.getAttribute("carCodes");
+    List<String> carImages = (List<String>) request.getAttribute("carImages");
+    List<String> carModels = (List<String>) request.getAttribute("carModels");
 %>
 
 <!DOCTYPE html>
@@ -36,63 +52,70 @@
     <main>
         <h2><%= stationName %> の空いている車両一覧</h2>
 
-        <%
-            if (availableCars != null && !availableCars.isEmpty()) {
-                for (Car car : availableCars) {
-        %>
-            <div class="car-info">
-                <h3><%= car.carInfo %></h3>
-                <table>
-                    <tr>
-                        <td>駆動方式:</td>
-                        <td><%= car.driveType %></td>
-                    </tr>
-                    <tr>
-                        <td>安全装備:</td>
-                        <td><%= car.safetyFeatures %></td>
-                    </tr>
-                    <tr>
-                        <td>備考:</td>
-                        <td><%= car.notes %></td>
-                    </tr>
-                </table>
-                <h4>空き時間</h4>
-                <table>
-                    <tr>
-                        <th>時間帯</th>
-                        <th>空き状況</th>
-                    </tr>
-                    <%
-                    for (String time : car.availableTimes) {
-                    %>
-                    <tr>
-                        <td><%= time %></td>
-                        <td>空きあり</td>
-                    </tr>
-                    <%
+        <div class="car-list">
+            <%
+                // 車両ごとの情報を保持するマップを作成
+                Map<String, List<ReservationTime>> carMap = new HashMap<>();
+
+                // combinedListをループして、車両ごとに予約時間をマップに追加
+                for (ReservationTime reservation : combinedList) {
+                    String carCode = reservation.getCarCode(); // 車両コードを取得
+                    
+                    if (!carMap.containsKey(carCode)) {
+                        carMap.put(carCode, new ArrayList<ReservationTime>());
                     }
-                    for (int hour = 0; hour < 24; hour++) {
-                        String timeSlot = String.format("%02d:00:00", hour);
-                        if (!car.availableTimes.contains(timeSlot)) {
+                    carMap.get(carCode).add(reservation);
+                }
+
+                // 車両ごとにループして表示
+                for (Map.Entry<String, List<ReservationTime>> entry : carMap.entrySet()) {
+                    String carCode = entry.getKey();
+                    List<ReservationTime> reservations = entry.getValue();
+                    String carName = reservations.get(0).getModelName(); // 最初の予約からモデル名を取得
+                    String carImg = ""; // 各車両の画像パスを設定
+
+                    // carImagesから画像を取得
+                    for (int i = 0; i < carCodes.size(); i++) {
+                        if (carCodes.get(i).equals(carCode)) {
+                            carImg = carImages.get(i);
+                            System.out.println(carImg);
+                            break;
+                        }
+                    }
+            %>
+
+            <div class="car-item">
+                <h3><%= carName %></h3>
+                <img src="img/<%= carImg %>" alt="<%= carName %>の画像" class="car-image">
+                <h4>タイムテーブル</h4>
+                <table>
+                    <tr>
+                        <th>開始時間</th>
+                        <th>終了時間</th>
+                        <th>状態</th>
+                    </tr>
+                    <%
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                        for (ReservationTime reservation : reservations) {
+                            String startTime = reservation.getStartDateTime();
+                            String endTime = reservation.getEndDateTime();
+                            String status = reservation.getStatus();
                     %>
                     <tr>
-                        <td><%= timeSlot %></td>
-                        <td>空きなし</td>
+                        <td><%= startTime %></td>
+                        <td><%= endTime %></td>
+                        <td><%= status %></td>
                     </tr>
                     <%
                         }
-                    }
                     %>
                 </table>
             </div>
-        <%
-                }
-            } else {
-        %>
-            <p>空き情報はありません。</p>
-        <%
-            }
-        %>
+
+            <%
+                } // 車両ごとのループ終了
+            %>
+        </div>
 
         <div class="button-container">
             <button onclick="location.href='P56.jsp'">戻る</button>

@@ -51,7 +51,7 @@ String totalCost =(String)session.getAttribute("totalCost");
             <div class="flex-container">
                 <div class="image-section"></div>
                     <img src="img/<%=img %>" alt="車両" style="width: 400px; height: auto; margin-top: 10px;">
-                    <p><%=img %><br><%=number %><br>（ダークシルバー）</p>
+                    <p><%=modelName %><br><%=number %><br>（ダークシルバー）</p>
                 </div>
                 <div class="table-section">
                     <table>
