@@ -61,7 +61,7 @@ public class CarAvailabilityServlet extends HttpServlet {
                                      + "FROM Reservation r "
                                      + "INNER JOIN car_db car ON r.car_code = car.car_code "
                                      + "INNER JOIN model m ON m.model_id = car.model_id "
-                                     + "INNER JOIN keybox k ON k.car_code =r.car_code"
+                                     + "INNER JOIN keybox k ON k.car_code =r.car_code "
                                      + "WHERE r.finish_date IS NULL AND k.station_id = ?";
 
             try (Connection con = DriverManager.getConnection(url, user, pass);

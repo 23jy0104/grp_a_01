@@ -136,7 +136,7 @@ String endDate = (String) session.getAttribute("endDate");
         <ul>
             <li class="nav-item gnav02"><a href="P53.jsp">予約・ステーション検索</a></li>
             <li class="nav-item gnav03"><a href="P65.jsp">予約確認・変更・取り消し</a></li>
-            <li class="nav-item gnav04"><a href="UseHistory?customerId=<%= customerId %>&customerName=<%= customerName %>">ご利用履歴</a></li>
+            <li class="nav-item gnav04"><a href="P74.jsp">ご利用履歴</a></li>
             <li class="nav-item gnav05"><a href="P76.jsp">ご登録情報の確認</a></li>
         </ul>
     </nav>
@@ -228,12 +228,10 @@ String endDate = (String) session.getAttribute("endDate");
 
         <div class="button-container">
               <div class="button-container">
-			    <form action="P56.jsp" method="post">
-			        <input type="hidden" name="stationId" value="<%= stationId %>">
-			        <input type="hidden" name="stationData" value="<%= stationData %>">
-			        <input type="hidden" name="stationName" value="<%= stationName %>">
-			        <button type="submit" class="back-button">戻る</button>
-			    </form>
+			    <% String detailUrl = "P56.jsp?stationid="+stationId+"&stationname=" + stationName +"&stationdata="+ stationData ;  %>
+			    <a href ="<%=detailUrl %>">
+			    	<input type ="submit" value="戻る">
+			    </a>
 			</div>
         </div>
         
