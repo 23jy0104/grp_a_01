@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.util.List" %>
-<%@ page import="model.ReservationTime" %>
+<%@ page import="model.Car" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 
 <%
@@ -10,11 +10,20 @@
 
     // リクエストから車両情報を取得
     String stationName = (String) request.getAttribute("stationName");
-    List<String> availableCarModels = (List<String>) request.getAttribute("availableCarModels");
-    List<String> carCodes = (List<String>) request.getAttribute("carCodes");
-    List<String> carImages = (List<String>) request.getAttribute("carImages");
-    List<String> carModels = (List<String>) request.getAttribute("carModels");
-    List<ReservationTime> combinedList = (List<ReservationTime>) request.getAttribute("combinedList"); // 予約情報と空車情報
+    String stationId = (String) request.getAttribute("stationId");
+    String stationData = (String) request.getAttribute("stationData");
+
+    // 車両情報リストを取得
+    List<Car> availableCars = (List<Car>) request.getAttribute("availableCars");
+
+    // jspで入力した日時
+    String selectedDate = request.getParameter("selectedDate"); // 選択された日付
+    String startTimeHour = request.getParameter("startTimeHour"); // 開始時間（時）
+    String startTimeMinute = request.getParameter("startTimeMinute"); // 開始時間（分）
+
+    // 開始時間をTimestampに変換
+    int startHour = Integer.parseInt(startTimeHour);
+    int startMinute = Integer.parseInt(startTimeMinute);
 %>
 
 <!DOCTYPE html>
@@ -25,6 +34,41 @@
     <title>TMC カーシェア - 空車情報</title>
     <link rel="stylesheet" href="css/nav.css">
     <link rel="stylesheet" href="css/P57.css">
+    <style>
+        .car-item {
+            display: flex;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .car-image {
+            width: 150px;
+            height: auto;
+            margin-right: 20px;
+        }
+        .car-details {
+            flex: 1;
+        }
+        .time-table {
+            margin-top: 10px;
+            border-collapse: collapse;
+            width: 100%;
+        }
+        .time-table th, .time-table td {
+            border: 1px solid #ccc;
+            padding: 5px;
+            text-align: center;
+        }
+        .available {
+            background-color: blue;
+            color: white;
+        }
+        .unavailable {
+            background-color: red;
+            color: white;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -46,51 +90,41 @@
         <h2><%= stationName %> の空いている車両一覧</h2>
 
         <div class="car-list">
-            <%
-                if (combinedList == null || combinedList.isEmpty()) {
-                    out.println("<p>空いている車両はありません。</p>");
-                } else {
-                    for (ReservationTime reservationTime : combinedList) {
-                        String status = reservationTime.getStatus(); // "予約可能" または "予約不可"
-                        String startTime = reservationTime.getStartDateTime();
-                        String endTime = reservationTime.getEndDateTime();
-                        String carModel = reservationTime.getModelName(); // モデル名を取得
-
-                        String carImg = ""; // 各車両の画像パスを取得する処理を追加する必要があります
-                        for (int i = 0; i < carModels.size(); i++) {
-                            if (carModels.get(i).equals(carModel)) {
-                                carImg = carImages.get(i);
-                                break;
-                            }
-                        }
-            %>
-
-            <div class="car-item">
-                <h3><%= carModel %></h3>
-                <img src="img/<%= carImg %>" alt="<%= carModel %>の画像" class="car-image">
-                <h4>タイムテーブル</h4>
-                <table>
-                    <tr>
-                        <th>開始時間</th>
-                        <th>終了時間</th>
-                        <th>状態</th>
-                    </tr>
-                    <tr>
-                        <td><%= startTime %></td>
-                        <td><%= endTime %></td>
-                        <td><%= status %></td>
-                    </tr>
-                </table>
-            </div>
-
-            <%
-                    } // 車両ごとのループ終了
-                }
-            %>
+            <% for (Car car : availableCars) { %>
+                <div class="car-item">
+                    <img src="<%= car.getImageUrl() %>" alt="<%= car.getCarModel() %>の画像" class="car-image">
+                    <div class="car-details">
+                        <h3>車種: <%= car.getCarModel() %></h3>
+                        <h4><%= selectedDate %> のタイムテーブル</h4>
+                        <table class="time-table">
+                            <tr>
+                                <th>時間</th>
+                                <th>状態</th>
+                            </tr>
+                            <% 
+                            // タイムテーブルのロジックをここに追加
+                            // 例: 09:00から20:00までの時間を表示
+                            for (int hour = 9; hour <= 20; hour++) {
+                                String timeSlot = String.format("%02d:00", hour);
+                                // ステータスを決定するロジックを追加
+                                String statusClass = "available"; // 仮に全て空いているとする
+                            %>
+                                <tr>
+                                    <td><%= timeSlot %></td>
+                                    <td class="<%= statusClass %>">空いています</td>
+                                </tr>
+                            <% } %>
+                        </table>
+                    </div>
+                </div>
+            <% } %>
         </div>
 
         <div class="button-container">
-            <button onclick="location.href='P56.jsp'">戻る</button>
+              <% String detailUrl = "P56.jsp?stationid=" + stationId + "&stationname=" + stationName + "&stationdata=" + stationData; %>
+              <a href="<%= detailUrl %>"> 
+                  <input type="button" value="戻る">
+              </a>
         </div>
     </main>
 </body>

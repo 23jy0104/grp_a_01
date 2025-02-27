@@ -225,14 +225,10 @@ String endDate = (String) session.getAttribute("endDate");
         </div> <!-- カレンダーを囲むコンテナの終了 -->
 
         <div class="button-container">
-              <div class="button-container">
-			    <form action="P56.jsp" method="post">
-			        <input type="hidden" name="stationId" value="<%= stationId %>">
-			        <input type="hidden" name="stationData" value="<%= stationData %>">
-			        <input type="hidden" name="stationName" value="<%= stationName %>">
-			        <button type="submit" class="back-button">戻る</button>
-			    </form>
-			</div>
+              <% String detailUrl = "P56.jsp?stationid="+stationId+"&stationname=" + stationName +"&stationdata="+ stationData;%>
+              <a href="<%= detailUrl %>"> 
+              	 <input type="submit"  value="戻る">
+              </a>
         </div>
         
         <!-- 開始時間の入力フィールド -->
@@ -351,7 +347,6 @@ String endDate = (String) session.getAttribute("endDate");
 				    <%
 				            }
 				        }
-				    }
 				    %>
 				</tr>
 		    </tbody>
