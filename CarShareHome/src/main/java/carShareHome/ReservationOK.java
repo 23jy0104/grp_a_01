@@ -27,7 +27,7 @@ public class ReservationOK extends HttpServlet {
 		response.setContentType("text/html; charset=UTF-8");
 		String startDateString =request.getParameter("startDate");
 		String startTimeHour =request.getParameter("startTimeHour");
-		String startTimeMinute=request.getParameter("startTimeHout");
+		String startTimeMinute=request.getParameter("startTimeMinute");
 		String EndDateString =request.getParameter("EndDate");
 		String EndTimeHour =request.getParameter("EndTimeHour");
 		String EndTimeMinute =request.getParameter("EndTimeMinute");
@@ -54,16 +54,15 @@ public class ReservationOK extends HttpServlet {
                      + "WHERE k.car_code = ? AND k.station_id = ? "
                      + "AND finish_date IS NULL "
                      + "AND (start_date < ? AND stop_date > ?)";
-			String startDate =startDateString+" "+startTimeHour+" "+startTimeMinute;
-			String endDate =EndDateString+" "+EndTimeHour+" "+EndTimeMinute+" ";
+			String startDate =startDateString+" "+startTimeHour+":"+startTimeMinute+":00";
+			String endDate =EndDateString+" "+EndTimeHour+":"+EndTimeMinute+":00";
 			con =DriverManager.getConnection(url, user, pass);
 			pstmt = con.prepareStatement(sql);
-			rs = pstmt.executeQuery();
-			
 			pstmt.setString(1, carCode);
 			pstmt.setString(2, stationId);
-			pstmt.setTimestamp(3, Timestamp.valueOf(endDate)); // 終了日時を渡す
-            pstmt.setTimestamp(4, Timestamp.valueOf(startDate)); // 開始日時を渡す
+			pstmt.setTimestamp(3, Timestamp.valueOf(startDate)); // 終了日時を渡す
+            pstmt.setTimestamp(4, Timestamp.valueOf(endDate)); // 開始日時を渡す
+            rs = pstmt.executeQuery();
             if (rs.next()) {
                 // 予約が重複している場合
                 request.setAttribute("errorMessage", "予約が重複しています。");

@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -20,15 +21,9 @@ public class DiscountCalculatorServlet extends HttpServlet {
     private static final int BASE_RATE_PER_15_MINUTES = 440; // 15分あたりの基本料金
     private static final int INSURANCE_FEE = 550; // 保険料金
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String startTimestamp = (String)request.getSession().getAttribute("startDate");
         String endTimestamp = (String)request.getSession().getAttribute("endDate");
-        String stationId =(String)request.getSession().getAttribute("stationId");
-        String carCode =(String)request.getSession().getAttribute("carCode");
-        String img =(String)request.getSession().getAttribute("img");
-        String stationName =(String)request.getSession().getAttribute("stationName");
-        String modelName =(String)request.getSession().getAttribute("modelName");
-        String number =(String)request.getSession().getAttribute("number");
         // 時間の計算
         long durationInMillis = calculateDuration(startTimestamp, endTimestamp);
         int durationHours = (int) (durationInMillis / (1000 * 60 * 60)); // ミリ秒を時間に変換
@@ -40,20 +35,12 @@ public class DiscountCalculatorServlet extends HttpServlet {
 
         // 料金計算
         int totalCost = calculateTotalCost(durationHours, discounts);
-
         // 結果をリクエストに設定
-        request.setAttribute("totalCost", totalCost);
-        
-        
-        request.setAttribute("stationId", stationId);
-        request.setAttribute("carCode", carCode);
-        request.setAttribute("img",img);
-        request.setAttribute("stationName", stationName);
-        request.setAttribute("modelName", modelName);
-        request.setAttribute("number", number);
-        request.setAttribute("startTimestamp", startTimestamp); 
-        request.setAttribute("endTimestamp", endTimestamp);
-        request.getRequestDispatcher("P63.jsp").forward(request, response); // 結果をresult.jspにフォワード
+        request.getSession().setAttribute("totalCost", totalCost);
+        String path ="P63.jsp"; // 結果をresult.jspにフォワード
+        RequestDispatcher rd =request.getRequestDispatcher(path);
+		rd.forward(request, response);
+
     }
 
     private long calculateDuration(String startTimestamp, String endTimestamp) {
