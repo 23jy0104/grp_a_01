@@ -1,3 +1,4 @@
+<%@page import="org.apache.taglibs.standard.tag.common.fmt.RequestEncodingSupport"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="java.sql.Timestamp" %>
 <%@ page import="java.util.Calendar" %>
@@ -14,6 +15,7 @@
 <%@ page import="java.text.SimpleDateFormat" %>
 
 <%
+Integer yoyaku = (Integer) request.getAttribute("yoyaku");
 String stationName=(String)session.getAttribute("stationName");
 String stationData=(String)session.getAttribute("stationData");
 String customerId =(String)session.getAttribute("customerId");
@@ -295,10 +297,12 @@ String endDate = (String) session.getAttribute("endDate");
 		        </tr>
 		       <tr>
 				    <%
-				    // 予約状況を表示するためのタイムテーブルを動的に生成
+				    Integer yoyakuCount = (Integer) request.getAttribute("yoyaku");
+			        int startIndex = (yoyakuCount != null) ? yoyakuCount : 0;
 				    if (combinedList != null && !combinedList.isEmpty()) {
+				    	int startIndex = yoyaku; 
 				        // 1行目を飛ばすため、インデックスを1から開始
-				        for (int i = 1 ; i < combinedList.size(); i++) {
+				        for (int i = startIndex ; i < combinedList.size(); i++) {
 				            ReservationTime time = combinedList.get(i);
 				            String startDateTime = time.getStartDateTime(); // "yyyy-MM-dd HH:mm" 形式
 				            String endDateTime = time.getEndDateTime();     // "yyyy-MM-dd HH:mm" 形式

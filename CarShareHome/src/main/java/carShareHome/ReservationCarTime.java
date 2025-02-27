@@ -102,9 +102,9 @@ public class ReservationCarTime extends HttpServlet {
                     String availableEndTime = sdfDateTime.format(endTime);
                     if (!isBooked) {
                         availableSlots.add(new ReservationTime(availableStartTime, availableEndTime, "予約可能"));
-                        yoyaku += 1;
                     } else {
                         availableSlots.add(new ReservationTime(availableStartTime, availableEndTime, "予約不可"));
+                        yoyaku = yoyaku + 1;
                     }
                 }
 
