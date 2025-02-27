@@ -1,5 +1,7 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.util.List" %>
+<%@ page import="model.Station" %>
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -23,41 +25,77 @@
                 <th>住所</th>
             </tr>
         </thead>
-        <tbody id="resultsBody"></tbody>
+        <tbody id="resultsBody">
+            <% 
+                // リクエスト属性からステーションリストを取得
+                List<Station> stations = (List<Station>) request.getAttribute("stations");
+                String address = request.getParameter("address"); 
+
+                if (stations != null && !stations.isEmpty()) {
+                    for (Station station : stations) {
+            %>
+            <tr>
+                <td>
+                    <a href="k_P7Servlet?stationName=<%= station.getStationName() %>&stationAddress=<%= station.getStationAddress() %>">
+                        <%= station.getStationName() %>
+                    </a>
+                </td>
+                <td><%= station.getStationAddress() %></td>
+            </tr>
+            <%
+                    }
+                } else {
+            %>
+            <tr>
+                <td colspan="2">ステーションが見つかりませんでした。</td>
+            </tr>
+            <%
+                }
+            %>
+        </tbody>
     </table>
 
     <script>
         document.getElementById('searchBtn').addEventListener('click', function() {
-            const address = document.getElementById('address').value;
-            const resultsBody = document.getElementById('resultsBody');
-            resultsBody.innerHTML = ''; // 既存の結果をクリア
+            const address = document.getElementById('address').value; 
 
-            // サンプルデータ（実際にはAPIから取得することを想定）
-            const stations = [
-                { name: 'ステーションA', address: '東京都千代田区1-1', link: 'P7.html' },
-                { name: 'ステーションB', address: '東京都新宿区2-2', link: 'P7.html' },
-                { name: 'ステーションC', address: '東京都渋谷区3-3', link: 'P7.html' }
-            ];
-
-            // 住所に基づいてフィルタリング
-            const filteredStations = stations.filter(station => station.address.includes(address));
-
-            // 結果をテーブルに追加
-            filteredStations.forEach(station => {
-                const row = document.createElement('tr');
-                row.innerHTML = `<td><a href="${station.link}">${station.name}</a></td><td>${station.address}</td>`;
-                resultsBody.appendChild(row);
-            });
-
-            // 結果があればテーブルを表示
-            if (filteredStations.length > 0) {
-                document.getElementById('resultsTable').style.display = 'table';
-            } else {
-                document.getElementById('resultsTable').style.display = 'none';
+            if (!address) {
+                return;
             }
+
+            fetch('getStations?address=' + encodeURIComponent(address))
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('HTTPエラー: ' + response.status);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const resultsBody = document.getElementById('resultsBody');
+                    resultsBody.innerHTML = '';
+
+                    if (Array.isArray(data) && data.length > 0) {
+                        data.forEach(station => {
+                            const row = document.createElement('tr');
+                            row.innerHTML = '<td>' +
+                                '<a href="k_P7.jsp?stationName=' + encodeURIComponent(station.station_name) + 
+                                '&stationAddress=' + encodeURIComponent(station.station_address) + '">' + 
+                                station.station_name + 
+                                '</a>' +
+                                '</td>' +
+                                '<td>' + station.station_address + '</td>';
+                            resultsBody.appendChild(row);
+                        });
+                        document.getElementById('resultsTable').style.display = 'table';
+                    } else {
+                        document.getElementById('resultsTable').style.display = 'none';
+                    }
+                })
+                .catch(error => {
+                });
         });
     </script>
-    
+
     <button class="logout" onclick="location.href='k_top.jsp'">サインアウト</button>
 
 </body>

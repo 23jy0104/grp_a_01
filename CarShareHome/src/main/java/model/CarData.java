@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class CarData implements Serializable {
     private String carCode;
     private String modelYear;
+    private String modelName; // model_nameを追加
     private String carNumber;
     private Maker makerId;
     private Model modelId;
@@ -21,10 +22,11 @@ public class CarData implements Serializable {
         this.carCode = carCode;
     }
 
-    public CarData(String carCode, String modelYear, String carNumber, Maker makerId, Model modelId, Station stationId, String carImage) {
+    public CarData(String carCode, String modelYear, String modelName, String carNumber, Maker makerId, Model modelId, Station stationId, String carImage) {
         super();
         this.carCode = carCode;
         this.modelYear = modelYear;
+        this.modelName = modelName; // model_nameを設定
         this.carNumber = carNumber;
         this.makerId = makerId;
         this.modelId = modelId;
@@ -46,6 +48,14 @@ public class CarData implements Serializable {
 
     public void setModelYear(String modelYear) {
         this.modelYear = modelYear;
+    }
+
+    public String getModelName() { // model_nameのゲッター
+        return modelName;
+    }
+
+    public void setModelName(String modelName) { // model_nameのセッター
+        this.modelName = modelName;
     }
 
     public String getCarNumber() {
