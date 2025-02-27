@@ -149,6 +149,20 @@ String endDate = (String) session.getAttribute("endDate");
                 <img src="img/<%= img %>" alt="車" />
             </div>
         </div>
+        <table class="info-table">
+                <tr>
+                    <td>駆動</td>
+                    <td>4WD</td>
+                </tr>
+                <tr>
+                    <td>安全装備</td>
+                    <td>ドライブレコーダー, ブレーキサポート, バックモニター</td>
+                </tr>
+                <tr>
+                    <td>備考</td>
+                    <td>ETC車載器</td>
+                </tr>
+            </table>
 
         <h2>空き状況を確認したい日付をクリックしてください。</h2>
         <br>

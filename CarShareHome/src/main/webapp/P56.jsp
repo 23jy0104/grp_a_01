@@ -18,7 +18,6 @@
  String customerName = (String) session.getAttribute("customerName");
 
  String stationIdValue = request.getParameter("stationid");
- System.out.println(stationIdValue);
  String stationNameValue =request.getParameter("stationname");
  String stationDataValue =request.getParameter("stationdata");
  // 現在の日時を取得
@@ -422,280 +421,111 @@ String stationName =(String)session.getAttribute("stationName");
 		 </table>
 		
 			 <div class="flex-container">
-			
-				 <div class="flex-item">
+				    <div class="flex-item">
+				        <h3>空き情報から探す</h3>
+				        <div class="calendar-container">
+				            <%
+				                for (int monthOffset = 0; monthOffset < 2; monthOffset++) {
+				                    Calendar monthCalendar = Calendar.getInstance();
+				                    monthCalendar.add(Calendar.MONTH, monthOffset);
+				                    monthCalendar.set(Calendar.DAY_OF_MONTH, 1);
+				                    int daysInMonth = monthCalendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+				                    int firstDayOfWeek = monthCalendar.get(Calendar.DAY_OF_WEEK);
 				
-					 <h3>空き情報から探す</h3>
-					
-					 <div class="calendar-container">
-		
-						 <%
-						
-						 for (int monthOffset = 0; monthOffset < 2; monthOffset++) {
-						
-						 Calendar monthCalendar = Calendar.getInstance();
-						
-						 monthCalendar.add(Calendar.MONTH, monthOffset);
-						
-						 monthCalendar.set(Calendar.DAY_OF_MONTH, 1);
-						
-						 int daysInMonth = monthCalendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-						
-						 int firstDayOfWeek = monthCalendar.get(Calendar.DAY_OF_WEEK);
-						
-						 
-						
-						 out.println("<div class='calendar'>");
-						
-						 out.println("<h3>" + monthCalendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.JAPANESE) + " " + monthCalendar.get(Calendar.YEAR) + "</h3>");
-						
-						 out.println("<div class='header'>");
-						
-						 out.println("<div>日</div><div>月</div><div>火</div><div>水</div><div>木</div><div>金</div><div>土</div>");
-						
-						 out.println("</div>");
-						
-						 out.println("<div class='days'>");
-						
-						
-						
-						 // 空白を表示
-						
-						 for (int i = 1; i < firstDayOfWeek; i++) {
-						
-						 out.println("<div class='day disabled'></div>");
-						
-						 }
-						
-						
-						
-						 // 日付を表示
-						
-						 for (int day = 1; day <= daysInMonth; day++) {
-						
-						 monthCalendar.set(Calendar.DAY_OF_MONTH, day);
-						
-						 String dateStr = sdf.format(monthCalendar.getTime());
-						
-						
-						
-						 // 今日以前または1か月後以降の日付は無効化
-						
-						 boolean isDisabled = monthCalendar.before(today) || monthCalendar.after(oneMonthLater);
-						
-						 String className = isDisabled ? "day disabled" : "day";
-						
-						 
-						
-						 out.println("<div class='" + className + "' " + (isDisabled ? "" : "onclick='selectDate(\"" + dateStr + "\")'") + ">" + day + "</div>");
-						
-						 }
-						
-						
-						
-						 out.println("</div></div>");
-						
-						 }
-						
-						 %>
-		
-					 </div>
-					
+				                    out.println("<div class='calendar'>");
+				                    out.println("<h3>" + monthCalendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.JAPANESE) + " " + monthCalendar.get(Calendar.YEAR) + "</h3>");
+				                    out.println("<div class='header'>");
+				                    out.println("<div>日</div><div>月</div><div>火</div><div>水</div><div>木</div><div>金</div><div>土</div>");
+				                    out.println("</div>");
+				                    out.println("<div class='days'>");
+				
+				                    // 空白を表示
+				                    for (int i = 1; i < firstDayOfWeek; i++) {
+				                        out.println("<div class='day disabled'></div>");
+				                    }
+				
+				                    // 日付を表示
+				                    for (int day = 1; day <= daysInMonth; day++) {
+				                        monthCalendar.set(Calendar.DAY_OF_MONTH, day);
+				                        String dateStr = sdf.format(monthCalendar.getTime());
+				                        boolean isDisabled = monthCalendar.before(today) || monthCalendar.after(oneMonthLater);
+				                        String className = isDisabled ? "day disabled" : "day";
+				                        out.println("<div class='" + className + "' " + (isDisabled ? "" : "onclick='selectDate(\"" + dateStr + "\")'") + ">" + day + "</div>");
+				                    }
+				
+				                    out.println("</div></div>");
+				                }
+				            %>
+				        </div>
+				    </div>
+				
+				    <div class="flex-item">
+				        <h3 class="sub-title">車種から探す</h3>
+				        <form action="ReservationCar" method="post">
+				            <input type="hidden" name="stationId" value="<%= stationIdValue %>">
+				            <input type="hidden" name="stationName" value="<%= stationNameValue %>">
+				            <input type ="hidden" name ="stationData" value ="<%=stationDataValue %>">
+				            <select id="carType" name="carType" required>
+				                <option value="BNR32型 skyline Nismo">BNR32型 skyline Nismo</option>
+				                <option value="NSX NA-1型 type-R">NSX NA-1型 type-R</option>
+				                <option value="GT-R R35 Nismo Special Edition T-spec">GT-R R35 Nismo Special Edition T-spec</option>
+				            </select>
+				            <div class="button-container">
+				                <button type="submit">検索</button>
+				            </div>
+				        </form>
+				    </div>
 				</div>
-					
-		 <div class="flex-item">
-		
-		 <h3 class="sub-title">車種から探す</h3>
-		
-		 <form action="ReservationCar" method="post"> <!-- ここはReservationCarに送信 -->
-		
-		 <input type="hidden" name="stationId" value="<%= stationIdValue %>">
-		
-		 <input type="hidden" name="stationName" value="<%= stationNameValue %>">
-		 
-		 <input type ="hidden" name ="stationData" value ="<%=stationDataValue %>">
-		
-		 
-		
-		 <select id="carType" name="carType" required>
-		
-		 <option value="BNR32型 skyline Nismo">BNR32型 skyline Nismo</option>
-		
-		 <option value="NSX NA-1型 type-R">NSX NA-1型 type-R</option>
-		
-		 <option value="GT-R R35 Nismo Special Edition T-spec">GT-R R35 Nismo Special Edition T-spec</option>
-		
-		 </select> 
-		
-		 <div class="button-container">
-		
-		 <button type="submit">検索</button> <!-- フォーム送信ボタン -->
-		
-		 </div>
-		
-		 </form>
-		
-		 </div>
-		
-		 </div>
-		
-		
-		
-		 <!-- タイムテーブル表示用のHTML -->
-		
-		<div id="timetable" class="timetable" style="display:none;">
-		
-		 <h3 id="timetable-title"></h3>
-		
-		 <table>
-		
-		 <thead>
-		
-		 <tr id="timetable-header"></tr>
-		
-		 </thead>
-		
-		 <tbody id="timetable-body"></tbody>
-		
-		 </table>
-		
-		 <div id="reserve-button-container" style="display:none;">
-		
-		 <button type="button" onclick="submitReservation()">予約する</button>
-		
-		 </div>
-		
-		</div>
-		
-		
-		
+
+				<div id="startTimeContainer" style="display:none; margin-top: 200px; border: 1px solid #ccc; padding: 15px; border-radius: 5px; background-color: #f9f9f9;">
+				    <h3>空き状況確認</h3>
+				    <form action="CarAvailabilityServlet" method="post">
+				        <label for="startTime" style="font-weight: bold;">確認したい開始時間:</label>
+				        <div style="display: flex; align-items: center; margin: 10px 0;">
+				            <select id="startTimeHour" name="startTimeHour" required style="margin-right: 5px; padding: 5px;">
+				                <option value="">-- 時間を選択 --</option>
+				                <%
+				                for (int hour = 0; hour < 24; hour++) {
+				                    String hourStr = String.format("%02d", hour);
+				                %>
+				                    <option value="<%= hourStr %>"><%= hourStr %></option>
+				                <%
+				                }
+				                %>
+				            </select>
+				
+				            <select id="startTimeMinute" name="startTimeMinute" required style="padding: 5px;">
+				                <option value="">-- 分を選択 --</option>
+				                <option value="00">00分</option>
+				                <option value="15">15分</option>
+				                <option value="30">30分</option>
+				                <option value="45">45分</option>
+				            </select>
+				        </div>
+				
+				        <input type="hidden" id="selectedDate" name="selectedDate">
+				        <input type="hidden" id="stationId" name="stationId" value="<%= stationId %>">
+				        <button type="submit" style="padding: 10px 15px; background-color: orange; color: white; border: none; border-radius: 5px; cursor: pointer;">検索</button>
+				    </form>
+				</div>
+
+
 		<script>
-		
-		 const selectedTimes = [];
-		
-		
-		
-		 function selectDate(date) {
-		
-		 document.getElementById("timetable-title").textContent = date + " のタイムテーブル";
-		
-		 const timetableBody = document.getElementById("timetable-body");
-		
-		 timetableBody.innerHTML = ""; // 既存の行をクリア
-		
-		
-		
-		 // 1時間単位の時間を表示
-		
-		 const timeRow = document.createElement("tr");
-		
-		 for (let hour = 0; hour < 24; hour++) {
-		
-		 const timeCell = document.createElement("th");
-		
-		 timeCell.colSpan = 4; // 15分単位で4つのセルをまとめる
-		
-		 timeCell.textContent = (hour < 10 ? "0" : "") + hour + ":00"; // 1時間単位で表示
-		
-		 timeRow.appendChild(timeCell);
-		
-		 }
-		
-		 timetableBody.appendChild(timeRow);
-		
-		
-		
-		 const statusRow = document.createElement("tr");
-		
-		 for (let hour = 0; hour < 24; hour++) {
-		
-		 for (let quarter = 0; quarter < 4; quarter++) {
-		
-		 const statusCell = document.createElement("td");
-		
-		 const isReserved = (hour % 2 === 0 && quarter === 0); // 例: 偶数時間の最初の15分を予約済みとする
-		
-		
-		
-		 // 背景色を設定
-		
-		 if (isReserved) {
-		
-		 statusCell.className = "reserved"; // 予約済みの場合、赤色背景
-		
-		 } else {
-		
-		 statusCell.className = "available"; // 空きの場合、青色背景
-		
-		 statusCell.style.cursor = "pointer"; // 空きの場合、クリック可能に
-		
-		
-		
-		 // 時間のクリックイベント
-		
-		 statusCell.onclick = function() {
-		
-		 const selectedTime = hour * 4 + quarter; // 15分単位の時間を計算
-		
-		 const selectedIndex = selectedTimes.indexOf(selectedTime);
-		
-		 
-		
-		 if (selectedIndex > -1) {
-		
-		 // 既に選択されている場合は解除
-		
-			 selectedTimes.splice(selectedIndex, 1);
-			
-			 statusCell.classList.remove("selected");
-		
-		 } else {
-		
-		 // 未選択の場合は選択
-		
-			 selectedTimes.push(selectedTime);
-			
-			 statusCell.classList.add("selected");
-		
-		 }
-			
-		 // 予約ボタンの表示/非表示
-		
-		 document.getElementById("reserve-button-container").style.display = selectedTimes.length > 0 ? "block" : "none";
-		
-		 };
-		
-		 }
-		 statusRow.appendChild(statusCell);
-		
-		 }
-		
-		 }
-		
-		 timetableBody.appendChild(statusRow);		
-		 // タイムテーブルを表示
-		
-		 document.getElementById("timetable").style.display = "block";
-		
-		 }
-		
-		 function submitReservation() {
-		
-		 // 選択された時間をフォームに設定
-		
-		 const selectedTimesString = selectedTimes.join(","); // カンマ区切りで時間を結合
-		
-		 document.getElementById('startTime').value = selectedTimesString; // 開始時間に設定
-		
-		 document.getElementById('endTime').value = selectedTimesString; // 終了時間にも設定（必要に応じて変更）		
-		
-		 // フォームを送信
-		
-		 document.getElementById("reservationForm").submit(); // フォーム送信
-		
-		 }
-		
+		    let isDateSelected = false; // 日付が選択されたかどうかのフラグ
+		
+		    function selectDate(selectedDate) {
+		        if (!isDateSelected) {
+		            // 開始日が未選択なら、開始時間の入力フィールドを表示
+		            document.getElementById('startTimeContainer').style.display = 'block';
+		            document.getElementById('selectedDate').value = selectedDate; // 隠しフィールドに選択した日付を設定
+		            isDateSelected = true; // 日付を選択したフラグを立てる
+		        } else {
+		            document.getElementById('selectedDate').value = selectedDate; // 隠しフィールドに選択した日付を再設定
+		        }
+		    }
 		</script>
+
+		
 	</body>
 
 </html>
