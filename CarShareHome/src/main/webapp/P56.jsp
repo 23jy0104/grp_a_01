@@ -502,6 +502,8 @@ String stationName =(String)session.getAttribute("stationName");
 				
 				        <input type="hidden" id="selectedDate" name="selectedDate">
 				        <input type="hidden" id="stationId" name="stationId" value="<%= stationId %>">
+				        <input type="hidden" id ="stationName" name="stationName" value="<%=stationName %>">
+				        <input type ="hidden" id ="stationData" name="stationData" value="<%=stationData %>">
 				        <button type="submit" style="padding: 10px 15px; background-color: orange; color: white; border: none; border-radius: 5px; cursor: pointer;">検索</button>
 				    </form>
 				</div>
