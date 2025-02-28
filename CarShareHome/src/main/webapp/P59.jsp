@@ -267,6 +267,7 @@ String endDate = (String) session.getAttribute("endDate");
                 <input type="hidden" id="selectedDate" name="selectedDate">
                 <input type="hidden" id="stationId" name="stationId" value="<%= stationId %>"> <!-- stationIdを隠しフィールドに追加 -->
                 <input type="hidden" id="car_code" name="carCode" value="<%=carCode %>"> <!-- carCodeを隠しフィールドに追加 -->
+                <input type="hidden" id="station_date" name="stationData" value="<%=stationData %>">
                 <button type="submit" style="padding: 10px 15px; background-color: orange; color: white; border: none; border-radius: 5px; cursor: pointer;">検索</button>
             </form>
         </div>

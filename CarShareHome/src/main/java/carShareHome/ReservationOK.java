@@ -60,13 +60,13 @@ public class ReservationOK extends HttpServlet {
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, carCode);
 			pstmt.setString(2, stationId);
-			pstmt.setTimestamp(3, Timestamp.valueOf(startDate)); // 終了日時を渡す
-            pstmt.setTimestamp(4, Timestamp.valueOf(endDate)); // 開始日時を渡す
+			pstmt.setTimestamp(4, Timestamp.valueOf(startDate)); // 終了日時を渡す
+            pstmt.setTimestamp(3, Timestamp.valueOf(endDate)); // 開始日時を渡す
             rs = pstmt.executeQuery();
             if (rs.next()) {
                 // 予約が重複している場合
-                request.setAttribute("errorMessage", "予約が重複しています。");
-                request.getRequestDispatcher("P84.jsp").forward(request, response);
+                request.setAttribute("errorMessage", "指定できない時間が含まれています。再度空き状況を確認してください。");
+                path = "P84.jsp";
             } else {
                 request.getSession().setAttribute("startDate", startDate);
                 request.getSession().setAttribute("endDate", endDate);

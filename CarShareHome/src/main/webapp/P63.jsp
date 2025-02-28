@@ -18,6 +18,7 @@ String stationName=(String)session.getAttribute("stationName");
 String startDate =(String)session.getAttribute("startDate");
 String endDate =(String)session.getAttribute("endDate");
 Integer totalCost = (Integer) session.getAttribute("totalCost");
+String stationData=(String)session.getAttribute("stationData");
 %>
 
 <!DOCTYPE html>
@@ -77,8 +78,16 @@ Integer totalCost = (Integer) session.getAttribute("totalCost");
             </div>
         </div>
         <div class="button-container">
-            <button class="action-button" onclick="location.href='P57.html'">入力内容を訂正する</button>
-            <form action ="Reg" method ="post">
+            <form action="ReservationCar" method="post">
+	            <input type="hidden" name="stationId" value="<%= stationId %>">
+	            <input type="hidden" name="stationName" value="<%= stationName %>">
+	            <input type ="hidden" name ="stationData" value ="<%=stationData %>">
+	            <input type ="hidden" name ="carType" value ="<%=modelName %>">
+	            <div class="button-container">
+	                <button type="submit">予約内容を訂正する</button>
+	            </div>
+	        </form>
+          	<form action ="Reg" method ="post">
             <input type ="hidden" id ="stationId" name="stationId" value ="<%=stationId %>">
             <input type ="hidden" id ="carCode" name ="carCode" value ="<%=carCode %>">
             <input type ="hidden" id ="startTimestamp" name ="startTimestamp" value="<%=startDate%>">
