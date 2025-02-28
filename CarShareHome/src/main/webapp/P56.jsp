@@ -345,7 +345,7 @@ String stationName =(String)session.getAttribute("stationName");
 					
 					 <li class="nav-item gnav03"><a href="P65.jsp">予約確認・変更・取り消し</a></li>
 					
-					 <li class="nav-item gnav04"><a href="UseHistory?customerId=<%= customerId %>&customerName=<%= customerName %>">ご利用履歴</a></li>
+					 <li class="nav-item gnav04"><a href="UseHistory?customerId=${customerId}&customerName=${customerName}">ご利用履歴</a></li>
 					
 					 <li class="nav-item gnav05"><a href="P76.jsp">ご登録情報の確認</a></li>
 				

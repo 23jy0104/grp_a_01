@@ -212,8 +212,8 @@
                 <span class="required">必須</span> 氏名<span class="highlight"> ※全角</span>
             </label>
             <div class="input-container">
-                姓<input type="text" id="sei" name="customerSei" placeholder="例：たいむ" required>
-                名<input type="text" id="mei" name="customerMei" placeholder="例：太郎" required>
+                姓<input type="text" id="sei" name="customerSei" placeholder="例：たいむ" >
+                名<input type="text" id="mei" name="customerMei" placeholder="例：太郎" >
             </div>
         </div>
         <div class="form-group">
@@ -221,8 +221,8 @@
                 <span class="required">必須</span> 氏名<span class="highlight"> ※全角カナ</span>
             </label>
             <div class="input-container">
-                姓<input type="text" id="seikana" name="customerSeiKana" placeholder="例：タイム" required>
-                名<input type="text" id="meikana" name="customerMeiKana" placeholder="例：タロウ" required>
+                姓<input type="text" id="seikana" name="customerSeiKana" placeholder="例：タイム">
+                名<input type="text" id="meikana" name="customerMeiKana" placeholder="例：タロウ">
             </div>
         </div>
         <div class="form-group">
@@ -230,9 +230,9 @@
                 <span class="required">必須</span>性別<span class="highlight"> ※必須</span>
             </label>
             <div class="radio-group">
-	            <input type="radio" name="gender" value="男" required> 男性
-	            <input type="radio" name="gender" value="女"required> 女性
-	             <input type="radio" name="gender" value="無"required> 回答しない
+	            <input type="radio" name="gender" value="男"> 男性
+	            <input type="radio" name="gender" value="女"> 女性
+	             <input type="radio" name="gender" value="無"> 回答しない
 	        </div>
         </div>
         <div class="form-group">
@@ -240,20 +240,20 @@
                 <span class="required">必須</span> 生年月日<span class="highlight"> ※半角数字</span>
             </label>
             <div class="input-container">
-                <input type="date" id="birthday" name="birthday" required>
+                <input type="date" id="birthday" name="birthday">
             </div>
         </div>
         <div class="form-group">
             <label for="postcode">
                 <span class="required">必須</span> 郵便番号　ハイフンなし半角数字で入力してください。
             </label>
-            〒<input type="text" id="postcode" name="postcode" placeholder="例：1690073" required>
+            〒<input type="text" id="postcode" name="postcode" placeholder="例：1690073">
         </div>
         <div class="form-group">
             <label for="prefecture">
                 <span class="required">必須</span> 都道府県
             </label>
-            <select id="prefecture" name="city" required>
+            <select id="prefecture" name="city">
                 <option value="">選択してください</option>
                 <option value="北海道">北海道</option>
                 <option value="青森県">青森県</option>
@@ -308,7 +308,7 @@
             <label for="address">
                 <span class="required">必須</span> 市区町村/町名/番地
             </label>
-            <input type="text" id="address" name="address" placeholder="例：中央区銀座1-2-3" required>
+            <input type="text" id="address" name="address" placeholder="例：中央区銀座1-2-3" >
         </div>
         <div class="form-group">
             <label for="building">
@@ -320,7 +320,7 @@
             <label for="TEL">
                 <span class="required">必須</span>携帯電話番号
             </label>
-            <input type="text" id="TEL" name="TEL" placeholder="例:09012345678" required>
+            <input type="text" id="TEL" name="TEL" placeholder="例:09012345678" >
         </div>
         <div class="form-group">
             <label for="koteiTEL">
@@ -332,38 +332,38 @@
             <label for="e_mail">
                 <span class="required">必須</span>メールアドレス<span class="highlight"> ※半角英数字</span>
             </label>
-            <input type="email" id="e_mail" name="email" placeholder="tmccarchare@share.ne.jp" required>
+            <input type="email" id="e_mail" name="email" placeholder="tmccarchare@share.ne.jp" >
         </div>
         <div class="form-group">
             <label for="password">
                 <span class="required">必須</span>パスワード<span class="highlight"> ※半角英数字8字以上20字以内</span>
             </label>
-            <input type="password" id="password" name="password" placeholder="例:mypassword1234" required>
+            <input type="password" id="password" name="password" placeholder="例:mypassword1234" >
         </div>
         <div class="form-group">
             <label for="agein_password">
                 <span class="required">必須</span>パスワード確認用
             </label>
-            <input type="password" id="agein_password" name="agein_password" placeholder="例:mypassword1234" required>
+            <input type="password" id="agein_password" name="agein_password" placeholder="例:mypassword1234" >
         </div>
         <div class="form-group">
             <label for="driver_licence_number">
                 <span class="required">必須</span>免許証番号<span class="highlight"> ※半角数字</span>
             </label>
-            <input type="text" id="driver_licence_number" name="licenseNumber" placeholder="例:001234567890" required>
+            <input type="text" id="driver_licence_number" name="licenseNumber" placeholder="例:001234567890" >
         </div>
         <div class="form-group">
             <label for="date_expiry">
                 <span class="required">必須</span>有効期限
             </label>
-            <input type="date" name="licenseDate" required>
+            <input type="date" name="licenseDate" >
         </div>
         <div class="form-group">
             <label for="licence_type">
                 <span class="required">必須</span>免許証種別<span class="highlight"> ※半角数字</span>
             </label>
             <div class="select-container">
-                <select id="type" name="type" required>
+                <select id="type" name="type">
                     <option value="">--選択--</option>
                     <option value="普通自動車免許">普通自動車免許</option>
                     <option value="普通自動車免許(AT限定)">普通自動車免許(AT限定)</option>
@@ -377,7 +377,7 @@
             <label for="licence_acquisition_date">
                 <span class="required">必須</span>免許取得年月日<span class="highlight"> ※半角数字</span>
             </label>
-            <input type="date" id="acquisition" name="licenseCatchDate" placeholder="例:2023-01-01" required>
+            <input type="date" id="acquisition" name="licenseCatchDate" placeholder="例:2023-01-01">
         </div>
         <div class="form-group">
             <label for="licence_img">
@@ -400,13 +400,13 @@
 	            <label for="licence_img_omote">
 	                <span class="required">必須</span>免許証(表面)
 	            </label>
-	            <input type="file" id="file_omote" name="file_omote" accept="image/*" required>
+	            <input type="file" id="file_omote" name="file_omote" accept="image/*" >
 	        </div>
 	        <div class="form-group">
 	            <label for="licence_img_ura">
 	                <span class="required">必須</span>免許証(裏面)
 	            </label>
-	            <input type="file" id="file_ura" name="file_ura" accept="image/*" required>
+	            <input type="file" id="file_ura" name="file_ura" accept="image/*">
 	        </div>
 	    <div class="button-container">
 	        <button type="button" onclick="location.href='P4.jsp'" class="btn">詳細・規約のご確認に戻る</button>

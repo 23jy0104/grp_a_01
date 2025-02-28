@@ -35,7 +35,7 @@
 <nav class="nav">
     <ul>
         <li class="nav-item"><a href="P49.jsp">ステーション検索</a></li>
-        <li class="nav-item"><a href="P40.jsp">料金</a></li>
+        <li class="nav-item"><a href="P39.jsp">料金</a></li>
         <li class="nav-item"><a href="P43.jsp">利用方法</a></li>
         <li class="nav-item active"><a href="P46.jsp">車種</a></li>
     </ul>
@@ -53,8 +53,17 @@
                     アクセス:<br>
                     　大久保駅北口から北西に進んでいただき、大久保通りをまっすぐ進んだ場所にございます。
                 </th>
-                <th><%=stationDataValue %></th>
+                
             </tr>
+            <tr>
+			
+			 	 <th>ステーション情報</th>
+			
+			 	 <th>
+				 	<%=stationDataValue%>
+				 </th>
+			
+			 </tr>
         </table>
         <button class="login-button" onclick="location.href='P29.jsp'">ログインして予約</button>
     </main>

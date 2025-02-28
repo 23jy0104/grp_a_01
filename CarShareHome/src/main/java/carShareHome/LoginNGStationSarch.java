@@ -67,6 +67,8 @@ public class LoginNGStationSarch extends HttpServlet {
                     request.getSession().setAttribute("stations", stations);
                     path = "P51.jsp";
                 } else {
+                    // エラーメッセージをリクエストに設定
+                    request.setAttribute("errorMessage", "該当するステーションが見つかりませんでした。");
                     path = "P49.jsp";
                 }
             } catch (SQLException e) {

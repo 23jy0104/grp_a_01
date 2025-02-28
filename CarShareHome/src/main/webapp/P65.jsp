@@ -10,8 +10,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TMC カーシェア</title>
-    <link rel="stylesheet" href="../../CSS/nav.css">
-    <link rel="stylesheet" href="../../CSS/P65.css">
+    <link rel="stylesheet" href="css/nav.css">
+    <link rel="stylesheet" href="css/P65.css">
 </head>
 <body>
 
@@ -20,16 +20,16 @@
     <h1>TMC カーシェア</h1>
     <div class="user-info">
         <h4 id="username">23jy0000様</h4>
-        <button class="logout-button" onclick="location.href='P29.html'" >ログアウト</button>
+        <button class="logout-button" onclick="location.href='P29.jsp'" >ログアウト</button>
     </div>
 </header>
 
 <nav class="nav">
     <ul>
-        <li class="nav-item gnav02"><a href="P53.html">予約・ステーション検索</a></li>
-            <li class="nav-item gnav03"><a href="P65.html">予約確認・変更・取り消し</a></li>
-            <li class="nav-item gnav04"><a href="UseHistory?customerId=<%= customerId %>&customerName=<%= customerName %>">ご利用履歴</a></li>
-            <li class="nav-item gnav05"><a href="P76.html">ご登録情報の確認</a></li>
+        <li class="nav-item gnav02"><a href="P53.jsp">予約・ステーション検索</a></li>
+            <li class="nav-item gnav03"><a href="P65.jsp">予約確認・変更・取り消し</a></li>
+            <li class="nav-item gnav04"><a href="UseHistory?customerId=${customerId}&customerName=${customerName}">ご利用履歴</a></li>
+            <li class="nav-item gnav05"><a href="P76.jsp">ご登録情報の確認</a></li>
     </ul>
 </nav>
 
@@ -58,7 +58,7 @@
             <td>〇〇駐車場</td>
             <td>BNR32型(新宿〇〇〇 わ 〇〇〇〇、ブラック) </td>
             <td>〇〇〇〇年〇〇月〇〇日(〇)00:00</td>
-            <td><button class="change" onclick="location.href='P67.html'">変更</button><br><button class="cancel" onclick="location.href='P72.html'">取消</button></td>
+            <td><button class="change" onclick="location.href='P67.jsp'">変更</button><br><button class="cancel" onclick="location.href='P72.jsp'">取消</button></td>
         </tr>
 
 </table>
