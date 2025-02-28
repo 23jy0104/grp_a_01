@@ -32,7 +32,6 @@ public class CarAvailabilityServlet extends HttpServlet {
         String stationId = request.getParameter("stationId");
         String stationName = request.getParameter("stationName");
         String stationData = request.getParameter("stationData");
-        
         String[] dateParts = selectedDate.split("-");
         String year = dateParts[0];
         String month = dateParts[1];
@@ -46,15 +45,14 @@ public class CarAvailabilityServlet extends HttpServlet {
         
         String selectDateTime =formattedDate +" "+startTimeHour +":"+startTimeMinute+":00";
         
-        System.out.println(selectDateTime);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime dateTime = LocalDateTime.parse(selectDateTime, formatter);
         // 6時間後の時間を取得
         LocalDateTime sixHoursLater = dateTime.plusHours(6);
         String sixHoursLaterString = sixHoursLater.format(formatter);
-        System.out.println(sixHoursLaterString);
-        System.out.println(stationId);
         List<CarData> carData =new ArrayList<>();
+        System.out.println(selectDateTime);
+        System.out.println( sixHoursLaterString);
         try {
 			Class.forName("com.mysql.jdbc.Driver");
 			final String url = "jdbc:mysql://10.64.144.5:3306/23jya01";
@@ -65,23 +63,28 @@ public class CarAvailabilityServlet extends HttpServlet {
 			String sql = "SELECT k.car_code, model_name, station_name, car_img "
 		            + "FROM keybox k "
 		            + "LEFT JOIN reservation r ON r.car_code = k.car_code AND (r.stop_date > ? AND r.start_date < ?) "
-		            + "INNER JOIN car_db car ON car.car_code = r.car_code "
+		            + "INNER JOIN car_db car ON car.car_code = k.car_code "
 		            + "INNER JOIN model m ON m.model_id = car.model_id "
 		            + "INNER JOIN station s ON s.station_id = k.station_id "
 		            + "WHERE s.station_id = ? AND r.car_code IS NULL";
 			try {
 				Connection con = DriverManager.getConnection(url, user, pass);
 				try(PreparedStatement pstmt =con.prepareStatement(sql)) {
-					pstmt.setString(1, sixHoursLaterString);
-					pstmt.setString(2, selectDateTime);
+					pstmt.setString(1, selectDateTime);
+					pstmt.setString(2, sixHoursLaterString);
 					pstmt.setString(3,stationId);
-					CarData car =new CarData();
+					
 					try(ResultSet rs = pstmt.executeQuery()) {
 						while(rs.next()) {
+							CarData car =new CarData();
+							car.setCarCode(rs.getString("car_code"));
 							car.setModelName(rs.getString("model_name"));
 							car.setCarImage(rs.getString("car_img"));
 							carData.add(car);
 						}
+					}
+					for(CarData car:carData) {
+						System.out.println("carCode:"+car.getCarCode()+" model_name"+car.getModelName()+"carImg"+car.getCarImage());
 					}
 				}
 				
@@ -92,7 +95,10 @@ public class CarAvailabilityServlet extends HttpServlet {
 			request.setAttribute("stationName", stationName);
 			request.setAttribute("stationData", stationData);
 			request.setAttribute("carData",carData);
-			System.out.println(carData);
+			request.setAttribute("stopDate",sixHoursLaterString);
+			request.setAttribute("selectedDate",selectedDate);
+			request.setAttribute("startTimeHour",startTimeHour);
+			request.setAttribute("startTimeMinute", startTimeMinute);
 			RequestDispatcher rd =request.getRequestDispatcher(path);
 			rd.forward(request, response);
 			
