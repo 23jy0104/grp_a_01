@@ -26,7 +26,7 @@
 <nav class="nav">
     <ul>
         <li class="nav-item"><a href="P49.jsp">ステーション検索</a></li>
-        <li class="nav-item"><a href="P40.jsp">料金</a></li>
+        <li class="nav-item"><a href="P39.jsp">料金</a></li>
         <li class="nav-item active"><a href="jspP43.html">利用方法</a></li>
         <li class="nav-item"><a href="P46.jsp">車種</a></li>
     </ul>

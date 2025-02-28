@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> <!-- JSTLのインポート -->
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -31,8 +31,16 @@
     </ul>
 </nav>
 
+<!-- エラーメッセージ表示部分 -->
+<c:if test="${not empty errorMessage}">
+    <div style="color: red; text-align: center;">
+        ${errorMessage}
+    </div>
+</c:if>
+
 <div class="column">
     <h2 class="column_title001">住所/ステーション名から探す</h2>
+    
     <div>
         <form action="LoginNGStationSarch" method="post">
             <div>

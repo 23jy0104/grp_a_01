@@ -17,12 +17,17 @@ import dao.ReservationDAO;
 import model.Reservation;
 
 @WebServlet("/UseHistory")
-
 public class UseHistory extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String customerName = request.getParameter("customerName");
+
+        // customerNameがnullまたは空の場合の処理
+        if (customerName == null || customerName.isEmpty()) {
+            response.sendRedirect("error.jsp"); // エラーページにリダイレクト
+            return;
+        }
 
         // customerIdをデータベースから取得
         String customerId = getCustomerIdByName(customerName);
@@ -60,18 +65,30 @@ public class UseHistory extends HttpServlet {
         
         String sql = "SELECT customer_id FROM Customer WHERE customer_name = ?";
 
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
         try {
-            Class.forName("com.mysql.jdbc.Driver");
-            try (Connection con = DriverManager.getConnection(url, user, pass);
-                 PreparedStatement pstmt = con.prepareStatement(sql)) {
-                pstmt.setString(1, customerName);
-                ResultSet rs = pstmt.executeQuery();
-                if (rs.next()) {
-                    customerId = rs.getString("customer_id");
-                }
+            Class.forName("com.mysql.cj.jdbc.Driver"); // 最新のドライバ名に変更
+            con = DriverManager.getConnection(url, user, pass);
+            pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, customerName);
+            rs = pstmt.executeQuery();
+            if (rs.next()) {
+                customerId = rs.getString("customer_id");
             }
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            // リソースを確実に閉じる
+            try {
+                if (rs != null) rs.close();
+                if (pstmt != null) pstmt.close();
+                if (con != null) con.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         return customerId;
