@@ -294,11 +294,10 @@ String endDate = (String) session.getAttribute("endDate");
 		        </tr>
 		       <tr>
 				    <%
-				    int i = yoyaku;
 				    // 予約状況を表示するためのタイムテーブルを動的に生成
 				    if (combinedList != null && !combinedList.isEmpty()) {
 				        // 1行目を飛ばすため、インデックスを1から開始
-				        for (; i < combinedList.size(); i++) {
+				        for (int i = yoyaku; i < combinedList.size(); i++) {
 				            ReservationTime time = combinedList.get(i);
 				            String startDateTime = time.getStartDateTime(); // "yyyy-MM-dd HH:mm" 形式
 				            String endDateTime = time.getEndDateTime();     // "yyyy-MM-dd HH:mm" 形式
@@ -327,11 +326,10 @@ String endDate = (String) session.getAttribute("endDate");
 
 		        <tr>
 				    <%
-				    i = yoyaku;
 				    // 状態を表示する行
 				    if (combinedList != null && !combinedList.isEmpty()) {
 				        // 状態行の表示を開始
-				        for (; i < combinedList.size(); i++) { // 0から開始
+				        for (int i = yoyaku; i < combinedList.size(); i++) { // 0から開始
 				            ReservationTime time = combinedList.get(i);
 				            String status = time.getStatus();
 				
@@ -351,6 +349,7 @@ String endDate = (String) session.getAttribute("endDate");
 				                <td class="<%= rowClass %>"></td> <!-- 状態 -->
 				    <%
 				            }
+				        }
 				    %>
 				</tr>
 		    </tbody>
