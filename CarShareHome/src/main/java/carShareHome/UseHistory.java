@@ -17,20 +17,27 @@ import dao.ReservationDAO;
 import model.Reservation;
 
 @WebServlet("/UseHistory")
-
 public class UseHistory extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String customerName = request.getParameter("customerName");
+        String customerId = null; // 初期化
+
+        // customerNameがnullまたは空の場合の処理
+        if (customerName == null || customerName.isEmpty()) {
+            request.setAttribute("errorMessage", "顧客名が指定されていません。");
+            request.getRequestDispatcher("P74.jsp").forward(request, response);
+            return;
+        }
 
         // customerIdをデータベースから取得
-        String customerId = getCustomerIdByName(customerName);
+        customerId = getCustomerIdByName(customerName);
 
         // customerIdがnullの場合の処理
         if (customerId == null || customerId.isEmpty()) {
-            System.out.println("Error: customerId is null or empty.");
-            response.sendRedirect("error.jsp"); // エラーページにリダイレクト
+            request.setAttribute("errorMessage", "指定された顧客名に該当するIDが見つかりません。");
+            request.getRequestDispatcher("P74.jsp").forward(request, response);
             return;
         }
 
@@ -38,7 +45,7 @@ public class UseHistory extends HttpServlet {
         ReservationDAO reservationDAO = new ReservationDAO();
 
         // 利用履歴を取得
-        List<Reservation> usedReservations = reservationDAO.getReservationsWithFinishDate(customerId); // customerIdを引数として渡す
+        List<Reservation> usedReservations = reservationDAO.getReservationsWithFinishDate(customerId);
 
         // リクエスト属性に設定
         request.setAttribute("customerId", customerId);
@@ -60,18 +67,29 @@ public class UseHistory extends HttpServlet {
         
         String sql = "SELECT customer_id FROM Customer WHERE customer_name = ?";
 
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            try (Connection con = DriverManager.getConnection(url, user, pass);
-                 PreparedStatement pstmt = con.prepareStatement(sql)) {
-                pstmt.setString(1, customerName);
-                ResultSet rs = pstmt.executeQuery();
-                if (rs.next()) {
-                    customerId = rs.getString("customer_id");
-                }
+            con = DriverManager.getConnection(url, user, pass);
+            pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, customerName);
+            rs = pstmt.executeQuery();
+            if (rs.next()) {
+                customerId = rs.getString("customer_id");
             }
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (pstmt != null) pstmt.close();
+                if (con != null) con.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         return customerId;

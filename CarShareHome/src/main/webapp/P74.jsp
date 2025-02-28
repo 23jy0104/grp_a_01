@@ -1,8 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import ="model.Customer" %>
-<%@ page import ="model.Reservation" %>
-<%@ page import ="java.util.List" %>
-<% 
+<%@ page import="model.Customer" %>
+<%@ page import="model.Reservation" %>
+<%@ page import="java.util.List" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+<%
     String customerId = (String) request.getAttribute("customerId");
     String customerName = (String) request.getAttribute("customerName");
     List<Reservation> usedReservations = (List<Reservation>) request.getAttribute("usedReservations");
@@ -71,27 +73,22 @@
                 </tr>
             </thead>
             <tbody>
-    <%
-        if (usedReservations == null || usedReservations.isEmpty()) {
-    %>
-                <tr>
-                    <td colspan="5">過去の利用履歴はありません。</td>
-                </tr>
-    <%
-        } else {
-            for (Reservation reservation : usedReservations) {
-    %>
-                <tr>
-                    <td><%= reservation.getCustomer().getCustomerName() %></td>
-                    <td><%= reservation.getStartDate() %></td>
-                    <td><%= reservation.getFinishDate() %></td>
-                    <td><%= reservation.getStation().getStationName() %></td>
-                    <td><%= reservation.getPrice() %> 円</td>
-                </tr>
-    <%
-            }
-        }
-    %>
+                <c:if test="${not empty usedReservations}">
+                    <c:forEach var="reservation" items="${usedReservations}">
+                        <tr>
+                            <td>${reservation.customer.customerName}</td>
+                            <td>${reservation.startDate}</td>
+                            <td>${reservation.finishDate}</td>
+                            <td>${reservation.station.stationName}</td>
+                            <td>${reservation.price} 円</td>
+                        </tr>
+                    </c:forEach>
+                </c:if>
+                <c:if test="${empty usedReservations}">
+                    <tr>
+                        <td colspan="5">過去の利用履歴はありません。</td>
+                    </tr>
+                </c:if>
             </tbody>
         </table>
     </div>

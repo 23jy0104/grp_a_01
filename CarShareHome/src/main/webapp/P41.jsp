@@ -25,8 +25,8 @@
 
 <nav class="nav">
     <ul>
-        <li class="nav-item"><a href="../../html/home/UC02_01_S1_S2.html">ステーション検索</a></li>
-        <li class="nav-item"><a href="P40.jsp">料金</a></li>
+        <li class="nav-item"><a href="P39.jsp">ステーション検索</a></li>
+        <li class="nav-item"><a href="P39.jsp">料金</a></li>
         <li class="nav-item active"><a href="P43.jsp">利用方法</a></li>
         <li class="nav-item"><a href="P46.jsp">車種</a></li>
     </ul>
@@ -36,7 +36,7 @@
     <div class="sidebar">
         <table>
             <tr>
-                <th class="highlight">料金</th>
+                <th class="highlight"><a href="P39.jsp" class="link">料金</a></th>
             </tr>
             <tr>
                 <td><a href="P40.jsp" class="link">利用料金</a></td>
