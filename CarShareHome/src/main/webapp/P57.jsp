@@ -131,105 +131,124 @@ for (int hour = startHour; hour <= stopHour; hour++) {
 </nav>
 
 <main>
+    <%
+		boolean hasAvailableCars = carData != null && !carData.isEmpty();
+	%>
+
+<main>
     <h2><%= selectedDate %></h2>
     <h2><%= stationName %> の空いている車両一覧</h2>
-	
+
     <%
-    for (CarData car : carData) {
-    %>  <img class="car-image" src="img/<%= car.getCarImage() %>" alt="車" />
+    if (hasAvailableCars) {
+        for (CarData car : carData) {
+    %>  
+        <img class="car-image" src="img/<%= car.getCarImage() %>" alt="車" />
         <div class="car-item">
             <div class="car-details">
                 <label>車種名：<%= car.getModelName() %></label>
                 <br>
-			                    <label>予約可能時間：</label>
-				<table class="time-table">
-				    <thead>
-				        <tr>
-				            <th>時間</th>
-				            <%
-				            for (String time : timeSlots) {
-				            %>
-				                <th><%= time %></th>
-				            <%
-				            }
-				            %>
-				        </tr>
-				    </thead>
-				    <tbody>
-				        <tr>
-				            <td>予約可能</td>
-				            <%
-				            for (String time : timeSlots) {
-				            %>
-				                <td class="available"></td>
-				            <%
-				            }
-				            %>
-				        </tr>
-				    </tbody>
-				</table>
-			  </div>
+                <label>予約可能時間：</label>
+                <table class="time-table">
+                    <thead>
+                        <tr>
+                            <th>時間</th>
+                            <%
+                            for (String time : timeSlots) {
+                            %>
+                                <th><%= time %></th>
+                            <%
+                            }
+                            %>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>予約可能</td>
+                            <%
+                            for (String time : timeSlots) {
+                            %>
+                                <td class="available"></td>
+                            <%
+                            }
+                            %>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
+    <%
+        }
+    } else {
+    %>
+        <div style="color: red; font-weight: bold;">空車はありませんので日付を変更してお試しください。</div>
     <%
     }
     %>
     
-	<form action ="DiscountCalculatorServlet" method ="post">
-		<input type="hidden" name="stationId" value="<%= stationId %>">
-		<input type ="hidden" name ="stationName" value ="<%=stationName %>">
-		<select id="carType" name="carType" required>
-				<option value="BNR32型 skyline Nismo">BNR32型 skyline Nismo</option>
-				<option value="NSX NA-1型 type-R">NSX NA-1型 type-R</option>
-				<option value="GT-R R35 Nismo Special Edition T-spec">GT-R R35 Nismo Special Edition T-spec</option>
-		</select>
-		
-		<div id="errorMessage" style="color: red; font-weight: bold;"></div>
-             <label for="startDate">予約開始日:</label>
-             <input type="date" name="startDate" id="startDate">
-             <select id="startTimeHour" name="startTimeHour" required style="margin-right: 5px; padding: 5px;">
-	              <label for="startTimeHour">予約開始時間:</label>
-	              <option value="">-- 選択 --</option>
-	                   <%
-	                     for (int hour = 0; hour < 24; hour++) {
-	                        String hourStr = String.format("%02d", hour);
-	                    %>
-	                        <option value="<%= hourStr %>"><%= hourStr %></option>
-	                    <%
-	                       }
-	                     %>
-             </select>
-                
-             <select id="startTimeMinute" name="startTimeMinute" required style="padding: 5px;">
-                  <option value="">-- 分を選択 --</option>
-                  <option value="00">00分</option>
-                  <option value="15">15分</option>
-                  <option value="30">30分</option>
-                  <option value="45">45分</option>
-              </select>
-              <br>
-              <label for="EndDate">予約終了日:</label>
-              <input type="date" name="EndDate" id="EndDate">
-              <select id="EndTimeHour" name="EndTimeHour" required style="margin-right: 5px; padding: 5px;">
-                  <label for="EndTimeHour">予約終了時間:</label>
-                   <option value="">-- 選択 --</option>
-                        <%
-                        for (int hour = 0; hour < 24; hour++) {
-                            String hourStr = String.format("%02d", hour);
-                        %>
-                            <option value="<%= hourStr %>"><%= hourStr %></option>
-                        <%
-                        }
-                        %>
-               </select>                
-               <select id="EndTimeMinute" name="EndTimeMinute" required style="padding: 5px;">
-                   <option value="">-- 分を選択 --</option>
-                   <option value="00">00分</option>
-                   <option value="15">15分</option>
-                   <option value="30">30分</option>
-                    <option value="45">45分</option>
-               </select>
-              </div>	
-	</form>
+    <%
+    // 車両がある場合のみ、予約フォームを表示
+    if (hasAvailableCars) {
+    %>
+    <form action ="DiscountCalculatorServlet" method ="post">
+        <input type="hidden" name="stationId" value="<%= stationId %>">
+        <input type="hidden" name="stationName" value="<%= stationName %>">
+        <select id="carType" name="carType" required>
+            <option value="BNR32型 skyline Nismo">BNR32型 skyline Nismo</option>
+            <option value="NSX NA-1型 type-R">NSX NA-1型 type-R</option>
+            <option value="GT-R R35 Nismo Special Edition T-spec">GT-R R35 Nismo Special Edition T-spec</option>
+        </select>
+
+        <div id="errorMessage" style="color: red; font-weight: bold;"></div>
+        <label for="startDate">予約開始日:</label>
+        <input type="date" name="startDate" id="startDate">
+        <select id="startTimeHour" name="startTimeHour" required style="margin-right: 5px; padding: 5px;">
+            <label for="startTimeHour">予約開始時間:</label>
+            <option value="">-- 選択 --</option>
+            <%
+            for (int hour = 0; hour < 24; hour++) {
+                String hourStr = String.format("%02d", hour);
+            %>
+                <option value="<%= hourStr %>"><%= hourStr %></option>
+            <%
+            }
+            %>
+        </select>
+        
+        <select id="startTimeMinute" name="startTimeMinute" required style="padding: 5px;">
+            <option value="">-- 分を選択 --</option>
+            <option value="00">00分</option>
+            <option value="15">15分</option>
+            <option value="30">30分</option>
+            <option value="45">45分</option>
+        </select>
+        <br>
+        <label for="EndDate">予約終了日:</label>
+        <input type="date" name="EndDate" id="EndDate">
+        <select id="EndTimeHour" name="EndTimeHour" required style="margin-right: 5px; padding: 5px;">
+            <label for="EndTimeHour">予約終了時間:</label>
+            <option value="">-- 選択 --</option>
+            <%
+            for (int hour = 0; hour < 24; hour++) {
+                String hourStr = String.format("%02d", hour);
+            %>
+                <option value="<%= hourStr %>"><%= hourStr %></option>
+            <%
+            }
+            %>
+        </select>                
+        <select id="EndTimeMinute" name="EndTimeMinute" required style="padding: 5px;">
+            <option value="">-- 分を選択 --</option>
+            <option value="00">00分</option>
+            <option value="15">15分</option>
+            <option value="30">30分</option>
+            <option value="45">45分</option>
+        </select>
+        <input type="submit" value="予約内容を確認する">
+    </form>
+    <%
+    }
+    %>
     <div class="button-container">
         <% String detailUrl = "P56.jsp?stationid=" + stationId + "&stationname=" + stationName + "&stationdata=" + stationData; %>
         <a href="<%= detailUrl %>">
@@ -237,5 +256,6 @@ for (int hour = startHour; hour <= stopHour; hour++) {
         </a>
     </div>
 </main>
+
 </body>
  </html>
