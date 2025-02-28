@@ -22,20 +22,22 @@ public class UseHistory extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String customerName = request.getParameter("customerName");
+        String customerId = null; // 初期化
 
         // customerNameがnullまたは空の場合の処理
         if (customerName == null || customerName.isEmpty()) {
-            response.sendRedirect("error.jsp"); // エラーページにリダイレクト
+            request.setAttribute("errorMessage", "顧客名が指定されていません。");
+            request.getRequestDispatcher("P74.jsp").forward(request, response);
             return;
         }
 
         // customerIdをデータベースから取得
-        String customerId = getCustomerIdByName(customerName);
+        customerId = getCustomerIdByName(customerName);
 
         // customerIdがnullの場合の処理
         if (customerId == null || customerId.isEmpty()) {
-            System.out.println("Error: customerId is null or empty.");
-            response.sendRedirect("error.jsp"); // エラーページにリダイレクト
+            request.setAttribute("errorMessage", "指定された顧客名に該当するIDが見つかりません。");
+            request.getRequestDispatcher("P74.jsp").forward(request, response);
             return;
         }
 
@@ -43,7 +45,7 @@ public class UseHistory extends HttpServlet {
         ReservationDAO reservationDAO = new ReservationDAO();
 
         // 利用履歴を取得
-        List<Reservation> usedReservations = reservationDAO.getReservationsWithFinishDate(customerId); // customerIdを引数として渡す
+        List<Reservation> usedReservations = reservationDAO.getReservationsWithFinishDate(customerId);
 
         // リクエスト属性に設定
         request.setAttribute("customerId", customerId);
@@ -70,7 +72,7 @@ public class UseHistory extends HttpServlet {
         ResultSet rs = null;
 
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver"); // 最新のドライバ名に変更
+            Class.forName("com.mysql.jdbc.Driver");
             con = DriverManager.getConnection(url, user, pass);
             pstmt = con.prepareStatement(sql);
             pstmt.setString(1, customerName);
@@ -81,7 +83,6 @@ public class UseHistory extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            // リソースを確実に閉じる
             try {
                 if (rs != null) rs.close();
                 if (pstmt != null) pstmt.close();
