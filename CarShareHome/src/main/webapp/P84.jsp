@@ -29,7 +29,110 @@ String stationName =(String)session.getAttribute("stationName");
     <title>TMC カーシェア - 空車情報</title>
     <link rel="stylesheet" href="css/nav.css">
     <link rel="stylesheet" href="css/P63.css">
+    
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const startDateInput = document.getElementById('startDate');
+        const endDateInput = document.getElementById('EndDate');
+        const startTimeHourInput = document.getElementById('startTimeHour');
+        const startTimeMinuteInput = document.getElementById('startTimeMinute');
+        const endTimeHourInput = document.getElementById('EndTimeHour');
+        const endTimeMinuteInput = document.getElementById('EndTimeMinute');
+        const errorMessage = document.getElementById('errorMessage'); // エラーメッセージ表示用の要素
+
+        // 現在の日付と時間を取得
+        const today = new Date();
+        const formattedToday = today.toISOString().split('T')[0];
+        const currentHour = today.getHours();
+        const currentMinute = today.getMinutes();
+
+        // 日付の最小値を今日の日付に設定
+        startDateInput.setAttribute('min', formattedToday);
+        endDateInput.setAttribute('min', formattedToday);
+
+        // 開始日付が変更されたときの処理
+        startDateInput.addEventListener('change', function () {
+            const selectedStartDate = new Date(startDateInput.value);
+            if (selectedStartDate < today) {
+                startDateInput.value = formattedToday; // 今日の日付に戻す
+            }
+            updateStartTimeOptions();
+        });
+
+        // 終了日付が変更されたときの処理
+        endDateInput.addEventListener('change', function () {
+            const selectedEndDate = new Date(endDateInput.value);
+            if (selectedEndDate < today) {
+                endDateInput.value = formattedToday; // 今日の日付に戻す
+            }
+            updateEndTimeOptions();
+        });
+
+        function updateStartTimeOptions() {
+            const selectedDate = new Date(startDateInput.value);
+            const isToday = selectedDate.toISOString().split('T')[0] === formattedToday;
+
+            // 時間の選択肢を更新
+            for (let hour = 0; hour < 24; hour++) {
+                const hourStr = String(hour).padStart(2, '0');
+                const hourOption = startTimeHourInput.querySelector(`option[value="${hourStr}"]`);
+                hourOption.disabled = !(isToday && hour > currentHour); // 現在の時間より後の時間のみ選択可能
+            }
+
+            // 分の選択肢を更新
+            for (let minute of [0, 15, 30, 45]) {
+                const minuteStr = String(minute).padStart(2, '0');
+                const minuteOption = startTimeMinuteInput.querySelector(`option[value="${minuteStr}"]`);
+                minuteOption.disabled = !(isToday && currentHour === hour && minute > currentMinute); // 現在の分より後の分のみ選択可能
+            }
+        }
+
+        function updateEndTimeOptions() {
+            const selectedDate = new Date(endDateInput.value);
+            const isToday = selectedDate.toISOString().split('T')[0] === formattedToday;
+
+            // 時間の選択肢を更新
+            for (let hour = 0; hour < 24; hour++) {
+                const hourStr = String(hour).padStart(2, '0');
+                const hourOption = endTimeHourInput.querySelector(`option[value="${hourStr}"]`);
+                hourOption.disabled = !isToday || hour < currentHour; // 現在の時間より後の時間のみ選択可能
+            }
+        }
+
+        // フォーム送信時の検証
+        document.querySelector('form').addEventListener('submit', function(event) {
+            const startHour = parseInt(startTimeHourInput.value);
+            const startMinute = parseInt(startTimeMinuteInput.value);
+            const endHour = parseInt(endTimeHourInput.value);
+            const endMinute = parseInt(endTimeMinuteInput.value);
+
+            // 現在の時間より前のチェック
+            if (startDateInput.value === formattedToday && (startHour < currentHour || (startHour === currentHour && startMinute <= currentMinute))) {
+                event.preventDefault(); // フォーム送信を防ぐ
+                errorMessage.textContent = "予約開始時間は現在の時間より後でなければなりません。";
+                return;
+            }
+
+            // 終了時間が開始時間より前のチェック
+            if (endDateInput.value === startDateInput.value && (endHour < startHour || (endHour === startHour && endMinute <= startMinute))) {
+                event.preventDefault(); // フォーム送信を防ぐ
+                errorMessage.textContent = "予約終了時間は開始時間より後でなければなりません。";
+                return;
+            }
+
+            errorMessage.textContent = ""; // エラーメッセージをクリア
+        });
+
+        // 初期状態の時間オプションを設定
+        updateStartTimeOptions();
+        updateEndTimeOptions();
+    });
+	</script>
+
+
+
 </head>
+
 <body>
 <style>
 /* フォーム全体のスタイル */
@@ -99,7 +202,8 @@ input[type="submit"]:hover {
                             <td><%=stationName %></td>
                         </tr>
                     </table>
-                    <form action ="ReservationOK" methdo ="post">
+                    <form action ="ReservationOK" method ="get">
+                    <div id="errorMessage" style="color: red; font-weight: bold;"></div>
                     	<label for="startDate">予約開始日:</label>
                     	<input type="date" name="startDate" id="startDate">
                     	<select id="startTimeHour" name="startTimeHour" required style="margin-right: 5px; padding: 5px;">

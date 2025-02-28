@@ -6,6 +6,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,45 +33,67 @@ public class CarAvailabilityServlet extends HttpServlet {
         String stationName = request.getParameter("stationName");
         String stationData = request.getParameter("stationData");
         
-        String selectDateTime =selectedDate +" "+startTimeHour +":"+startTimeMinute+" 00";
+        String[] dateParts = selectedDate.split("-");
+        String year = dateParts[0];
+        String month = dateParts[1];
+        String day = dateParts[2];
+
+        // 月を2桁にフォーマット
+        String formattedMonth = String.format("%02d", Integer.parseInt(month));
+
+        // 新しい日付文字列を作成
+        String formattedDate = year + "-" + formattedMonth + "-" + day;
         
+        String selectDateTime =formattedDate +" "+startTimeHour +":"+startTimeMinute+":00";
+        
+        System.out.println(selectDateTime);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime dateTime = LocalDateTime.parse(selectDateTime, formatter);
+        // 6時間後の時間を取得
+        LocalDateTime sixHoursLater = dateTime.plusHours(6);
+        String sixHoursLaterString = sixHoursLater.format(formatter);
+        System.out.println(sixHoursLaterString);
+        System.out.println(stationId);
+        List<CarData> carData =new ArrayList<>();
         try {
 			Class.forName("com.mysql.jdbc.Driver");
 			final String url = "jdbc:mysql://10.64.144.5:3306/23jya01";
 			final String user = "23jya01";
 			final String pass = "23jya01";
-			String consql = "SELECT start_date,stop_date "
-					+ "FROM keybox k "
-					+ "INNER JOIN reservation r ON r.car_code =k.car_code "
-					+ "WHERE station_id = ? and finish_date IS null and start_date <= ? ";
-			Connection con = DriverManager.getConnection(url, user, pass);
-			PreparedStatement pstmt = con.prepareStatement(consql);
-			pstmt.setString(1, stationId);
-			pstmt.setString(2, selectDateTime);
-			ResultSet rs = pstmt.executeQuery();
+		
 			
-			List<CarData> availableCars = new ArrayList<>();
-			while(rs.next()) {
+			String sql = "SELECT k.car_code, model_name, station_name, car_img "
+		            + "FROM keybox k "
+		            + "LEFT JOIN reservation r ON r.car_code = k.car_code AND (r.stop_date > ? AND r.start_date < ?) "
+		            + "INNER JOIN car_db car ON car.car_code = r.car_code "
+		            + "INNER JOIN model m ON m.model_id = car.model_id "
+		            + "INNER JOIN station s ON s.station_id = k.station_id "
+		            + "WHERE s.station_id = ? AND r.car_code IS NULL";
+			try {
+				Connection con = DriverManager.getConnection(url, user, pass);
+				PreparedStatement pstmt =con.prepareStatement(sql);
+				pstmt.setString(1, sixHoursLaterString);
+				pstmt.setString(2, selectDateTime);
+				pstmt.setString(3,stationId);
+				ResultSet rs = pstmt.executeQuery();
 				CarData car =new CarData();
-				car.setCarCode(rs.getString("car_code"));
-				car.setModelName(rs.getString("model_name"));
-				car.setCarImage(rs.getString("car_img"));
-				availableCars.add(car);
+				while(rs.next()) {
+					car.setModelName(rs.getString("model_name"));
+					car.setCarImage(rs.getString("car_img"));
+					carData.add(car);
+				}
+			} catch (SQLException e) {
+				// TODO 自動生成された catch ブロック
+				e.printStackTrace();
 			}
-			
-			
-			
-			
-			request.setAttribute("availableCars", availableCars);
 			request.setAttribute("stationName", stationName);
 			request.setAttribute("stationData", stationData);
+			request.setAttribute("carData",carData);
+			System.out.println(carData);
 			RequestDispatcher rd =request.getRequestDispatcher(path);
 			rd.forward(request, response);
 			
 		} catch (ClassNotFoundException e) {
-			// TODO 自動生成された catch ブロック
-			e.printStackTrace();
-		} catch (SQLException e) {
 			// TODO 自動生成された catch ブロック
 			e.printStackTrace();
 		}

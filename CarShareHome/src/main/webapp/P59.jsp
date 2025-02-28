@@ -14,6 +14,7 @@
 <%@ page import="java.text.SimpleDateFormat" %>
 
 <%
+Integer yoyaku = (Integer)request.getAttribute("yoyaku");
 String stationName=(String)session.getAttribute("stationName");
 String stationData=(String)session.getAttribute("stationData");
 String customerId =(String)session.getAttribute("customerId");
@@ -195,11 +196,11 @@ String endDate = (String) session.getAttribute("endDate");
                     out.println("<div class='day disabled'></div>");
                 }
 
-                // 日付を表示
+             	// 日付を表示
                 for (int day = 1; day <= daysInMonth; day++) {
                     monthCalendar.set(Calendar.DAY_OF_MONTH, day);
                     String dateStr = sdf.format(monthCalendar.getTime());
-                
+                    
                     // 今日以前または1か月後以降の日付は無効化
                     boolean isDisabled = monthCalendar.before(today) || monthCalendar.after(oneMonthLater);
                     String className = "day";
@@ -210,14 +211,17 @@ String endDate = (String) session.getAttribute("endDate");
                     } else if (startDate != null && startDate.equals(dateStr)) {
                         className += " selectedStart"; // 開始日選択
                     }
-
+                    
                     // 日付がクリック可能であればイベントを追加
                     if (!isDisabled) {
                         out.println("<div class='" + className + "' onclick='handleDateClick(\"" + dateStr + "\")'>" + day + "</div>");
                     } else {
+                        className += " disabled"; // ここで無効化クラスを追加
                         out.println("<div class='" + className + "'>" + day + "</div>");
                     }
                 }
+
+
 
                 out.println("</div></div>");
             }
@@ -225,10 +229,12 @@ String endDate = (String) session.getAttribute("endDate");
         </div> <!-- カレンダーを囲むコンテナの終了 -->
 
         <div class="button-container">
-              <% String detailUrl = "P56.jsp?stationid="+stationId+"&stationname=" + stationName +"&stationdata="+ stationData;%>
+              <div class="button-container">
+			    <% String detailUrl = "P56.jsp?stationid="+stationId+"&stationname=" + stationName +"&stationdata="+ stationData;%>
               <a href="<%= detailUrl %>"> 
               	 <input type="submit"  value="戻る">
               </a>
+			</div>
         </div>
         
         <!-- 開始時間の入力フィールド -->
@@ -294,7 +300,7 @@ String endDate = (String) session.getAttribute("endDate");
 				    // 予約状況を表示するためのタイムテーブルを動的に生成
 				    if (combinedList != null && !combinedList.isEmpty()) {
 				        // 1行目を飛ばすため、インデックスを1から開始
-				        for (int i = 1; i < combinedList.size(); i++) {
+				        for (int i = yoyaku; i < combinedList.size(); i++) {
 				            ReservationTime time = combinedList.get(i);
 				            String startDateTime = time.getStartDateTime(); // "yyyy-MM-dd HH:mm" 形式
 				            String endDateTime = time.getEndDateTime();     // "yyyy-MM-dd HH:mm" 形式
@@ -326,7 +332,7 @@ String endDate = (String) session.getAttribute("endDate");
 				    // 状態を表示する行
 				    if (combinedList != null && !combinedList.isEmpty()) {
 				        // 状態行の表示を開始
-				        for (int i = 0; i < combinedList.size(); i++) { // 0から開始
+				        for (int i = yoyaku; i < combinedList.size(); i++) { // 0から開始
 				            ReservationTime time = combinedList.get(i);
 				            String status = time.getStatus();
 				
@@ -360,6 +366,57 @@ String endDate = (String) session.getAttribute("endDate");
 		<script>
 		    // タイムテーブルが生成された後にリンクを表示
 		    document.getElementById('reservationLink').style.display = 'block';
+
+		    function handleDateClick(selectedDate) {
+		        document.getElementById('startTimeContainer').style.display = 'block';
+		        document.getElementById('selectedDate').value = selectedDate; // 隠しフィールドに選択した日付を設定
+
+		        // 現在の日時を取得
+		        const now = new Date();
+		        const selectedDateObj = new Date(selectedDate); // 選択した日付をDateオブジェクトに変換
+		        const selectedDateStart = new Date(selectedDateObj.setHours(0, 0, 0, 0));
+
+		        // 時間選択の各オプションをリセット
+		        const hourSelect = document.getElementById('startTimeHour');
+		        const minuteSelect = document.getElementById('startTimeMinute');
+
+		        // すべてのオプションを有効化
+		        for (let hour = 0; hour < 24; hour++) {
+		            hourSelect.options[hour].disabled = false; // すべての時間を有効化
+		        }
+		        for (let minute = 0; minute < minuteSelect.options.length; minute++) {
+		            minuteSelect.options[minute].disabled = false; // すべての分を有効化
+		        }
+
+		        // 現在時刻が選択した日付の0時より前の場合、無効にする
+		        if (now >= selectedDateStart) {
+		            const currentHour = now.getHours();
+		            const currentMinute = now.getMinutes();
+
+		            // 現在時刻より前の時間を無効化
+		            for (let hour = 0; hour < 24; hour++) {
+		                hourSelect.options[hour].disabled = (hour < currentHour); // 現在時刻より前の時間を無効化
+		            }
+
+		            // 現在の時間が30分を過ぎている場合の処理
+		            if (currentMinute >= 30) {
+		                // 次の時間からのみ選択可能にする
+		                for (let hour = 0; hour < 24; hour++) {
+		                    if (hour === currentHour) {
+		                        hourSelect.options[hour].disabled = true; // 現在の時間は無効化
+		                    }
+		                }
+		            } else {
+		                // 現在の時間の30分未満であれば、分の選択肢を無効化
+		                for (let minute = 0; minute < minuteSelect.options.length; minute++) {
+		                    minuteSelect.options[minute].disabled = (currentHour === hourSelect.value && minute * 15 < currentMinute);
+		                }
+		            }
+		        }
+		    }
+
+
+		    		    
 		</script>
 
     </main>
