@@ -13,7 +13,8 @@ public class CarData implements Serializable {
     private Maker maker;
     private Model model;
     private String carImage; // 画像ファイル名を追加
-
+    private String status;
+    
     public CarData() {
         super();
     }
@@ -113,4 +114,16 @@ public class CarData implements Serializable {
     public void setCarImage(String carImage) { // 画像設定メソッドを追加
         this.carImage = carImage;
     }
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	
+    
+    
 }

@@ -37,7 +37,7 @@ public class DiscountCalculatorServlet extends HttpServlet {
         int totalCost = calculateTotalCost(durationHours, discounts);
         // 結果をリクエストに設定
         request.getSession().setAttribute("totalCost", totalCost);
-        String path ="P63.jsp"; // 結果をresult.jspにフォワード
+        String path ="P63.jsp"; // 結果をresult.jspにフォワード 
         RequestDispatcher rd =request.getRequestDispatcher(path);
 		rd.forward(request, response);
 
@@ -79,4 +79,28 @@ public class DiscountCalculatorServlet extends HttpServlet {
 
         return totalDiscount;
     }
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	String startTimestamp = (String)request.getSession().getAttribute("startDate");
+        String endTimestamp = (String)request.getSession().getAttribute("endDate");
+        String carName =(String)request.getParameter("car_name");
+        // 時間の計算
+        long durationInMillis = calculateDuration(startTimestamp, endTimestamp);
+        int durationHours = (int) (durationInMillis / (1000 * 60 * 60)); // ミリ秒を時間に変換
+
+        // 割引情報を取得
+        DiscountDao discountDao = new DiscountDao();
+        List<Discount> discounts = discountDao.getDiscounts();
+        discountDao.connectionClose(); // 接続を閉じる
+
+        // 料金計算
+        int totalCost = calculateTotalCost(durationHours, discounts);
+        // 結果をリクエストに設定
+        request.getSession().setAttribute("totalCost", totalCost);
+        String path ="P63.jsp"; // 結果をresult.jspにフォワード 
+        RequestDispatcher rd =request.getRequestDispatcher(path);
+		rd.forward(request, response);
+
+    }
+
+    
 }

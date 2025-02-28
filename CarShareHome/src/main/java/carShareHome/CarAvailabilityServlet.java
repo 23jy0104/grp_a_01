@@ -65,7 +65,7 @@ public class CarAvailabilityServlet extends HttpServlet {
 			String sql = "SELECT k.car_code, model_name, station_name, car_img "
 		            + "FROM keybox k "
 		            + "LEFT JOIN reservation r ON r.car_code = k.car_code AND (r.stop_date > ? AND r.start_date < ?) "
-		            + "INNER JOIN car_db car ON car.car_code = r.car_code "
+		            + "INNER JOIN car_db car ON car.car_code = k.car_code "
 		            + "INNER JOIN model m ON m.model_id = car.model_id "
 		            + "INNER JOIN station s ON s.station_id = k.station_id "
 		            + "WHERE s.station_id = ? AND r.car_code IS NULL";
@@ -76,10 +76,14 @@ public class CarAvailabilityServlet extends HttpServlet {
 				pstmt.setString(2, selectDateTime);
 				pstmt.setString(3,stationId);
 				ResultSet rs = pstmt.executeQuery();
-				CarData car =new CarData();
 				while(rs.next()) {
+					CarData car =new CarData();
+					car.setCarCode(rs.getString("car_code"));
 					car.setModelName(rs.getString("model_name"));
 					car.setCarImage(rs.getString("car_img"));
+					car.setStatus("予約可能");
+				
+			        
 					carData.add(car);
 				}
 			} catch (SQLException e) {
@@ -89,7 +93,14 @@ public class CarAvailabilityServlet extends HttpServlet {
 			request.setAttribute("stationName", stationName);
 			request.setAttribute("stationData", stationData);
 			request.setAttribute("carData",carData);
-			System.out.println(carData);
+			request.setAttribute("stopDate", sixHoursLaterString);
+			request.setAttribute("selectDate", selectDateTime);
+			
+			for(CarData data :carData) {
+				System.out.println("carCode:"+data.getCarCode()+" modelName:"+data.getModelName()+" img:"+data.getCarImage()+" status:"+data.getStatus());
+				
+			}
+			
 			RequestDispatcher rd =request.getRequestDispatcher(path);
 			rd.forward(request, response);
 			
