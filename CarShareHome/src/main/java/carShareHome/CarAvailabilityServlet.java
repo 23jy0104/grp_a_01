@@ -71,17 +71,20 @@ public class CarAvailabilityServlet extends HttpServlet {
 		            + "WHERE s.station_id = ? AND r.car_code IS NULL";
 			try {
 				Connection con = DriverManager.getConnection(url, user, pass);
-				PreparedStatement pstmt =con.prepareStatement(sql);
-				pstmt.setString(1, sixHoursLaterString);
-				pstmt.setString(2, selectDateTime);
-				pstmt.setString(3,stationId);
-				ResultSet rs = pstmt.executeQuery();
-				CarData car =new CarData();
-				while(rs.next()) {
-					car.setModelName(rs.getString("model_name"));
-					car.setCarImage(rs.getString("car_img"));
-					carData.add(car);
+				try(PreparedStatement pstmt =con.prepareStatement(sql)) {
+					pstmt.setString(1, sixHoursLaterString);
+					pstmt.setString(2, selectDateTime);
+					pstmt.setString(3,stationId);
+					CarData car =new CarData();
+					try(ResultSet rs = pstmt.executeQuery()) {
+						while(rs.next()) {
+							car.setModelName(rs.getString("model_name"));
+							car.setCarImage(rs.getString("car_img"));
+							carData.add(car);
+						}
+					}
 				}
+				
 			} catch (SQLException e) {
 				// TODO 自動生成された catch ブロック
 				e.printStackTrace();
