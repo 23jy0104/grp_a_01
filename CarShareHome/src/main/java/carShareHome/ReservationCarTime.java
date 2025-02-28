@@ -66,6 +66,7 @@ public class ReservationCarTime extends HttpServlet {
 
                     ReservationTime reservationTime = new ReservationTime(reservedStartTime, reservedEndTime, "予約不可");
                     reservationTimes.add(reservationTime);
+                    yoyaku = yoyaku +1;
                 }
 
                 // 入力された時間を基に24時間後の時間を計算
@@ -104,11 +105,9 @@ public class ReservationCarTime extends HttpServlet {
                         availableSlots.add(new ReservationTime(availableStartTime, availableEndTime, "予約可能"));
                     } else {
                         availableSlots.add(new ReservationTime(availableStartTime, availableEndTime, "予約不可"));
-                        yoyaku = yoyaku + 1;
+                        
                     }
                 }
-
-
 
 
                 // 予約済み時間と予約可能時間を結合
