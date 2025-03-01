@@ -12,6 +12,7 @@
 
 
 <%
+String startDate =(String)session.getAttribute()
 String stationData=(String)session.getAttribute("stationData");
 String customerId =(String)session.getAttribute("customerId");
 String customerName = (String) session.getAttribute("customerName");

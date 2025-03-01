@@ -201,10 +201,18 @@ for (int hour = startHour; hour <= stopHour; hour++) {
             }
             %>
         </select>
-
+		<%
+			if (request.getAttribute("errorMessage") != null) {
+			    String errorMessage = (String) request.getAttribute("errorMessage");
+		%>
+			    <div style="color: red; font-weight: bold;"><%= errorMessage %></div>
+		<%
+			}
+		%>
         <div id="errorMessage" style="color: red; font-weight: bold;"></div>
         <label for="startDate">予約開始日:</label>
-        <input type="date" name="startDate" id="startDate">
+        <%=selectedDate %>
+        <br>
         <select id="startTimeHour" name="startTimeHour" required style="margin-right: 5px; padding: 5px;">
             <label for="startTimeHour">予約開始時間:</label>
             <option value="">-- 選択 --</option>

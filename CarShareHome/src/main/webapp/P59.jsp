@@ -359,7 +359,7 @@ String endDate = (String) session.getAttribute("endDate");
 		    </tbody>
 		</table>
 		
-		<a href="ReservationCon?stationId=<%= stationId %>&carCode=<%= carCode %>&img=<%= img %>&modelName=<%= modelName %>" id="reservationLink" style="display:none;">予約入力画面へ</a>
+		<a href="ReservationCon?stationId=<%= stationId %>&carCode=<%= carCode %>&img=<%= img %>&modelName=<%= modelName %>&startDate=<%= selectedDate %>" id="reservationLink" style="display:none;">予約入力画面へ</a>
 		
 		<%
 		    } // combinedList のチェックが終わったら閉じる

@@ -114,6 +114,7 @@ public class DiscountCalculatorServlet extends HttpServlet {
     	String endTimestamp = endformattedDate+" "+EndTimeHour+":"+EndTimeMinute+":00";
     	
         String carType =request.getParameter("carType");
+        System.out.println(carType);
         String stationId = (String) request.getSession().getAttribute("stationId");
 
         
@@ -128,36 +129,38 @@ public class DiscountCalculatorServlet extends HttpServlet {
 			
 			
 			
-			String sql = "SELECT k.car_code, model_name, station_name, car_img, number "
-		            + "FROM keybox k "
-		            + "INNER JOIN car_db car ON car.car_code = k.car_code "
-		            + "INNER JOIN model m ON m.model_id = car.model_id "
-		            + "INNER JOIN station s ON s.station_id = k.station_id "
-		            + "WHERE s.station_id = ? AND k.car_code NOT IN ("
-		            + "SELECT r.car_code FROM reservation r "
-		            + "WHERE (r.stop_date > ? AND r.start_date < ?) "
-		            + "AND r.finish_date IS NULL)"; // finish_dateがNULLであることを確認
+			 String sql = "SELECT k.car_code, model_name, station_name, car_img, number "
+		                + "FROM keybox k "
+		                + "INNER JOIN car_db car ON car.car_code = k.car_code "
+		                + "INNER JOIN model m ON m.model_id = car.model_id "
+		                + "INNER JOIN station s ON s.station_id = k.station_id "
+		                + "WHERE s.station_id = ? AND m.model_name = ? AND k.car_code NOT IN ("
+		                + "SELECT r.car_code FROM reservation r "
+		                + "WHERE (r.stop_date > ? AND r.start_date < ?) "
+		                + "AND r.finish_date IS NULL)"; // finish_dateがNULLであることを確認
 
-			
-			 Connection con =DriverManager.getConnection(url, user, pass);
-			 PreparedStatement pstmt = con.prepareStatement(sql);
-			 pstmt.setString(1, stationId);
-			 pstmt.setTimestamp(2, Timestamp.valueOf(endTimestamp));
-			 pstmt.setTimestamp(3, Timestamp.valueOf(startTimestamp));
-			 ResultSet rs =pstmt.executeQuery();
+		        Connection con = DriverManager.getConnection(url, user, pass);
+		        PreparedStatement pstmt = con.prepareStatement(sql);
+		        pstmt.setString(1, stationId);
+		        pstmt.setString(2, carType); // carTypeを条件に追加
+		        pstmt.setTimestamp(3, Timestamp.valueOf(endTimestamp));
+		        pstmt.setTimestamp(4, Timestamp.valueOf(startTimestamp));
+		        ResultSet rs = pstmt.executeQuery();
 			 if (rs.next()) {
-				 request.getSession().setAttribute("startDate", startTimestamp);
-				 request.getSession().setAttribute("endDate", endTimestamp);
-				 request.getSession().setAttribute("carCode", rs.getString("car_code"));
-				 request.getSession().setAttribute("img", rs.getString("car_img"));
-				 request.getSession().setAttribute("modelName", carType);
-				 request.getSession().setAttribute("number", rs.getString("number"));
-				 // 予約が重複している場合
-			 } else {
-				 request.setAttribute("errorMessage", "指定できない時間が含まれています。再度空き状況を確認してください。");
-				 path = "P57.jsp";
-			 } 
-					   
+				    // 予約が可能な場合の処理
+				    request.getSession().setAttribute("startDate", startTimestamp);
+				    request.getSession().setAttribute("endDate", endTimestamp);
+				    request.getSession().setAttribute("carCode", rs.getString("car_code"));
+				    request.getSession().setAttribute("img", rs.getString("car_img"));
+				    request.getSession().setAttribute("modelName", carType);
+				    request.getSession().setAttribute("number", rs.getString("number"));
+				    path = "P63.jsp"; // 予約内容確認画面
+				} else {
+				    // 予約が重複している場合
+				    request.setAttribute("errorMessage", "指定できない時間が含まれています。再度空き状況を確認してください。");
+				    path = "P57.jsp"; // エラーメッセージを表示する画面
+				    return; // ここで処理を終了する
+				}	   
 			 
 	    } catch (ClassNotFoundException |SQLException e) {
 			// TODO 自動生成された catch ブロック
@@ -177,7 +180,7 @@ public class DiscountCalculatorServlet extends HttpServlet {
         int totalCost = calculateTotalCost(durationHours, discounts);
         // 結果をリクエストに設定
         request.getSession().setAttribute("totalCost", totalCost);
-        path ="P63.jsp"; // 結果をresult.jspにフォワード
+        
         RequestDispatcher rd =request.getRequestDispatcher(path);
 		rd.forward(request, response);
 
