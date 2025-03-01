@@ -12,18 +12,18 @@ String customerId = (String) session.getAttribute("customerId");
 
 
 // リクエストから車両情報を取得
-String stationName = (String) request.getAttribute("stationName");
-String stationId = (String) request.getAttribute("stationId");
-String stationData = (String) request.getAttribute("stationData");
+String stationName=(String)request.getSession().getAttribute("stationName");
+String stationId = (String) request.getSession().getAttribute("stationId");
+String stationData = (String) session.getAttribute("stationData");
 String stopDateParam = (String) request.getAttribute("stopDate");
 
 // 車両情報リストを取得
 List<CarData> carData = (List<CarData>) request.getAttribute("carData");
 
 // jspで入力した日時
-String selectedDate = request.getParameter("selectedDate");
-String startTimeHour = request.getParameter("startTimeHour");
-String startTimeMinute = request.getParameter("startTimeMinute");
+String selectedDate = (String)request.getAttribute("selectedDate");
+String startTimeHour = (String)request.getAttribute("startTimeHour");
+String startTimeMinute = (String)request.getAttribute("startTimeMinute");
 
 // 開始時間を取得
 int startHour = Integer.parseInt(startTimeHour);
@@ -191,12 +191,15 @@ for (int hour = startHour; hour <= stopHour; hour++) {
     if (hasAvailableCars) {
     %>
     <form action ="DiscountCalculatorServlet" method ="post">
-        <input type="hidden" name="stationId" value="<%= stationId %>">
-        <input type="hidden" name="stationName" value="<%= stationName %>">
         <select id="carType" name="carType" required>
-            <option value="BNR32型 skyline Nismo">BNR32型 skyline Nismo</option>
-            <option value="NSX NA-1型 type-R">NSX NA-1型 type-R</option>
-            <option value="GT-R R35 Nismo Special Edition T-spec">GT-R R35 Nismo Special Edition T-spec</option>
+            <option value="">-- 選択 --</option>
+            <%
+            for (CarData car : carData) {              
+            %>
+            <option value ="<%=car.getModelName() %>"><%=car.getModelName()%></option>
+            <%
+            }
+            %>
         </select>
 
         <div id="errorMessage" style="color: red; font-weight: bold;"></div>
@@ -249,12 +252,14 @@ for (int hour = startHour; hour <= stopHour; hour++) {
     <%
     }
     %>
-    <div class="button-container">
-        <% String detailUrl = "P56.jsp?stationid=" + stationId + "&stationname=" + stationName + "&stationdata=" + stationData; %>
-        <a href="<%= detailUrl %>">
-            <input type="button" value="戻る">
-        </a>
-    </div>
+    <div id="errorMessage" style="color: red; font-weight: bold;">
+              <div class="button-container">
+			    <% String detailUrl = "P56.jsp?stationid="+stationId+"&stationname=" + stationName +"&stationdata="+ stationData;%>
+              <a href="<%= detailUrl %>"> 
+              	 <input type="submit"  value="戻る">
+              </a>
+			</div>
+        </div>
 </main>
 
 </body>

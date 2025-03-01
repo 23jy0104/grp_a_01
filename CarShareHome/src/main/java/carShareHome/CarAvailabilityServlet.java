@@ -25,7 +25,7 @@ public class CarAvailabilityServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html; charset=UTF-8");
-        String path = "P57.jsp"; // 遷移先のデフォルトパス
+        String path = ""; // 遷移先のデフォルトパス
         String selectedDate = request.getParameter("selectedDate");
         String startTimeHour = request.getParameter("startTimeHour");
         String startTimeMinute = request.getParameter("startTimeMinute");
@@ -82,25 +82,24 @@ public class CarAvailabilityServlet extends HttpServlet {
 							car.setCarImage(rs.getString("car_img"));
 							carData.add(car);
 						}
-					}
-					for(CarData car:carData) {
-						System.out.println("carCode:"+car.getCarCode()+" model_name"+car.getModelName()+"carImg"+car.getCarImage());
+						request.getSession().setAttribute("stationId", stationId);
+						request.getSession().setAttribute("stationName", stationName);
+						request.getSession().setAttribute("stationData", stationData);
+						request.setAttribute("carData",carData);
+						request.setAttribute("stopDate",sixHoursLaterString);
+						request.setAttribute("selectedDate",selectedDate);
+						request.setAttribute("startTimeHour",startTimeHour);
+						request.setAttribute("startTimeMinute", startTimeMinute);
+						path ="P57.jsp";
 					}
 				}
+				RequestDispatcher rd =request.getRequestDispatcher(path);
+				rd.forward(request, response);
 				
 			} catch (SQLException e) {
 				// TODO 自動生成された catch ブロック
 				e.printStackTrace();
 			}
-			request.setAttribute("stationName", stationName);
-			request.setAttribute("stationData", stationData);
-			request.setAttribute("carData",carData);
-			request.setAttribute("stopDate",sixHoursLaterString);
-			request.setAttribute("selectedDate",selectedDate);
-			request.setAttribute("startTimeHour",startTimeHour);
-			request.setAttribute("startTimeMinute", startTimeMinute);
-			RequestDispatcher rd =request.getRequestDispatcher(path);
-			rd.forward(request, response);
 			
 		} catch (ClassNotFoundException e) {
 			// TODO 自動生成された catch ブロック

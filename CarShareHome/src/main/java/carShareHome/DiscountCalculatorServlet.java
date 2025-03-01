@@ -1,6 +1,12 @@
 package carShareHome;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -78,5 +84,102 @@ public class DiscountCalculatorServlet extends HttpServlet {
         }
 
         return totalDiscount;
+    }
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	request.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html; charset=UTF-8");
+        
+    	String startDate =request.getParameter("startDate");
+        String startTimeHour =request.getParameter("startTimeHour");
+        String startTimeMinute =request.getParameter("startTimeMinute");
+        String[] startdateParts = startDate.split("-");
+        String startyear = startdateParts[0];
+        String startmonth = startdateParts[1];
+        String startday = startdateParts[2];       
+        String startformattedMonth = String.format("%02d", Integer.parseInt(startmonth));
+        String startformattedDate = startyear + "-" + startformattedMonth + "-" + startday;
+    	String startTimestamp =startformattedDate +" "+startTimeHour +":"+startTimeMinute+":00";
+        
+    	
+    	String EndDate =request.getParameter("EndDate");
+    	String EndTimeHour =request.getParameter("EndTimeHour");
+    	String EndTimeMinute =request.getParameter("EndTimeMinute");
+    	String[] EnddateParts = EndDate.split("-");
+        String Endyear = EnddateParts[0];
+        String Endmonth = EnddateParts[1];
+        String Endday = EnddateParts[2];        
+        String endformattedMonth = String.format("%02d", Integer.parseInt(Endmonth));
+        String endformattedDate = Endyear + "-" + endformattedMonth + "-" + Endday;
+        
+    	String endTimestamp = endformattedDate+" "+EndTimeHour+":"+EndTimeMinute+":00";
+    	
+        String carType =request.getParameter("carType");
+        String stationId = (String) request.getSession().getAttribute("stationId");
+
+        
+		
+		String path ="";
+		
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			final String url = "jdbc:mysql://10.64.144.5:3306/23jya01";
+			final String user = "23jya01";
+			final String pass = "23jya01";
+			
+			
+			
+			String sql = "SELECT k.car_code, model_name, station_name, car_img, number "
+		            + "FROM keybox k "
+		            + "INNER JOIN car_db car ON car.car_code = k.car_code "
+		            + "INNER JOIN model m ON m.model_id = car.model_id "
+		            + "INNER JOIN station s ON s.station_id = k.station_id "
+		            + "WHERE s.station_id = ? AND k.car_code NOT IN ("
+		            + "SELECT r.car_code FROM reservation r "
+		            + "WHERE (r.stop_date > ? AND r.start_date < ?) "
+		            + "AND r.finish_date IS NULL)"; // finish_dateがNULLであることを確認
+
+			
+			 Connection con =DriverManager.getConnection(url, user, pass);
+			 PreparedStatement pstmt = con.prepareStatement(sql);
+			 pstmt.setString(1, stationId);
+			 pstmt.setTimestamp(2, Timestamp.valueOf(endTimestamp));
+			 pstmt.setTimestamp(3, Timestamp.valueOf(startTimestamp));
+			 ResultSet rs =pstmt.executeQuery();
+			 if (rs.next()) {
+				 request.getSession().setAttribute("startDate", startTimestamp);
+				 request.getSession().setAttribute("endDate", endTimestamp);
+				 request.getSession().setAttribute("carCode", rs.getString("car_code"));
+				 request.getSession().setAttribute("img", rs.getString("car_img"));
+				 request.getSession().setAttribute("modelName", carType);
+				 request.getSession().setAttribute("number", rs.getString("number"));
+				 // 予約が重複している場合
+			 } else {
+				 request.setAttribute("errorMessage", "指定できない時間が含まれています。再度空き状況を確認してください。");
+				 path = "P57.jsp";
+			 } 
+					   
+			 
+	    } catch (ClassNotFoundException |SQLException e) {
+			// TODO 自動生成された catch ブロック
+			e.printStackTrace();
+		}
+		 
+        // 時間の計算
+        long durationInMillis = calculateDuration(startTimestamp, endTimestamp);
+        int durationHours = (int) (durationInMillis / (1000 * 60 * 60)); // ミリ秒を時間に変換
+
+        // 割引情報を取得
+        DiscountDao discountDao = new DiscountDao();
+        List<Discount> discounts = discountDao.getDiscounts();
+        discountDao.connectionClose(); // 接続を閉じる
+
+        // 料金計算
+        int totalCost = calculateTotalCost(durationHours, discounts);
+        // 結果をリクエストに設定
+        request.getSession().setAttribute("totalCost", totalCost);
+        path ="P63.jsp"; // 結果をresult.jspにフォワード
+        RequestDispatcher rd =request.getRequestDispatcher(path);
+		rd.forward(request, response);
+
     }
 }
