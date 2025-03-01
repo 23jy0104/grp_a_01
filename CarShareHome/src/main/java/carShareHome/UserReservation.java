@@ -66,7 +66,6 @@ public class UserReservation extends HttpServlet {
         request.setAttribute("customerId", customerId);
         request.setAttribute("customerName", customerName);
         request.setAttribute("rireki", rireki);
-        System.out.println(rireki);
         request.getRequestDispatcher("P65.jsp").forward(request, response);
         
         reservationDAO.connectionClose();

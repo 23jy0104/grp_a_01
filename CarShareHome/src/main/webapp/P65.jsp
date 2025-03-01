@@ -4,7 +4,7 @@
 <%@page import="java.util.List"%>
 <%@ page import="model.Customer" %>
 <%
-	String cuetomerId =(String)session.getAttribute("customerId");
+	String customerId =(String)session.getAttribute("customerId");
 	String customerName =(String)session.getAttribute("customerName");
 	List<Reservation> list =(List<Reservation>)request.getAttribute("rireki");
 	
@@ -38,7 +38,8 @@
 <nav class="nav">
     <ul>
         <li class="nav-item gnav02"><a href="P53.jsp">予約・ステーション検索</a></li>
- 		<li class="nav-item gnav03"><a href="UserReservation?customerId=<%= customerId%>&customerName=<%=customerName%>">予約確認・変更・取り消し</a></li>            <li class="nav-item gnav04"><a href="UseHistory?customerId=${customerId}&customerName=${customerName}">ご利用履歴</a></li>
+ 		<li class="nav-item gnav03"><a href="UserReservation?customerId=<%= customerId%>&customerName=<%=customerName%>">予約確認・変更・取り消し</a></li>           
+ 		<li class="nav-item gnav04"><a href="UseHistory?customerId=${customerId}&customerName=${customerName}">ご利用履歴</a></li>
         <li class="nav-item gnav05"><a href="P76.jsp">ご登録情報の確認</a></li>
     </ul>
 </nav>
@@ -75,9 +76,9 @@
             <td><%= yoyaku.getModelName() %> </td>
             <td><%=yoyaku.getReservationTime() %></td>
             <td><%=yoyaku.getPrice() %>円</td>
-             <button class="change" onclick="location.href='P67.jsp?reservationId=<%=yoyaku.getReservationId()%>'">変更</button>
-    <br>
-    <button class="cancel" onclick="location.href='P72.jsp?reservationId=<%=yoyaku.getReservationId()%>'">取消</button>
+            <td><button class="change" onclick="location.href='Henkou?reservationId=<%=yoyaku.getReservationId()%>'">変更</button>
+			<br><button class="cancel" onclick="location.href='Sakujo?reservationId=<%=yoyaku.getReservationId()%>'">取消</button></td>
+
          </tr>
        <%
         }
