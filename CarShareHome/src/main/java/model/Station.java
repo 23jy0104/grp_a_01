@@ -36,6 +36,10 @@ public class Station implements Serializable{
 		this.stationAddress = stationAddress;
 		this.stationData=stationData;
 	}
+	public Station(String stationName) {
+		
+		this.stationName = stationName;
+	}
 	public String getStationName() {
 		return stationName;
 	}

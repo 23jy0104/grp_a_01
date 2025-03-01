@@ -13,6 +13,9 @@ public class Reservation implements Serializable {
     private CarData carCode;
     private Customer customer;
     private Station station;
+    private String number;
+    private String reservationTime;
+    private String modelName;
 
     
     
@@ -41,7 +44,34 @@ public class Reservation implements Serializable {
 		this.price = price;
 		this.carCode = carCode;
 	}
+	
+	
 
+	public Reservation(String reservationId, String startDate, String stopDate, Customer customerId, int price,
+			CarData carCode, Station station, String number, String reservationTime, String modelName) {
+		super();
+		this.reservationId = reservationId;
+		this.startDate = startDate;
+		this.stopDate = stopDate;
+		this.customerId = customerId;
+		this.price = price;
+		this.carCode = carCode;
+		this.station = station;
+		this.number = number;
+		this.reservationTime =reservationTime;
+		this.modelName=modelName;
+	}
+	public Reservation(String reservationId, String startDate, String stopDate, Customer customerId, int price,
+			Customer customer, Station station) {
+		super();
+		this.reservationId = reservationId;
+		this.startDate = startDate;
+		this.stopDate = stopDate;
+		this.customerId = customerId;
+		this.price = price;
+		this.customer = customer;
+		this.station = station;
+	}
 	public String getReservationId() {
 		return reservationId;
 	}
@@ -112,6 +142,27 @@ public class Reservation implements Serializable {
 
 	public void setStation(Station station) {
 		this.station = station;
+	}
+	public String getNumber() {
+		return number;
+	}
+	public void setNumber(String number) {
+		this.number = number;
+	}
+	public String getReservationTime() {
+		return reservationTime;
+	}
+	public void setReservationTime(String reservationTime) {
+		this.reservationTime = reservationTime;
+	}
+	public String getModelName() {
+		return modelName;
+	}
+	public void setModelName(String modelName) {
+		this.modelName = modelName;
+	}
+	public void setFinishDate(String finishDate) {
+		this.finishDate = finishDate;
 	}
 	
 	

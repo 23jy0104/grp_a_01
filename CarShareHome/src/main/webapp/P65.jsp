@@ -1,6 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-
+<%@page import="model.Reservation"%>
+<%@page import="java.util.List"%>
+<%@ page import="model.Customer" %>
+<%
+	String cuetomerId =(String)session.getAttribute("customerId");
+	String customerName =(String)session.getAttribute("customerName");
+	List<Reservation> list =(List<Reservation>)request.getAttribute("rireki");
+	System.out.println(list);
+%>
 <!DOCTYPE html>
 <html>
 <!--予約変更・確認・取消-->
@@ -20,7 +28,7 @@
     <img src="img/rog.png" alt="TMCロゴ">
     <h1>TMC カーシェア</h1>
     <div class="user-info">
-        <h4 id="username">23jy0000様</h4>
+        <h4 id="username"><%=customerName %>さん</h4>
         <button class="logout-button" onclick="location.href='P29.jsp'" >ログアウト</button>
     </div>
 </header>
@@ -37,7 +45,7 @@
 <table>
     <div class="history">
         <tr>
-            <th>ご利用履歴</th>
+            <th>予約の確認・変更・取消</th>
         </tr>
     </div>
 </table>
@@ -45,22 +53,35 @@
     <thead>
         <tr>
             <th>予約番号</th>
-            <th>予約開始日時<br>返却予定日時</th>
+            <th>予約開始日時</th>
+            <th>予約終了日時</th>
             <th>ステーション</th>
             <th>車両</th>
             <th>予約受付日時</th>
+            <th>利用予定金額</th>
             <th>情報</th>
         </tr>
     </thead>
     <tbody>
         <tr>
-            <td>00000000</td>
-            <td>〇〇〇〇年〇〇月〇〇日(〇)〇〇:〇〇<br>～<br>〇〇〇〇年〇〇月〇〇日(〇)〇〇:〇〇</td>
-            <td>〇〇駐車場</td>
-            <td>BNR32型(新宿〇〇〇 わ 〇〇〇〇、ブラック) </td>
-            <td>〇〇〇〇年〇〇月〇〇日(〇)00:00</td>
-            <td><button class="change" onclick="location.href='P67.jsp'">変更</button><br><button class="cancel" onclick="location.href='P72.jsp'">取消</button></td>
-        </tr>
+        <% for(Reservation yoyaku: list){
+        	
+        %>
+            <td><%=yoyaku.getReservationId() %></td>
+            <td><%=yoyaku.getStartDate() %></td>
+            <td><%=yoyaku.getStopDate() %></td>
+            <td><%=yoyaku.getStation() %></td>
+            <td><%= yoyaku.getModelName() %> </td>
+            <td><%=yoyaku.getReservationTime() %></td>
+            <td><%=yoyaku.getPrice() %>円</td>
+            <td><button class="change" onclick="location.href='P67.jsp'">変更</button>
+            <br><button class="cancel" onclick="location.href='P72.jsp'">取消</button></td>
+         </tr>
+       <%
+        }
+       %>
+       
+       
 
 </table>
 </body>
