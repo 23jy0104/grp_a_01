@@ -263,11 +263,6 @@ public class ReservationDAO {
 						modelName
 						);
 				yoyakuzumi.add(list);
-				for( Reservation lists :yoyakuzumi) {
-					System.out.println("予約ID:"+lists.getReservationId()+" 利用開始日時:"+lists.getStartDate()+"利用終了日時"+lists.getStopDate()
-										+" ステーションIDとステーション名:"+lists.getStation()+" 車種名："+lists.getModelName()
-										+"ナンバー："+lists.getNumber()+"予約受付日時:"+lists.getReservationTime()+"価格："+lists.getPrice());
-					}
 			}
 			
 		} catch (SQLException e) {

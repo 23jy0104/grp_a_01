@@ -7,7 +7,9 @@
 	String cuetomerId =(String)session.getAttribute("customerId");
 	String customerName =(String)session.getAttribute("customerName");
 	List<Reservation> list =(List<Reservation>)request.getAttribute("rireki");
-	System.out.println(list);
+	
+    String reservationId = request.getParameter("reservationId");
+    // reservationId を使ってデータベースから予約情報を取得し、変更処理を行う
 %>
 <!DOCTYPE html>
 <html>
@@ -36,9 +38,8 @@
 <nav class="nav">
     <ul>
         <li class="nav-item gnav02"><a href="P53.jsp">予約・ステーション検索</a></li>
-            <li class="nav-item gnav03"><a href="P65.jsp">予約確認・変更・取り消し</a></li>
-            <li class="nav-item gnav04"><a href="UseHistory?customerId=${customerId}&customerName=${customerName}">ご利用履歴</a></li>
-            <li class="nav-item gnav05"><a href="P76.jsp">ご登録情報の確認</a></li>
+ 		<li class="nav-item gnav03"><a href="UserReservation?customerId=<%= customerId%>&customerName=<%=customerName%>">予約確認・変更・取り消し</a></li>            <li class="nav-item gnav04"><a href="UseHistory?customerId=${customerId}&customerName=${customerName}">ご利用履歴</a></li>
+        <li class="nav-item gnav05"><a href="P76.jsp">ご登録情報の確認</a></li>
     </ul>
 </nav>
 
@@ -70,12 +71,13 @@
             <td><%=yoyaku.getReservationId() %></td>
             <td><%=yoyaku.getStartDate() %></td>
             <td><%=yoyaku.getStopDate() %></td>
-            <td><%=yoyaku.getStation() %></td>
+            <td><%=yoyaku.getStation().getStationName() %></td>
             <td><%= yoyaku.getModelName() %> </td>
             <td><%=yoyaku.getReservationTime() %></td>
             <td><%=yoyaku.getPrice() %>円</td>
-            <td><button class="change" onclick="location.href='P67.jsp'">変更</button>
-            <br><button class="cancel" onclick="location.href='P72.jsp'">取消</button></td>
+             <button class="change" onclick="location.href='P67.jsp?reservationId=<%=yoyaku.getReservationId()%>'">変更</button>
+    <br>
+    <button class="cancel" onclick="location.href='P72.jsp?reservationId=<%=yoyaku.getReservationId()%>'">取消</button>
          </tr>
        <%
         }
