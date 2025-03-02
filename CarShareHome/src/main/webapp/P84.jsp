@@ -73,6 +73,16 @@ String stationName =(String)session.getAttribute("stationName");
             const selectedDate = new Date(startDateInput.value);
             const isToday = selectedDate.toISOString().split('T')[0] === formattedToday;
 
+            // 現在の日付より前の場合、時間を無効にする
+            if (selectedDate < today) {
+                for (let hour = 0; hour < 24; hour++) {
+                    const hourStr = String(hour).padStart(2, '0');
+                    const hourOption = startTimeHourInput.querySelector(`option[value="${hourStr}"]`);
+                    hourOption.disabled = true; // すべて無効にする
+                }
+                return;
+            }
+
             // 時間の選択肢を更新
             for (let hour = 0; hour < 24; hour++) {
                 const hourStr = String(hour).padStart(2, '0');
@@ -92,6 +102,16 @@ String stationName =(String)session.getAttribute("stationName");
             const selectedDate = new Date(endDateInput.value);
             const isToday = selectedDate.toISOString().split('T')[0] === formattedToday;
 
+            // 現在の日付より前の場合、時間を無効にする
+            if (selectedDate < today) {
+                for (let hour = 0; hour < 24; hour++) {
+                    const hourStr = String(hour).padStart(2, '0');
+                    const hourOption = endTimeHourInput.querySelector(`option[value="${hourStr}"]`);
+                    hourOption.disabled = true; // すべて無効にする
+                }
+                return;
+            }
+
             // 時間の選択肢を更新
             for (let hour = 0; hour < 24; hour++) {
                 const hourStr = String(hour).padStart(2, '0');
@@ -99,6 +119,7 @@ String stationName =(String)session.getAttribute("stationName");
                 hourOption.disabled = !isToday || hour < currentHour; // 現在の時間より後の時間のみ選択可能
             }
         }
+
 
      // 予約内容確認ボタンのフォームに対してのみイベントリスナーを設定
         document.querySelector('form[action="ReservationOK"]').addEventListener('submit', function(event) {
