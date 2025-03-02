@@ -7,7 +7,6 @@
 	String customerId =(String)session.getAttribute("customerId");
 	String customerName =(String)session.getAttribute("customerName");
 	List<Reservation> list =(List<Reservation>)request.getAttribute("rireki");
-	
     String reservationId = request.getParameter("reservationId");
     // reservationId を使ってデータベースから予約情報を取得し、変更処理を行う
 %>

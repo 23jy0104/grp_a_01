@@ -10,13 +10,17 @@ String startDate =(String)request.getAttribute("startDate");
 String stopDate =(String)request.getAttribute("stopDate");
 String modelName =(String)request.getAttribute("modelName");
 String number=(String)request.getAttribute("number");
+String carCode =(String)request.getAttribute("carCode");
+int price =(Integer)request.getAttribute("price");
 
-boolean isDateTime = startDate.contains(" "); // 日付と時間が含まれているか判定
+boolean isStartDateTime = startDate.contains(" "); // 日付と時間が含まれているか判定
 
 //日付だけを取得する場合
-String dateOnly = isDateTime ? startDate.split(" ")[0] : startDate;
+String startdateOnly = isStartDateTime ? startDate.split(" ")[0] : startDate;
 
+boolean isStopDateTime = stopDate.contains(" ");
 
+String stopdateOnly = isStopDateTime ? stopDate.split(" ")[0] : stopDate;
 
 %>
 <!DOCTYPE html>
@@ -44,7 +48,7 @@ String dateOnly = isDateTime ? startDate.split(" ")[0] : startDate;
         </ul>
     </nav>
 <main>
-    <h4>※前後5時間以内のみ変更可能です。車種変更または日時変更をする際は取り消してから予約しなおしてください。</h4>
+    <h4>※ご予約の時間のみ変更が可能となります。開始日と終了日の日付の変更はできません。日付を跨いでの変更、または車種の変更をご希望のお客様は一度予約を取り消してから再度ご予約ください。</h4>
     <table>
         <tr>
             <th colspan="2">変更前の予約情報</th>
@@ -71,7 +75,11 @@ String dateOnly = isDateTime ? startDate.split(" ")[0] : startDate;
         </tr>
          <tr>
         	<th>ナンバー</th>
-        	<td><%=number %>
+        	<td><%=number %></td>
+        </tr>
+        <tr>
+        	<th>予定金額</th>
+        	<td><%=price %>円</td>
         </tr>
         <tr>
             <td>駆動</td>
@@ -87,17 +95,16 @@ String dateOnly = isDateTime ? startDate.split(" ")[0] : startDate;
         </tr>
     </table>
 	<div id="errorMessage" style="color: red; font-weight: bold;">
-    <%
-       String errorMessage = (String) request.getAttribute("errorMessage");
-       if (errorMessage != null) {
-           out.println(errorMessage);
-       }
-    %>
+   <% if (request.getAttribute("errorMessage") != null) { %>
+    <div class="error-message">
+        <%= request.getAttribute("errorMessage") %>
+    </div>
+<% } %>
 </div>
 	<h2>予約変更入力（入力）</h2>
-	<form action="Henkou" method="get" style="display: inline;" onsubmit="return validateDates();">
+	<form action="Henkou" method="post" style="display: inline;>
 	    <label for="startDate">予約開始日:</label>
-	    <input type="date" name="startDate" id="startDate" value="<%= dateOnly %>" readonly>
+	    <input type="date" name="startDate" id="startDate" value="<%= startdateOnly %>" readonly>
 	    <select id="startTimeHour" name="startTimeHour" required style="margin-right: 5px; padding: 5px;">
 	        <option value="">-- 選択 --</option>
 	        <%
@@ -117,9 +124,9 @@ String dateOnly = isDateTime ? startDate.split(" ")[0] : startDate;
 	        <option value="45">45分</option>
 	    </select>
 	    <br>
-	    <label for="EndDate">予約終了日:</label>
-	    <input type="date" name="EndDate" id="EndDate" required>
-	    <select id="EndTimeHour" name="EndTimeHour" required style="margin-right: 5px; padding: 5px;">
+	    <label for="endDate">予約終了日:</label>
+	    <input type="date" name="endDate" id="EndDate" value ="<%=stopdateOnly%>"readonly>
+	    <select id="endTimeHour" name="endTimeHour" required style="margin-right: 5px; padding: 5px;">
 	        <option value="">-- 選択 --</option>
 	        <%
 	        for (int hour = 0; hour < 24; hour++) {
@@ -130,7 +137,7 @@ String dateOnly = isDateTime ? startDate.split(" ")[0] : startDate;
 	        }
 	        %>
 	    </select>
-	    <select id="EndTimeMinute" name="EndTimeMinute" required style="padding: 5px;">
+	    <select id="EndTimeMinute" name="endTimeMinute" required style="padding: 5px;">
 	        <option value="">-- 分を選択 --</option>
 	        <option value="00">00分</option>
 	        <option value="15">15分</option>
@@ -139,33 +146,21 @@ String dateOnly = isDateTime ? startDate.split(" ")[0] : startDate;
 	    </select>
 	    <br>
 	    <input type ="hidden" name="reservationId" value ="<%=reservationId %>">
+	    <input type ="hidden" name="stationId" value="<%=stationId %>">
+	    <input type ="hidden" name="carCode" value="<%=carCode %>">
+	    <input type="hidden" name="customerId" value ="<%=customerId %>">
+	    <input type ="hidden" name ="modelName" value ="<%=modelName %>">
+	    <input type ="hidden" name="number" value ="<%=number %>">
+	    <input type ="hidden" name ="stationName" value="<%=stationName %>">
+	    <input type ="hidden" name ="price" value="<%=price %>">
+	    
 	    <input type="submit" value="変更する">
 	</form>
 
 		</div>
    
         </div>
-        <script>
-	        function validateDates() {
-	            const startDate = new Date(document.getElementById('startDate').value);
-	            const stopDate = new Date(document.getElementById('EndDate').value);
-	            
-	            const fiveHoursInMillis = 5 * 60 * 60 * 1000; // 5時間をミリ秒に変換
-	            
-	            // startDateからの5時間前後を計算
-	            const minStopDate = new Date(startDate.getTime() - fiveHoursInMillis);
-	            const maxStopDate = new Date(startDate.getTime() + fiveHoursInMillis);
-	            
-	            if (stopDate < minStopDate || stopDate > maxStopDate) {
-	                const errorMessageDiv = document.getElementById('errorMessage');
-	                errorMessageDiv.innerHTML = '※ 予約終了日時は予約開始日時の前後5時間以内で指定してください。';
-	                return false;
-	            } else {
-	                document.getElementById('errorMessage').innerHTML = ''; // エラーメッセージをクリア
-	            }
-	            return true;
-	        }
-		</script>
+       
         
 
     </main>

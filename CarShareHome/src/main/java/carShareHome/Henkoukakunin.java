@@ -1,0 +1,59 @@
+package carShareHome;
+
+import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import model.Reservation.ReservationManager;
+
+/**
+ * Servlet implementation class Henkoukakunin
+ */
+@WebServlet("/Henkoukakunin")
+public class Henkoukakunin extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public Henkoukakunin() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		 request.setCharacterEncoding("UTF-8");
+	     response.setContentType("text/html; charset=UTF-8");
+	      
+	     String reservationId =request.getParameter("reservationId");
+	     String stationId =request.getParameter("stationId");
+	     String carCode =request.getParameter("carCode");
+	     String customerId =request.getParameter("customerId");
+	     String modelName =request.getParameter("modelName");
+	     String number =request.getParameter("number");
+	     String priceParam = request.getParameter("price");
+	     int price = Integer.parseInt(priceParam); // 必要に応じて型変換
+	        
+	     String startDate =request.getParameter("startDate");
+	     String startTimeHour =request.getParameter("startTimeHour");
+	     String startTimeMinute = request.getParameter("startTimeMinute");
+	        
+	     String endDate =request.getParameter("endDate");
+	     String endTimeHour =request.getParameter("endTimeHour");
+	     String endTimeMinute =request.getParameter("endTimeMinute");
+	                
+	     String startDateTime =startDate+" "+ startTimeHour +":"+startTimeMinute+":00";
+	     String endDateTime =endDate+" "+endTimeHour+":"+endTimeMinute+":00";
+	     
+	     ReservationManager.changeReservation(reservationId, startDateTime, endDateTime);
+	     
+	     RequestDispatcher rd =request.getRequestDispatcher("");
+	     rd.forward(request, response);
+	}
+
+}
