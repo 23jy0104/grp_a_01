@@ -8,6 +8,8 @@ public class HenkyakuData {
     private String stationId;
     private String keyboxId;
     private String reservationId;
+    private String timeDate;
+    private String finishDate;
 
 	public HenkyakuData() {
 		super();
@@ -60,6 +62,22 @@ public class HenkyakuData {
 
 	public void setReservationId(String reservationId) {
 		this.reservationId = reservationId;
+	}
+
+	public String getTimeDate() {
+		return timeDate;
+	}
+
+	public void setTimeDate(String timeDate) {
+		this.timeDate = timeDate;
+	}
+
+	public String getFinishDate() {
+		return finishDate;
+	}
+
+	public void setFinishDate(String finishDate) {
+		this.finishDate = finishDate;
 	}
 	
 }

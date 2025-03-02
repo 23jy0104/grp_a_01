@@ -1,5 +1,6 @@
 package Kanri;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -43,7 +44,14 @@ public class MailSendAttached extends HttpServlet {
 
 	private final String from = "gr0101a@jynet.jec.ac.jp";
 	private final String host = "10.64.144.9";
-	private final String fileName = "qr_code.png";
+	private String fileName = "qr_code.png";
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+doPost(request, response);
+	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -64,9 +72,18 @@ public class MailSendAttached extends HttpServlet {
 		    "---\r\nTMCカーシェアチーム"
 		);
 		try {
+			String reservationId = "R0018";
+			String sendURL = "http://localhost:8080/CarShareHome/StationQRcodeReader?reservationId=" + reservationId;
+			
+			
+			//sendURL = "http://192.168.1.124:8080/CarShareHome/StationQRcodeReader?reservationId=" + reservationId;
+			
+			fileName = reservationId+".png";
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			Timer timer = new Timer(false);
-			CreateQR.createQr("boxがあきました。"); //QR読み込み後に表示される文字を取得
+			CreateQR.createQr(sendURL ,reservationId+".png"); //QR読み込み後に表示される文字を取得
+			File tmpFile = new File(fileName);
+			System.out.println(tmpFile.getAbsolutePath());
 			TimerTask task = new TimerTask() {
 	 
 				@Override
@@ -106,7 +123,7 @@ public class MailSendAttached extends HttpServlet {
 			MimeBodyPart mbp2 = new MimeBodyPart();
 			FileDataSource fds = new FileDataSource(fileName);
 			mbp2.setDataHandler(new DataHandler(fds));
-			mbp2.setFileName(MimeUtility.encodeWord(fds.getName()));
+			mbp2.setFileName(MimeUtility.encodeWord("QRcode.png"));
 
 			Multipart mp = new MimeMultipart();
 			mp.addBodyPart(mbp1);
