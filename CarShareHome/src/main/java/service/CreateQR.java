@@ -15,12 +15,12 @@ import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
 public class CreateQR {
-	public static void createQr(String key) {
+	public static void createQr(String key ,String fileName) {
 		try {
 	        String source = key;
 	        String encoding = "UTF-8";
 	        int size = 300;
-	        String filePath =  "qr_code.png";
+	        String filePath =  fileName;
 	
 	        Map<EncodeHintType, Object> hints = new HashMap<>();
 	        hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.M);

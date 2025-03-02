@@ -13,5 +13,7 @@
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/jstl-1.2.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/activation.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/javax.mail.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/core-3.3.0.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/javase-3.3.0.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

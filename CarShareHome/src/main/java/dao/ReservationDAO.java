@@ -172,7 +172,7 @@ public class ReservationDAO {
     }
     public HenkyakuData getUsageById(String reservationId) {
     	HenkyakuData henkyaku = null;
-    	String sql = "SELECT s.station_name,m.model_name,car.number,r.start_date ,k.keybox_id ,k.station_id ,reservation_id"
+    	String sql = "SELECT s.station_name,m.model_name,car.number,r.start_date ,k.keybox_id ,k.station_id ,reservation_id ,r.time_date ,r.finish_date"
 	    			+ " FROM reservation AS r"
 	    			+ " INNER JOIN car_db AS car"
 	    			+ " ON r.car_code = car.car_code"
@@ -195,6 +195,8 @@ public class ReservationDAO {
                 henkyaku.setStationId(rs.getString("station_id"));
                 henkyaku.setKeyboxId(rs.getString("keybox_id"));
                 henkyaku.setReservationId(rs.getString("reservation_id"));
+                henkyaku.setTimeDate(rs.getString("time_date"));
+                henkyaku.setFinishDate(rs.getString("finish_date"));
             }
     	}catch(SQLException e) {
     		e.printStackTrace();
@@ -273,4 +275,47 @@ public class ReservationDAO {
     
     }
     
+    public String getLastReservationId(String customerId ,String carCode) {
+    	String sql = "SELECT MAX(reservation_id) AS reservation_id FROM reservation WHERE customer_id = ? AND car_code = ? AND time_date IS NULL AND finish_date IS NULL;";
+    	String reservationId = null;
+    	try(PreparedStatement pstmt = con.prepareStatement(sql)) {
+    		pstmt.setString(1, customerId);
+    		pstmt.setString(2, carCode);
+    		ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                reservationId = rs.getString("reservation_id");
+                
+            }
+    	}catch(SQLException e) {
+    		e.printStackTrace();
+    	}
+    	return reservationId;
+    }
+    public boolean setTimeDate(String reservationId) {
+    	boolean time = false;
+    	String sql = "UPDATE reservation SET time_date = CURRENT_TIME WHERE station_id = ?;";
+    	try(PreparedStatement pstmt = con.prepareStatement(sql)) {
+    		pstmt.setString(1, reservationId);
+         time = true;
+        	System.out.println("利用が開始されました。");
+    	}catch(SQLException e) {
+    		e.printStackTrace();
+    		System.out.println("利用が開始されていません");
+    	}
+    	return time;
+    }
+    
+    public boolean setFinishDate(String reservationId) {
+    	boolean time = false;
+    	String sql = "UPDATE reservation SET finish_date = CURRENT_TIME WHERE station_id = ?;";
+    	try(PreparedStatement pstmt = con.prepareStatement(sql)) {
+    		pstmt.setString(1, reservationId);
+         time = true;
+        	System.out.println("利用が終了ました。");
+    	}catch(SQLException e) {
+    		e.printStackTrace();
+    		System.out.println("利用が終了していません");
+    	}
+    	return time;
+    }
 }
