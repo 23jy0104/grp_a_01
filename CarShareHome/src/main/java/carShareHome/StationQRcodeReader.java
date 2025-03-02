@@ -8,6 +8,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import dao.ReservationDAO;
+import model.HenkyakuData;
+
 /**
  * Servlet implementation class StationQRcodeReader
  */
@@ -29,6 +32,11 @@ public class StationQRcodeReader extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String reservationId = request.getParameter("reservationId");
 		request.setAttribute("reservationId", reservationId);
+		ReservationDAO reservationDao = new ReservationDAO();
+		HenkyakuData henkyaku = reservationDao.getUsageById(reservationId);
+		if(henkyaku.getTimeDate() == null || henkyaku.equals("")) {
+			
+		}
 		request.getRequestDispatcher("qrcode.jsp").forward(request, response);
 	}
 
