@@ -51,8 +51,6 @@ public class CarAvailabilityServlet extends HttpServlet {
         LocalDateTime sixHoursLater = dateTime.plusHours(6);
         String sixHoursLaterString = sixHoursLater.format(formatter);
         List<CarData> carData =new ArrayList<>();
-        System.out.println(selectDateTime);
-        System.out.println( sixHoursLaterString);
         try {
 			Class.forName("com.mysql.jdbc.Driver");
 			final String url = "jdbc:mysql://10.64.144.5:3306/23jya01";

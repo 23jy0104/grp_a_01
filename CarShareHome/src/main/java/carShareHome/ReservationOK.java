@@ -60,8 +60,8 @@ public class ReservationOK extends HttpServlet {
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, carCode);
 			pstmt.setString(2, stationId);
-			pstmt.setTimestamp(4, Timestamp.valueOf(endDate)); // 終了日時を渡す
-            pstmt.setTimestamp(3, Timestamp.valueOf(startDate)); // 開始日時を渡す
+			pstmt.setTimestamp(3, Timestamp.valueOf(endDate)); // 終了日時を渡す
+            pstmt.setTimestamp(4, Timestamp.valueOf(startDate)); // 開始日時を渡す
             rs = pstmt.executeQuery();
             if (rs.next()) {
                 // 予約が重複している場合
