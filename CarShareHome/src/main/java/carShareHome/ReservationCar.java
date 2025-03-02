@@ -35,6 +35,10 @@ public class ReservationCar extends HttpServlet {
 
         // リクエストパラメータの取得
         String carType = request.getParameter("carType");
+        // 最後の文字が '>' であれば取り除く
+        if (carType != null && carType.endsWith(">")) {
+            carType = carType.substring(0, carType.length() - 1);
+        }
         String stationId =request.getParameter("stationId");
         String stationName =request.getParameter("stationName");
         String stationData =request.getParameter("stationData");

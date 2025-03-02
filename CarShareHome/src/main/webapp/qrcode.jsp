@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>キーボックス画面表示</title>
 </head>
 <body>
 <p>ボックスが開きました。</p>
