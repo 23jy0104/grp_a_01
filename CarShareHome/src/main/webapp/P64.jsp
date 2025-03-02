@@ -76,8 +76,8 @@
             </div>
         </div>
         <div class="button-container">
-            <button class="action-button" onclick="UserReservation?customerId=<%= customerId%>&customerName=<%=customerName%>'">予約確認画面へ</button>
-        </div>
+    		<button class="action-button" onclick="window.location.href='UserReservation?customerId=<%= customerId %>&customerName=<%= customerName %>'">予約確認画面へ</button>
+		</div>
     </main>
 </body>
 </html>

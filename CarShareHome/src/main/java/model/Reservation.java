@@ -174,44 +174,31 @@ public class Reservation implements Serializable {
 	
 	public static class ReservationManager {
 	    private static List<Reservation> reservations;
-	    private static Connection connection;
 
 	    public ReservationManager(List<Reservation> reservations) {
-	        ReservationManager.setReservations(reservations);
-	        initializeConnection(); // Connectionを初期化
+	        setReservations(reservations);
 	    }
-	    private static void initializeConnection() {
-	        try {
-	            Class.forName("com.mysql.jdbc.Driver");
-	            final String url = "jdbc:mysql://10.64.144.5:3306/23jya01";
-	            final String user = "23jya01";
-	            final String pass = "23jya01";
-	            connection = DriverManager.getConnection(url, user, pass); // Connectionを取得
-	        } catch (ClassNotFoundException | SQLException e) {
-	            e.printStackTrace(); // エラーハンドリング
-	        }
-	    }
-	    
-	    public static boolean isTimeSlotAvailableForOtherCustomers(String customerId, String carCode, String startDateTime, String endDateTime) {
-	    	String sql = "SELECT * FROM Reservation WHERE car_code = ? AND customer_id != ? AND "
-	                + "(start_date < ? AND stop_date > ?);";
 
-	    // SQLを実行して予約を取得する処理を追加
-	    List<Reservation> reservations = executeQuery(sql, carCode, customerId, endDateTime, startDateTime);
-	    
-	    for (Reservation reservation : reservations) {
+	    public static boolean isTimeSlotAvailableForOtherCustomers(String customerId, String carCode, String startDateTime, String endDateTime) {
+	        String sql = "SELECT * FROM Reservation WHERE car_code = ? AND customer_id != ? AND "
+	                   + "(start_date < ? AND stop_date > ?);";
+
+	        // SQLを実行して予約を取得する処理を追加
+	        List<Reservation> reservations = executeQuery(sql, carCode, customerId, endDateTime, startDateTime);
+	        
 	        // 予約時間の重複チェック
-	        return false; // 重複している
+	        return reservations.isEmpty(); // 予約がなければ重複していない
 	    }
-	    
-	    return true; // 重複していない
-	}
 
 	    private static List<Reservation> executeQuery(String sql, String carCode, String customerId, String endDateTime,
-				String startDateTime) {
-	    	List<Reservation> reservations = new ArrayList<>();
+	                                                  String startDateTime) {
+	        List<Reservation> reservations = new ArrayList<>();
+	        String url = "jdbc:mysql://10.64.144.5:3306/23jya01";
+	        String user = "23jya01";
+	        String pass = "23jya01";
 	        
-	        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+	        try (Connection connection = DriverManager.getConnection(url, user, pass);
+	             PreparedStatement pstmt = connection.prepareStatement(sql)) {
 	            pstmt.setString(1, carCode);
 	            pstmt.setString(2, customerId);
 	            pstmt.setString(3, endDateTime);
@@ -219,56 +206,47 @@ public class Reservation implements Serializable {
 	            
 	            try (ResultSet rs = pstmt.executeQuery()) {
 	                while (rs.next()) {
-	                    // Reservationオブジェクトを作成し、リストに追加
 	                    Reservation reservation = new Reservation();
-	                    reservation.setCustomerId(new Customer(rs.getString("customer_id"))); // Customerオブジェクトを作成
-	                    reservation.setCarCode(new CarData(rs.getString("car_code"))); // CarDataオブジェクトを作成
+	                    reservation.setCustomerId(new Customer(rs.getString("customer_id")));
+	                    reservation.setCarCode(new CarData(rs.getString("car_code")));
 	                    reservation.setStartDate(rs.getString("start_date"));
 	                    reservation.setStopDate(rs.getString("stop_date"));
-	                    // 他の必要なフィールドも設定
 	                    reservations.add(reservation);
 	                }
 	            }
 	        } catch (SQLException e) {
-	            e.printStackTrace();
-	            // エラーハンドリング
+	            e.printStackTrace(); // エラーハンドリング
 	        }
 	        
 	        return reservations;
-		}
-		public static void changeReservation(String reservationId, String startDateTime, String endDateTime,int price)  {
-	    	
-	    	try {
-				Class.forName("com.mysql.jdbc.Driver");
-				final String url = "jdbc:mysql://10.64.144.5:3306/23jya01";
-				final String user = "23jya01";
-				final String pass = "23jya01";			
-				
-				String sql = "UPDATE reservation SET start_date = ?, stop_date = ?,price= ? WHERE reservation_id = ?";    	
-				
-				try (	Connection con =DriverManager.getConnection(url,user,pass);
-						PreparedStatement statement = con.prepareStatement(sql)) {
-				    statement.setString(1, startDateTime);
-				    statement.setString(2, endDateTime);
-				    statement.setString(4, reservationId);
-				    statement.setInt(3, price);
-				    statement.executeUpdate();
-				}
-			} catch (ClassNotFoundException e) {
-				// TODO 自動生成された catch ブロック
-				e.printStackTrace();
-			} catch (SQLException e) {
-				// TODO 自動生成された catch ブロック
-				e.printStackTrace();
-			}
 	    }
-		public static List<Reservation> getReservations() {
-			return reservations;
-		}
-		public static void setReservations(List<Reservation> reservations) {
-			ReservationManager.reservations = reservations;
-		}
-	    
+
+	    public static void changeReservation(String reservationId, String startDateTime, String endDateTime, int price) {
+	        String url = "jdbc:mysql://10.64.144.5:3306/23jya01";
+	        String user = "23jya01";
+	        String pass = "23jya01";			
+	        
+	        String sql = "UPDATE reservation SET start_date = ?, stop_date = ?, price = ? WHERE reservation_id = ?";    	
+	        
+	        try (Connection con = DriverManager.getConnection(url, user, pass);
+	             PreparedStatement statement = con.prepareStatement(sql)) {
+	            statement.setString(1, startDateTime);
+	            statement.setString(2, endDateTime);
+	            statement.setInt(3, price);
+	            statement.setString(4, reservationId);
+	            statement.executeUpdate();
+	        } catch (SQLException e) {
+	            e.printStackTrace(); // エラーハンドリング
+	        }
+	    }
+
+	    public static List<Reservation> getReservations() {
+	        return reservations;
+	    }
+
+	    public static void setReservations(List<Reservation> reservations) {
+	        ReservationManager.reservations = reservations;
+	    }
 	}
 	
 	

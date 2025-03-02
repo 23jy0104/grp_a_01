@@ -121,12 +121,7 @@ public class Henkou extends HttpServlet {
 			
 		 List<Reservation> reservations = new ArrayList<Reservation>();// ここで予約リストを取得する処理を実装
 			
-		 Reservation.ReservationManager reservationManager = new ReservationManager(reservations);
-
-			
 			boolean isAvailable = ReservationManager.isTimeSlotAvailableForOtherCustomers(customerId, carCode, startDateTime, endDateTime);
-		    System.out.println("boolean後:"+startDate);
-		    System.out.println(endDate);
 		    if (isAvailable) {
 		    	
 		    	request.setAttribute("stationName", stationName);
@@ -137,6 +132,7 @@ public class Henkou extends HttpServlet {
 				request.setAttribute("number", number);
 				path ="DiscountHenkou";
 		    } else {
+		    	request.setAttribute("price", price);
 		    	 request.setAttribute("errorMessage", "指定された時間は他の顧客によって予約されています。");
 		    	 path="P67.jsp";
 		    }
