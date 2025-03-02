@@ -124,7 +124,8 @@ for (int hour = startHour; hour <= stopHour; hour++) {
 <nav class="nav">
     <ul>
         <li class="nav-item gnav02"><a href="P53.jsp">予約・ステーション検索</a></li>
-		 <li class="nav-item gnav03"><a href="UserReservation?customerId=<%= customerId%>&customerName=<%=customerName%>">予約確認・変更・取り消し</a></li>        <li class="nav-item gnav04"><a href="UseHistory?customerId=<%= customerId %>&customerName=<%= customerName %>">ご利用履歴</a></li>
+		 <li class="nav-item gnav03"><a href="UserReservation?customerId=<%= customerId%>&customerName=<%=customerName%>">予約確認・変更・取り消し</a></li>        
+		 <li class="nav-item gnav04"><a href="UseHistory?customerId=<%= customerId %>&customerName=<%= customerName %>">ご利用履歴</a></li>
         <li class="nav-item gnav05"><a href="P76.jsp">ご登録情報の確認</a></li>
     </ul>
 </nav>
@@ -190,6 +191,8 @@ for (int hour = startHour; hour <= stopHour; hour++) {
     if (hasAvailableCars) {
     %>
     <form action="DiscountCalculatorServlet" method="post" onsubmit="return validateForm()">
+	<input type="hidden" name ="stationName" value="<%=stationName %>">
+	<input type="hidden" name ="stationData" value ="<%=stationData %>">
     <select id="carType" name="carType" required>
         <option value="">-- 車種を選択してください。 --</option>
         <%

@@ -89,6 +89,7 @@ public class DiscountCalculatorServlet extends HttpServlet {
     	request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html; charset=UTF-8");
         
+        
     	String startDate =request.getParameter("startDate");
         String startTimeHour =request.getParameter("startTimeHour");
         String startTimeMinute =request.getParameter("startTimeMinute");
@@ -114,10 +115,9 @@ public class DiscountCalculatorServlet extends HttpServlet {
     	String endTimestamp = endformattedDate+" "+EndTimeHour+":"+EndTimeMinute+":00";
     	
         String carType =request.getParameter("carType");
-        System.out.println(carType);
         String stationId = (String) request.getSession().getAttribute("stationId");
-
-        
+        String stationName =request.getParameter("stationName");
+        String stationData =request.getParameter("stationData");
 		
 		String path ="";
 		
@@ -143,8 +143,8 @@ public class DiscountCalculatorServlet extends HttpServlet {
 		        PreparedStatement pstmt = con.prepareStatement(sql);
 		        pstmt.setString(1, stationId);
 		        pstmt.setString(2, carType); // carTypeを条件に追加
-		        pstmt.setTimestamp(3, Timestamp.valueOf(endTimestamp));
-		        pstmt.setTimestamp(4, Timestamp.valueOf(startTimestamp));
+		        pstmt.setTimestamp(3, Timestamp.valueOf(startTimestamp));
+		        pstmt.setTimestamp(4, Timestamp.valueOf(endTimestamp));
 		        ResultSet rs = pstmt.executeQuery();
 			 if (rs.next()) {
 				    // 予約が可能な場合の処理
@@ -158,8 +158,9 @@ public class DiscountCalculatorServlet extends HttpServlet {
 				} else {
 				    // 予約が重複している場合
 				    request.setAttribute("errorMessage", "指定できない時間が含まれています。再度空き状況を確認してください。");
-				    path = "P57.jsp"; // エラーメッセージを表示する画面
-				    return; // ここで処理を終了する
+				    String detailUrl = "P56.jsp?stationid=" + stationId + "&stationname=" + stationName + "&stationdata=" + stationData;
+
+				    path = detailUrl; // エラーメッセージを表示する画面
 				}	   
 			 
 	    } catch (ClassNotFoundException |SQLException e) {

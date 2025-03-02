@@ -416,7 +416,12 @@ String stationName =(String)session.getAttribute("stationName");
 			 </tr>
 			
 		 </table>
-		
+		<% String errorMessage = (String) request.getAttribute("errorMessage"); %>
+			<% if (errorMessage != null) { %>
+			    <div style="color: red;">
+			        <p><%= errorMessage %></p>
+			    </div>
+			<% } %>
 			 <div class="flex-container">
 				    <div class="flex-item">
 				        <h3>空き情報から探す</h3>

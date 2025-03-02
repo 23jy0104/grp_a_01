@@ -90,7 +90,8 @@ public class CreditNew extends HttpServlet {
         } catch (SQLException e) {
             e.printStackTrace();
             // エラーハンドリングの処理
-            request.setAttribute("errorMessage", "データベースへの登録に失敗しました。");
+            String errorMessage = "データベースへの登録に失敗しました: " + e.getMessage();
+            request.setAttribute("errorMessage", errorMessage);
             RequestDispatcher rd = request.getRequestDispatcher("P22.jsp");
             rd.forward(request, response);
         }
