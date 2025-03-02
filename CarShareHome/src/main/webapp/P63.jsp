@@ -35,7 +35,8 @@ String previousServlet = (String) request.getAttribute("previousServlet");
         function handleButtonClick() {
             if ("DiscountCalculatorServlet" === "<%= previousServlet %>") {
                 // P56.jspにGETリクエストを送信
-                var url = "P56.jsp?stationId=<%= stationId %>&stationName=<%= stationName %>&stationData=<%= stationData %>";
+                var url = "P56.jsp?stationid=<%= stationId %>&stationname=<%= stationName %>&stationdata=<%= stationData %>";
+
                 window.location.href = url;
             } else {
                 // ReservationCarにPOSTリクエストを送信

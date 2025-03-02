@@ -140,51 +140,52 @@ for (int hour = startHour; hour <= stopHour; hour++) {
     <h2><%= stationName %> の空いている車両一覧</h2>
 
     <%
-    if (hasAvailableCars) {
-        for (CarData car : carData) {
-    %>  
-        <img class="car-image" src="img/<%= car.getCarImage() %>" alt="車" />
-        <div class="car-item">
-            <div class="car-details">
-                <label>車種名：<%= car.getModelName() %></label>
-                <br>
-                <label>予約可能時間：</label>
-                <table class="time-table">
-                    <thead>
-                        <tr>
-                            <th>時間</th>
-                            <%
-                            for (String time : timeSlots) {
-                            %>
-                                <th><%= time %></th>
-                            <%
-                            }
-                            %>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>予約可能</td>
-                            <%
-                            for (String time : timeSlots) {
-                            %>
-                                <td class="available"></td>
-                            <%
-                            }
-                            %>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+if (hasAvailableCars) {
+    for (CarData car : carData) {
+%>  
+    <img class="car-image" src="img/<%= car.getCarImage() %>" alt="車" />
+    <div class="car-item">
+        <div class="car-details">
+            <label>車種名：<%= car.getModelName() %></label>
+            <br>
+            <label>予約可能時間：</label>
+            <table class="time-table">
+                <thead>
+                    <tr>
+                        <th>時間</th>
+                        <%
+                        for (String time : timeSlots) {
+                        %>
+                            <th><%= time %></th>
+                        <%
+                        }
+                        %>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>予約可能</td>
+                        <%
+                        for (String time : timeSlots) {
+                        %>
+                            <td class="available"></td>
+                        <%
+                        }
+                        %>
+                    </tr>
+                </tbody>
+            </table>
         </div>
-    <%
-        }
-    } else {
-    %>
-        <div style="color: red; font-weight: bold;">空車はありませんので日付を変更してお試しください。</div>
-    <%
+    </div>
+<%
     }
-    %>
+} else {
+%>
+    <div style="color: red; font-weight: bold;">空車はありませんので日付を変更してお試しください。</div>
+<%
+}
+%>
+
     
     <%
     // 車両がある場合のみ、予約フォームを表示
@@ -258,76 +259,101 @@ for (int hour = startHour; hour <= stopHour; hour++) {
         <option value="45">45分</option>
     </select>
     <div id="EndTimeMinuteError" style="color: red; display: none;">※ 予約終了分を選択してください。</div>
+    <input type="hidden" name="currentPath" value="<%= request.getRequestURI() %>">
 
     <input type="submit" value="予約内容を確認する">
 </form>
 
 <script>
-		function validateForm() {
-		    let isValid = true;
-		
-		    // 車種のバリデーション
-		    const carType = document.getElementById('carType');
-		    const carTypeError = document.getElementById('carTypeError');
-		    if (carType.value === "") {
-		        carTypeError.style.display = 'block';
-		        isValid = false;
-		    } else {
-		        carTypeError.style.display = 'none';
-		    }
-		
-		    // 予約開始時間のバリデーション
-		    const startTimeHour = document.getElementById('startTimeHour');
-		    const startTimeHourError = document.getElementById('startTimeHourError');
-		    if (startTimeHour.value === "") {
-		        startTimeHourError.style.display = 'block';
-		        isValid = false;
-		    } else {
-		        startTimeHourError.style.display = 'none';
-		    }
-		
-		    // 予約開始分のバリデーション
-		    const startTimeMinute = document.getElementById('startTimeMinute');
-		    const startTimeMinuteError = document.getElementById('startTimeMinuteError');
-		    if (startTimeMinute.value === "") {
-		        startTimeMinuteError.style.display = 'block';
-		        isValid = false;
-		    } else {
-		        startTimeMinuteError.style.display = 'none';
-		    }
-		
-		    // 予約終了日のバリデーション
-		    const endDate = document.getElementById('EndDate');
-		    const endDateError = document.getElementById('endDateError');
-		    if (endDate.value === "") {
-		        endDateError.style.display = 'block';
-		        isValid = false;
-		    } else {
-		        endDateError.style.display = 'none';
-		    }
-		
-		    // 予約終了時間のバリデーション
-		    const endTimeHour = document.getElementById('EndTimeHour');
-		    const endTimeHourError = document.getElementById('EndTimeHourError');
-		    if (endTimeHour.value === "") {
-		        endTimeHourError.style.display = 'block';
-		        isValid = false;
-		    } else {
-		        endTimeHourError.style.display = 'none';
-		    }
-		
-		    // 予約終了分のバリデーション
-		    const endTimeMinute = document.getElementById('EndTimeMinute');
-		    const endTimeMinuteError = document.getElementById('EndTimeMinuteError');
-		    if (endTimeMinute.value === "") {
-		        endTimeMinuteError.style.display = 'block';
-		        isValid = false;
-		    } else {
-		        endTimeMinuteError.style.display = 'none';
-		    }
-		
-		    return isValid;
-		}
+    function validateForm() {
+        let isValid = true;
+
+        // 現在時刻を取得
+        const now = new Date();
+        const currentHour = now.getHours();
+        const currentMinute = now.getMinutes();
+
+        // 車種のバリデーション
+        const carType = document.getElementById('carType');
+        const carTypeError = document.getElementById('carTypeError');
+        if (carType.value === "") {
+            carTypeError.style.display = 'block';
+            isValid = false;
+        } else {
+            carTypeError.style.display = 'none';
+        }
+
+        // 予約開始時間のバリデーション
+        const startTimeHour = document.getElementById('startTimeHour');
+        const startTimeMinute = document.getElementById('startTimeMinute');
+        const startTimeHourError = document.getElementById('startTimeHourError');
+        const startTimeMinuteError = document.getElementById('startTimeMinuteError');
+
+        if (startTimeHour.value === "" || startTimeMinute.value === "") {
+            if (startTimeHour.value === "") {
+                startTimeHourError.style.display = 'block';
+            } else {
+                startTimeHourError.style.display = 'none';
+            }
+            if (startTimeMinute.value === "") {
+                startTimeMinuteError.style.display = 'block';
+            } else {
+                startTimeMinuteError.style.display = 'none';
+            }
+            isValid = false;
+        } else {
+            const startHour = parseInt(startTimeHour.value);
+            const startMinute = parseInt(startTimeMinute.value);
+
+            if (startHour < currentHour || (startHour === currentHour && startMinute < currentMinute)) {
+                alert("予約開始時間は現在時刻以降を選択してください。");
+                isValid = false;
+            }
+        }
+
+        // 予約終了日のバリデーション
+        const endDate = document.getElementById('EndDate');
+        const endDateError = document.getElementById('endDateError');
+        if (endDate.value === "") {
+            endDateError.style.display = 'block';
+            isValid = false;
+        } else {
+            endDateError.style.display = 'none';
+        }
+
+        // 予約終了時間のバリデーション
+        const endTimeHour = document.getElementById('EndTimeHour');
+        const endTimeMinute = document.getElementById('EndTimeMinute');
+        const endTimeHourError = document.getElementById('EndTimeHourError');
+        const endTimeMinuteError = document.getElementById('EndTimeMinuteError');
+
+        if (endTimeHour.value === "" || endTimeMinute.value === "") {
+            if (endTimeHour.value === "") {
+                endTimeHourError.style.display = 'block';
+            } else {
+                endTimeHourError.style.display = 'none';
+            }
+            if (endTimeMinute.value === "") {
+                endTimeMinuteError.style.display = 'block';
+            } else {
+                endTimeMinuteError.style.display = 'none';
+            }
+            isValid = false;
+        } else {
+            const endHour = parseInt(endTimeHour.value);
+            const endMinute = parseInt(endTimeMinute.value);
+            const startHour = parseInt(startTimeHour.value);
+            const startMinute = parseInt(startTimeMinute.value);
+
+            // 終了時間が開始時間より早い場合
+            if (endHour < startHour || (endHour === startHour && endMinute <= startMinute)) {
+                alert("予約終了時間は開始時間より遅く設定してください。");
+                isValid = false;
+            }
+        }
+
+        return isValid;
+    }
 </script>
 
 <div id="errorMessage" style="color: red; font-weight: bold;">
