@@ -189,84 +189,156 @@ for (int hour = startHour; hour <= stopHour; hour++) {
     // 車両がある場合のみ、予約フォームを表示
     if (hasAvailableCars) {
     %>
-    <form action ="DiscountCalculatorServlet" method ="post">
-        <select id="carType" name="carType" required>
-            <option value="">-- 選択 --</option>
-            <%
-            for (CarData car : carData) {              
-            %>
-            <option value ="<%=car.getModelName() %>"><%=car.getModelName()%></option>
-            <%
-            }
-            %>
-        </select>
-		<%
-			if (request.getAttribute("errorMessage") != null) {
-			    String errorMessage = (String) request.getAttribute("errorMessage");
-		%>
-			    <div style="color: red; font-weight: bold;"><%= errorMessage %></div>
-		<%
-			}
-		%>
-        <div id="errorMessage" style="color: red; font-weight: bold;"></div>
-        <label for="startDate">予約開始日:</label>
-        <%=selectedDate %>
-        <br>
-        <select id="startTimeHour" name="startTimeHour" required style="margin-right: 5px; padding: 5px;">
-            <label for="startTimeHour">予約開始時間:</label>
-            <option value="">-- 選択 --</option>
-            <%
-            for (int hour = 0; hour < 24; hour++) {
-                String hourStr = String.format("%02d", hour);
-            %>
-                <option value="<%= hourStr %>"><%= hourStr %></option>
-            <%
-            }
-            %>
-        </select>
-        
-        <select id="startTimeMinute" name="startTimeMinute" required style="padding: 5px;">
-            <option value="">-- 分を選択 --</option>
-            <option value="00">00分</option>
-            <option value="15">15分</option>
-            <option value="30">30分</option>
-            <option value="45">45分</option>
-        </select>
-        <br>
-        <label for="EndDate">予約終了日:</label>
-        <input type="date" name="EndDate" id="EndDate">
-        <select id="EndTimeHour" name="EndTimeHour" required style="margin-right: 5px; padding: 5px;">
-            <label for="EndTimeHour">予約終了時間:</label>
-            <option value="">-- 選択 --</option>
-            <%
-            for (int hour = 0; hour < 24; hour++) {
-                String hourStr = String.format("%02d", hour);
-            %>
-                <option value="<%= hourStr %>"><%= hourStr %></option>
-            <%
-            }
-            %>
-        </select>                
-        <select id="EndTimeMinute" name="EndTimeMinute" required style="padding: 5px;">
-            <option value="">-- 分を選択 --</option>
-            <option value="00">00分</option>
-            <option value="15">15分</option>
-            <option value="30">30分</option>
-            <option value="45">45分</option>
-        </select>
-        <input type="submit" value="予約内容を確認する">
-    </form>
+    <form action="DiscountCalculatorServlet" method="post" onsubmit="return validateForm()">
+    <select id="carType" name="carType" required>
+        <option value="">-- 車種を選択してください。 --</option>
+        <%
+        for (CarData car : carData) {              
+        %>
+        <option value="<%= car.getModelName() %>"><%= car.getModelName() %></option>
+        <%
+        }
+        %>
+    </select>
+    <div id="carTypeError" style="color: red; display: none;">※ 車種を選択してください。</div><br>
+
+    <label for="startDate">予約開始日:</label>
+    <input type="date" name="startDate" value="<%= selectedDate %>"readonly>
+    <br>
+    
+    <select id="startTimeHour" name="startTimeHour" required style="margin-right: 5px; padding: 5px;">
+        <label for="startTimeHour">予約開始時間:</label>
+        <option value="">-- 選択 --</option>
+        <%
+        for (int hour = 0; hour < 24; hour++) {
+            String hourStr = String.format("%02d", hour);
+        %>
+            <option value="<%= hourStr %>"><%= hourStr %></option>
+        <%
+        }
+        %>
+    </select>
+    <div id="startTimeHourError" style="color: red; display: none;">※ 予約開始時間を選択してください。</div>
+
+    <select id="startTimeMinute" name="startTimeMinute" required style="padding: 5px;">
+        <option value="">-- 分を選択 --</option>
+        <option value="00">00分</option>
+        <option value="15">15分</option>
+        <option value="30">30分</option>
+        <option value="45">45分</option>
+    </select>
+    <div id="startTimeMinuteError" style="color: red; display: none;">※ 予約開始分を選択してください。</div><br>
+    
+    <label for="EndDate">予約終了日:</label>
+    <input type="date" name="EndDate" id="EndDate" min="<%= new SimpleDateFormat("yyyy-MM-dd").format(new Date()) %>" required>
+    <div id="endDateError" style="color: red; display: none;">※ 予約終了日を選択してください。</div>
+
+    <select id="EndTimeHour" name="EndTimeHour" required style="margin-right: 5px; padding: 5px;">
+        <label for="EndTimeHour">予約終了時間:</label>
+        <option value="">-- 選択 --</option>
+        <%
+        for (int hour = 0; hour < 24; hour++) {
+            String hourStr = String.format("%02d", hour);
+        %>
+            <option value="<%= hourStr %>"><%= hourStr %></option>
+        <%
+        }
+        %>
+    </select>
+    <div id="EndTimeHourError" style="color: red; display: none;">※ 予約終了時間を選択してください。</div>
+
+    <select id="EndTimeMinute" name="EndTimeMinute" required style="padding: 5px;">
+        <option value="">-- 分を選択 --</option>
+        <option value="00">00分</option>
+        <option value="15">15分</option>
+        <option value="30">30分</option>
+        <option value="45">45分</option>
+    </select>
+    <div id="EndTimeMinuteError" style="color: red; display: none;">※ 予約終了分を選択してください。</div>
+
+    <input type="submit" value="予約内容を確認する">
+</form>
+
+<script>
+		function validateForm() {
+		    let isValid = true;
+		
+		    // 車種のバリデーション
+		    const carType = document.getElementById('carType');
+		    const carTypeError = document.getElementById('carTypeError');
+		    if (carType.value === "") {
+		        carTypeError.style.display = 'block';
+		        isValid = false;
+		    } else {
+		        carTypeError.style.display = 'none';
+		    }
+		
+		    // 予約開始時間のバリデーション
+		    const startTimeHour = document.getElementById('startTimeHour');
+		    const startTimeHourError = document.getElementById('startTimeHourError');
+		    if (startTimeHour.value === "") {
+		        startTimeHourError.style.display = 'block';
+		        isValid = false;
+		    } else {
+		        startTimeHourError.style.display = 'none';
+		    }
+		
+		    // 予約開始分のバリデーション
+		    const startTimeMinute = document.getElementById('startTimeMinute');
+		    const startTimeMinuteError = document.getElementById('startTimeMinuteError');
+		    if (startTimeMinute.value === "") {
+		        startTimeMinuteError.style.display = 'block';
+		        isValid = false;
+		    } else {
+		        startTimeMinuteError.style.display = 'none';
+		    }
+		
+		    // 予約終了日のバリデーション
+		    const endDate = document.getElementById('EndDate');
+		    const endDateError = document.getElementById('endDateError');
+		    if (endDate.value === "") {
+		        endDateError.style.display = 'block';
+		        isValid = false;
+		    } else {
+		        endDateError.style.display = 'none';
+		    }
+		
+		    // 予約終了時間のバリデーション
+		    const endTimeHour = document.getElementById('EndTimeHour');
+		    const endTimeHourError = document.getElementById('EndTimeHourError');
+		    if (endTimeHour.value === "") {
+		        endTimeHourError.style.display = 'block';
+		        isValid = false;
+		    } else {
+		        endTimeHourError.style.display = 'none';
+		    }
+		
+		    // 予約終了分のバリデーション
+		    const endTimeMinute = document.getElementById('EndTimeMinute');
+		    const endTimeMinuteError = document.getElementById('EndTimeMinuteError');
+		    if (endTimeMinute.value === "") {
+		        endTimeMinuteError.style.display = 'block';
+		        isValid = false;
+		    } else {
+		        endTimeMinuteError.style.display = 'none';
+		    }
+		
+		    return isValid;
+		}
+</script>
+
+<div id="errorMessage" style="color: red; font-weight: bold;">
+    <div class="button-container">
+        <% String detailUrl = "P56.jsp?stationid=" + stationId + "&stationname=" + stationName + "&stationdata=" + stationData; %>
+        <a href="<%= detailUrl %>"> 
+            <input type="button" value="戻る">
+        </a>
+    </div>
+</div>
+
     <%
     }
     %>
-    <div id="errorMessage" style="color: red; font-weight: bold;">
-              <div class="button-container">
-			    <% String detailUrl = "P56.jsp?stationid="+stationId+"&stationname=" + stationName +"&stationdata="+ stationData;%>
-              <a href="<%= detailUrl %>"> 
-              	 <input type="submit"  value="戻る">
-              </a>
-			</div>
-        </div>
 </main>
 
 </body>

@@ -31,28 +31,16 @@ public class Henkoukakunin extends HttpServlet {
 	     response.setContentType("text/html; charset=UTF-8");
 	      
 	     String reservationId =request.getParameter("reservationId");
-	     String stationId =request.getParameter("stationId");
-	     String carCode =request.getParameter("carCode");
-	     String customerId =request.getParameter("customerId");
-	     String modelName =request.getParameter("modelName");
-	     String number =request.getParameter("number");
 	     String priceParam = request.getParameter("price");
 	     int price = Integer.parseInt(priceParam); // 必要に応じて型変換
 	        
 	     String startDate =request.getParameter("startDate");
-	     String startTimeHour =request.getParameter("startTimeHour");
-	     String startTimeMinute = request.getParameter("startTimeMinute");
-	        
-	     String endDate =request.getParameter("endDate");
-	     String endTimeHour =request.getParameter("endTimeHour");
-	     String endTimeMinute =request.getParameter("endTimeMinute");
-	                
-	     String startDateTime =startDate+" "+ startTimeHour +":"+startTimeMinute+":00";
-	     String endDateTime =endDate+" "+endTimeHour+":"+endTimeMinute+":00";
+	     System.out.println("変更確認"+startDate);
+	     String stopDate =request.getParameter("stopDate"); 
+	     System.out.println("変更確認"+stopDate);
+	     ReservationManager.changeReservation(reservationId, startDate, stopDate,price);
 	     
-	     ReservationManager.changeReservation(reservationId, startDateTime, endDateTime);
-	     
-	     RequestDispatcher rd =request.getRequestDispatcher("");
+	     RequestDispatcher rd =request.getRequestDispatcher("P71.jsp");
 	     rd.forward(request, response);
 	}
 

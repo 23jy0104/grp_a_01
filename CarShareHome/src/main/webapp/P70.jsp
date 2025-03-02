@@ -10,6 +10,7 @@ String startDate =(String)request.getAttribute("startDate");
 String stopDate =(String)request.getAttribute("stopDate");
 String modelName =(String)request.getAttribute("modelName");
 String number=(String)request.getAttribute("number");
+int price =(Integer)session.getAttribute("price");
 
 boolean isDateTime = startDate.contains(" "); // 日付と時間が含まれているか判定
 
@@ -47,7 +48,7 @@ String dateOnly = isDateTime ? startDate.split(" ")[0] : startDate;
     <h4>※ご予約の時間のみ変更が可能となります。開始日と終了日の日付の変更はできません。日付を跨いでの変更、または車種の変更をご希望のお客様は一度予約を取り消してから再度ご予約ください。s</h4>
     <table>
         <tr>
-            <th colspan="2">変更前の予約情報</th>
+            <th colspan="2">変更後の予約情報</th>
         </tr>
         <tr>
             <th>予約番号</th>
@@ -71,11 +72,11 @@ String dateOnly = isDateTime ? startDate.split(" ")[0] : startDate;
         </tr>
          <tr>
         	<th>ナンバー</th>
-        	<td><%=number %>
+        	<td><%=number %></td>
         </tr>
         <tr>
         	<th>予定金額</th>
-        	<td><%=price %>
+        	<td><%=price %>円</td>
         </tr>
         <tr>
             <td>駆動</td>
@@ -95,6 +96,9 @@ String dateOnly = isDateTime ? startDate.split(" ")[0] : startDate;
 		<div style="text-align: center;">
         <form action="Henkoukakunin"method ="post">
         	<input type ="hidden" name="reservationId" value="<%=reservationId %>">
+        	<input type="hidden" name ="startDate"value="<%=startDate %>">
+        	<input type="hidden" name="stopDate" value="<%=stopDate %>">
+        	<input type="hidden" name ="price" value="<%=price %>">
         	<input type ="submit"value="変更する">
         
         </form>

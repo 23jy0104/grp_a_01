@@ -114,11 +114,8 @@ public class Henkou extends HttpServlet {
                 
         String startDate =startDateTime+" "+ startTimeHour +":"+startTimeMinute+":00";
         String endDate =endDateTime+" "+endTimeHour+":"+endTimeMinute+":00";
-        
-        Integer totalPrice = (Integer) request.getAttribute("totalPrice");
-        if (totalPrice != null) {
-            request.setAttribute("totalPrice", totalPrice);
-        }
+        System.out.println(startDate);
+        System.out.println(endDate);
         
         String path="";
 			
@@ -128,19 +125,17 @@ public class Henkou extends HttpServlet {
 
 			
 			boolean isAvailable = ReservationManager.isTimeSlotAvailableForOtherCustomers(customerId, carCode, startDateTime, endDateTime);
-		    
+		    System.out.println("boolean後:"+startDate);
+		    System.out.println(endDate);
 		    if (isAvailable) {
+		    	
 		    	request.setAttribute("stationName", stationName);
 	        	request.setAttribute("reservationId", reservationId);
 				request.setAttribute("startDate", startDate);
 				request.setAttribute("stopDate", endDate);
 				request.setAttribute("modelName",modelName);
 				request.setAttribute("number", number);
-				path ="P70.jsp";
-		    	String discountCalculatorUrl = "DiscountHenkou?startDate=" + startDate 
-                         + "&endDate=" + endDate ;
-		    	response.sendRedirect(discountCalculatorUrl);
-				return;
+				path ="DiscountHenkou";
 		    } else {
 		    	 request.setAttribute("errorMessage", "指定された時間は他の顧客によって予約されています。");
 		    	 path="P67.jsp";

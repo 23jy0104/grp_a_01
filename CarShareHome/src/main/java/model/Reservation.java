@@ -236,7 +236,7 @@ public class Reservation implements Serializable {
 	        
 	        return reservations;
 		}
-		public static void changeReservation(String reservationId, String startDateTime, String endDateTime)  {
+		public static void changeReservation(String reservationId, String startDateTime, String endDateTime,int price)  {
 	    	
 	    	try {
 				Class.forName("com.mysql.jdbc.Driver");
@@ -244,13 +244,14 @@ public class Reservation implements Serializable {
 				final String user = "23jya01";
 				final String pass = "23jya01";			
 				
-				String sql = "UPDATE reservation SET start_date = ?, stop_date = ? WHERE reservation_id = ?";    	
+				String sql = "UPDATE reservation SET start_date = ?, stop_date = ?,price= ? WHERE reservation_id = ?";    	
 				
 				try (	Connection con =DriverManager.getConnection(url,user,pass);
 						PreparedStatement statement = con.prepareStatement(sql)) {
 				    statement.setString(1, startDateTime);
 				    statement.setString(2, endDateTime);
-				    statement.setString(3, reservationId);
+				    statement.setString(4, reservationId);
+				    statement.setInt(3, price);
 				    statement.executeUpdate();
 				}
 			} catch (ClassNotFoundException e) {

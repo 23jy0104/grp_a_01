@@ -35,9 +35,15 @@ public class DiscountHenkou extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String startTimestamp =request.getParameter("startDate");
-        String endTimestamp = request.getParameter("endDate");
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String startTimestamp =(String)request.getAttribute("startDate");
+        String endTimestamp = (String)request.getAttribute("stopDate");
+        String stationName=(String)request.getAttribute("stationName");
+        String reservationId =(String)request.getAttribute("reservationId");
+        String modelName=(String)request.getAttribute("modelName");
+        String number=(String)request.getAttribute("number");
+        System.out.println("startDate:"+startTimestamp);
+        System.out.println("endDate:"+endTimestamp);
         // 時間の計算
         long durationInMillis = calculateDuration(startTimestamp, endTimestamp);
         int durationHours = (int) (durationInMillis / (1000 * 60 * 60)); // ミリ秒を時間に変換
@@ -50,11 +56,16 @@ public class DiscountHenkou extends HttpServlet {
         // 料金計算
         int totalCost = calculateTotalCost(durationHours, discounts);
         // 結果をリクエストに設定
-        request.getSession().setAttribute("totalCost", totalCost);
+        request.getSession().setAttribute("price", totalCost);
+        request.getSession().setAttribute("stationName", stationName);
+        request.getSession().setAttribute("reservationId", reservationId);
+        request.getSession().setAttribute("startDate", startTimestamp);
+        request.getSession().setAttribute("stopDate", endTimestamp);
+        request.getSession().setAttribute("modelName", modelName);
+        request.getSession().setAttribute("number", number);
         
-        RequestDispatcher rd = request.getRequestDispatcher("Henkou");
+        RequestDispatcher rd = request.getRequestDispatcher("P70.jsp");
         rd.forward(request, response);
-
     }
 
     private long calculateDuration(String startTimestamp, String endTimestamp) {

@@ -78,10 +78,7 @@ public class ReservationCar extends HttpServlet {
                 request.getSession().setAttribute("stationName",stationName);
                 request.getSession().setAttribute("stationData",stationData );
                 path ="P59.jsp";
-            } else {
-                // データが見つからなかった場合の処理
-                path = "error.jsp"; // エラーページに転送するなどの処理
-            }
+            } 
 
             // リクエストディスパッチャーによる転送
             RequestDispatcher rd = request.getRequestDispatcher(path);
