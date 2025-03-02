@@ -41,10 +41,10 @@
         errorContainer.innerHTML = '';
 
         // クレジットカード番号のバリデーション
-        const regex = /^\d{16}$/;
-        if (!regex.test(creditNumber)) {
+        const creditNumberRegex = /^\d{16}$/;
+        if (!creditNumberRegex.test(creditNumber) || !isValidCreditCard(creditNumber)) {
             event.preventDefault(); // フォーム送信をキャンセル
-            errorContainer.innerHTML += 'クレジットカード番号は16桁の数字でなければなりません。<br>';
+            errorContainer.innerHTML += 'クレジットカード番号は有効な16桁の数字でなければなりません。<br>';
         }
 
         // 有効期限のバリデーション
@@ -54,18 +54,36 @@
         }
 
         // セキュリティコードのバリデーション
-        // セキュリティコードのバリデーション
-		const securityRegex3 = /^\d{3}$/; // 3桁の数字
-		const securityRegex4 = /^\d{4}$/; // 4桁の数字
-		if (!securityRegex3.test(securityCode) && !securityRegex4.test(securityCode)) {
-		    event.preventDefault();
-		    errorContainer.innerHTML += 'セキュリティコードは3桁または4桁の数字でなければなりません。<br>';
-		}
+        const securityRegex3 = /^\d{3}$/; // 3桁の数字
+        const securityRegex4 = /^\d{4}$/; // 4桁の数字
+        if (!securityRegex3.test(securityCode) && !securityRegex4.test(securityCode)) {
+            event.preventDefault();
+            errorContainer.innerHTML += 'セキュリティコードは3桁または4桁の数字でなければなりません。<br>';
+        }
+    }
 
+    // Luhnアルゴリズムを使用してクレジットカード番号の検証を行う関数
+    function isValidCreditCard(number) {
+        let sum = 0;
+        let alternate = false;
+        for (let i = number.length - 1; i >= 0; i--) {
+            let n = parseInt(number.charAt(i), 10);
+            if (alternate) {
+                n *= 2;
+                if (n > 9) {
+                    n -= 9;
+                }
+            }
+            sum += n;
+            alternate = !alternate;
+        }
+        return sum % 10 === 0;
+    }
 
     // フォームのsubmitイベントにバリデーションを追加
     document.querySelector('form').addEventListener('submit', validateForm);
 </script>
+
 
     <header>
         <div class="logo">
@@ -120,7 +138,7 @@
         </div>
     </form>
 
-    <div id="errorContainer" class="error-message"></div> <!-- エラーメッセージ表示用 -->
+    <div id="errorContainer" class="error-message" style=color:red></div> <!-- エラーメッセージ表示用 -->
 
     <script>
         function toggleButton() {
