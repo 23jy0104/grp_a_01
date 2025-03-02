@@ -6,21 +6,21 @@ String customerName = (String) session.getAttribute("customerName");
 String reservationId =(String)request.getAttribute("reservationId");
 String stationId =(String)request.getAttribute("stationId");
 String stationName=(String)request.getAttribute("stationName");
-String startDate =(String)request.getAttribute("startDate");
-String stopDate =(String)request.getAttribute("stopDate");
+String oldstartDate =(String)request.getAttribute("startDate");
+String oldstopDate =(String)request.getAttribute("stopDate");
 String modelName =(String)request.getAttribute("modelName");
 String number=(String)request.getAttribute("number");
 String carCode =(String)request.getAttribute("carCode");
 int price =(Integer)request.getAttribute("price");
 
-boolean isStartDateTime = startDate.contains(" "); // 日付と時間が含まれているか判定
+boolean isStartDateTime = oldstartDate.contains(" "); // 日付と時間が含まれているか判定
 
 //日付だけを取得する場合
-String startdateOnly = isStartDateTime ? startDate.split(" ")[0] : startDate;
+String startdateOnly = isStartDateTime ? oldstartDate.split(" ")[0] : oldstartDate;
 
-boolean isStopDateTime = stopDate.contains(" ");
+boolean isStopDateTime = oldstopDate.contains(" ");
 
-String stopdateOnly = isStopDateTime ? stopDate.split(" ")[0] : stopDate;
+String stopdateOnly = isStopDateTime ? oldstopDate.split(" ")[0] : oldstopDate;
 
 %>
 <!DOCTYPE html>
@@ -63,11 +63,11 @@ String stopdateOnly = isStopDateTime ? stopDate.split(" ")[0] : stopDate;
         </tr>
          <tr>
         	<th>予約開始日時</th>
-        	<td><%=startDate %>
+        	<td><%=oldstartDate %>
         </tr>
          <tr>
         	<th>予約終了日時</th>
-        	<td><%=stopDate %></td>
+        	<td><%=oldstopDate %></td>
         </tr>
          <tr>
         	<th>車種名</th>
@@ -153,6 +153,8 @@ String stopdateOnly = isStopDateTime ? stopDate.split(" ")[0] : stopDate;
 	    <input type ="hidden" name="number" value ="<%=number %>">
 	    <input type ="hidden" name ="stationName" value="<%=stationName %>">
 	    <input type ="hidden" name ="price" value="<%=price %>">
+	    <input type="hidden" name ="oldstartDate" value="<%=oldstartDate %>">
+	    <input type ="hidden" name ="oldstopDate" value="<%=oldstopDate %>">
 	    
 	    <input type="submit" value="変更する">
 	</form>

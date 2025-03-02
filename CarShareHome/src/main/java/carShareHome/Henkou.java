@@ -96,6 +96,9 @@ public class Henkou extends HttpServlet {
         String reservationId =request.getParameter("reservationId");
         String stationId =request.getParameter("stationId");
         String stationName =request.getParameter("stationName");
+        String oldstartDate=request.getParameter("oldstartDate");
+        String oldstopDate=request.getParameter("oldstopDate");
+        
         
         String carCode =request.getParameter("carCode");
         String customerId =request.getParameter("customerId");
@@ -132,9 +135,15 @@ public class Henkou extends HttpServlet {
 				request.setAttribute("number", number);
 				path ="DiscountHenkou";
 		    } else {
+		    	request.setAttribute("startDate", oldstartDate);
+		    	request.setAttribute("stopDate",oldstopDate);
+		    	request.setAttribute("modelName",modelName);
+		    	request.setAttribute("stationName",stationName);
+		    	request.setAttribute("number", number);
+		    	request.setAttribute("reservationId",reservationId);
 		    	request.setAttribute("price", price);
-		    	 request.setAttribute("errorMessage", "指定された時間は他の顧客によって予約されています。");
-		    	 path="P67.jsp";
+		    	request.setAttribute("errorMessage", "指定された時間は他の顧客によって予約されています。");
+		    	path="P67.jsp";
 		    }
 		
 		    RequestDispatcher rd =request.getRequestDispatcher(path);
