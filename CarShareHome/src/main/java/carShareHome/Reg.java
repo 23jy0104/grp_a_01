@@ -49,6 +49,7 @@ public class Reg extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
 		response.setContentType("text/html; charset=UTF-8");
+	
 		
 		String startDate = (String) request.getSession().getAttribute("startDate");
         String endDate = (String) request.getSession().getAttribute("endDate");
