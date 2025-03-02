@@ -81,6 +81,7 @@ public class ReservationCar extends HttpServlet {
                 request.getSession().setAttribute("carCode", rs.getString("car_code")); // car_codeを追加
                 request.getSession().setAttribute("stationName",stationName);
                 request.getSession().setAttribute("stationData",stationData );
+                request.setAttribute("previousServlet", "ReservationCar");
                 path ="P59.jsp";
             } 
 

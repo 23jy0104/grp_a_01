@@ -154,6 +154,7 @@ public class DiscountCalculatorServlet extends HttpServlet {
 				    request.getSession().setAttribute("img", rs.getString("car_img"));
 				    request.getSession().setAttribute("modelName", carType);
 				    request.getSession().setAttribute("number", rs.getString("number"));
+				    request.setAttribute("previousServlet", "DiscountCalculatorServlet");
 				    path = "P63.jsp"; // 予約内容確認画面
 				} else {
 				    // 予約が重複している場合
