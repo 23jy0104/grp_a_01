@@ -30,6 +30,7 @@ public class DiscountCalculatorServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String startTimestamp = (String)request.getSession().getAttribute("startDate");
         String endTimestamp = (String)request.getSession().getAttribute("endDate");
+        String currentPath = request.getParameter("currentPath");
         // 時間の計算
         long durationInMillis = calculateDuration(startTimestamp, endTimestamp);
         int durationHours = (int) (durationInMillis / (1000 * 60 * 60)); // ミリ秒を時間に変換
@@ -43,6 +44,7 @@ public class DiscountCalculatorServlet extends HttpServlet {
         int totalCost = calculateTotalCost(durationHours, discounts);
         // 結果をリクエストに設定
         request.getSession().setAttribute("totalCost", totalCost);
+        request.getSession().setAttribute("currentPath", currentPath);
         String path ="P63.jsp"; // 結果をresult.jspにフォワード
         RequestDispatcher rd =request.getRequestDispatcher(path);
 		rd.forward(request, response);
