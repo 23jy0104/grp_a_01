@@ -7,6 +7,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-<p>ボックスが開きました。</p>
+<p>このQRコードは無効です。</p>
 </body>
 </html>

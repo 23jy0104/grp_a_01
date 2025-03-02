@@ -291,5 +291,31 @@ public class ReservationDAO {
     	}
     	return reservationId;
     }
+    public boolean setTimeDate(String reservationId) {
+    	boolean time = false;
+    	String sql = "UPDATE reservation SET time_date = CURRENT_TIME WHERE station_id = ?;";
+    	try(PreparedStatement pstmt = con.prepareStatement(sql)) {
+    		pstmt.setString(1, reservationId);
+         time = true;
+        	System.out.println("利用が開始されました。");
+    	}catch(SQLException e) {
+    		e.printStackTrace();
+    		System.out.println("利用が開始されていません");
+    	}
+    	return time;
+    }
     
+    public boolean setFinishDate(String reservationId) {
+    	boolean time = false;
+    	String sql = "UPDATE reservation SET finish_date = CURRENT_TIME WHERE station_id = ?;";
+    	try(PreparedStatement pstmt = con.prepareStatement(sql)) {
+    		pstmt.setString(1, reservationId);
+         time = true;
+        	System.out.println("利用が終了ました。");
+    	}catch(SQLException e) {
+    		e.printStackTrace();
+    		System.out.println("利用が終了していません");
+    	}
+    	return time;
+    }
 }

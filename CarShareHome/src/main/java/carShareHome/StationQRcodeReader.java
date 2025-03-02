@@ -35,7 +35,12 @@ public class StationQRcodeReader extends HttpServlet {
 		ReservationDAO reservationDao = new ReservationDAO();
 		HenkyakuData henkyaku = reservationDao.getUsageById(reservationId);
 		if(henkyaku.getTimeDate() == null || henkyaku.equals("")) {
-			
+			reservationDao.setTimeDate(reservationId);
+		}else if(henkyaku.getFinishDate() == null || henkyaku.equals("")) {
+			reservationDao.setFinishDate(reservationId);
+		}else {
+			System.out.println("指定された予約は利用が終了しています。");
+			request.getRequestDispatcher("noqrcode.jsp").forward(request, response);
 		}
 		request.getRequestDispatcher("qrcode.jsp").forward(request, response);
 	}
