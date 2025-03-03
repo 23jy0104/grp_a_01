@@ -11,12 +11,6 @@
 	String postcode =customer.getPostCode();
 	String tellNumber =customer.getTellNumber();
 	
-	System.out.println("P82.jsp:"+customerId);
-	System.out.println(customerName);
-	System.out.println(customerKana);
-	System.out.println(postcode);
-	System.out.println(customerAddress);
-	System.out.println(tellNumber);
 %>
 <!--変更後の登録情報の確認-->
 

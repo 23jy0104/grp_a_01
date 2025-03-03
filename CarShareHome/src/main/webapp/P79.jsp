@@ -25,37 +25,38 @@ String tellNumber =(String)session.getAttribute("tellNumber");
     <link rel="stylesheet" href="css/nav.css">
     <link rel="stylesheet" href="css/check.css">
     <script>
-	    function validateForm() {
-	        let postcode = document.forms["customerForm"]["postcode"].value;
-	        let address1 = document.forms["customerForm"]["address1"].value;
-	        let address2 = document.forms["customerForm"]["address2"].value;
-	        let tellNumber = document.forms["customerForm"]["tellNumber"].value;
-	        let errorMessages = [];
-	
-	        // 郵便番号のバリデーション
-	        if (!postcode) {
-	            errorMessages.push("※郵便番号は必須です。");
-	        } else if (!/^\d{3}-?\d{4}$/.test(postcode)) { // 7桁の数字かどうかをチェック
-	            errorMessages.push("※郵便番号は7桁の数字でなければなりません。");
-	        }
-	
-	        if (!address1) {
-	            errorMessages.push("※都道府県/市区町村は必須です。");
-	        }
-	        if (!address2) {
-	            errorMessages.push("町名・番地などは必須です。");
-	        }
-	        if (!tellNumber) {
-	            errorMessages.push("※携帯電話番号は必須です。");
-	        }
-	
-	        if (errorMessages.length > 0) {
-	            document.getElementById("errorMessages").innerHTML = errorMessages.join("<br>").fontcolor("red");
-	            return false; // フォーム送信を防ぐ
-	        }
-	        return true; // フォーム送信を続行
-	    }
+    function validateForm() {
+        let postcode = document.forms["customerForm"]["postcode"].value;
+        let address1 = document.forms["customerForm"]["address1"].value;
+        let address2 = document.forms["customerForm"]["address2"].value;
+        let tellNumber = document.forms["customerForm"]["tellNumber"].value;
+        let errorMessages = [];
 
+        // 郵便番号のバリデーション
+        if (!postcode) {
+            errorMessages.push("※郵便番号は必須です。");
+        } else if (!/^\d{3}-?\d{4}$/.test(postcode)) { // 7桁の数字かどうかをチェック
+            errorMessages.push("※郵便番号は7桁の数字でなければなりません。");
+        }
+
+        if (!address1) {
+            errorMessages.push("※都道府県/市区町村は必須です。");
+        }
+        if (!address2) {
+            errorMessages.push("町名・番地などは必須です。");
+        }
+        if (!tellNumber) {
+            errorMessages.push("※携帯電話番号は必須です。");
+        } else if (!/^\d{11}$/.test(tellNumber)) { // 11桁の数字かどうかをチェック
+            errorMessages.push("※携帯電話番号は11桁の数字でなければなりません。");
+        }
+
+        if (errorMessages.length > 0) {
+            document.getElementById("errorMessages").innerHTML = errorMessages.join("<br>").fontcolor("red");
+            return false; // フォーム送信を防ぐ
+        }
+        return true; // フォーム送信を続行
+    }
     </script>
 </head>
 <body>
