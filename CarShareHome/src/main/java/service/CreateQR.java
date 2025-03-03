@@ -28,7 +28,7 @@ public class CreateQR {
 	        hints.put(EncodeHintType.MARGIN, 2); // マージンを2に変更
 	
 	        QRCodeWriter writer = new QRCodeWriter();
-	        BitMatrix bitMatrix = writer.encode(source, BarcodeFormat.QR_CODE, size, size, hints);
+	        BitMatrix bitMatrix = writer.encode(source, BarcodeFormat.QR_CODE, size, size);
 	        BufferedImage image = MatrixToImageWriter.toBufferedImage(bitMatrix);
 	
 	        ImageIO.write(image, "png", new File(filePath));
