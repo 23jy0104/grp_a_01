@@ -2,25 +2,23 @@
     pageEncoding="UTF-8"%>
 <%@ page import="javax.servlet.http.HttpSession" %>
 <%
-	request.setCharacterEncoding("UTF-8");
-	response.setContentType("text/html; charset=UTF-8");
+    request.setCharacterEncoding("UTF-8");
+    response.setContentType("text/html; charset=UTF-8");
     // セッションからデータを取得
     String customerName = request.getParameter("customerName");
     String customerKana = request.getParameter("customerKana");
-    System.out.println("P22.jsp:"+customerKana);
-    String gender =request.getParameter("gender");
+    String gender = request.getParameter("gender");
     String email = request.getParameter("email");
-    String postcode =request.getParameter("postcode");
-    String tellNumber =request.getParameter("tellNumber");
+    String postcode = request.getParameter("postcode");
+    String tellNumber = request.getParameter("tellNumber");
     String customerAddress = request.getParameter("customerAddress");
-    String licenseNumber =request.getParameter("licenseNumber");
+    String licenseNumber = request.getParameter("licenseNumber");
     String licenseDate = request.getParameter("licenseDate");
-    String birthDate = request.getParameter("birthDate"); // 生年月日も取得
+    String birthDate = request.getParameter("birthDate");
     String password = request.getParameter("password");
     String file_omote = request.getParameter("file_omote");
     String file_ura = request.getParameter("file_ura");
 %>
-<!-- クレジットカード情報入力ページ -->
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -32,19 +30,20 @@
 <body>
     <script>
     function validateForm(event) {
-    	const creditNumber = document.getElementById('credit_number').value.trim();
+        const creditNumber = document.getElementById('credit_number').value.trim();
         const creditDate = document.getElementsByName('credittime')[0].value;
         const securityCode = document.getElementById('security').value;
         const errorContainer = document.getElementById('errorContainer');
-        
+
         // エラーメッセージをクリア
         errorContainer.innerHTML = '';
 
         // クレジットカード番号のバリデーション
-        const creditNumberRegex = /^(?!0000000000000000)(?!([0-9])\1{15})\d{16}$/; // 16桁の数字
-        if (!creditNumberRegex.test(creditNumber) || !isValidCreditCard(creditNumber)) {
+        if (!isValidCreditCard(creditNumber)) {
             event.preventDefault(); // フォーム送信をキャンセル
             errorContainer.innerHTML += 'クレジットカード番号は有効な16桁の数字でなければなりません。<br>';
+        } else {
+            console.log('クレジットカード番号は有効です。');
         }
 
         // 有効期限のバリデーション
@@ -62,28 +61,16 @@
         }
     }
 
-    // Luhnアルゴリズムを使用してクレジットカード番号の検証を行う関数
+    // クレジットカード番号の形式をチェックする関数
     function isValidCreditCard(number) {
-        let sum = 0;
-        let alternate = false;
-        for (let i = number.length - 1; i >= 0; i--) {
-            let n = parseInt(number.charAt(i), 10);
-            if (alternate) {
-                n *= 2;
-                if (n > 9) {
-                    n -= 9;
-                }
-            }
-            sum += n;
-            alternate = !alternate;
-        }
-        return sum % 10 === 0;
+        // 16桁の数字のみを許可する正規表現
+        const creditNumberRegex = /^\d{16}$/;
+        return creditNumberRegex.test(number);
     }
 
     // フォームのsubmitイベントにバリデーションを追加
     document.querySelector('form').addEventListener('submit', validateForm);
-</script>
-
+    </script>
 
     <header>
         <div class="logo">
@@ -103,8 +90,8 @@
         <input type="hidden" name="customerAddress" value="<%= customerAddress %>">
         <input type="hidden" name="licenseNumber" value="<%= licenseNumber %>">
         <input type="hidden" name="licenseDate" value="<%= licenseDate %>">
-        <input type="hidden" name="birthDate" value="<%= birthDate %>"> <!-- 生年月日を隠しフィールドとして追加 -->
-        <input type="hidden" name="hashedPassword" value="<%= password %>"> <!-- ハッシュ化されたパスワードを保持 -->
+        <input type="hidden" name="birthDate" value="<%= birthDate %>">
+        <input type="hidden" name="hashedPassword" value="<%= password %>">
         <input type="hidden" name="omote" value="<%= file_omote %>">
         <input type="hidden" name="ura" value="<%= file_ura %>">
 
@@ -138,7 +125,7 @@
         </div>
     </form>
 
-    <div id="errorContainer" class="error-message" style=color:red></div> <!-- エラーメッセージ表示用 -->
+    <div id="errorContainer" class="error-message" style="color:red"></div>
 
     <script>
         function toggleButton() {
