@@ -361,7 +361,11 @@ for (int hour = startHour; hour <= stopHour; hour++) {
     }
 </script>
 
-<div id="errorMessage" style="color: red; font-weight: bold;">
+    <%
+    }
+    %>
+    
+    <div id="errorMessage" style="color: red; font-weight: bold;">
     <div class="button-container">
         <% String detailUrl = "P56.jsp?stationid=" + stationId + "&stationname=" + stationName + "&stationdata=" + stationData; %>
         <a href="<%= detailUrl %>"> 
@@ -369,10 +373,6 @@ for (int hour = startHour; hour <= stopHour; hour++) {
         </a>
     </div>
 </div>
-
-    <%
-    }
-    %>
 </main>
 
 
