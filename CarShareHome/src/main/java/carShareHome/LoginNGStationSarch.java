@@ -40,10 +40,10 @@ public class LoginNGStationSarch extends HttpServlet {
             String sql;
             if ("1".equals(addressType)) {
                 // 住所で検索
-                sql = "SELECT * FROM Station WHERE station_address LIKE ? AND station_id IN (SELECT station_id FROM keybox GROUP BY station_id HAVING COUNT(keybox_id) > 5);";
+                sql = "SELECT * FROM Station WHERE station_address LIKE ? AND station_id IN (SELECT station_id FROM keybox GROUP BY station_id HAVING COUNT(keybox_id) > 2);";
             } else {
                 // ステーション名で検索
-                sql = "SELECT * FROM Station WHERE station_name LIKE ? AND station_id IN (SELECT station_id FROM keybox GROUP BY station_id HAVING COUNT(keybox_id) > 5);";
+                sql = "SELECT * FROM Station WHERE station_name LIKE ? AND station_id IN (SELECT station_id FROM keybox GROUP BY station_id HAVING COUNT(keybox_id) > 2);";
             }
 
             List<String[]> stations = new ArrayList<>();
