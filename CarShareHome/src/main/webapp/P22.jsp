@@ -32,7 +32,7 @@
 <body>
     <script>
     function validateForm(event) {
-        const creditNumber = document.getElementById('credit_number').value;
+    	const creditNumber = document.getElementById('credit_number').value.trim();
         const creditDate = document.getElementsByName('credittime')[0].value;
         const securityCode = document.getElementById('security').value;
         const errorContainer = document.getElementById('errorContainer');
@@ -41,10 +41,10 @@
         errorContainer.innerHTML = '';
 
         // クレジットカード番号のバリデーション
-        const creditNumberRegex = /^\d{12}$/;
+        const creditNumberRegex = /^\d{16}$/; // 16桁の数字に変更
         if (!creditNumberRegex.test(creditNumber) || !isValidCreditCard(creditNumber)) {
             event.preventDefault(); // フォーム送信をキャンセル
-            errorContainer.innerHTML += 'クレジットカード番号は有効な12桁の数字でなければなりません。<br>';
+            errorContainer.innerHTML += 'クレジットカード番号は有効な16桁の数字でなければなりません。<br>';
         }
 
         // 有効期限のバリデーション
@@ -112,7 +112,7 @@
             <label for="credit_number">
                 <span class="required">必須</span>クレジットカード番号<span class="highlight"> ※半角数字、ハイフンなし</span>
             </label>
-            <input type="text" id="credit_number" name="credit_number" placeholder="例:1234567891234567" required><br><br>
+            <input type="text" id="credit_number" name="credit_number" placeholder="例:1234567891234567" required pattern="\d{16}" title="16桁の数字を入力してください">
             <span class="highlight2"> 注意:ご登録は、お申込ご本人名義のクレジットカードに限ります。</span><br>
             VISA・JCB・AMEX・MASTER・DINERS・EPOSの6ブランドがご利用いただけます。
 
