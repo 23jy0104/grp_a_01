@@ -48,9 +48,16 @@
 
         // 有効期限のバリデーション
         if (!creditDate) {
-            event.preventDefault();
-            errorContainer.innerHTML += '有効期限を選択してください。<br>';
-        }
+        event.preventDefault();
+        errorMessages.push('有効期限を選択してください。');
+    	} else {
+        	const creditExpiryDate = new Date(creditDate);
+        	if (creditExpiryDate <= new Date()) {
+            	event.preventDefault();
+            	errorContainer.innerHTML +=('有効期限は現在の日よりも後でなければなりません。');
+       	 	}
+    	}
+        
 
         // セキュリティコードのバリデーション
         const securityRegex3 = /^\d{3}$/; // 3桁の数字

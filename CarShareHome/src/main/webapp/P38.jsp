@@ -21,7 +21,7 @@
             マイページログイン画面よりログインを行ってください。
         </h4>
         <div class="button-container">
-            <button type="submit" onclick="location.href='P29.jsp'" class="btn">マイページログイン画面へ</button>
+            <button type="submit" onclick="location.href='P29.jsp" class="btn">マイページログイン画面へ</button>
         </div>
     </div>
 </div>
