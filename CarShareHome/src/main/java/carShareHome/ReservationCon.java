@@ -25,6 +25,7 @@ public class ReservationCon extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
 		response.setContentType("text/html; charset=UTF-8");
+		String startDate =request.getParameter("selectedDate");
 		String stationId =request.getParameter("stationId");
 		String carCode =request.getParameter("carCode");
 		String img =request.getParameter("img");
@@ -54,6 +55,7 @@ public class ReservationCon extends HttpServlet {
 			rs =pstmt.executeQuery();
 			
 			if(rs.next()) {
+				request.getSession().setAttribute("startDate", startDate);
 				request.getSession().setAttribute("stationId", stationId);
 				request.getSession().setAttribute("carCode",carCode);
 				request.getSession().setAttribute("stationName", rs.getString("station_name"));

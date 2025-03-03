@@ -56,11 +56,14 @@ public class CarShareNew extends HttpServlet {
         String file_omote =Paths.get(omoteJpg.getSubmittedFileName()).getFileName().toString();
         String file_ura =Paths.get(uraJpg.getSubmittedFileName()).getFileName().toString();
         String path =getServletContext().getRealPath("upload");
+        File uploadDir = new File(path);
+        if (!uploadDir.exists()) {
+            uploadDir.mkdirs(); // ディレクトリが存在しない場合、作成する
+        }
+        omoteJpg.write(path + File.separator + file_omote);
+        uraJpg.write(path + File.separator + file_ura);
         String licenseDate = request.getParameter("licenseDate");
-        System.out.println(path);
-        omoteJpg.write(path + File.separator+file_omote);
-        uraJpg.write(path +File.separator +file_ura); 
-        
+        System.out.println(path); 
         if (validateInputs(customerSei, customerMei, customerSeiKana, customerMeiKana, gender, birthday, licenseDate, tellNumber, email)) {
         	Customer customer = new Customer();
 

@@ -35,6 +35,10 @@ public class ReservationCar extends HttpServlet {
 
         // リクエストパラメータの取得
         String carType = request.getParameter("carType");
+        // 最後の文字が '>' であれば取り除く
+        if (carType != null && carType.endsWith(">")) {
+            carType = carType.substring(0, carType.length() - 1);
+        }
         String stationId =request.getParameter("stationId");
         String stationName =request.getParameter("stationName");
         String stationData =request.getParameter("stationData");
@@ -77,11 +81,9 @@ public class ReservationCar extends HttpServlet {
                 request.getSession().setAttribute("carCode", rs.getString("car_code")); // car_codeを追加
                 request.getSession().setAttribute("stationName",stationName);
                 request.getSession().setAttribute("stationData",stationData );
+                request.setAttribute("previousServlet", "ReservationCar");
                 path ="P59.jsp";
-            } else {
-                // データが見つからなかった場合の処理
-                path = "error.jsp"; // エラーページに転送するなどの処理
-            }
+            } 
 
             // リクエストディスパッチャーによる転送
             RequestDispatcher rd = request.getRequestDispatcher(path);

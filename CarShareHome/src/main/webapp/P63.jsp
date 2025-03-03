@@ -18,6 +18,9 @@ String stationName=(String)session.getAttribute("stationName");
 String startDate =(String)session.getAttribute("startDate");
 String endDate =(String)session.getAttribute("endDate");
 Integer totalCost = (Integer) session.getAttribute("totalCost");
+String stationData=(String)session.getAttribute("stationData");
+
+String previousServlet = (String) request.getAttribute("previousServlet");
 %>
 
 <!DOCTYPE html>
@@ -28,6 +31,48 @@ Integer totalCost = (Integer) session.getAttribute("totalCost");
     <title>TMC カーシェア</title>
     <link rel="stylesheet" href="css/nav.css">
     <link rel="stylesheet" href="css/P63.css">
+    <script>
+        function handleButtonClick() {
+            if ("DiscountCalculatorServlet" === "<%= previousServlet %>") {
+                // P56.jspにGETリクエストを送信
+                var url = "P56.jsp?stationid=<%= stationId %>&stationname=<%= stationName %>&stationdata=<%= stationData %>";
+
+                window.location.href = url;
+            } else {
+                // ReservationCarにPOSTリクエストを送信
+                var form = document.createElement("form");
+                form.method = "post";
+                form.action = "ReservationCar";
+
+                var inputStationId = document.createElement("input");
+                inputStationId.type = "hidden";
+                inputStationId.name = "stationId";
+                inputStationId.value = "<%= stationId %>";
+                form.appendChild(inputStationId);
+                
+                var inputStationName = document.createElement("input");
+                inputStationName.type = "hidden";
+                inputStationName.name = "stationName";
+                inputStationName.value = "<%= stationName %>";
+                form.appendChild(inputStationName);
+                
+                var inputStationData = document.createElement("input");
+                inputStationData.type = "hidden";
+                inputStationData.name = "stationData";
+                inputStationData.value = "<%= stationData %>";
+                form.appendChild(inputStationData);
+                
+                var inputModelName = document.createElement("input");
+                inputModelName.type = "hidden";
+                inputModelName.name = "carType";
+                inputModelName.value = "<%= modelName %>";
+                form.appendChild(inputModelName);
+
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
+    </script>
 </head>
 <body>
     <header>
@@ -41,7 +86,7 @@ Integer totalCost = (Integer) session.getAttribute("totalCost");
     <nav class="nav">
         <ul>
             <li class="nav-item gnav02"><a href="P53.jsp">予約・ステーション検索</a></li>
-            <li class="nav-item gnav03"><a href="P65.jsp">予約確認・変更・取り消し</a></li>
+            <li class="nav-item gnav03"><a href="UserReservation?customerId=<%= customerId%>&customerName=<%=customerName%>">予約確認・変更・取り消し</a></li>
             <li class="nav-item gnav04"><a href="UseHistory?customerId=${customerId}&customerName=${customerName}">ご利用履歴</a></li>
             <li class="nav-item gnav05"><a href="P76.jsp">ご登録情報の確認</a></li>
         </ul>
@@ -51,8 +96,8 @@ Integer totalCost = (Integer) session.getAttribute("totalCost");
         <div class="content">
             <div class="flex-container">
                 <div class="image-section"></div>
-                    <img src="img/<%=img %>" alt="車両" style="width: 400px; height: auto; margin-top: 10px;">
-                    <p><%=img %><br><%=number %><br></p>
+                <img src="img/<%=img %>" alt="車両" style="width: 400px; height: auto; margin-top: 10px;">
+                <p><%=modelName %><br><%=number %><br></p>
                 </div>
                 <div class="table-section">
                     <table>
@@ -77,18 +122,16 @@ Integer totalCost = (Integer) session.getAttribute("totalCost");
             </div>
         </div>
         <div class="button-container">
-            <button class="action-button" onclick="location.href='P57.html'">入力内容を訂正する</button>
-            <form action ="Reg" method ="post">
-            <input type ="hidden" id ="stationId" name="stationId" value ="<%=stationId %>">
-            <input type ="hidden" id ="carCode" name ="carCode" value ="<%=carCode %>">
-            <input type ="hidden" id ="startTimestamp" name ="startTimestamp" value="<%=startDate%>">
-            <input type ="hidden" id="endTimestamp" name="endTimestamp"value="<%=endDate %>">
-            <input type ="hidden" id ="totalCost" name ="totalCost" value ="<%=totalCost %>">
-            <button type="submit" class="action-button">予約登録</button>
+            <button type="button" onclick="handleButtonClick()">空き状況確認画面に戻る</button>
+            <form action="Reg" method="post">
+                <input type="hidden" id="stationId" name="stationId" value="<%=stationId %>">
+                <input type="hidden" id="carCode" name="carCode" value="<%=carCode %>">
+                <input type="hidden" id="startTimestamp" name="startTimestamp" value="<%=startDate %>">
+                <input type="hidden" id="endTimestamp" name="endTimestamp" value="<%=endDate %>">
+                <input type="hidden" id="totalCost" name="totalCost" value="<%=totalCost %>">
+                <button type="submit" class="action-button">予約登録</button>
             </form>
         </div>
     </main>
 </body>
-</html>
-
 </html>

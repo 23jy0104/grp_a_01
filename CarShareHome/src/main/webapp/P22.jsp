@@ -31,27 +31,59 @@
 </head>
 <body>
     <script>
-        function validateForm(event) {
-            const creditNumber = document.getElementById('credit_number').value;
-            const errorContainer = document.getElementById('errorContainer');
+    function validateForm(event) {
+        const creditNumber = document.getElementById('credit_number').value;
+        const creditDate = document.getElementsByName('credittime')[0].value;
+        const securityCode = document.getElementById('security').value;
+        const errorContainer = document.getElementById('errorContainer');
+        
+        // エラーメッセージをクリア
+        errorContainer.innerHTML = '';
 
-            // エラーメッセージをクリア
-            errorContainer.innerHTML = '';
-
-            // 正規表現で16桁の数字をチェック
-            const regex = /^\d{16}$/;
-            if (!regex.test(creditNumber)) {
-                event.preventDefault(); // フォーム送信をキャンセル
-                errorContainer.innerHTML = 'クレジットカード番号は16桁の数字でなければなりません。';
-                return false;
-            }
-
-            return true; // バリデーションを通過した場合
+        // クレジットカード番号のバリデーション
+        const creditNumberRegex = /^\d{16}$/;
+        if (!creditNumberRegex.test(creditNumber) || !isValidCreditCard(creditNumber)) {
+            event.preventDefault(); // フォーム送信をキャンセル
+            errorContainer.innerHTML += 'クレジットカード番号は有効な16桁の数字でなければなりません。<br>';
         }
 
-        // フォームのsubmitイベントにバリデーションを追加
-        document.querySelector('form').addEventListener('submit', validateForm);
-    </script>
+        // 有効期限のバリデーション
+        if (!creditDate) {
+            event.preventDefault();
+            errorContainer.innerHTML += '有効期限を選択してください。<br>';
+        }
+
+        // セキュリティコードのバリデーション
+        const securityRegex3 = /^\d{3}$/; // 3桁の数字
+        const securityRegex4 = /^\d{4}$/; // 4桁の数字
+        if (!securityRegex3.test(securityCode) && !securityRegex4.test(securityCode)) {
+            event.preventDefault();
+            errorContainer.innerHTML += 'セキュリティコードは3桁または4桁の数字でなければなりません。<br>';
+        }
+    }
+
+    // Luhnアルゴリズムを使用してクレジットカード番号の検証を行う関数
+    function isValidCreditCard(number) {
+        let sum = 0;
+        let alternate = false;
+        for (let i = number.length - 1; i >= 0; i--) {
+            let n = parseInt(number.charAt(i), 10);
+            if (alternate) {
+                n *= 2;
+                if (n > 9) {
+                    n -= 9;
+                }
+            }
+            sum += n;
+            alternate = !alternate;
+        }
+        return sum % 10 === 0;
+    }
+
+    // フォームのsubmitイベントにバリデーションを追加
+    document.querySelector('form').addEventListener('submit', validateForm);
+</script>
+
 
     <header>
         <div class="logo">
@@ -60,7 +92,7 @@
         </div>
     </header>
 
-    <form action="CreditNew" method="post">
+    <form action="CreditNew" method="post" onsubmit="validateForm(event);">
         <input type="hidden" name="customerName" value="<%= customerName %>">
         <input type="hidden" name="customerKana" value="<%= customerKana %>">
         <input type="hidden" name="gender" value="<%= gender %>">
@@ -106,7 +138,7 @@
         </div>
     </form>
 
-    <div id="errorContainer" class="error-message"></div> <!-- エラーメッセージ表示用 -->
+    <div id="errorContainer" class="error-message" style=color:red></div> <!-- エラーメッセージ表示用 -->
 
     <script>
         function toggleButton() {

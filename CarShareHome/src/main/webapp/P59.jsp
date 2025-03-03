@@ -134,8 +134,7 @@ String endDate = (String) session.getAttribute("endDate");
     <nav class="nav">
         <ul>
             <li class="nav-item gnav02"><a href="P53.jsp">予約・ステーション検索</a></li>
-            <li class="nav-item gnav03"><a href="P65.jsp">予約確認・変更・取り消し</a></li>
-            <li class="nav-item gnav04"><a href="UseHistory?customerId=${customerId}&customerName=${customerName}">ご利用履歴</a></li>
+ 			<li class="nav-item gnav03"><a href="UserReservation?customerId=<%= customerId%>&customerName=<%=customerName%>">予約確認・変更・取り消し</a></li>            <li class="nav-item gnav04"><a href="UseHistory?customerId=${customerId}&customerName=${customerName}">ご利用履歴</a></li>
             <li class="nav-item gnav05"><a href="P76.jsp">ご登録情報の確認</a></li>
         </ul>
     </nav>
@@ -267,6 +266,7 @@ String endDate = (String) session.getAttribute("endDate");
                 <input type="hidden" id="selectedDate" name="selectedDate">
                 <input type="hidden" id="stationId" name="stationId" value="<%= stationId %>"> <!-- stationIdを隠しフィールドに追加 -->
                 <input type="hidden" id="car_code" name="carCode" value="<%=carCode %>"> <!-- carCodeを隠しフィールドに追加 -->
+                <input type="hidden" id="station_date" name="stationData" value="<%=stationData %>">
                 <button type="submit" style="padding: 10px 15px; background-color: orange; color: white; border: none; border-radius: 5px; cursor: pointer;">検索</button>
             </form>
         </div>
@@ -299,7 +299,7 @@ String endDate = (String) session.getAttribute("endDate");
 				    <%
 				    // 予約状況を表示するためのタイムテーブルを動的に生成
 				    if (combinedList != null && !combinedList.isEmpty()) {
-				        // 1行目を飛ばすため、インデックスを1から開始
+
 				        for (int i = yoyaku; i < combinedList.size(); i++) {
 				            ReservationTime time = combinedList.get(i);
 				            String startDateTime = time.getStartDateTime(); // "yyyy-MM-dd HH:mm" 形式
@@ -358,7 +358,7 @@ String endDate = (String) session.getAttribute("endDate");
 		    </tbody>
 		</table>
 		
-		<a href="ReservationCon?stationId=<%= stationId %>&carCode=<%= carCode %>&img=<%= img %>&modelName=<%= modelName %>" id="reservationLink" style="display:none;">予約入力画面へ</a>
+		<a href="ReservationCon?stationId=<%= stationId %>&carCode=<%= carCode %>&img=<%= img %>&modelName=<%= modelName %>>" id="reservationLink" style="display:none;">予約入力画面へ</a>
 		
 		<%
 		    } // combinedList のチェックが終わったら閉じる
