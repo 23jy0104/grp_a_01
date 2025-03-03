@@ -44,9 +44,6 @@
             <tr>
                 <td><a href="P41.jsp" class="link active">補償制度</a></td>
             </tr>
-            <tr>
-                <td><a href="P42.jsp" class="link">延長、超過料金について</a></td>
-            </tr>
         </table>
     </div>
     <div class="comprice">
