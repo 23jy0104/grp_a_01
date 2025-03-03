@@ -41,7 +41,7 @@
         errorContainer.innerHTML = '';
 
         // クレジットカード番号のバリデーション
-        const creditNumberRegex = /^\d{16}$/; // 16桁の数字
+        const creditNumberRegex = /^(?!0000000000000000)(?!([0-9])\1{15})\d{16}$/; // 16桁の数字
         if (!creditNumberRegex.test(creditNumber) || !isValidCreditCard(creditNumber)) {
             event.preventDefault(); // フォーム送信をキャンセル
             errorContainer.innerHTML += 'クレジットカード番号は有効な16桁の数字でなければなりません。<br>';
