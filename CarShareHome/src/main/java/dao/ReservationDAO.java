@@ -137,7 +137,7 @@ public class ReservationDAO {
     }
     public HenkyakuData getUsage(String customerId) {
     	HenkyakuData henkyaku = null;
-    	String sql = "SELECT s.station_name,m.model_name,car.number,r.start_date ,k.keybox_id ,k.station_id ,reservation_id"
+    	String sql = "SELECT s.station_name,m.model_name,car.number,r.start_date ,r.time_date ,k.keybox_id ,k.station_id ,reservation_id"
 	    			+ " FROM customer AS c"
 	    			+ " INNER JOIN reservation AS r"
 	    			+ " ON c.customer_id = r.customer_id"
@@ -150,7 +150,8 @@ public class ReservationDAO {
 	    			+ " INNER JOIN model AS m"
 	    			+ " ON car.model_id = m.model_id"
 	    			+ " WHERE c.customer_id = ?"
-	    			+ " AND r.finish_date IS NULL;";
+	    			+ " AND r.finish_date IS NULL"
+	    			+ " AND r.time_date IS NOT NULL;";
     	try(PreparedStatement pstmt = con.prepareStatement(sql)) {
     		pstmt.setString(1, customerId);
     		ResultSet rs = pstmt.executeQuery();
@@ -159,7 +160,7 @@ public class ReservationDAO {
                 henkyaku.setStationName(rs.getString("station_name"));
                 henkyaku.setNumber(rs.getString("number"));
                 henkyaku.setCarName(rs.getString("model_name"));
-                henkyaku.setStartDate(rs.getString("start_date"));
+                henkyaku.setStartDate(rs.getString("time_date"));
                 henkyaku.setStationId(rs.getString("station_id"));
                 henkyaku.setKeyboxId(rs.getString("keybox_id"));
                 henkyaku.setReservationId(rs.getString("reservation_id"));
@@ -293,9 +294,10 @@ public class ReservationDAO {
     }
     public boolean setTimeDate(String reservationId) {
     	boolean time = false;
-    	String sql = "UPDATE reservation SET time_date = CURRENT_TIME WHERE station_id = ?;";
+    	String sql = "UPDATE reservation SET time_date = CURRENT_TIME WHERE reservation_id = ?;";
     	try(PreparedStatement pstmt = con.prepareStatement(sql)) {
     		pstmt.setString(1, reservationId);
+    		pstmt.executeUpdate();
          time = true;
         	System.out.println("利用が開始されました。");
     	}catch(SQLException e) {
@@ -307,9 +309,10 @@ public class ReservationDAO {
     
     public boolean setFinishDate(String reservationId) {
     	boolean time = false;
-    	String sql = "UPDATE reservation SET finish_date = CURRENT_TIME WHERE station_id = ?;";
+    	String sql = "UPDATE reservation SET finish_date = CURRENT_TIME WHERE reservation_id = ?;";
     	try(PreparedStatement pstmt = con.prepareStatement(sql)) {
     		pstmt.setString(1, reservationId);
+    		pstmt.executeUpdate();
          time = true;
         	System.out.println("利用が終了ました。");
     	}catch(SQLException e) {
