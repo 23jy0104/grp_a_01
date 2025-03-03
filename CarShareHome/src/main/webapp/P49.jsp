@@ -10,6 +10,23 @@
     <link rel="stylesheet" href="css/price.css">
     <link rel="stylesheet" href="css/not_login.css">
     <link rel="stylesheet" href="css/P53.css">
+    <script>
+        window.onload = function() {
+            document.getElementById("doNameAdrSearch").onclick = function(event) {
+                var addressInput = document.getElementById("nameAdr-s").value.trim();
+                var errorMessageElement = document.getElementById("error-message");
+                
+                // エラーメッセージを初期化
+                errorMessageElement.textContent = "";
+
+                if (addressInput === "") {
+                    event.preventDefault(); // フォームの送信を防ぐ
+                    errorMessageElement.textContent = "住所を入力してください。"; // エラーメッセージを表示
+                    errorMessageElement.style.color = "red"; // エラーメッセージの色を赤に設定
+                }
+            };
+        };
+    </script>
 </head>
 <body>
 
@@ -32,11 +49,6 @@
 </nav>
 
 <!-- エラーメッセージ表示部分 -->
-<c:if test="${not empty errorMessage}">
-    <div style="color: red; text-align: center;">
-        ${errorMessage}
-    </div>
-</c:if>
 
 <div class="column">
     <h2 class="column_title001">住所/ステーション名から探す</h2>
@@ -55,6 +67,12 @@
                 <input type="submit" id="doNameAdrSearch" value="検索" />
             </div>
             <p class="notes">例）有楽町、新宿、六本木</p>
+            <div id="error-message" style="color: red; text-align: center;"></div> <!-- エラーメッセージ表示用 -->
+            <c:if test="${not empty errorMessage}">
+			    <div style="color: red; text-align: center;">
+			        ${errorMessage}
+			    </div>
+			</c:if>
         </form>
     </div>
 </div>

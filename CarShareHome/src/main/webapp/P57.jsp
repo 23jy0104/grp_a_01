@@ -96,13 +96,9 @@ for (int hour = startHour; hour <= stopHour; hour++) {
 		        outline: none; /* デフォルトのアウトラインを削除 */
 		 }
 		
-		 .button-container {
-		    margin-top: 20px; /* ボタンの上にスペースを追加 */
-		 }
 		
-		 input[type="button"], 
-		    input[type="submit"] {
-		        background-color: #007bff; /* ボタンの背景色 */
+		 input[type="button"]{
+		        background-color: #4CAF50; /* ボタンの背景色 */
 		        color: white; /* ボタンの文字色 */
 		        border: none; /* ボーダーをなしに */
 		        padding: 10px 20px; /* パディング */
@@ -110,12 +106,16 @@ for (int hour = startHour; hour <= stopHour; hour++) {
 		        cursor: pointer; /* カーソルをポインタに */
 		        font-size: 16px; /* フォントサイズ */
 		 }
+		 input[type="submit"]{
+		 	background-color: #ffa500;
+		 }
 		
-		input[type="button"]:hover, 
-		    input[type="submit"]:hover {
+		input[type="button"]:hover{
 		        background-color: #0056b3; /* ホバー時の背景色 */
 		}
-</style>
+ 		.button-container {
+		    margin-top: 20px; /* ボタンの上にスペースを追加 */
+		}
 		
 
 </style>
