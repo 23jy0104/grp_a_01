@@ -123,8 +123,7 @@ for (int hour = startHour; hour <= stopHour; hour++) {
 <body> 
 <header> 
 <img src="img/rog.png" alt="TMCロゴ"> 
-<h1>TMC カーシェア</h1>
- <button class="logout-button" onclick="location.href='P29.jsp'">ログアウト</button> </header>
+<h1>TMC カーシェア</h1> <button class="logout-button" onclick="location.href='P29.jsp'">ログアウト</button> </header>
 
 
 <nav class="nav">
