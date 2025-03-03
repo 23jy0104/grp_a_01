@@ -11,7 +11,7 @@ String customerName = (String) session.getAttribute("customerName");
 String customerId = (String) session.getAttribute("customerId");
 
 // リクエストから車両情報を取得
-String stationName=(String)request.getSession().getAttribute("stationName");
+String stationName = (String) request.getSession().getAttribute("stationName");
 String stationId = (String) request.getSession().getAttribute("stationId");
 String stationData = (String) session.getAttribute("stationData");
 String stopDateParam = (String) request.getAttribute("stopDate");
@@ -20,9 +20,9 @@ String stopDateParam = (String) request.getAttribute("stopDate");
 List<CarData> carData = (List<CarData>) request.getAttribute("carData");
 
 // jspで入力した日時
-String selectedDate = (String)request.getAttribute("selectedDate");
-String startTimeHour = (String)request.getAttribute("startTimeHour");
-String startTimeMinute = (String)request.getAttribute("startTimeMinute");
+String selectedDate = (String) request.getAttribute("selectedDate");
+String startTimeHour = (String) request.getAttribute("startTimeHour");
+String startTimeMinute = (String) request.getAttribute("startTimeMinute");
 
 // 開始時間を取得
 int startHour = Integer.parseInt(startTimeHour);
@@ -31,17 +31,23 @@ int startMinute = Integer.parseInt(startTimeMinute);
 // stopDateの処理
 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 Date stopDate = sdf.parse(stopDateParam);
-int stopHour = stopDate.getHours();
 
 // 時間スロットの生成
 List<String> timeSlots = new ArrayList<>();
-for (int hour = startHour; hour <= stopHour; hour++) {
+int endHour = startHour + 6; // 6時間後まで表示
+for (int hour = startHour; hour < endHour; hour++) { // '<'を使う
     for (int minute = 0; minute < 60; minute += 30) { // 30分単位
         String formattedTime = String.format("%02d:%02d", hour, minute);
         timeSlots.add(formattedTime);
     }
 }
+// 最後の時間枠を追加（終了時間がちょうど60分の時）
+if (startMinute == 0) {
+    String formattedTime = String.format("%02d:%02d", endHour, 0);
+    timeSlots.add(formattedTime);
+}
 %>
+
 
 
 <!DOCTYPE html>
