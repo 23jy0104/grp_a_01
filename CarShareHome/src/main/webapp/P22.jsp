@@ -41,10 +41,10 @@
         errorContainer.innerHTML = '';
 
         // クレジットカード番号のバリデーション
-        const creditNumberRegex = /^\d{16}$/;
+        const creditNumberRegex = /^\d{12}$/;
         if (!creditNumberRegex.test(creditNumber) || !isValidCreditCard(creditNumber)) {
             event.preventDefault(); // フォーム送信をキャンセル
-            errorContainer.innerHTML += 'クレジットカード番号は有効な16桁の数字でなければなりません。<br>';
+            errorContainer.innerHTML += 'クレジットカード番号は有効な12桁の数字でなければなりません。<br>';
         }
 
         // 有効期限のバリデーション
