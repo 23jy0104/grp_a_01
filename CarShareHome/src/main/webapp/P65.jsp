@@ -64,24 +64,36 @@
         </tr>
     </thead>
     <tbody>
-        <tr>
-        <% for(Reservation yoyaku: list){
-        	
-        %>
-            <td><%=yoyaku.getReservationId() %></td>
-            <td><%=yoyaku.getStartDate() %></td>
-            <td><%=yoyaku.getStopDate() %></td>
-            <td><%=yoyaku.getStation().getStationName() %></td>
-            <td><%= yoyaku.getModelName() %> </td>
-            <td><%=yoyaku.getReservationTime() %></td>
-            <td><%=yoyaku.getPrice() %>円</td>
-            <td><button class="change" onclick="location.href='Henkou?reservationId=<%=yoyaku.getReservationId()%>'">変更</button>
-			<br><button class="cancel" onclick="location.href='Sakujo?reservationId=<%=yoyaku.getReservationId()%>'">取消</button></td>
+    <tr>
+    <% 
+        if (list == null || list.isEmpty()) { 
+    %>
+        <td colspan="8">予約がありません。</td>
+    <% 
+        } else { 
+            for (Reservation yoyaku : list) {
+                if (yoyaku != null) { 
+    %>
+                    <td><%= yoyaku.getReservationId() %></td>
+                    <td><%= yoyaku.getStartDate() %></td>
+                    <td><%= yoyaku.getStopDate() %></td>
+                    <td><%= yoyaku.getStation().getStationName() %></td>
+                    <td><%= yoyaku.getModelName() %></td>
+                    <td><%= yoyaku.getReservationTime() %></td>
+                    <td><%= yoyaku.getPrice() %>円</td>
+                    <td>
+                        <button class="change" onclick="location.href='Henkou?reservationId=<%= yoyaku.getReservationId() %>'">変更</button>
+                        <br>
+                        <button class="cancel" onclick="location.href='Sakujo?reservationId=<%= yoyaku.getReservationId() %>'">取消</button>
+                    </td>
+                </tr>
+    <% 
+                } 
+            } 
+        } 
+    %>
+</tbody>
 
-         </tr>
-       <%
-        }
-       %>
        
        
 
