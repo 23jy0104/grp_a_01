@@ -180,8 +180,8 @@ public class Reservation implements Serializable {
 	    }
 
 	    public static boolean isTimeSlotAvailableForOtherCustomers(String customerId, String carCode, String startDateTime, String endDateTime) {
-	        String sql = "SELECT * FROM Reservation WHERE car_code = ? AND "
-	                   + "(start_date < ? AND stop_date > ?);";
+	    	String sql = "SELECT * FROM Reservation WHERE car_code = ? "
+	    			+ "AND(start_date < ? AND stop_date > ?)";
 
 	        // SQLを実行して予約を取得する処理を追加
 	        List<Reservation> reservations = executeQuery(sql, carCode, customerId, endDateTime, startDateTime);
@@ -199,7 +199,7 @@ public class Reservation implements Serializable {
 	        
 	        try (Connection connection = DriverManager.getConnection(url, user, pass);
 	             PreparedStatement pstmt = connection.prepareStatement(sql)) {
-	            pstmt.setString(1, carCode);
+	            pstmt.setString(1, carCode);;
 	            pstmt.setString(2, endDateTime);
 	            pstmt.setString(3, startDateTime);
 	            

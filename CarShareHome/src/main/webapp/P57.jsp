@@ -37,15 +37,28 @@ List<String> timeSlots = new ArrayList<>();
 int endHour = startHour + 6; // 6時間後まで表示
 for (int hour = startHour; hour < endHour; hour++) { // '<'を使う
     for (int minute = 0; minute < 60; minute += 30) { // 30分単位
-        String formattedTime = String.format("%02d:%02d", hour, minute);
+        String formattedTime;
+        if (hour == 23 && minute == 0) {
+            formattedTime = "23:00"; // 23:00のまま
+        } else if (hour == 24 && minute == 0) {
+            formattedTime = "0:00"; // 終了時間が24:00の時
+        } else {
+            formattedTime = String.format("%02d:%02d", hour % 24, minute);
+        }
         timeSlots.add(formattedTime);
     }
 }
 // 最後の時間枠を追加（終了時間がちょうど60分の時）
 if (startMinute == 0) {
-    String formattedTime = String.format("%02d:%02d", endHour, 0);
+    String formattedTime;
+    if (endHour == 24) {
+        formattedTime = "0:00"; // 終了時間が24:00の時
+    } else {
+        formattedTime = String.format("%02d:%02d", endHour % 24, 0);
+    }
     timeSlots.add(formattedTime);
 }
+
 %>
 
 
@@ -130,8 +143,12 @@ if (startMinute == 0) {
 <body> 
 <header> 
 <img src="img/rog.png" alt="TMCロゴ"> 
-<h1>TMC カーシェア</h1> <button class="logout-button" onclick="location.href='P29.jsp'">ログアウト</button> </header>
-
+<h1>TMC カーシェア</h1>
+  <div class="user-info">
+            <h4 id="username"><%=customerName %>さん</h4>
+            <button class="logout-button" onclick="location.href='P29.jsp'">ログアウト</button>
+        </div>
+</header>
 
 <nav class="nav">
     <ul>
