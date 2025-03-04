@@ -291,9 +291,33 @@ String endDate = (String) session.getAttribute("endDate");
 		<table id="carShareTable">
 		    <tbody>
 		        <tr>
-		            <td colspan="96" class="time-cell">
-		                <%= selectedDate != null ? selectedDate : "日付と空き状況を確認したい開始時間を入力してください。" %>
-		            </td>
+<td colspan="96" class="time-cell">
+    <%
+        if (selectedDate != null) {
+            // フォームからのリクエストパラメータを取得
+            String startTimeHour = (String) request.getParameter("startTimeHour");
+            String startTimeMinute = (String) request.getParameter("startTimeMinute");
+
+            // 0:00でない場合に次の日付を表示
+            if (!"00".equals(startTimeHour) || !"00".equals(startTimeMinute)) {
+                // 次の日付を計算
+                Calendar cal = Calendar.getInstance();
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                cal.setTime(dateFormat.parse(selectedDate));
+                cal.add(Calendar.DAY_OF_MONTH, 1);
+                String nextDate = dateFormat.format(cal.getTime());
+                out.println(selectedDate + " ~ " + nextDate);
+            } else {
+                out.println(selectedDate); // 0:00の場合は選択した日付のみ表示
+            }
+        } else {
+            out.println("日付と空き状況を確認したい開始時間を入力してください。");
+        }
+    %>
+</td>
+
+
+
 		        </tr>
 		       <tr>
 				    <%
@@ -413,10 +437,7 @@ String endDate = (String) session.getAttribute("endDate");
 		                }
 		            }
 		        }
-		    }
-
-
-		    		    
+		    }	    
 		</script>
 
     </main>
