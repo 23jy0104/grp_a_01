@@ -280,25 +280,6 @@ if (startMinute == 0) {
     function validateForm() {
         let isValid = true;
 
-        // 現在時刻を取得
-        const now = new Date();
-
-        // 予約開始日を取得
-        const selectedDate = document.getElementsByName('startDate')[0].value;
-        const startTimeHour = document.getElementById('startTimeHour').value;
-        const startTimeMinute = document.getElementById('startTimeMinute').value;
-
-        // 入力された予約開始日時を作成
-        if (selectedDate && startTimeHour !== "" && startTimeMinute !== "") {
-            const startDateTime = new Date(`${selectedDate}T${startTimeHour}:${startTimeMinute}`);
-            
-            // 予約開始日時が現在時刻よりも早い場合のチェック
-            if (startDateTime <= now) {
-                alert("予約開始時間は現在時刻以降を選択してください。");
-                isValid = false;
-            }
-        }
-
         // 車種のバリデーション
         const carType = document.getElementById('carType');
         const carTypeError = document.getElementById('carTypeError');
@@ -307,6 +288,37 @@ if (startMinute == 0) {
             isValid = false;
         } else {
             carTypeError.style.display = 'none';
+        }
+
+        // 予約開始時間のバリデーション
+        const startTimeHour = document.getElementById('startTimeHour');
+        const startTimeMinute = document.getElementById('startTimeMinute');
+        const startTimeHourError = document.getElementById('startTimeHourError');
+        const startTimeMinuteError = document.getElementById('startTimeMinuteError');
+        if (startTimeHour.value === "") {
+            startTimeHourError.style.display = 'block';
+            isValid = false;
+        } else {
+            startTimeHourError.style.display = 'none';
+        }
+        if (startTimeMinute.value === "") {
+            startTimeMinuteError.style.display = 'block';
+            isValid = false;
+        } else {
+            startTimeMinuteError.style.display = 'none';
+        }
+
+        // 現在時刻を取得
+        const now = new Date();
+        const startDate = new Date(document.getElementsByName('startDate')[0].value);
+        const startTime = new Date(startDate);
+        startTime.setHours(startTimeHour.value);
+        startTime.setMinutes(startTimeMinute.value);
+
+        // 現在時刻より早い場合のエラーチェック
+        if (startTime <= now) {
+            alert("予約開始時間は現在時刻以降でなければなりません。");
+            isValid = false;
         }
 
         // 予約終了日のバリデーション
@@ -324,28 +336,27 @@ if (startMinute == 0) {
         const endTimeMinute = document.getElementById('EndTimeMinute');
         const endTimeHourError = document.getElementById('EndTimeHourError');
         const endTimeMinuteError = document.getElementById('EndTimeMinuteError');
-
-        if (endTimeHour.value === "" || endTimeMinute.value === "") {
-            if (endTimeHour.value === "") {
-                endTimeHourError.style.display = 'block';
-            } else {
-                endTimeHourError.style.display = 'none';
-            }
-            if (endTimeMinute.value === "") {
-                endTimeMinuteError.style.display = 'block';
-            } else {
-                endTimeMinuteError.style.display = 'none';
-            }
+        if (endTimeHour.value === "") {
+            endTimeHourError.style.display = 'block';
             isValid = false;
         } else {
-            const endHour = parseInt(endTimeHour.value);
-            const endMinute = parseInt(endTimeMinute.value);
-            const startHour = parseInt(startTimeHour);
-            const startMinute = parseInt(startTimeMinute);
+            endTimeHourError.style.display = 'none';
+        }
+        if (endTimeMinute.value === "") {
+            endTimeMinuteError.style.display = 'block';
+            isValid = false;
+        } else {
+            endTimeMinuteError.style.display = 'none';
+        }
 
-            // 終了時間が開始時間より早い場合
-            if (endHour < startHour || (endHour === startHour && endMinute <= startMinute)) {
-                alert("予約終了時間は開始時間より遅く設定してください。");
+        // 終了時間が開始時間より前になっているかをチェック
+        if (isValid) {
+            const endTime = new Date(startDate);
+            endTime.setHours(endTimeHour.value);
+            endTime.setMinutes(endTimeMinute.value);
+
+            if (endTime <= startTime) {
+                alert("予約終了時間は開始時間より後でなければなりません。");
                 isValid = false;
             }
         }
@@ -353,6 +364,7 @@ if (startMinute == 0) {
         return isValid;
     }
 </script>
+
 
 
     <%
