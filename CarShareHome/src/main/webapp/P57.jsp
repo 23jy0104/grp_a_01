@@ -351,9 +351,15 @@ if (startMinute == 0) {
 
         // 終了時間が開始時間より前になっているかをチェック
         if (isValid) {
-            const endTime = new Date(startDate);
+            const endTime = new Date(endDate.value);
             endTime.setHours(endTimeHour.value);
             endTime.setMinutes(endTimeMinute.value);
+
+            // 開始日と終了日を比較
+            if (endDate.value < startDate.toISOString().split('T')[0]) {
+                alert("予約終了日は開始日より後でなければなりません。");
+                isValid = false;
+            }
 
             if (endTime <= startTime) {
                 alert("予約終了時間は開始時間より後でなければなりません。");
@@ -364,6 +370,7 @@ if (startMinute == 0) {
         return isValid;
     }
 </script>
+
 
 
 
